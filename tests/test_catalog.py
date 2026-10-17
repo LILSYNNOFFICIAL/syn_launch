@@ -433,6 +433,48 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(go["version_specification"], "floating_latest")
         self.assertEqual(go["version_evidence"], "not_collected")
 
+    def test_pkg_resolved_version_comes_from_dpkg_metadata(self):
+        from unittest.mock import patch, Mock
+        tool = {"install_kind":"pkg", "package":"sample-package"}
+        with patch.object(APP.shutil, "which", return_value="/usr/bin/dpkg-query"), \
+             patch.object(APP.subprocess, "run", return_value=Mock(returncode=0, stdout="1.2.3-4", stderr="")) as query:
+            result = APP.collect_resolved_version(tool)
+        self.assertEqual(result["resolved_version"], "1.2.3-4")
+        self.assertEqual(result["version_evidence"], "package_manager_metadata")
+        self.assertEqual(result["version_query_exit_code"], 0)
+        self.assertEqual(query.call_args.args[0][-1], "sample-package")
+        self.assertEqual(query.call_args.kwargs["timeout"], 5)
+
+    def test_pip_resolved_version_parses_pip_show_metadata(self):
+        from unittest.mock import patch, Mock
+        tool = {"install_kind":"pip", "package":"sample-package"}
+        with patch.object(APP.Path, "is_file", return_value=True), \
+             patch.object(APP.subprocess, "run", return_value=Mock(
+                 returncode=0, stdout="Name: sample-package\\nVersion: 4.5.6\\n", stderr=""
+             )) as query:
+            result = APP.collect_resolved_version(tool)
+        self.assertEqual(result["resolved_version"], "4.5.6")
+        self.assertEqual(result["version_evidence"], "package_manager_metadata")
+        self.assertEqual(query.call_args.args[0][-2:], ["show", "sample-package"])
+
+    def test_version_query_failure_never_invents_a_version(self):
+        from unittest.mock import patch
+        tool = {"install_kind":"pkg", "package":"sample-package"}
+        with patch.object(APP.shutil, "which", return_value="/usr/bin/dpkg-query"), \
+             patch.object(APP.subprocess, "run", side_effect=FileNotFoundError):
+            result = APP.collect_resolved_version(tool)
+        self.assertIsNone(result["resolved_version"])
+        self.assertEqual(result["version_evidence"], "query_failed")
+
+    def test_unsupported_package_manager_does_not_run_a_probe(self):
+        from unittest.mock import patch
+        tool = {"install_kind":"go", "package":"example.org/sample@v1.2.3"}
+        with patch.object(APP.subprocess, "run") as query:
+            result = APP.collect_resolved_version(tool)
+        query.assert_not_called()
+        self.assertIsNone(result["resolved_version"])
+        self.assertEqual(result["version_evidence"], "not_supported")
+
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "main.py"), "--profile"],
