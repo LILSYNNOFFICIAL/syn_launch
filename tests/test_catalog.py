@@ -89,6 +89,19 @@ class CatalogTests(unittest.TestCase):
         finally:
             APP.CUSTOM_PATH = original
 
+
+    def test_malformed_custom_catalog_fails_closed(self):
+        import tempfile
+        original = APP.CUSTOM_PATH
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.CUSTOM_PATH = Path(tmp) / "custom_tools.json"
+                APP.save_private_json(APP.CUSTOM_PATH, [None])
+                with self.assertRaisesRegex(ValueError, "list of tool objects"):
+                    APP.load_catalog()
+        finally:
+            APP.CUSTOM_PATH = original
+
     def test_subprocess_timeout_terminates_process(self):
         import time
         started = time.monotonic()
