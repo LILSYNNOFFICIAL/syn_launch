@@ -16,6 +16,8 @@ jobs:
           python-version: "3.12"
       - name: Validate Python syntax
         run: python -m py_compile main.py
+      - name: Validate bootstrap shell syntax
+        run: bash -n install.sh
       - name: Validate catalog and tests
         run: python -m unittest discover -s tests -v
       - name: Run environment check
