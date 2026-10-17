@@ -188,7 +188,7 @@ def bounded_probe(command, timeout=5, max_bytes=65536):
         proc = subprocess.Popen(list(command), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT, start_new_session=(os.name == "posix"))
         if proc.stdout is None:
-            return "", False
+            return "", False, False
         deadline = time.monotonic() + timeout
         with selectors.DefaultSelector() as selector:
             selector.register(proc.stdout, selectors.EVENT_READ)
