@@ -95,6 +95,14 @@ class CatalogTests(unittest.TestCase):
             APP.installed = original_installed
             APP.show_local_docs = original_docs
 
+    def test_bounded_probe_caps_output(self):
+        output, truncated = APP.bounded_probe(
+            [sys.executable, "-c", "print('A' * 5000)"], timeout=5, max_bytes=1024
+        )
+        self.assertTrue(truncated)
+        self.assertLessEqual(len(output.encode("utf-8")), 1024)
+        self.assertEqual(output, "A" * 1024)
+
     def test_check_cli(self):
         result = subprocess.run([sys.executable, str(ROOT / "main.py"), "--check"], capture_output=True, text=True, timeout=15)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
