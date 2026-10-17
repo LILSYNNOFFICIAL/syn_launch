@@ -33,12 +33,44 @@ def installed(t):
 def status(t):
  if installed(t): return "INSTALLED"
  return {"pkg":"TERMUX PKG","pip":"PYTHON/PIP","go":"GO BUILD","manual":"MANUAL","root":"ROOT/HW"}.get(t["install_kind"],"UNKNOWN")
+def show_local_docs(t):
+ exe=t.get("executable","")
+ path=shutil.which(exe) if exe and not any(c in exe for c in " /$;|&") else None
+ if not path: return
+ say("\\nLocal command documentation (from the installed executable):")
+ version_output=""
+ for flag in ("--version","-V","version"):
+  try:
+   r=subprocess.run([path,flag],capture_output=True,text=True,timeout=5,errors="replace")
+   output=(r.stdout+"\\n"+r.stderr).strip()
+   if output:
+    version_output=output
+    break
+  except (OSError,subprocess.TimeoutExpired): continue
+ if version_output: say("Version / version response:\\n"+version_output[:2500])
+ help_output=""
+ for flag in ("--help","-h"):
+  try:
+   r=subprocess.run([path,flag],capture_output=True,text=True,timeout=5,errors="replace")
+   output=(r.stdout+"\\n"+r.stderr).strip()
+   if output:
+    help_output=output
+    break
+  except (OSError,subprocess.TimeoutExpired): continue
+ if help_output:
+  lines=help_output.splitlines()
+  say("Installed CLI help (first 70 lines):")
+  say("\\n".join(lines[:70]))
+  if len(lines)>70: say(f"... {len(lines)-70} additional lines omitted; run {exe} --help directly for full output.")
+ else:
+  say("The installed command did not return version/help text using standard flags. Check the source link for current documentation.")
 def show_tool(t,n=None):
- say("\n"+(f"{n}. " if n else "")+t["name"])
+ say("\\n"+(f"{n}. " if n else "")+t["name"])
  say(f"Category: {t['category']} | Status: {status(t)}")
  say(t["description"]); say("Install method: "+t["install_kind"]+(f" ({t['package']})" if t.get("package") else ""))
  say("Compatibility: "+t["caveat"]); say("Source: "+t["source"])
  if t.get("example"): say("Example: "+t["example"])
+ if installed(t): show_local_docs(t)
  say("Only test systems, accounts, apps, and networks you own or have explicit permission to assess.")
 def ask(s="> "):
  try: return input(s).strip()
