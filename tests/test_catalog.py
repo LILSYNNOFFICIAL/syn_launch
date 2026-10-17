@@ -55,6 +55,22 @@ class CatalogTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsafe package/module syntax"):
             APP.validate_catalog(broken)
 
+    def test_catalog_rejects_unsafe_package_syntax(self):
+        broken = copy.deepcopy(self.data)
+        tool = next(t for t in broken["tools"] if t["install_kind"] == "pkg")
+        tool["package"] = "nmap;touch /tmp/should-not-run"
+        with self.assertRaisesRegex(ValueError, "unsafe package/module syntax"):
+            APP.validate_catalog(broken)
+
+    def test_catalog_rejects_duplicate_display_names(self):
+        broken = copy.deepcopy(self.data)
+        duplicate = copy.deepcopy(broken["tools"][0])
+        duplicate["id"] = "different-id"
+        broken["tools"].append(duplicate)
+        broken["tool_count"] += 1
+        with self.assertRaisesRegex(ValueError, "duplicate display name"):
+            APP.validate_catalog(broken)
+
     def test_catalog_rejects_non_https_source(self):
         broken = copy.deepcopy(self.data)
         broken["tools"][0]["source"] = "http://example.com/tool"
@@ -94,6 +110,19 @@ class CatalogTests(unittest.TestCase):
         finally:
             APP.installed = original_installed
             APP.show_local_docs = original_docs
+
+    def test_package_manager_environment_overrides_are_removed(self):
+        from unittest.mock import patch
+        with patch.dict("os.environ", {
+            "PIP_INDEX_URL": "https://attacker.invalid/simple",
+            "PIP_TRUSTED_HOST": "attacker.invalid",
+            "GOPROXY": "https://attacker.invalid",
+            "npm_config_registry": "https://attacker.invalid",
+            "PYTHONPATH": "/tmp/untrusted",
+        }):
+            child = APP.build_child_env()
+        for key in ("PIP_INDEX_URL", "PIP_TRUSTED_HOST", "GOPROXY", "npm_config_registry", "PYTHONPATH"):
+            self.assertNotIn(key, child)
 
     def test_bounded_probe_caps_output(self):
         output, truncated, timed_out = APP.bounded_probe(
