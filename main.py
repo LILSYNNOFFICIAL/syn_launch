@@ -66,8 +66,8 @@ def load_catalog():
     data = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
     if CUSTOM_PATH.exists():
         custom = json.loads(CUSTOM_PATH.read_text(encoding="utf-8"))
-        if not isinstance(custom, list):
-            raise ValueError("custom_tools.json must contain a JSON list")
+        if not isinstance(custom, list) or not all(isinstance(item, dict) for item in custom):
+            raise ValueError("custom_tools.json must contain a list of tool objects")
         data["tools"].extend(custom)
     data["categories"] = list(dict.fromkeys(t.get("category", "") for t in data["tools"]))
     data["tool_count"] = len(data["tools"])
