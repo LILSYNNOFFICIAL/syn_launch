@@ -8,7 +8,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Expose a stable, versioned JSON profile for future compatibility automation.
 - [x] Explain that container/proot UID 0 is not proof of Android host root.
 - [x] Add regression tests for architecture normalization and the CLI profile.
-- [ ] Validate the profile on physical Termux devices across arm64 and 32-bit/other supported architectures.
+- [x] Run a baseline smoke test on one physical Android 16 / Termux / ARM64 device with Python 3.14.6 (commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e`); the test does not validate individual cataloged tools.
+- [ ] Re-run device validation on the latest code and validate 32-bit/other supported architectures.
 
 ## Stage 2: Compatibility metadata
 

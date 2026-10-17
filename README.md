@@ -40,11 +40,13 @@ python main.py --list
 python main.py --search nuclei
 python main.py --category "Mobile App Security"
 python main.py --tool Nmap
+python main.py --compatibility-report > compatibility-report.json
 ~~~
 
 - `--check` validates the catalog and reports a concise runtime summary.
 - `--doctor` reports architecture, Android/Termux signals, process UID, free storage, available runtimes, and catalog install-method counts.
 - `--profile` prints a machine-readable JSON runtime profile. Detection signals do not certify individual tools as compatible.
+- `--compatibility-report` prints JSON for every catalog entry, including PATH detection, install method, package metadata, caveats, and an explicit `verification: not_run` field. It does not execute any cataloged tool. A PATH match is not proof of installation health or compatibility.
 - `--list` lists the catalog and current PATH-based status.
 - `--search` searches tool names, categories, and descriptions.
 - `--category` lists tools from a category.
@@ -96,7 +98,7 @@ Each bulk action requires an explicit confirmation. Individual third-party insta
 
 | Status | Meaning |
 |---|---|
-| INSTALLED | An executable with the expected name is present in PATH. This is not a full self-test. |
+| PATH MATCH (UNVERIFIED) | An executable with the expected name is present in PATH. This is not proof that the intended tool is installed correctly or functions. |
 | TERMUX PKG | The installer can attempt the named Termux package. |
 | PYTHON/PIP | Installs into an isolated virtual environment under `~/.syn_launch/venv`. |
 | GO BUILD | Uses `go install` and places generated binaries in `~/.local/bin`. |
@@ -139,6 +141,24 @@ Some tools can trigger account lockouts, execute commands on vulnerable systems,
 
 See [PLATFORM_ROADMAP.md](PLATFORM_ROADMAP.md) for the staged plan covering compatibility metadata, verified tool lifecycle, authorized assessment workflows, and optional Linux environments.
 
+## Physical-device validation snapshot
+
+On 2026-10-17, a temporary checkout of commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e` was exercised on a physical Android 16 / Termux / ARM64 device using Python 3.14.6. The then-current suite passed 28 tests. The CLI started and exited, the complete catalog rendered, search/category/tool detail paths worked, malformed category/tool inputs failed cleanly, and JSON/shell/Python syntax checks passed. The catalog contained 269 entries in 19 categories; 31 entries matched executable names in PATH.
+
+This is a **baseline device result for that exact commit**, not a claim that every listed tool works and not a validation of later commits. The 31 matches were discovery-only. No security tools were installed or run as part of this smoke test. Re-run the device checks after code changes:
+
+~~~bash
+cd ~/syn_launch
+git pull --ff-only
+python main.py --check
+python main.py --doctor
+python main.py --profile
+python main.py --compatibility-report > compatibility-report.json
+python -m unittest discover -s tests -v
+~~~
+
+Review the JSON report locally before sharing it because it includes local executable paths and runtime details.
+
 ## Development and verification
 
 Run these checks locally:
@@ -150,7 +170,7 @@ python -m unittest discover -s tests -v
 python main.py --check
 ~~~
 
-GitHub Actions runs syntax, bootstrap-shell, JSON, catalog-integrity, CLI, bootstrap-security and regression checks on pushes and pull requests. CI success on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
+GitHub Actions runs Python syntax, bootstrap-shell, JSON, catalog-integrity, CLI, bootstrap-security and regression checks on pushes and pull requests across Python 3.10, 3.12, and 3.14. CI success on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
 
 ## Contributing
 
