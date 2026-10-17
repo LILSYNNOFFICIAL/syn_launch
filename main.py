@@ -158,7 +158,7 @@ def run(command, label, timeout=900, env=None):
                             sys.stdout.write(decoded); sys.stdout.flush(); log.write(decoded); log.flush()
                         total_output += len(chunk)
                         if len(chunk)>remaining_bytes and not output_truncated:
-                            notice="\\n[output truncated after 10 MiB; remaining output is drained but not displayed or logged]\\n"
+                            notice="\n[output truncated after 10 MiB; remaining output is drained but not displayed or logged]\n"
                             sys.stdout.write(notice); sys.stdout.flush(); log.write(notice); log.flush(); output_truncated=True
             proc.stdout.close()
             code=proc.wait(timeout=max(0.1,deadline-time.monotonic()))
