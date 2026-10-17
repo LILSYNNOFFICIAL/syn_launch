@@ -76,7 +76,7 @@ def load_catalog():
 def save_private_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    temp.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     try: temp.chmod(0o600)
     except OSError: pass
     temp.replace(path)
