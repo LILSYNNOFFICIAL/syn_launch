@@ -135,6 +135,10 @@ Use reconnaissance, scanners, fuzzers, proxies, password-auditing tools, and exp
 
 Some tools can trigger account lockouts, execute commands on vulnerable systems, change cloud/directory state, or capture sensitive traffic. They are labeled with specific caveats. Protect reports, logs, tokens, hashes, and collected directory data. PhoneInfoga and similar services **do not reveal live GPS location merely from a phone number**.
 
+## Platform roadmap
+
+See [PLATFORM_ROADMAP.md](PLATFORM_ROADMAP.md) for the staged plan covering compatibility metadata, verified tool lifecycle, authorized assessment workflows, and optional Linux environments.
+
 ## Development and verification
 
 Run these checks locally:
