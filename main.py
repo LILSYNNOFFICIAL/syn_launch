@@ -8,6 +8,7 @@ APP_DIR = Path(__file__).resolve().parent
 CATALOG_PATH = APP_DIR / "catalog.json"
 STATE_DIR = Path(os.environ.get("SYN_LAUNCH_HOME", str(Path.home() / ".syn_launch"))).expanduser()
 LOG_DIR, BIN_DIR, VENV_DIR = STATE_DIR / "logs", Path.home() / ".local" / "bin", STATE_DIR / "venv"
+CUSTOM_PATH, FAVORITES_PATH = STATE_DIR / "custom_tools.json", STATE_DIR / "favorites.json"
 for directory in (STATE_DIR, LOG_DIR, BIN_DIR):
     directory.mkdir(parents=True, exist_ok=True)
     try: directory.chmod(0o700 if directory != BIN_DIR else 0o755)
@@ -62,7 +63,45 @@ def validate_catalog(data):
     return data
 
 def load_catalog():
-    return validate_catalog(json.loads(CATALOG_PATH.read_text(encoding="utf-8")))
+    data = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    if CUSTOM_PATH.exists():
+        custom = json.loads(CUSTOM_PATH.read_text(encoding="utf-8"))
+        if not isinstance(custom, list):
+            raise ValueError("custom_tools.json must contain a JSON list")
+        data["tools"].extend(custom)
+    data["categories"] = list(dict.fromkeys(t.get("category", "") for t in data["tools"]))
+    data["tool_count"] = len(data["tools"])
+    return validate_catalog(data)
+
+def save_private_json(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    try: temp.chmod(0o600)
+    except OSError: pass
+    temp.replace(path)
+    try: path.chmod(0o600)
+    except OSError: pass
+
+def get_custom_tools():
+    if not CUSTOM_PATH.exists(): return []
+    value = json.loads(CUSTOM_PATH.read_text(encoding="utf-8"))
+    if not isinstance(value, list): raise ValueError("custom_tools.json must contain a JSON list")
+    return value
+
+def get_favorites():
+    if not FAVORITES_PATH.exists(): return set()
+    value = json.loads(FAVORITES_PATH.read_text(encoding="utf-8"))
+    if not isinstance(value, list) or not all(isinstance(x, str) for x in value):
+        raise ValueError("favorites.json must contain a list of tool IDs")
+    return set(value)
+
+def toggle_favorite(tool):
+    favorites = get_favorites()
+    if tool["id"] in favorites:
+        favorites.remove(tool["id"]); save_private_json(FAVORITES_PATH, sorted(favorites)); say("Removed from favorites.")
+    else:
+        favorites.add(tool["id"]); save_private_json(FAVORITES_PATH, sorted(favorites)); say("Added to favorites.")
 
 def installed(t):
     exe=t.get("executable","")
@@ -258,6 +297,80 @@ def progress(items,worker,label,confirmed=False):
     say(f"Finished: {good}/{len(items)} successful attempts.")
     if failed: say("Failed/unavailable: "+", ".join(failed))
 
+
+def add_custom_tool(data):
+    say("Add a personal catalog entry. This saves metadata only; it does not install the tool.")
+    name=ask("Tool display name: ")
+    if not name: say("Name is required."); return
+    slug=re.sub(r"[^a-z0-9]+","-",name.lower()).strip("-")
+    if not slug or any(t["id"]==slug for t in data["tools"]):
+        say("Could not make a unique ID from that name. Choose a different display name."); return
+    category_name=ask("Category [Custom Tools]: ") or "Custom Tools"
+    executable=ask("Executable/command name (one token): ")
+    if not re.fullmatch(r"[A-Za-z0-9_.+-]+",executable):
+        say("Executable must be a single command name without spaces or shell syntax."); return
+    kinds=["pkg","pip","go","cargo","npm","manual","root"]
+    choice=menu("Install method",kinds)
+    if not choice.isdigit() or not 1<=int(choice)<=len(kinds): return
+    kind=kinds[int(choice)-1]
+    package=None
+    if kind in {"pkg","pip","go","cargo","npm"}:
+        package=ask("Exact package/module name: ")
+    description=ask("Purpose/description: ")
+    source=ask("HTTPS upstream URL: ")
+    example=ask("Example/help command (optional, not auto-executed): ")
+    caveat=ask("Termux compatibility/safety caveat: ")
+    tool={"id":slug,"name":name,"category":category_name,"executable":executable,"install_kind":kind,"package":package,"installable":kind in {"pkg","pip","go","cargo","npm"},"description":description,"example":example,"source":source,"caveat":caveat}
+    custom=get_custom_tools()
+    candidate=json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    candidate["tools"].extend(custom+[tool])
+    candidate["categories"]=list(dict.fromkeys(t.get("category","") for t in candidate["tools"]))
+    candidate["tool_count"]=len(candidate["tools"])
+    try: validate_catalog(candidate)
+    except (ValueError,TypeError) as exc:
+        say("Entry rejected: "+str(exc)); return
+    custom.append(tool)
+    save_private_json(CUSTOM_PATH,custom)
+    data["tools"].append(tool)
+    data["categories"]=list(dict.fromkeys(t["category"] for t in data["tools"]))
+    data["tool_count"]=len(data["tools"])
+    say("Custom entry saved. It will appear in search and category menus next time too.")
+
+def browse_favorites(data):
+    ids=get_favorites()
+    matches=[t for t in data["tools"] if t["id"] in ids]
+    if not matches: say("No favorites yet. Select a tool and choose [f]avorite."); return
+    choose(data,matches)
+
+def list_custom_tools(data):
+    ids={t["id"] for t in get_custom_tools()}
+    matches=[t for t in data["tools"] if t["id"] in ids]
+    if matches: choose(data,matches)
+    else: say("No custom entries yet.")
+
+def remove_custom_tool(data):
+    custom=get_custom_tools()
+    if not custom: say("No custom entries to remove."); return
+    show_list(custom)
+    value=ask("Custom tool number to remove: ")
+    if not value.isdigit() or int(value)<1 or int(value)>len(custom): return
+    tool=custom[int(value)-1]
+    if ask(f"Type DELETE to remove {tool['name']}: ")!="DELETE": say("Cancelled."); return
+    custom=[t for t in custom if t["id"]!=tool["id"]]
+    save_private_json(CUSTOM_PATH,custom)
+    data["tools"]=[t for t in data["tools"] if t["id"]!=tool["id"]]
+    data["categories"]=list(dict.fromkeys(t["category"] for t in data["tools"]))
+    data["tool_count"]=len(data["tools"])
+    favorites=get_favorites(); favorites.discard(tool["id"]); save_private_json(FAVORITES_PATH,sorted(favorites))
+    say("Custom entry removed. This does not uninstall its software.")
+
+def manage_custom_tools(data):
+    choice=menu("Custom tools and favorites",["Add a custom tool entry","Browse favorites","Browse custom entries","Remove a custom entry"])
+    if choice=="1": add_custom_tool(data)
+    elif choice=="2": browse_favorites(data)
+    elif choice=="3": list_custom_tools(data)
+    elif choice=="4": remove_custom_tool(data)
+
 def installer(data):
     choice=menu("Installer",["Attempt all distinct Termux packages","Install one selected tool","Install Python, Go, Rust and Node.js runtimes","Attempt all Python/Go/Cargo/npm tools (large download/build)","Show last install summary"])
     if choice=="1":
@@ -319,7 +432,7 @@ def main():
         show_tool(matches[0]); return 0
     title()
     while True:
-        c=menu("Main menu",["Browse categories","Search catalog","All tools","Installer","Environment / health","Credits and safety","Exit"])
+        c=menu("Main menu",["Browse categories","Search catalog","All tools","Installer","Environment / health","Credits and safety","Custom tools / favorites","Exit"])
         if c=="1": category(data)
         elif c=="2": search(data)
         elif c=="3": choose(data)
@@ -330,7 +443,7 @@ def main():
             say("Each entry links to a maintainer or project page. Respect upstream licenses and API terms.")
             say("Some tools require root, compatible hardware, desktop Linux, API keys, or approved credentials.")
             say("No scans start automatically. Never run active tests outside explicit authorization.")
-        elif c in ("0","7"): break
+        elif c=="7": manage_custom_tools(data)\n        elif c in ("0","8"): break
         else: say("Invalid choice.")
     return 0
 
