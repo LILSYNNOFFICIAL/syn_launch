@@ -76,7 +76,7 @@ Use **Custom tools / favorites** in the main menu to add a tool entry without ed
 - **Privacy & Metadata**
 - **Password & Authentication Auditing**
 
-Advanced entries include Nuclei, Dalfox, Ghauri, RustScan, Kiterunner, ffuf, Gobuster, Subfinder, dnsx, Katana, Naabu, Uncover, gau, gospider, Hakrawler, Gitleaks, OSV-Scanner, Checkov, Bandit, pip-audit, Syft, Grype, Cosign, Terrascan, Semgrep, Trivy, mitmproxy, SSLyze, testssl.sh, YARA, capa, Apktool, JADX, angr, pwndbg, RustHound-CE, and more. Some entries are intentionally manual-only where a reliable Termux install path is not established.
+Advanced entries include Nuclei, Dalfox, Ghauri, RustScan, Kiterunner, ffuf, Gobuster, Subfinder, dnsx, Katana, Naabu, Uncover, PureDNS, gau, gospider, Hakrawler, Gitleaks, OSV-Scanner, Checkov, Bandit, pip-audit, Syft, Grype, Cosign, Terrascan, Semgrep, Trivy, mitmproxy, SSLyze, testssl.sh, YARA, capa, Apktool, APKiD, JADX, angr, pwndbg, RustHound-CE, Cloudsplaining, kube-linter, Dockle, staticcheck, gowitness, steghide, and Pacu. Some entries are intentionally manual-only where a reliable Termux install path is not established.
 
 Some high-impact or desktop-focused projects such as Metasploit, Responder, Hydra, Hashcat, masscan, JADX, and MobSF are explicitly marked manual-only or compatibility-limited. SYN_LAUNCH does not silently root the phone or claim these work on stock Android.
 
@@ -111,6 +111,7 @@ The progress bar counts completed attempts, not downloaded bytes. Command output
 - Validates package/module syntax inside the catalog itself, not just at install time.
 - Removes environment-based package-source overrides before installer subprocesses. Python installs use pip isolated mode and the official PyPI index; Go installs use the official Go proxy/checksum database; npm installs pin the official registry and require TLS verification.
 - Duplicate display names are rejected to keep catalog selection unambiguous.
+- The bootstrap verifies the official HTTPS Git origin, requires a clean checkout on `main`, disables Git hooks during repository operations, and installs Python dependencies through isolated pip against the official PyPI index.
 - Validates upstream links as HTTPS URLs with a hostname and rejects embedded URL credentials.
 - Validates executable names, boolean install flags, and metadata lengths before a catalog entry is accepted.
 - Browsing a tool no longer executes its local binary. Version/help probing occurs only after the user explicitly chooses Help.
