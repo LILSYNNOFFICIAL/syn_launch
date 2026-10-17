@@ -8,7 +8,7 @@
 
 **A searchable, Android-aware security toolkit catalog and installer for Termux.**
 
-SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, example command, and (when installed) version/help output from the local executable. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
+SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, and example command. Local version/help probes are available only after you explicitly choose Help. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
 
 > **Important:** cataloged does not mean installed, compatible, or verified on every phone. Termux is not desktop Linux. Android permissions, kernel features, CPU architecture, package repositories, Python wheels, native libraries, external adapters, and root access all affect compatibility. The app reports install attempts and does not claim a tool works until it is actually detected in PATH.
 
