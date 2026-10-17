@@ -430,11 +430,16 @@ def collect_resolved_version(tool):
             return result
         command = [manager, "-W", "-f=" + "{Version}", package]
     elif kind == "pip" and isinstance(package, str) and PIP_RE.fullmatch(package):
-        manager = VENV_DIR / "bin" / "pip"
+        manager = VENV_DIR / "bin" / "python"
         if not manager.is_file():
             result["version_evidence"] = "query_unavailable"
             return result
-        command = [str(manager), "show", package]
+        # Static Python code reads installed metadata and prints only the version.
+        command = [
+            str(manager), "-c",
+            "import importlib.metadata, sys; print(importlib.metadata.version(sys.argv[1]))",
+            package,
+        ]
     else:
         return result
     try:
@@ -450,11 +455,7 @@ def collect_resolved_version(tool):
     if completed.returncode != 0:
         result["version_evidence"] = "not_found" if completed.returncode == 1 else "query_failed"
         return result
-    if kind == "pkg":
-        version = completed.stdout.strip()
-    else:
-        version = next((line.split(":", 1)[1].strip() for line in completed.stdout.splitlines()
-                        if line.lower().startswith("version:")), "")
+    version = completed.stdout.strip()
     if version:
         result.update({"resolved_version": version, "version_evidence": "package_manager_metadata"})
     else:
