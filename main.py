@@ -552,17 +552,29 @@ def print_environment_profile(data):
 
 
 def health(data, detailed=False):
+    profile = environment_profile(data)
     say(f"Python: {sys.version.split()[0]} | Platform: {platform.platform()}")
+    say(f"Architecture: {profile['machine_raw']} (family: {profile['architecture_family']})")
+    say(f"Android markers: {'detected' if profile['android_markers_detected'] else 'not detected'} | Termux: {'detected' if profile['termux_detected'] else 'not detected'}")
+    say(f"Process UID 0: {'yes' if profile['process_uid_is_zero'] else 'no'} (does not prove Android host root)")
+    if profile["storage_free_bytes"] is not None:
+        say(f"Storage free: {profile['storage_free_bytes'] / (1024 ** 3):.2f} GiB / {profile['storage_total_bytes'] / (1024 ** 3):.2f} GiB")
     say(f"Catalog: {len(data['tools'])} entries across {len(data['categories'])} categories")
     say("Termux pkg: "+("available" if shutil.which("pkg") else "not found"))
-    for cmd in ("go","cargo","npm","git"): say(f"{cmd}: "+(shutil.which(cmd) or "not found"))
+    for cmd in ("pkg", "python", "python3", "go", "cargo", "rustc", "npm", "node", "git", "proot", "docker", "adb"):
+        say(f"{cmd}: " + (shutil.which(cmd) or "not found"))
+    if detailed:
+        say("Install-method counts: " + json.dumps(profile["install_method_counts"], sort_keys=True))
+        say(profile["compatibility_note"])
     say("Rich UI: "+("enabled" if RICH else "plain-text fallback"))
     say("State directory: "+str(STATE_DIR))
     say(f"Detected executables: {sum(installed(t) for t in data['tools'])}/{len(data['tools'])} entries (PATH check only, not full self-tests)")
 
 def main():
     parser=argparse.ArgumentParser(description="SYN_LAUNCH Termux security-tool catalog and installer")
-    parser.add_argument("--check",action="store_true",help="validate catalog and print environment status")
+    parser.add_argument("--check",action="store_true",help="validate catalog and print concise environment status")
+    parser.add_argument("--doctor",action="store_true",help="show detailed platform, architecture, runtime, and storage diagnostics")
+    parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
@@ -571,7 +583,9 @@ def main():
     try: data=load_catalog()
     except (OSError,json.JSONDecodeError,ValueError) as exc:
         print("Catalog validation failed:",exc,file=sys.stderr); return 2
+    if args.profile: print_environment_profile(data); return 0
     if args.check: health(data); return 0
+    if args.doctor: health(data, detailed=True); return 0
     if args.list: show_list(data["tools"]); return 0
     if args.search:
         matches=[t for t in data["tools"] if args.search.lower() in t["name"].lower() or args.search.lower() in t["category"].lower() or args.search.lower() in t["description"].lower()]
