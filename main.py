@@ -444,7 +444,8 @@ def main():
             say("Each entry links to a maintainer or project page. Respect upstream licenses and API terms.")
             say("Some tools require root, compatible hardware, desktop Linux, API keys, or approved credentials.")
             say("No scans start automatically. Never run active tests outside explicit authorization.")
-        elif c=="7": manage_custom_tools(data)\n        elif c in ("0","8"): break
+        elif c=="7": manage_custom_tools(data)
+        elif c in ("0","8"): break
         else: say("Invalid choice.")
     return 0
 
