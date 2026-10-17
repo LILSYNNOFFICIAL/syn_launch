@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse, json, os, platform, re, selectors, shutil, signal, subprocess, sys, time
 from pathlib import Path
+from urllib.parse import urlsplit
 
 APP_DIR = Path(__file__).resolve().parent
 CATALOG_PATH = APP_DIR / "catalog.json"
@@ -30,6 +31,8 @@ PIP_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 GO_RE = re.compile(r"^[A-Za-z0-9._/-]+@[A-Za-z0-9._-]+$")
 CARGO_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 NPM_RE = re.compile(r"^(?:@[A-Za-z0-9._-]+/)?[A-Za-z0-9._-]+$")
+EXECUTABLE_RE = re.compile(r"^[A-Za-z0-9_.+-]{1,128}$")
+MAX_COMMAND_OUTPUT_BYTES = 10 * 1024 * 1024
 
 def say(message=""):
     if RICH: console.print(message, markup=False)
@@ -42,23 +45,33 @@ def title():
 def validate_catalog(data):
     if not isinstance(data, dict) or not isinstance(data.get("tools"), list) or not isinstance(data.get("categories"), list):
         raise ValueError("catalog must contain tools and categories lists")
-    if data.get("tool_count") != len(data["tools"]): raise ValueError("tool_count does not match actual entries")
+    if type(data.get("tool_count")) is not int or data.get("tool_count") != len(data["tools"]): raise ValueError("tool_count does not match actual entries")
     ids, categories = set(), set()
     for t in data["tools"]:
         if not isinstance(t, dict): raise ValueError("each tool must be an object")
         for field in ("id","name","category","executable","install_kind","description","source","caveat"):
             if not isinstance(t.get(field),str) or not t[field].strip(): raise ValueError(f"missing/invalid {field}: {t.get('name','<unnamed>')}")
         if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*",t["id"]): raise ValueError(f"invalid id: {t['id']}")
+        if len(t["name"]) > 160 or len(t["description"]) > 2000 or len(t["caveat"]) > 2000:
+            raise ValueError(f"field exceeds safe length: {t['name']}")
+        if not isinstance(t.get("category"), str) or len(t["category"]) > 120:
+            raise ValueError(f"invalid category: {t['name']}")
+        if not isinstance(t.get("executable"), str) or not EXECUTABLE_RE.fullmatch(t["executable"]):
+            raise ValueError(f"invalid executable name: {t['name']}")
         if t["id"] in ids: raise ValueError(f"duplicate id: {t['id']}")
         ids.add(t["id"]); categories.add(t["category"])
         if t["install_kind"] not in INSTALL_KINDS: raise ValueError(f"invalid install kind: {t['name']}")
-        if not t["source"].startswith("https://"): raise ValueError(f"source must use HTTPS: {t['name']}")
+        try:
+            parsed_source = urlsplit(t["source"])
+            valid_source = parsed_source.scheme == "https" and bool(parsed_source.hostname) and not parsed_source.username and not parsed_source.password and not any(ch.isspace() for ch in t["source"])
+            _ = parsed_source.port
+        except ValueError:
+            valid_source = False
+        if not valid_source: raise ValueError(f"source must be a valid HTTPS URL without credentials: {t['name']}")
+        if "example" in t and (not isinstance(t["example"], str) or len(t["example"]) > 1000):
+            raise ValueError(f"invalid example: {t['name']}")
         expected=t["install_kind"] in {"pkg","pip","go","cargo","npm"}
-        if bool(t.get("installable")) != expected: raise ValueError(f"installable flag mismatch: {t['name']}")
-        if expected:
-            package=t.get("package")
-            regex={"pkg":PKG_RE,"pip":PIP_RE,"go":GO_RE,"cargo":CARGO_RE,"npm":NPM_RE}[t["install_kind"]]
-            if not isinstance(package,str) or not regex.fullmatch(package): raise ValueError(f"unsafe package/module syntax: {t['name']}")
+        if type(t.get("installable")) is not bool or t.get("installable") != expected: raise ValueError(f"installable flag mismatch: {t['name']}")
     if set(data["categories"]) != categories: raise ValueError("categories list does not match catalog entries")
     return data
 
@@ -119,6 +132,8 @@ def run(command, label, timeout=900, env=None):
     child_env=os.environ.copy()
     if env: child_env.update(env)
     proc=None
+    total_output=0
+    output_truncated=False
     try:
         with logfile.open("a",encoding="utf-8") as log:
             try: logfile.chmod(0o600)
@@ -136,8 +151,15 @@ def run(command, label, timeout=900, env=None):
                         chunk=os.read(key.fd,8192)
                         if not chunk:
                             selector.unregister(key.fileobj); continue
-                        decoded=chunk.decode("utf-8",errors="replace")
-                        sys.stdout.write(decoded); sys.stdout.flush(); log.write(decoded); log.flush()
+                        remaining_bytes=max(0,MAX_COMMAND_OUTPUT_BYTES-total_output)
+                        visible=chunk[:remaining_bytes]
+                        if visible:
+                            decoded=visible.decode("utf-8",errors="replace")
+                            sys.stdout.write(decoded); sys.stdout.flush(); log.write(decoded); log.flush()
+                        total_output += len(chunk)
+                        if len(chunk)>remaining_bytes and not output_truncated:
+                            notice="\\n[output truncated after 10 MiB; remaining output is drained but not displayed or logged]\\n"
+                            sys.stdout.write(notice); sys.stdout.flush(); log.write(notice); log.flush(); output_truncated=True
             proc.stdout.close()
             code=proc.wait(timeout=max(0.1,deadline-time.monotonic()))
             if code: say(f"Command exited with status {code}.")
@@ -179,7 +201,7 @@ def show_tool(t,n=None):
     say(t["description"]); say("Install method: "+t["install_kind"]+(f" ({t['package']})" if t.get("package") else ""))
     say("Compatibility: "+t["caveat"]); say("Source: "+t["source"])
     if t.get("example"): say("Example: "+t["example"])
-    if installed(t): show_local_docs(t)
+    say("Local help/version commands are not executed automatically. Choose Help to run bounded probes.")
     say("Authorized use only: assess systems, accounts, apps, and networks you own or have explicit permission to test.")
 
 def ask(prompt="> "):
@@ -262,7 +284,10 @@ def choose(data,tools=None):
     if i<0 or i>=len(tools): say("Invalid number."); return
     t=tools[i]; show_tool(t); action=ask("[i]nstall / [h]elp / [f]avorite / [b]ack: ").lower()
     if action=="i": install_one(t)
-    elif action=="h": say("Review the example and source; replace placeholders only with authorized test values." if t.get("example") else "No example supplied. Read upstream documentation.")
+    elif action=="h":
+        if installed(t): show_local_docs(t)
+        else: say("Executable is not detected in PATH. Review the upstream documentation link and example.")
+        say("Use examples only with authorized test values.")
     elif action=="f": toggle_favorite(t)
 
 def category(data,selected=None):
@@ -310,7 +335,7 @@ def add_custom_tool(data):
         say("Could not make a unique ID from that name. Choose a different display name."); return
     category_name=ask("Category [Custom Tools]: ") or "Custom Tools"
     executable=ask("Executable/command name (one token): ")
-    if not re.fullmatch(r"[A-Za-z0-9_.+-]+",executable):
+    if not EXECUTABLE_RE.fullmatch(executable):
         say("Executable must be a single command name without spaces or shell syntax."); return
     kinds=["pkg","pip","go","cargo","npm","manual","root"]
     choice=menu("Install method",kinds)
@@ -321,7 +346,7 @@ def add_custom_tool(data):
         package=ask("Exact package/module name: ")
     description=ask("Purpose/description: ")
     source=ask("HTTPS upstream URL: ")
-    example=ask("Example/help command (optional, not auto-executed): ")
+    example=ask("Example/help command (display only, never auto-executed): ")
     caveat=ask("Termux compatibility/safety caveat: ")
     tool={"id":slug,"name":name,"category":category_name,"executable":executable,"install_kind":kind,"package":package,"installable":kind in {"pkg","pip","go","cargo","npm"},"description":description,"example":example,"source":source,"caveat":caveat}
     custom=get_custom_tools()
