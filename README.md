@@ -143,7 +143,7 @@ python -m unittest discover -s tests -v
 python main.py --check
 ~~~
 
-GitHub Actions runs syntax, bootstrap-shell, JSON, catalog-integrity, CLI, and regression checks on pushes and pull requests. CI success on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
+GitHub Actions runs syntax, bootstrap-shell, JSON, catalog-integrity, CLI, bootstrap-security and regression checks on pushes and pull requests. CI success on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
 
 ## Contributing
 
