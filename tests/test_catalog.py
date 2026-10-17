@@ -518,7 +518,7 @@ class CatalogTests(unittest.TestCase):
             package_dir.mkdir()
             Path(package_dir, "package.json").write_text(json.dumps({"version":"3.4.5"}), encoding="utf-8")
             with patch.object(APP.shutil, "which", return_value="/usr/bin/npm"), \
-                 patch.object(APP.subprocess, "run", return_value=Mock(returncode=0, stdout=tmp, stderr="")):
+                 patch.object(APP, "bounded_probe", return_value=(tmp, False, False)):
                 result = APP.collect_resolved_version(tool)
         self.assertEqual(result["resolved_version"], "3.4.5")
         self.assertEqual(result["version_evidence"], "package_manager_metadata")
