@@ -130,7 +130,8 @@ def installed(t):
     return bool(re.fullmatch(r"[A-Za-z0-9_.+-]+",exe) and shutil.which(exe))
 
 def status(t):
-    if installed(t): return "INSTALLED"
+    # PATH presence is only a discovery signal, never a successful tool self-test.
+    if installed(t): return "PATH MATCH (UNVERIFIED)"
     return {"pkg":"TERMUX PKG","pip":"PYTHON/PIP","go":"GO BUILD","cargo":"CARGO BUILD","npm":"NPM PACKAGE","manual":"MANUAL","root":"ROOT/HW"}.get(t["install_kind"],"UNKNOWN")
 
 PACKAGE_CONFIG_ENV = (
@@ -542,13 +543,53 @@ def environment_profile(data):
         "storage_free_bytes": free_bytes, "storage_total_bytes": total_bytes,
         "runtimes": runtimes, "catalog_entries": len(data["tools"]),
         "catalog_categories": len(data["categories"]),
+        "path_match_tool_entries": sum(1 for tool in data["tools"] if installed(tool)),
+        "unique_path_match_executables": len({tool["executable"] for tool in data["tools"] if installed(tool)}),
         "install_method_counts": dict(sorted(install_counts.items())),
         "compatibility_note": "Catalog presence and architecture detection are not proof that a tool installs or runs; verify each tool on this device.",
     }
 
 
+def compatibility_report(data):
+    """Describe what is discoverable on this device without claiming it works."""
+    profile = environment_profile(data)
+    tools = []
+    for tool in data["tools"]:
+        executable = tool.get("executable", "")
+        path = shutil.which(executable) if re.fullmatch(r"[A-Za-z0-9_.+-]{1,128}", executable) else None
+        tools.append({
+            "id": tool["id"],
+            "name": tool["name"],
+            "category": tool["category"],
+            "executable": executable,
+            "path": path,
+            "status": "path_match_unverified" if path else "not_detected",
+            "verification": "not_run",
+            "install_kind": tool["install_kind"],
+            "package": tool.get("package"),
+            "caveat": tool["caveat"],
+        })
+    return {
+        "report_schema": 1,
+        "application": "SYN_LAUNCH",
+        "device_profile": profile,
+        "summary": {
+            "catalog_entries": len(tools),
+            "path_match_entries": sum(1 for tool in tools if tool["path"]),
+            "unique_path_match_executables": len({tool["executable"] for tool in tools if tool["path"]}),
+            "verified_tools": 0,
+            "note": "PATH matches are not installation, compatibility, or functional verification. No tools were executed by this report.",
+        },
+        "tools": tools,
+    }
+
+
 def print_environment_profile(data):
     print(json.dumps(environment_profile(data), indent=2, sort_keys=True))
+
+
+def print_compatibility_report(data):
+    print(json.dumps(compatibility_report(data), indent=2, sort_keys=True))
 
 
 def health(data, detailed=False):
@@ -575,6 +616,7 @@ def main():
     parser.add_argument("--check",action="store_true",help="validate catalog and print concise environment status")
     parser.add_argument("--doctor",action="store_true",help="show detailed platform, architecture, runtime, and storage diagnostics")
     parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
+    parser.add_argument("--compatibility-report",action="store_true",help="print JSON catalog status; PATH matches are explicitly unverified")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
@@ -584,6 +626,7 @@ def main():
     except (OSError,json.JSONDecodeError,ValueError) as exc:
         print("Catalog validation failed:",exc,file=sys.stderr); return 2
     if args.profile: print_environment_profile(data); return 0
+    if args.compatibility_report: print_compatibility_report(data); return 0
     if args.check: health(data); return 0
     if args.doctor: health(data, detailed=True); return 0
     if args.list: show_list(data["tools"]); return 0
