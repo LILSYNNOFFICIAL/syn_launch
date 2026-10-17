@@ -440,6 +440,87 @@ def collect_resolved_version(tool):
             "import importlib.metadata, sys; print(importlib.metadata.version(sys.argv[1]))",
             package,
         ]
+    elif kind == "cargo" and isinstance(package, str) and CARGO_RE.fullmatch(package):
+        cargo_home = Path(os.environ.get("CARGO_HOME", str(Path.home() / ".cargo"))).expanduser()
+        metadata_path = cargo_home / ".crates2.json"
+        if not metadata_path.is_file():
+            result["version_evidence"] = "query_unavailable"
+            return result
+        try:
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            installs = metadata.get("installs", {})
+            versions = sorted({entry.get("version") for entry in installs.values()
+                               if isinstance(entry, dict) and entry.get("crate") == package
+                               and isinstance(entry.get("version"), str) and entry.get("version")})
+        except (OSError, ValueError, AttributeError):
+            result["version_evidence"] = "query_failed"
+            return result
+        if len(versions) == 1:
+            result.update({"resolved_version": versions[0], "version_evidence": "package_manager_metadata"})
+        elif len(versions) > 1:
+            result["version_evidence"] = "multiple_versions"
+        else:
+            result["version_evidence"] = "not_found"
+        return result
+    elif kind == "npm" and isinstance(package, str) and NPM_RE.fullmatch(package):
+        npm = shutil.which("npm")
+        if not npm:
+            result["version_evidence"] = "query_unavailable"
+            return result
+        try:
+            root_result = subprocess.run(
+                [npm, "root", "--global"], stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+                timeout=5, check=False, env=build_child_env(),
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            result["version_evidence"] = "query_failed"
+            return result
+        result["version_query_exit_code"] = root_result.returncode
+        if root_result.returncode != 0:
+            result["version_evidence"] = "query_failed"
+            return result
+        root = Path(root_result.stdout.strip()).resolve()
+        package_dir = (root / package).resolve()
+        try:
+            package_dir.relative_to(root)
+        except ValueError:
+            result["version_evidence"] = "invalid_package_path"
+            return result
+        metadata_path = package_dir / "package.json"
+        if not metadata_path.is_file():
+            result["version_evidence"] = "not_found"
+            return result
+        try:
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            result["version_evidence"] = "query_failed"
+            return result
+        version = metadata.get("version") if isinstance(metadata, dict) else None
+        if isinstance(version, str) and version.strip():
+            result.update({"resolved_version": version.strip(), "version_evidence": "package_manager_metadata"})
+        else:
+            result["version_evidence"] = "metadata_missing"
+        return result
+    elif kind == "go" and isinstance(package, str) and GO_RE.fullmatch(package):
+        go, executable = shutil.which("go"), shutil.which(tool.get("executable", ""))
+        if not go or not executable:
+            result["version_evidence"] = "query_unavailable"
+            return result
+        requested_module = package.rsplit("@", 1)[0]
+        output, truncated, timed_out = bounded_probe(
+            [go, "version", "-m", executable], timeout=5, max_bytes=65536
+        )
+        if truncated or timed_out:
+            result["version_evidence"] = "query_failed"
+            return result
+        for line in output.splitlines():
+            parts = line.strip().split()
+            if len(parts) >= 3 and parts[0] == "mod" and parts[1] == requested_module:
+                result.update({"resolved_version": parts[2], "version_evidence": "package_manager_metadata"})
+                return result
+        result["version_evidence"] = "metadata_missing"
+        return result
     else:
         return result
     try:

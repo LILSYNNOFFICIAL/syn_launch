@@ -470,12 +470,68 @@ class CatalogTests(unittest.TestCase):
 
     def test_unsupported_package_manager_does_not_run_a_probe(self):
         from unittest.mock import patch
-        tool = {"install_kind":"go", "package":"example.org/sample@v1.2.3"}
+        tool = {"install_kind":"manual", "package":None}
         with patch.object(APP.subprocess, "run") as query:
             result = APP.collect_resolved_version(tool)
         query.assert_not_called()
         self.assertIsNone(result["resolved_version"])
         self.assertEqual(result["version_evidence"], "not_supported")
+
+    def test_cargo_resolved_version_uses_crate_metadata_file(self):
+        import json
+        import tempfile
+        from unittest.mock import patch
+        tool = {"install_kind":"cargo", "package":"sample-crate"}
+        with tempfile.TemporaryDirectory() as tmp:
+            metadata = {"installs":{"sample-crate 1.2.3 (registry)": {
+                "crate":"sample-crate", "version":"1.2.3"
+            }}}
+            Path(tmp, ".crates2.json").write_text(json.dumps(metadata), encoding="utf-8")
+            with patch.dict(APP.os.environ, {"CARGO_HOME":tmp}):
+                result = APP.collect_resolved_version(tool)
+        self.assertEqual(result["resolved_version"], "1.2.3")
+        self.assertEqual(result["version_evidence"], "package_manager_metadata")
+
+    def test_cargo_ambiguous_versions_are_not_guessed(self):
+        import json
+        import tempfile
+        from unittest.mock import patch
+        tool = {"install_kind":"cargo", "package":"sample-crate"}
+        with tempfile.TemporaryDirectory() as tmp:
+            metadata = {"installs":{
+                "sample-crate 1.2.3 (registry)": {"crate":"sample-crate","version":"1.2.3"},
+                "sample-crate 2.0.0 (registry)": {"crate":"sample-crate","version":"2.0.0"},
+            }}
+            Path(tmp, ".crates2.json").write_text(json.dumps(metadata), encoding="utf-8")
+            with patch.dict(APP.os.environ, {"CARGO_HOME":tmp}):
+                result = APP.collect_resolved_version(tool)
+        self.assertIsNone(result["resolved_version"])
+        self.assertEqual(result["version_evidence"], "multiple_versions")
+
+    def test_npm_resolved_version_reads_global_package_metadata(self):
+        import json
+        import tempfile
+        from unittest.mock import patch, Mock
+        tool = {"install_kind":"npm", "package":"sample-package"}
+        with tempfile.TemporaryDirectory() as tmp:
+            package_dir = Path(tmp, "sample-package")
+            package_dir.mkdir()
+            Path(package_dir, "package.json").write_text(json.dumps({"version":"3.4.5"}), encoding="utf-8")
+            with patch.object(APP.shutil, "which", return_value="/usr/bin/npm"), \
+                 patch.object(APP.subprocess, "run", return_value=Mock(returncode=0, stdout=tmp, stderr="")):
+                result = APP.collect_resolved_version(tool)
+        self.assertEqual(result["resolved_version"], "3.4.5")
+        self.assertEqual(result["version_evidence"], "package_manager_metadata")
+
+    def test_go_resolved_version_reads_build_metadata_without_running_tool(self):
+        from unittest.mock import patch
+        tool = {"install_kind":"go", "package":"example.org/sample/cmd/tool@v1.2.3", "executable":"sample-tool"}
+        with patch.object(APP.shutil, "which", side_effect=["/usr/bin/go", "/home/user/.local/bin/sample-tool"]), \
+             patch.object(APP, "bounded_probe", return_value=("/home/user/.local/bin/sample-tool: go1.23.0\n    mod example.org/sample/cmd/tool v1.2.3 h1:checksum\n", False, False)) as probe:
+            result = APP.collect_resolved_version(tool)
+        self.assertEqual(result["resolved_version"], "v1.2.3")
+        self.assertEqual(result["version_evidence"], "package_manager_metadata")
+        self.assertEqual(probe.call_args.args[0][1:3], ["version", "-m"])
 
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(
