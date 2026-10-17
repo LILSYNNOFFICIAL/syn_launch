@@ -111,7 +111,7 @@ The progress bar counts completed attempts, not downloaded bytes. Command output
 - Validates upstream links as HTTPS URLs with a hostname and rejects embedded URL credentials.
 - Validates executable names, boolean install flags, and metadata lengths before a catalog entry is accepted.
 - Browsing a tool no longer executes its local binary. Version/help probing occurs only after the user explicitly chooses Help.
-- Caps displayed and logged subprocess output at 10 MiB while continuing to drain the process pipe, reducing log-flood and disk-exhaustion risk.
+- Caps displayed and logged installer output at 10 MiB, and caps explicit help/version probe output at 64 KiB, while continuing to drain process pipes. This reduces log-flood and memory/disk-exhaustion risk.
 - Validates catalog IDs, install methods, HTTPS source links, and package/module syntax before use.
 - Uses an isolated Python virtual environment instead of installing Python security packages into Termux's system Python.
 - Installs Go binaries into a dedicated user bin directory.
