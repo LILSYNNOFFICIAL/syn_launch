@@ -450,7 +450,7 @@ class CatalogTests(unittest.TestCase):
         tool = {"install_kind":"pip", "package":"sample-package"}
         with patch.object(APP.Path, "is_file", return_value=True), \
              patch.object(APP.subprocess, "run", return_value=Mock(
-                 returncode=0, stdout="Name: sample-package\\nVersion: 4.5.6\\n", stderr=""
+                 returncode=0, stdout="Name: sample-package\nVersion: 4.5.6\n", stderr=""
              )) as query:
             result = APP.collect_resolved_version(tool)
         self.assertEqual(result["resolved_version"], "4.5.6")
