@@ -22,7 +22,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 - [x] Record batch operation outcomes separately from before/after PATH matches, and label functional verification as not run.
 - [x] Capture the most recent installer subprocess command, exit code, timeout/launch error, timestamps, and output bounds in batch summaries; entries that never launched a subprocess retain a null exit code.
-- [ ] Record exact requested/resolved package versions and installer result evidence beyond the subprocess exit code.
+- [x] Record requested package specs and explicit Go module version requests in each batch result; mark unpinned packages and unresolved versions honestly.
+- [ ] Collect actual resolved package versions through package-manager-specific evidence and reconcile them with the requested spec.
 - [ ] Add bounded post-install checks that do not run arbitrary commands from catalog metadata.
 - [ ] Make updates and uninstall behavior explicit, reversible where possible, and auditable.
 - [x] Add advisory dependency/runtime and disk-space preflight checks before bulk installs; missing `pkg` blocks package batches, while other warnings require explicit continuation. Exact package sizes and tool functionality remain unverified.
