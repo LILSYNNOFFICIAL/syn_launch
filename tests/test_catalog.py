@@ -247,6 +247,34 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("runtimes", profile)
         self.assertIn("install_method_counts", profile)
 
+    def test_compatibility_report_never_claims_path_matches_are_verified(self):
+        from unittest.mock import patch
+        fake = {
+            "id": "fake-tool", "name": "Fake Tool", "category": "Test",
+            "executable": "fake-tool", "install_kind": "manual", "package": None,
+            "caveat": "Test-only entry."
+        }
+        with patch.object(APP.shutil, "which", side_effect=lambda command: "/test/fake-tool" if command == "fake-tool" else None):
+            report = APP.compatibility_report({"tools": [fake], "categories": ["Test"]})
+        self.assertEqual(report["summary"]["catalog_entries"], 1)
+        self.assertEqual(report["summary"]["path_match_entries"], 1)
+        self.assertEqual(report["summary"]["verified_tools"], 0)
+        self.assertEqual(report["tools"][0]["status"], "path_match_unverified")
+        self.assertEqual(report["tools"][0]["verification"], "not_run")
+
+    def test_compatibility_report_cli_outputs_json_for_entire_catalog(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "main.py"), "--compatibility-report"],
+            capture_output=True, text=True, timeout=15
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["application"], "SYN_LAUNCH")
+        self.assertEqual(report["summary"]["catalog_entries"], self.data["tool_count"])
+        self.assertEqual(len(report["tools"]), self.data["tool_count"])
+        self.assertEqual(report["summary"]["verified_tools"], 0)
+        self.assertTrue(all(item["verification"] == "not_run" for item in report["tools"]))
+
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "main.py"), "--profile"],
