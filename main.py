@@ -46,7 +46,7 @@ def validate_catalog(data):
     if not isinstance(data, dict) or not isinstance(data.get("tools"), list) or not isinstance(data.get("categories"), list):
         raise ValueError("catalog must contain tools and categories lists")
     if type(data.get("tool_count")) is not int or data.get("tool_count") != len(data["tools"]): raise ValueError("tool_count does not match actual entries")
-    ids, categories = set(), set()
+    ids, categories, display_names = set(), set(), set()
     for t in data["tools"]:
         if not isinstance(t, dict): raise ValueError("each tool must be an object")
         for field in ("id","name","category","executable","install_kind","description","source","caveat"):
@@ -59,7 +59,9 @@ def validate_catalog(data):
         if not isinstance(t.get("executable"), str) or not EXECUTABLE_RE.fullmatch(t["executable"]):
             raise ValueError(f"invalid executable name: {t['name']}")
         if t["id"] in ids: raise ValueError(f"duplicate id: {t['id']}")
-        ids.add(t["id"]); categories.add(t["category"])
+        display_name=t["name"].casefold()
+        if display_name in display_names: raise ValueError(f"duplicate display name: {t['name']}")
+        ids.add(t["id"]); display_names.add(display_name); categories.add(t["category"])
         if t["install_kind"] not in INSTALL_KINDS: raise ValueError(f"invalid install kind: {t['name']}")
         try:
             parsed_source = urlsplit(t["source"])
@@ -72,6 +74,13 @@ def validate_catalog(data):
             raise ValueError(f"invalid example: {t['name']}")
         expected=t["install_kind"] in {"pkg","pip","go","cargo","npm"}
         if type(t.get("installable")) is not bool or t.get("installable") != expected: raise ValueError(f"installable flag mismatch: {t['name']}")
+        if expected:
+            package=t.get("package")
+            package_pattern={"pkg":PKG_RE,"pip":PIP_RE,"go":GO_RE,"cargo":CARGO_RE,"npm":NPM_RE}[t["install_kind"]]
+            if not isinstance(package,str) or not package_pattern.fullmatch(package):
+                raise ValueError(f"unsafe package/module syntax: {t['name']}")
+        elif t.get("package") is not None:
+            raise ValueError(f"manual/root entries must not define an install package: {t['name']}")
     if set(data["categories"]) != categories: raise ValueError("categories list does not match catalog entries")
     return data
 
@@ -124,13 +133,30 @@ def status(t):
     if installed(t): return "INSTALLED"
     return {"pkg":"TERMUX PKG","pip":"PYTHON/PIP","go":"GO BUILD","cargo":"CARGO BUILD","npm":"NPM PACKAGE","manual":"MANUAL","root":"ROOT/HW"}.get(t["install_kind"],"UNKNOWN")
 
+PACKAGE_CONFIG_ENV = (
+    "PYTHONPATH", "PYTHONHOME", "PYTHONSTARTUP",
+    "PIP_INDEX_URL", "PIP_EXTRA_INDEX_URL", "PIP_TRUSTED_HOST", "PIP_CONFIG_FILE",
+    "PIP_CERT", "PIP_CLIENT_CERT", "PIP_NO_VERIFY_CERTS",
+    "GOPROXY", "GOSUMDB", "GONOSUMDB", "GOPRIVATE", "GOINSECURE", "GOFLAGS", "GOTOOLCHAIN",
+    "NPM_CONFIG_REGISTRY", "NPM_CONFIG_STRICT_SSL", "npm_config_registry", "npm_config_strict_ssl",
+)
+
+def build_child_env(overrides=None):
+    """Remove environment-based package-source overrides before installer subprocesses."""
+    child_env=os.environ.copy()
+    for key in PACKAGE_CONFIG_ENV:
+        child_env.pop(key,None)
+    if overrides:
+        child_env.update({key:value for key,value in overrides.items() if isinstance(key,str) and isinstance(value,str)})
+    return child_env
+
+
 def run(command, label, timeout=900, env=None):
     if not isinstance(command,(list,tuple)) or not command or not all(isinstance(x,str) and x for x in command):
         say("Refusing invalid command arguments."); return False
     logfile=LOG_DIR/(time.strftime("%Y%m%d-%H%M%S")+"-"+str(os.getpid())+".log")
     say(f"\n→ {label}\nCommand: {' '.join(command)}\nLog: {logfile}")
-    child_env=os.environ.copy()
-    if env: child_env.update(env)
+    child_env=build_child_env(env)
     proc=None
     total_output=0
     output_truncated=False
@@ -289,7 +315,7 @@ def install_pip(t):
     if not ensure_venv(): say("Could not create virtual environment. Install Termux's python package first."); return False
     pip=VENV_DIR/"bin"/"pip"
     if not pip.exists(): say("Virtual environment has no pip executable."); return False
-    if not run([str(pip),"install","--upgrade",package],"Installing Python tool "+t["name"],1800): return False
+    if not run([str(pip),"install","--isolated","--disable-pip-version-check","--index-url","https://pypi.org/simple",package],"Installing Python tool "+t["name"],1800): return False
     return installed(t)
 
 def install_go(t):
@@ -298,7 +324,7 @@ def install_go(t):
     if not GO_RE.fullmatch(module): say("Refusing invalid Go module path."); return False
     go=shutil.which("go")
     if not go: say("Go missing. Install the Go runtime first."); return False
-    return run([go,"install",module],"Building "+t["name"],3600,{"GOBIN":str(BIN_DIR)})
+    return run([go,"install",module],"Building "+t["name"],3600,{"GOBIN":str(BIN_DIR),"GOPROXY":"https://proxy.golang.org,direct","GOSUMDB":"sum.golang.org","GONOSUMDB":"","GOPRIVATE":"","GOINSECURE":"","GOFLAGS":"","GOTOOLCHAIN":"local"})
 
 def install_cargo(t):
     if installed(t): say(f"{t['name']} already appears in PATH."); return True
@@ -314,7 +340,7 @@ def install_npm(t):
     if not NPM_RE.fullmatch(package): say("Refusing invalid npm package name."); return False
     npm=shutil.which("npm")
     if not npm: say("npm missing. Install Termux's nodejs package first."); return False
-    return run([npm,"install","--global",package],"Installing npm tool "+t["name"],1800)
+    return run([npm,"install","--global","--registry=https://registry.npmjs.org","--strict-ssl=true",package],"Installing npm tool "+t["name"],1800)
 
 def install_one(t,confirmed=False):
     kind=t["install_kind"]
