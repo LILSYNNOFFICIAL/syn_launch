@@ -499,29 +499,117 @@ def manage_custom_tools(data):
     elif choice=="3": list_custom_tools(data)
     elif choice=="4": remove_custom_tool(data)
 
+
+PREFLIGHT_MIN_FREE_BYTES = {
+    "termux_packages": 2 * 1024**3,
+    "third_party_builds": 1 * 1024**3,
+    "runtime_prerequisites": 512 * 1024**2,
+}
+
+
+def build_install_preflight(items, mode, free_bytes, available_commands):
+    """Describe bulk-install prerequisites without running installers or catalog tools."""
+    if mode not in PREFLIGHT_MIN_FREE_BYTES:
+        raise ValueError("unknown install preflight mode")
+    commands = set(available_commands)
+    kinds = {tool.get("install_kind") for tool in items}
+    required = {}
+    if kinds.intersection({"pkg"}):
+        required["pkg"] = sum(1 for tool in items if tool.get("install_kind") == "pkg")
+    for kind, command in (("pip", "python"), ("go", "go"), ("cargo", "cargo"), ("npm", "npm")):
+        count = sum(1 for tool in items if tool.get("install_kind") == kind)
+        if count:
+            required[command] = count
+    missing = [{"command": command, "affected_tool_count": count}
+               for command, count in sorted(required.items())
+               if command not in commands and not (command == "python" and "python3" in commands)]
+    threshold = PREFLIGHT_MIN_FREE_BYTES[mode]
+    warnings = []
+    if free_bytes is None:
+        warnings.append("Free storage could not be measured; package/build storage needs are unknown.")
+    elif free_bytes < threshold:
+        warnings.append(
+            f"Free storage is below the {threshold}-byte advisory threshold for {mode.replace('_', ' ')}."
+        )
+    if missing:
+        warnings.append("One or more required package managers or runtimes are missing; affected attempts may fail.")
+    return {
+        "preflight_schema": 1,
+        "mode": mode,
+        "tool_count": len(items),
+        "distinct_package_count": len({
+            (tool.get("install_kind"), tool.get("package"))
+            for tool in items if tool.get("package")
+        }),
+        "free_bytes": free_bytes,
+        "recommended_min_free_bytes": threshold,
+        "required_commands": required,
+        "missing_commands": missing,
+        "warnings": warnings,
+        "proceed": not ({"pkg"} <= {entry["command"] for entry in missing} and "pkg" in required),
+        "verification": "not_run",
+        "installers_executed": False,
+        "note": "Preflight is advisory. Package sizes and compatibility vary; it does not install or test tools.",
+    }
+
+
+def run_install_preflight(items, mode):
+    try:
+        free_bytes = shutil.disk_usage(APP_DIR).free
+    except OSError:
+        free_bytes = None
+    commands = {name for name in ("pkg", "python", "python3", "go", "cargo", "npm")
+                if shutil.which(name)}
+    report = build_install_preflight(items, mode, free_bytes, commands)
+    report["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    save_private_json(STATE_DIR / "last_preflight.json", report)
+    say("\\nBulk-install preflight (no installers or catalog tools executed):")
+    say(f"Mode: {mode} | Selected entries: {report['tool_count']} | Distinct packages/modules: {report['distinct_package_count']}")
+    say("Free storage: " + ("unknown" if free_bytes is None else f"{free_bytes:,} bytes"))
+    if report["missing_commands"]:
+        for entry in report["missing_commands"]:
+            say(f"Missing command: {entry['command']} (affects up to {entry['affected_tool_count']} selected entries)")
+    for warning in report["warnings"]:
+        say("WARNING: " + warning)
+    if not report["proceed"]:
+        say("Preflight cannot continue: Termux pkg is unavailable.")
+        return False
+    if report["warnings"] and ask("Type CONTINUE to proceed despite preflight warnings: ") != "CONTINUE":
+        say("Cancelled before installation.")
+        return False
+    return True
+
+
 def installer(data):
     choice=menu("Installer",["Attempt all distinct Termux packages","Install one selected tool","Install Python, Go, Rust and Node.js runtimes","Attempt all Python/Go/Cargo/npm tools (large download/build)","Show last install summary"])
     if choice=="1":
         packages={}
         for t in data["tools"]:
             if t["install_kind"]=="pkg" and t.get("package"): packages.setdefault(t["package"],t)
+        items=list(packages.values())
         say(f"Attempts {len(packages)} distinct packages; availability varies by Termux repo and architecture.")
         if ask("Type YES to continue: ")!="YES": return
-        if not shutil.which("pkg"): say("pkg not found. Run inside Termux."); return
+        if not run_install_preflight(items, "termux_packages"): return
         run(["pkg","update","-y"],"Refreshing package indexes",1200)
-        progress(list(packages.values()),install_pkg,"Termux packages")
+        progress(items,install_pkg,"Termux packages")
         say("Progress measures completed attempts, not download-byte percentage.")
     elif choice=="2": choose(data)
     elif choice=="3":
         names={"Python","Go","Rust","Node.js"}
-        progress([t for t in data["tools"] if t["name"] in names and t["install_kind"]=="pkg"],install_pkg,"Toolchain prerequisites")
+        items=[t for t in data["tools"] if t["name"] in names and t["install_kind"]=="pkg"]
+        if run_install_preflight(items, "runtime_prerequisites"):
+            progress(items,install_pkg,"Toolchain prerequisites")
     elif choice=="4":
         items=[t for t in data["tools"] if t["install_kind"] in {"pip","go","cargo","npm"}]
         say(f"Attempts {len(items)} third-party installs/builds. Expect large downloads and Android dependency failures.")
         if ask("Type YES to continue: ")!="YES": return
         names={"Python","Go","Rust","Node.js"}
-        progress([t for t in data["tools"] if t["name"] in names and t["install_kind"]=="pkg"],install_pkg,"Installing runtimes")
-        progress(items,install_one,"Security tool installs",confirmed=True)
+        runtimes=[t for t in data["tools"] if t["name"] in names and t["install_kind"]=="pkg"]
+        if not run_install_preflight(runtimes, "runtime_prerequisites"):
+            return
+        progress(runtimes,install_pkg,"Installing runtimes")
+        if run_install_preflight(items, "third_party_builds"):
+            progress(items,install_one,"Security tool installs",confirmed=True)
     elif choice=="5":
         p=STATE_DIR/"last_install_summary.json"; say(p.read_text(encoding="utf-8") if p.exists() else "No install summary yet.")
 

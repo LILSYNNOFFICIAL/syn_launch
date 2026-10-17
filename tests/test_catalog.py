@@ -312,6 +312,38 @@ class CatalogTests(unittest.TestCase):
         finally:
             APP.STATE_DIR = original_state
 
+    def test_install_preflight_warns_about_low_storage_and_missing_runtimes(self):
+        items = [
+            {"id": "one", "name": "One", "install_kind": "go", "package": "example.org/one@v1"},
+            {"id": "two", "name": "Two", "install_kind": "npm", "package": "two"},
+            {"id": "three", "name": "Three", "install_kind": "go", "package": "example.org/one@v1"},
+        ]
+        report = APP.build_install_preflight(items, "third_party_builds", 1, {"python"})
+        self.assertEqual(report["preflight_schema"], 1)
+        self.assertEqual(report["tool_count"], 3)
+        self.assertEqual(report["distinct_package_count"], 2)
+        self.assertEqual(report["missing_commands"], [
+            {"command": "go", "affected_tool_count": 2},
+            {"command": "npm", "affected_tool_count": 1},
+        ])
+        self.assertEqual(report["verification"], "not_run")
+        self.assertFalse(report["installers_executed"])
+        self.assertTrue(any("below" in warning for warning in report["warnings"]))
+        self.assertTrue(any("missing" in warning for warning in report["warnings"]))
+
+    def test_install_preflight_blocks_package_batch_without_pkg(self):
+        items = [{"id": "pkg-tool", "name": "Pkg Tool", "install_kind": "pkg", "package": "pkg-tool"}]
+        report = APP.build_install_preflight(items, "termux_packages", 4 * 1024**3, set())
+        self.assertFalse(report["proceed"])
+        self.assertEqual(report["missing_commands"], [{"command": "pkg", "affected_tool_count": 1}])
+
+    def test_install_preflight_handles_unknown_storage_without_claiming_verification(self):
+        report = APP.build_install_preflight([], "runtime_prerequisites", None, {"pkg"})
+        self.assertEqual(report["free_bytes"], None)
+        self.assertTrue(any("could not be measured" in warning for warning in report["warnings"]))
+        self.assertEqual(report["verification"], "not_run")
+        self.assertFalse(report["installers_executed"])
+
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "main.py"), "--profile"],
