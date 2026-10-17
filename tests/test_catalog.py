@@ -344,6 +344,75 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(report["verification"], "not_run")
         self.assertFalse(report["installers_executed"])
 
+    def test_run_captures_structured_exit_code_without_changing_boolean_return(self):
+        import tempfile
+        import contextlib
+        import io
+        with tempfile.TemporaryDirectory() as tmp:
+            old_log_dir = APP.LOG_DIR
+            try:
+                APP.LOG_DIR = Path(tmp)
+                with contextlib.redirect_stdout(io.StringIO()):
+                    result = APP.run([sys.executable, "-c", "raise SystemExit(7)"], "nonzero test", timeout=5)
+                self.assertFalse(result)
+                self.assertEqual(APP.LAST_COMMAND_RESULT["exit_code"], 7)
+                self.assertFalse(APP.LAST_COMMAND_RESULT["timed_out"])
+                self.assertIsNone(APP.LAST_COMMAND_RESULT["launch_error"])
+                self.assertEqual(APP.LAST_COMMAND_RESULT["label"], "nonzero test")
+            finally:
+                APP.LOG_DIR = old_log_dir
+
+    def test_run_captures_success_exit_code(self):
+        import tempfile
+        import contextlib
+        import io
+        with tempfile.TemporaryDirectory() as tmp:
+            old_log_dir = APP.LOG_DIR
+            try:
+                APP.LOG_DIR = Path(tmp)
+                with contextlib.redirect_stdout(io.StringIO()):
+                    result = APP.run([sys.executable, "-c", "print('ok')"], "success test", timeout=5)
+                self.assertTrue(result)
+                self.assertEqual(APP.LAST_COMMAND_RESULT["exit_code"], 0)
+                self.assertGreater(APP.LAST_COMMAND_RESULT["output_bytes"], 0)
+            finally:
+                APP.LOG_DIR = old_log_dir
+
+    def test_install_summary_carries_subprocess_evidence(self):
+        import tempfile
+        import contextlib
+        import io
+        original_state = APP.STATE_DIR
+        fake_tools = [{"id":"first", "name":"First", "install_kind":"pkg", "package":"first", "executable":"first"}]
+        command_evidence = {
+            "command": ["pkg", "install", "-y", "first"], "label": "Installing First",
+            "exit_code": 23, "timed_out": False, "launch_error": None,
+            "output_bytes": 40, "output_truncated": False,
+            "started_at": "2026-10-17 12:00:00", "finished_at": "2026-10-17 12:00:01",
+        }
+        def fake_worker(tool):
+            APP.LAST_COMMAND_RESULT.update(command_evidence)
+            return False
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.STATE_DIR = Path(tmp)
+                old_installed = APP.installed
+                try:
+                    APP.installed = lambda tool: False
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        APP.progress(fake_tools, fake_worker, "test")
+                finally:
+                    APP.installed = old_installed
+                summary = json.loads((Path(tmp) / "last_install_summary.json").read_text(encoding="utf-8"))
+                entry = summary["results"][0]
+                self.assertEqual(entry["installer_exit_code"], 23)
+                self.assertEqual(entry["installer_command"], ["pkg", "install", "-y", "first"])
+                self.assertEqual(entry["installer_label"], "Installing First")
+                self.assertEqual(entry["installer_output_bytes"], 40)
+                self.assertEqual(entry["verification"], "not_run")
+        finally:
+            APP.STATE_DIR = original_state
+
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "main.py"), "--profile"],
