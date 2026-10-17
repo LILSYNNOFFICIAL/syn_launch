@@ -177,6 +177,52 @@ def run(command, label, timeout=900, env=None):
         say(f"Could not run command: {exc}")
         return False
 
+def bounded_probe(command, timeout=5, max_bytes=65536):
+    """Run an explicit help/version probe with a time and retained-output cap."""
+    if not isinstance(command, (list, tuple)) or not command or not all(isinstance(x, str) and x for x in command):
+        return "", False
+    proc = None
+    output = bytearray()
+    truncated = False
+    try:
+        proc = subprocess.Popen(list(command), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT, start_new_session=(os.name == "posix"))
+        if proc.stdout is None:
+            return "", False
+        deadline = time.monotonic() + timeout
+        with selectors.DefaultSelector() as selector:
+            selector.register(proc.stdout, selectors.EVENT_READ)
+            while selector.get_map():
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise subprocess.TimeoutExpired(command, timeout)
+                for key, _ in selector.select(min(remaining, 0.2)):
+                    chunk = os.read(key.fd, 8192)
+                    if not chunk:
+                        selector.unregister(key.fileobj)
+                        continue
+                    room = max(0, max_bytes - len(output))
+                    if room:
+                        output.extend(chunk[:room])
+                    if len(chunk) > room or len(output) >= max_bytes:
+                        truncated = True
+        proc.wait(timeout=max(0.1, deadline - time.monotonic()))
+        return output.decode("utf-8", errors="replace"), truncated
+    except subprocess.TimeoutExpired:
+        try:
+            if proc and proc.poll() is None:
+                os.killpg(proc.pid, signal.SIGKILL) if os.name == "posix" else proc.kill()
+                proc.wait(timeout=2)
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+        return output.decode("utf-8", errors="replace"), True
+    except OSError:
+        return output.decode("utf-8", errors="replace"), truncated
+    finally:
+        if proc and proc.stdout and not proc.stdout.closed:
+            proc.stdout.close()
+
+
 def show_local_docs(t):
     exe=t["executable"]; path=shutil.which(exe) if re.fullmatch(r"[A-Za-z0-9_.+-]+",exe) else None
     if not path: return
@@ -185,9 +231,11 @@ def show_local_docs(t):
         output=""
         for flag in flags:
             try:
-                r=subprocess.run([path,flag],stdin=subprocess.DEVNULL,capture_output=True,text=True,timeout=5,errors="replace",check=False)
-                candidate=(r.stdout+"\n"+r.stderr).strip()
-                if candidate: output=candidate; break
+                candidate,truncated=bounded_probe([path,flag],timeout=5,max_bytes=65536)
+                candidate=candidate.strip()
+                if candidate:
+                    output=candidate+("\\n[probe output truncated at 64 KiB]" if truncated else "")
+                    break
             except (OSError,subprocess.TimeoutExpired): continue
         if output:
             lines=output.splitlines(); say(label+" output:"); say("\n".join(lines[:70]))
