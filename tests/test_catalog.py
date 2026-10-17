@@ -67,6 +67,28 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("Catalog:", result.stdout)
 
 
+
+    def test_custom_tools_are_merged_and_private_json_round_trips(self):
+        import tempfile
+        original = APP.CUSTOM_PATH
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.CUSTOM_PATH = Path(tmp) / "custom_tools.json"
+                tool = {
+                    "id": "my-lab-tool", "name": "My Lab Tool", "category": "Custom Tools",
+                    "executable": "my-lab-tool", "install_kind": "manual", "package": None,
+                    "installable": False, "description": "Local lab utility for my own systems.",
+                    "example": "my-lab-tool --help", "source": "https://example.org/project",
+                    "caveat": "User-managed entry; verify the upstream source before installing."
+                }
+                APP.save_private_json(APP.CUSTOM_PATH, [tool])
+                self.assertEqual(json.loads(APP.CUSTOM_PATH.read_text(encoding="utf-8")), [tool])
+                merged = APP.load_catalog()
+                self.assertIn("my-lab-tool", {t["id"] for t in merged["tools"]})
+                self.assertIn("Custom Tools", merged["categories"])
+        finally:
+            APP.CUSTOM_PATH = original
+
     def test_subprocess_timeout_terminates_process(self):
         import time
         started = time.monotonic()
