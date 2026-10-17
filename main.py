@@ -447,6 +447,9 @@ def collect_resolved_version(tool):
             result["version_evidence"] = "query_unavailable"
             return result
         try:
+            if metadata_path.stat().st_size > 2 * 1024 * 1024:
+                result["version_evidence"] = "metadata_too_large"
+                return result
             metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
             installs = metadata.get("installs", {})
             versions = sorted({entry.get("version") for entry in installs.values()
@@ -467,20 +470,13 @@ def collect_resolved_version(tool):
         if not npm:
             result["version_evidence"] = "query_unavailable"
             return result
-        try:
-            root_result = subprocess.run(
-                [npm, "root", "--global"], stdin=subprocess.DEVNULL,
-                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
-                timeout=5, check=False, env=build_child_env(),
-            )
-        except (OSError, subprocess.TimeoutExpired):
+        output, truncated, timed_out = bounded_probe(
+            [npm, "root", "--global"], timeout=5, max_bytes=4096
+        )
+        if truncated or timed_out or not output.strip():
             result["version_evidence"] = "query_failed"
             return result
-        result["version_query_exit_code"] = root_result.returncode
-        if root_result.returncode != 0:
-            result["version_evidence"] = "query_failed"
-            return result
-        root = Path(root_result.stdout.strip()).resolve()
+        root = Path(output.strip()).resolve()
         package_dir = (root / package).resolve()
         try:
             package_dir.relative_to(root)
@@ -495,6 +491,9 @@ def collect_resolved_version(tool):
             result["version_evidence"] = "not_found"
             return result
         try:
+            if metadata_path.stat().st_size > 1024 * 1024:
+                result["version_evidence"] = "metadata_too_large"
+                return result
             metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             result["version_evidence"] = "query_failed"
@@ -567,9 +566,21 @@ def progress(items,worker,label,confirmed=False):
         # Query package-manager metadata even after an unsuccessful operation: the
         # package may already be installed, or an install may have partially succeeded.
         version_result = collect_resolved_version(t)
+        post_check = {
+            "check_type": "metadata_only",
+            "executable_detected": bool(path_after),
+            "package_version_detected": bool(version_result.get("resolved_version")),
+            "status": (
+                "metadata_and_executable_present" if path_after and version_result.get("resolved_version")
+                else "executable_path_match_only" if path_after
+                else "package_metadata_only" if version_result.get("resolved_version")
+                else "no_evidence"
+            ) if t.get("install_kind") in {"pkg", "pip", "go", "cargo", "npm"} else "not_applicable",
+        }
         results.append({
             "id":t["id"], "name":t["name"], "install_kind":t["install_kind"],
             "package":t.get("package"), **requested_package_evidence(t), **version_result,
+            "post_install_check": post_check,
             "operation_returned_success":bool(ok),
             "path_match_before_attempt":bool(path_before),
             "path_match_after_attempt":bool(path_after),
