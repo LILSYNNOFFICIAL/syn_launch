@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_for": "SYN_LAUNCH",
-  "tool_count": 178,
+  "tool_count": 244,
   "categories": [
     "Termux Core",
     "Network & DNS",
@@ -11,7 +11,17 @@
     "Forensics & File Analysis",
     "Cryptography & Password Hygiene",
     "Wireless & Android Environment",
-    "Cloud, Containers & Misc"
+    "Cloud, Containers & Misc",
+    "Advanced Pentest & Exploit Research",
+    "Web & API Assessment",
+    "Active Directory & Windows",
+    "Mobile App Security",
+    "Cloud & Container Security",
+    "Network & TLS Assessment",
+    "Developer & Supply Chain Security",
+    "Forensics & Reverse Engineering",
+    "Privacy & Metadata",
+    "Password & Authentication Auditing"
   ],
   "tools": [
     {
@@ -22,7 +32,7 @@
       "install_kind": "pkg",
       "package": "git",
       "installable": true,
-      "description": "git utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Distributed version control and repository inspection.",
       "example": "git status",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -35,7 +45,7 @@
       "install_kind": "pkg",
       "package": "curl",
       "installable": true,
-      "description": "curl utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "HTTP client for API testing, headers, TLS troubleshooting, and downloads.",
       "example": "curl -I https://example.com",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -61,7 +71,7 @@
       "install_kind": "pkg",
       "package": "jq",
       "installable": true,
-      "description": "jq utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Parse, filter, and transform JSON safely from the command line.",
       "example": "jq --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -74,7 +84,7 @@
       "install_kind": "pkg",
       "package": "ripgrep",
       "installable": true,
-      "description": "ripgrep utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Fast recursive text search for source code, logs, and evidence.",
       "example": "rg --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -230,7 +240,7 @@
       "install_kind": "pkg",
       "package": "python",
       "installable": true,
-      "description": "Python utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Python runtime for scripts and Python-based security utilities.",
       "example": "python --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -295,7 +305,7 @@
       "install_kind": "pkg",
       "package": "golang",
       "installable": true,
-      "description": "Go utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Go compiler and toolchain for supported upstream CLI tools.",
       "example": "go --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -308,7 +318,7 @@
       "install_kind": "pkg",
       "package": "rust",
       "installable": true,
-      "description": "Rust utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Rust compiler and Cargo package manager for native CLI tools.",
       "example": "rustc --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -347,7 +357,7 @@
       "install_kind": "pkg",
       "package": "nmap",
       "installable": true,
-      "description": "Network discovery and port auditing. Scan only systems you own or are authorized to test.",
+      "description": "Network discovery, service identification, and port auditing. Scan only authorized hosts.",
       "example": "nmap -sV 192.0.2.10",
       "source": "https://nmap.org/",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -646,7 +656,7 @@
       "install_kind": "pip",
       "package": "theHarvester",
       "installable": true,
-      "description": "Collect public-source domain/email metadata; respect scope and provider rules.",
+      "description": "Collect public-source domain, email, and host metadata for scoped reconnaissance.",
       "example": "theHarvester -h",
       "source": "https://github.com/laramies/theHarvester",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -659,7 +669,7 @@
       "install_kind": "pip",
       "package": "sherlock-project",
       "installable": true,
-      "description": "Search public profile names across supported sites.",
+      "description": "Search supported public websites for a username's public profiles.",
       "example": "sherlock --help",
       "source": "https://github.com/sherlock-project/sherlock",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -698,7 +708,7 @@
       "install_kind": "go",
       "package": "github.com/sundowndev/phoneinfoga/v2@latest",
       "installable": true,
-      "description": "Phone-number metadata and format intelligence; it does not reveal live GPS location from a number.",
+      "description": "Phone-number format and public metadata OSINT; it does not reveal live GPS location.",
       "example": "phoneinfoga --help",
       "source": "https://github.com/sundowndev/phoneinfoga",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -711,7 +721,7 @@
       "install_kind": "go",
       "package": "github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest",
       "installable": true,
-      "description": "subfinder utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Passive subdomain discovery for domains in your authorized scope.",
       "example": "subfinder --help",
       "source": "https://pkg.go.dev/github.com/projectdiscovery/subfinder/v2/cmd/subfinder",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -726,7 +736,7 @@
       "installable": false,
       "description": "Amass utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "",
-      "source": "https://github.com/search?q=Amass&type=repositories",
+      "source": "https://github.com/owasp-amass/amass",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -763,7 +773,7 @@
       "install_kind": "go",
       "package": "github.com/projectdiscovery/httpx/cmd/httpx@latest",
       "installable": true,
-      "description": "httpx utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "ProjectDiscovery's Go HTTP probe for scoped web assets, not Python httpx.",
       "example": "httpx --help",
       "source": "https://pkg.go.dev/github.com/projectdiscovery/httpx/cmd/httpx",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -856,7 +866,7 @@
       "installable": true,
       "description": "recon-ng utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "recon-ng --help",
-      "source": "https://pypi.org/project/recon-ng/",
+      "source": "https://github.com/lanmaster53/recon-ng",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -869,7 +879,7 @@
       "installable": true,
       "description": "OSRFramework utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "osrframework --help",
-      "source": "https://pypi.org/project/osrframework/",
+      "source": "https://github.com/i3visio/osrframework",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -895,7 +905,7 @@
       "installable": true,
       "description": "h8mail utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "h8mail --help",
-      "source": "https://pypi.org/project/h8mail/",
+      "source": "https://github.com/khast3x/h8mail",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -921,7 +931,7 @@
       "installable": true,
       "description": "dnstwist utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "dnstwist --help",
-      "source": "https://pypi.org/project/dnstwist/",
+      "source": "https://github.com/elceef/dnstwist",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -947,7 +957,7 @@
       "installable": true,
       "description": "WhatWeb utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "whatweb https://example.com",
-      "source": "https://github.com/termux/termux-packages",
+      "source": "https://github.com/urbanadventurer/WhatWeb",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
     },
     {
@@ -971,7 +981,7 @@
       "install_kind": "pkg",
       "package": "sqlmap",
       "installable": true,
-      "description": "SQL injection testing only against explicitly authorized targets.",
+      "description": "Automate SQL injection testing only on explicitly authorized targets.",
       "example": "sqlmap --version",
       "source": "https://github.com/sqlmapproject/sqlmap",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -986,7 +996,7 @@
       "installable": true,
       "description": "Wapiti utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "wapiti3 --help",
-      "source": "https://pypi.org/project/wapiti3/",
+      "source": "https://github.com/wapiti-scanner/wapiti",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -999,7 +1009,7 @@
       "installable": true,
       "description": "dirsearch utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "dirsearch --help",
-      "source": "https://pypi.org/project/dirsearch/",
+      "source": "https://github.com/maurosoria/dirsearch",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1010,7 +1020,7 @@
       "install_kind": "go",
       "package": "github.com/ffuf/ffuf/v2@latest",
       "installable": true,
-      "description": "ffuf utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Fast web fuzzer for authorized content and parameter discovery.",
       "example": "ffuf --help",
       "source": "https://github.com/ffuf/ffuf",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1051,7 +1061,7 @@
       "installable": true,
       "description": "Wfuzz utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "wfuzz --help",
-      "source": "https://pypi.org/project/wfuzz/",
+      "source": "https://github.com/xmendez/wfuzz",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1114,10 +1124,10 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "JWT Tool utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Inspect and test JSON Web Tokens in a controlled lab.",
       "example": "",
-      "source": "https://github.com/search?q=JWT%20Tool&type=repositories",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/ticarpi/jwt_tool",
+      "caveat": "Never paste production tokens into public services."
     },
     {
       "id": "corsy",
@@ -1127,10 +1137,10 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Corsy utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Check CORS configuration for common security misconfigurations.",
       "example": "",
-      "source": "https://github.com/search?q=Corsy&type=repositories",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/s0md3v/Corsy",
+      "caveat": "Only test approved origins and endpoints."
     },
     {
       "id": "xsstrike",
@@ -1140,10 +1150,10 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "XSStrike utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "XSS detection and context analysis for authorized web testing.",
       "example": "",
-      "source": "https://github.com/search?q=XSStrike&type=repositories",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/s0md3v/XSStrike",
+      "caveat": "Active probes can trigger application behavior."
     },
     {
       "id": "commix",
@@ -1153,10 +1163,10 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Commix utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Command-injection testing for controlled authorized assessments.",
       "example": "",
-      "source": "https://github.com/search?q=Commix&type=repositories",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/commixproject/commix",
+      "caveat": "Potentially executes commands on vulnerable targets; lab or written authorization only."
     },
     {
       "id": "tplmap",
@@ -1166,10 +1176,10 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "tplmap utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Server-side template injection testing for authorized applications.",
       "example": "",
-      "source": "https://github.com/search?q=tplmap&type=repositories",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/epinna/tplmap",
+      "caveat": "Potentially intrusive; use labs or approved scope."
     },
     {
       "id": "semgrep",
@@ -1181,7 +1191,7 @@
       "installable": true,
       "description": "Semgrep utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "semgrep --help",
-      "source": "https://pypi.org/project/semgrep/",
+      "source": "https://github.com/semgrep/semgrep",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1194,7 +1204,7 @@
       "installable": true,
       "description": "Bandit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "bandit --help",
-      "source": "https://pypi.org/project/bandit/",
+      "source": "https://github.com/PyCQA/bandit",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1207,7 +1217,7 @@
       "installable": true,
       "description": "pip-audit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "pip-audit --help",
-      "source": "https://pypi.org/project/pip-audit/",
+      "source": "https://github.com/pypa/pip-audit",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1233,7 +1243,7 @@
       "installable": true,
       "description": "Checkov utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "checkov --help",
-      "source": "https://pypi.org/project/checkov/",
+      "source": "https://github.com/bridgecrewio/checkov",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1283,7 +1293,7 @@
       "install_kind": "go",
       "package": "github.com/gitleaks/gitleaks/v8@latest",
       "installable": true,
-      "description": "Gitleaks utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Detect secrets accidentally committed to repositories.",
       "example": "gitleaks version",
       "source": "https://github.com/gitleaks/gitleaks",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1296,7 +1306,7 @@
       "install_kind": "go",
       "package": "github.com/trufflesecurity/trufflehog/v3@latest",
       "installable": true,
-      "description": "TruffleHog utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Search repositories and supported sources for exposed secrets.",
       "example": "trufflehog --help",
       "source": "https://pkg.go.dev/github.com/trufflesecurity/trufflehog/v3",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1350,7 +1360,7 @@
       "installable": true,
       "description": "ShellCheck utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "shellcheck --version",
-      "source": "https://github.com/termux/termux-packages",
+      "source": "https://github.com/koalaman/shellcheck",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
     },
     {
@@ -1376,7 +1386,7 @@
       "installable": true,
       "description": "yamllint utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "yamllint --help",
-      "source": "https://pypi.org/project/yamllint/",
+      "source": "https://github.com/adrienverge/yamllint",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1439,7 +1449,7 @@
       "install_kind": "pkg",
       "package": "exiftool",
       "installable": true,
-      "description": "ExifTool utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Read and inspect metadata in images, documents, and media files.",
       "example": "exiftool photo.jpg",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1480,7 +1490,7 @@
       "installable": true,
       "description": "Foremost utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
       "example": "foremost --help",
-      "source": "https://github.com/termux/termux-packages",
+      "source": "https://github.com/korczis/foremost",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
     },
     {
@@ -1662,7 +1672,7 @@
       "installable": true,
       "description": "Tesseract OCR utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
       "example": "tesseract scan.png stdout",
-      "source": "https://github.com/termux/termux-packages",
+      "source": "https://github.com/tesseract-ocr/tesseract",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
     },
     {
@@ -1831,7 +1841,7 @@
       "installable": true,
       "description": "Certbot utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "certbot --help",
-      "source": "https://pypi.org/project/certbot/",
+      "source": "https://github.com/certbot/certbot",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1857,7 +1867,7 @@
       "installable": true,
       "description": "SSLyze utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "sslyze --help",
-      "source": "https://pypi.org/project/sslyze/",
+      "source": "https://github.com/nabla-c0d3/sslyze",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -2052,7 +2062,7 @@
       "installable": true,
       "description": "Ansible utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
       "example": "ansible --help",
-      "source": "https://pypi.org/project/ansible-core/",
+      "source": "https://github.com/ansible/ansible",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -2078,7 +2088,7 @@
       "installable": true,
       "description": "restic utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
       "example": "restic --help",
-      "source": "https://pkg.go.dev/github.com/restic/restic/cmd/restic",
+      "source": "https://github.com/restic/restic",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -2130,7 +2140,7 @@
       "installable": true,
       "description": "Scan accessible files; signature updates and storage need setup.",
       "example": "clamscan --version",
-      "source": "https://www.clamav.net/",
+      "source": "https://github.com/Cisco-Talos/clamav",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
     },
     {
@@ -2327,6 +2337,864 @@
       "example": "stress-ng --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
+    },
+    {
+      "id": "nuclei",
+      "name": "Nuclei",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "nuclei",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest",
+      "installable": true,
+      "description": "Template-driven vulnerability checks for scoped, authorized targets.",
+      "example": "nuclei -h",
+      "source": "https://github.com/projectdiscovery/nuclei",
+      "caveat": "Review templates and rate limits; active scanning only within written scope."
+    },
+    {
+      "id": "dalfox",
+      "name": "Dalfox",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "dalfox",
+      "install_kind": "go",
+      "package": "github.com/hahwul/dalfox/v2@latest",
+      "installable": true,
+      "description": "XSS parameter analysis for authorized web assessments.",
+      "example": "dalfox --help",
+      "source": "https://github.com/hahwul/dalfox",
+      "caveat": "Active probes may trigger application behavior."
+    },
+    {
+      "id": "arjun",
+      "name": "Arjun",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "arjun",
+      "install_kind": "pip",
+      "package": "arjun",
+      "installable": true,
+      "description": "Discover HTTP parameters during authorized web testing.",
+      "example": "arjun --help",
+      "source": "https://github.com/s0md3v/Arjun",
+      "caveat": "Requests can be noisy; use approved scope."
+    },
+    {
+      "id": "wafw00f",
+      "name": "WAFW00F",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "wafw00f",
+      "install_kind": "pip",
+      "package": "wafw00f",
+      "installable": true,
+      "description": "Identify common web application firewall fingerprints.",
+      "example": "wafw00f --help",
+      "source": "https://github.com/EnableSecurity/wafw00f",
+      "caveat": "Only assess sites you are authorized to test."
+    },
+    {
+      "id": "kiterunner",
+      "name": "Kiterunner",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "kr",
+      "install_kind": "go",
+      "package": "github.com/assetnote/kiterunner/cmd/kr@latest",
+      "installable": true,
+      "description": "API route discovery using wordlists and request patterns.",
+      "example": "kr --help",
+      "source": "https://github.com/assetnote/kiterunner",
+      "caveat": "Can generate substantial traffic; use scoped wordlists."
+    },
+    {
+      "id": "rustscan",
+      "name": "RustScan",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "rustscan",
+      "install_kind": "cargo",
+      "package": "rustscan",
+      "installable": true,
+      "description": "Fast port scanner with optional Nmap handoff.",
+      "example": "rustscan --help",
+      "source": "https://github.com/bee-san/RustScan",
+      "caveat": "Only scan authorized ranges; native compilation may fail on Android."
+    },
+    {
+      "id": "metasploit-framework",
+      "name": "Metasploit Framework",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "msfconsole",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Penetration-testing framework for controlled labs and authorized engagements.",
+      "example": "",
+      "source": "https://github.com/rapid7/metasploit-framework",
+      "caveat": "Large framework; stock Termux support is not verified."
+    },
+    {
+      "id": "routersploit",
+      "name": "RouterSploit",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "rsf.py",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Router and embedded-device security assessment framework.",
+      "example": "",
+      "source": "https://github.com/threat9/routersploit",
+      "caveat": "Use only against devices you own or are authorized to test."
+    },
+    {
+      "id": "pwntools",
+      "name": "pwntools",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "pwn",
+      "install_kind": "pip",
+      "package": "pwntools",
+      "installable": true,
+      "description": "Python framework for exploit-development education and CTF labs.",
+      "example": "pwn --help",
+      "source": "https://github.com/Gallopsled/pwntools",
+      "caveat": "Native dependencies and architecture support vary on Android."
+    },
+    {
+      "id": "ropgadget",
+      "name": "ROPGadget",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "ROPgadget",
+      "install_kind": "pip",
+      "package": "ROPGadget",
+      "installable": true,
+      "description": "Search binaries for ROP gadgets during authorized binary research.",
+      "example": "ROPgadget --help",
+      "source": "https://github.com/JonathanSalwan/ROPgadget",
+      "caveat": "For binary auditing and controlled labs."
+    },
+    {
+      "id": "ropper",
+      "name": "Ropper",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "ropper",
+      "install_kind": "pip",
+      "package": "ropper",
+      "installable": true,
+      "description": "Binary gadget search for exploit-development education and auditing.",
+      "example": "ropper --help",
+      "source": "https://github.com/sashs/Ropper",
+      "caveat": "Binary and architecture support vary."
+    },
+    {
+      "id": "ghauri",
+      "name": "Ghauri",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "ghauri",
+      "install_kind": "pip",
+      "package": "ghauri",
+      "installable": true,
+      "description": "SQL injection verification for authorized applications.",
+      "example": "ghauri --help",
+      "source": "https://github.com/r0oth3x49/ghauri",
+      "caveat": "Active probes can affect databases; use a lab or approved target."
+    },
+    {
+      "id": "kxss",
+      "name": "KXSS",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "kxss",
+      "install_kind": "go",
+      "package": "github.com/Emoe/kxss@latest",
+      "installable": true,
+      "description": "Find potentially reflective parameters in URLs for XSS triage.",
+      "example": "kxss -h",
+      "source": "https://github.com/Emoe/kxss",
+      "caveat": "Validate findings manually; require target authorization."
+    },
+    {
+      "id": "crlfuzz",
+      "name": "CRLFuzz",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "crlfuzz",
+      "install_kind": "go",
+      "package": "github.com/dwisiswant0/crlfuzz/cmd/crlfuzz@latest",
+      "installable": true,
+      "description": "Check CRLF injection indicators in authorized web tests.",
+      "example": "crlfuzz -h",
+      "source": "https://github.com/dwisiswant0/crlfuzz",
+      "caveat": "Active requests; stay within approved scope."
+    },
+    {
+      "id": "interactsh-client",
+      "name": "Interactsh Client",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "interactsh-client",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest",
+      "installable": true,
+      "description": "Out-of-band interaction testing for authorized assessments.",
+      "example": "interactsh-client -h",
+      "source": "https://github.com/projectdiscovery/interactsh",
+      "caveat": "Callbacks contact external infrastructure; understand data flows."
+    },
+    {
+      "id": "tlsx",
+      "name": "Tlsx",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "tlsx",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/tlsx/cmd/tlsx@latest",
+      "installable": true,
+      "description": "TLS certificate and protocol metadata probing.",
+      "example": "tlsx -h",
+      "source": "https://github.com/projectdiscovery/tlsx",
+      "caveat": "Use against approved hosts."
+    },
+    {
+      "id": "mapcidr",
+      "name": "MapCIDR",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "mapcidr",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest",
+      "installable": true,
+      "description": "CIDR parsing and range transformation for scope management.",
+      "example": "mapcidr -h",
+      "source": "https://github.com/projectdiscovery/mapcidr",
+      "caveat": "Use only to prepare authorized address ranges."
+    },
+    {
+      "id": "uncover",
+      "name": "Uncover",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "uncover",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/uncover/cmd/uncover@latest",
+      "installable": true,
+      "description": "Query supported public search engines for exposed asset metadata.",
+      "example": "uncover -h",
+      "source": "https://github.com/projectdiscovery/uncover",
+      "caveat": "Provider terms, API keys, and rate limits apply."
+    },
+    {
+      "id": "asnmap",
+      "name": "ASNMap",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "asnmap",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/asnmap/cmd/asnmap@latest",
+      "installable": true,
+      "description": "Map ASN and organization metadata to public network ranges.",
+      "example": "asnmap -h",
+      "source": "https://github.com/projectdiscovery/asnmap",
+      "caveat": "Public metadata does not authorize scanning discovered ranges."
+    },
+    {
+      "id": "alterx",
+      "name": "Alterx",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "alterx",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/alterx/cmd/alterx@latest",
+      "installable": true,
+      "description": "Generate candidate subdomain names from patterns.",
+      "example": "alterx -h",
+      "source": "https://github.com/projectdiscovery/alterx",
+      "caveat": "Check generated names only within authorized scope."
+    },
+    {
+      "id": "dnsgen",
+      "name": "DNSGen",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "dnsgen",
+      "install_kind": "pip",
+      "package": "dnsgen",
+      "installable": true,
+      "description": "Generate domain-name permutations for defensive asset discovery.",
+      "example": "dnsgen --help",
+      "source": "https://github.com/ProjectAnte/dnsgen",
+      "caveat": "Use only with domains in scope."
+    },
+    {
+      "id": "shuffledns",
+      "name": "Shuffledns",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "shuffledns",
+      "install_kind": "go",
+      "package": "github.com/projectdiscovery/shuffledns/cmd/shuffledns@latest",
+      "installable": true,
+      "description": "MassDNS-based subdomain resolution workflow.",
+      "example": "shuffledns -h",
+      "source": "https://github.com/projectdiscovery/shuffledns",
+      "caveat": "Resolver configuration and high DNS volume may be involved."
+    },
+    {
+      "id": "massdns",
+      "name": "MassDNS",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "massdns",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "High-performance DNS stub resolver for scoped enumeration.",
+      "example": "",
+      "source": "https://github.com/blechschmidt/massdns",
+      "caveat": "Native build and resolver setup are required; no Termux recipe verified."
+    },
+    {
+      "id": "nuclei-templates",
+      "name": "Nuclei Templates",
+      "category": "Advanced Pentest & Exploit Research",
+      "executable": "nuclei-templates",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Nuclei's maintained template collection; templates are executable test logic.",
+      "example": "",
+      "source": "https://github.com/projectdiscovery/nuclei-templates",
+      "caveat": "Review template contents and provenance before running."
+    },
+    {
+      "id": "wpscan",
+      "name": "WPScan",
+      "category": "Web & API Assessment",
+      "executable": "wpscan",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "WordPress security scanner and vulnerability enumeration.",
+      "example": "",
+      "source": "https://github.com/wpscanteam/wpscan",
+      "caveat": "Some features require an API token; respect rate limits."
+    },
+    {
+      "id": "impacket",
+      "name": "Impacket",
+      "category": "Active Directory & Windows",
+      "executable": "impacket-scripts",
+      "install_kind": "pip",
+      "package": "impacket",
+      "installable": true,
+      "description": "Python protocol toolkit for network protocol testing and Windows domain labs.",
+      "example": "impacket-smbclient --help",
+      "source": "https://github.com/fortra/impacket",
+      "caveat": "Credentialed actions are sensitive; use approved lab accounts."
+    },
+    {
+      "id": "netexec",
+      "name": "NetExec",
+      "category": "Active Directory & Windows",
+      "executable": "nxc",
+      "install_kind": "pip",
+      "package": "netexec",
+      "installable": true,
+      "description": "Network service assessment toolkit for authorized internal testing.",
+      "example": "nxc --help",
+      "source": "https://github.com/Pennyw0rth/NetExec",
+      "caveat": "Credentialed checks can affect systems; stay within approved scope."
+    },
+    {
+      "id": "bloodhound-python-collector",
+      "name": "BloodHound Python Collector",
+      "category": "Active Directory & Windows",
+      "executable": "bloodhound-python",
+      "install_kind": "pip",
+      "package": "bloodhound",
+      "installable": true,
+      "description": "Collect Active Directory relationship data for authorized domain audits.",
+      "example": "bloodhound-python --help",
+      "source": "https://github.com/dirkjanm/BloodHound.py",
+      "caveat": "Collected directory data is sensitive."
+    },
+    {
+      "id": "enum4linux-ng",
+      "name": "enum4linux-ng",
+      "category": "Active Directory & Windows",
+      "executable": "enum4linux-ng",
+      "install_kind": "pip",
+      "package": "enum4linux-ng",
+      "installable": true,
+      "description": "SMB and Windows domain enumeration for authorized assessments.",
+      "example": "enum4linux-ng --help",
+      "source": "https://github.com/cddmp/enum4linux-ng",
+      "caveat": "Enumeration may disclose directory information."
+    },
+    {
+      "id": "kerbrute",
+      "name": "Kerbrute",
+      "category": "Active Directory & Windows",
+      "executable": "kerbrute",
+      "install_kind": "go",
+      "package": "github.com/ropnop/kerbrute@latest",
+      "installable": true,
+      "description": "Kerberos user enumeration and testing for controlled AD labs.",
+      "example": "kerbrute -h",
+      "source": "https://github.com/ropnop/kerbrute",
+      "caveat": "May trigger account lockouts; password spraying requires explicit approval."
+    },
+    {
+      "id": "certipy",
+      "name": "Certipy",
+      "category": "Active Directory & Windows",
+      "executable": "certipy-ad",
+      "install_kind": "pip",
+      "package": "certipy-ad",
+      "installable": true,
+      "description": "Audit Active Directory Certificate Services in authorized domains.",
+      "example": "certipy-ad -h",
+      "source": "https://github.com/ly4k/Certipy",
+      "caveat": "Certificate abuse paths are sensitive; restrict use to approved domains."
+    },
+    {
+      "id": "ldapdomaindump",
+      "name": "LDAPDomainDump",
+      "category": "Active Directory & Windows",
+      "executable": "ldapdomaindump",
+      "install_kind": "pip",
+      "package": "ldapdomaindump",
+      "installable": true,
+      "description": "Export LDAP directory information for authorized audits.",
+      "example": "ldapdomaindump --help",
+      "source": "https://github.com/dirkjanm/ldapdomaindump",
+      "caveat": "Treat output as confidential."
+    },
+    {
+      "id": "coercer",
+      "name": "Coercer",
+      "category": "Active Directory & Windows",
+      "executable": "coercer",
+      "install_kind": "pip",
+      "package": "coercer",
+      "installable": true,
+      "description": "Assess Windows authentication coercion exposure in controlled environments.",
+      "example": "coercer --help",
+      "source": "https://github.com/p0dalirius/Coercer",
+      "caveat": "Can trigger authentication traffic; explicit authorization required."
+    },
+    {
+      "id": "bloodyad",
+      "name": "BloodyAD",
+      "category": "Active Directory & Windows",
+      "executable": "bloodyAD",
+      "install_kind": "pip",
+      "package": "bloodyAD",
+      "installable": true,
+      "description": "Active Directory administration and security testing utility.",
+      "example": "bloodyAD --help",
+      "source": "https://github.com/CravateRouge/bloodyAD",
+      "caveat": "Some operations modify directory state; review each action."
+    },
+    {
+      "id": "evil-winrm",
+      "name": "Evil-WinRM",
+      "category": "Active Directory & Windows",
+      "executable": "evil-winrm",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "WinRM client for authorized Windows lab assessments.",
+      "example": "",
+      "source": "https://github.com/Hackplayers/evil-winrm",
+      "caveat": "Credentialed remote shell access; manual-only."
+    },
+    {
+      "id": "responder",
+      "name": "Responder",
+      "category": "Active Directory & Windows",
+      "executable": "Responder.py",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Network protocol analysis and poisoning tool for isolated labs.",
+      "example": "",
+      "source": "https://github.com/lgandx/Responder",
+      "caveat": "Poisoning can intercept credentials or disrupt networks; lab-only."
+    },
+    {
+      "id": "frida-tools",
+      "name": "Frida Tools",
+      "category": "Mobile App Security",
+      "executable": "frida",
+      "install_kind": "pip",
+      "package": "frida-tools",
+      "installable": true,
+      "description": "Dynamic instrumentation CLI for authorized mobile app testing.",
+      "example": "frida --help",
+      "source": "https://github.com/frida/frida-tools",
+      "caveat": "Device-side frida-server, ABI compatibility, and app privileges are separate requirements."
+    },
+    {
+      "id": "objection",
+      "name": "Objection",
+      "category": "Mobile App Security",
+      "executable": "objection",
+      "install_kind": "pip",
+      "package": "objection",
+      "installable": true,
+      "description": "Runtime mobile app inspection built on Frida.",
+      "example": "objection --help",
+      "source": "https://github.com/sensepost/objection",
+      "caveat": "Requires a compatible Frida setup and authorized app/device."
+    },
+    {
+      "id": "apkleaks",
+      "name": "ApkLeaks",
+      "category": "Mobile App Security",
+      "executable": "apkleaks",
+      "install_kind": "pip",
+      "package": "apkleaks",
+      "installable": true,
+      "description": "Search APKs for embedded endpoints and secrets during defensive review.",
+      "example": "apkleaks --help",
+      "source": "https://github.com/dwisiswant0/apkleaks",
+      "caveat": "Review results locally; never use discovered secrets to access accounts."
+    },
+    {
+      "id": "androguard",
+      "name": "Androguard",
+      "category": "Mobile App Security",
+      "executable": "androguard",
+      "install_kind": "pip",
+      "package": "androguard",
+      "installable": true,
+      "description": "Static analysis toolkit for Android APK and DEX files.",
+      "example": "androguard --help",
+      "source": "https://github.com/androguard/androguard",
+      "caveat": "Large dependency tree; Android compatibility varies."
+    },
+    {
+      "id": "quark-engine",
+      "name": "Quark Engine",
+      "category": "Mobile App Security",
+      "executable": "quark",
+      "install_kind": "pip",
+      "package": "quark-engine",
+      "installable": true,
+      "description": "Rule-based Android malware behavior analysis and APK triage.",
+      "example": "quark --help",
+      "source": "https://github.com/quark-engine/quark-engine",
+      "caveat": "Use for defensive analysis of files you may inspect."
+    },
+    {
+      "id": "jadx",
+      "name": "JADX",
+      "category": "Mobile App Security",
+      "executable": "jadx",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Decompile Android DEX/APK bytecode for analysis.",
+      "example": "",
+      "source": "https://github.com/skylot/jadx",
+      "caveat": "Java runtime and GUI components may limit stock Termux support."
+    },
+    {
+      "id": "apktool",
+      "name": "Apktool",
+      "category": "Mobile App Security",
+      "executable": "apktool",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Decode Android resources and smali for app auditing.",
+      "example": "",
+      "source": "https://github.com/iBotPeaches/Apktool",
+      "caveat": "Manual Java setup and Android build tools may be required."
+    },
+    {
+      "id": "mobsf",
+      "name": "MobSF",
+      "category": "Mobile App Security",
+      "executable": "mobsf",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Mobile app security testing framework for APK/IPA analysis.",
+      "example": "",
+      "source": "https://github.com/MobSF/Mobile-Security-Framework-MobSF",
+      "caveat": "Resource-heavy; not treated as a native Termux install."
+    },
+    {
+      "id": "prowler",
+      "name": "Prowler",
+      "category": "Cloud & Container Security",
+      "executable": "prowler",
+      "install_kind": "pip",
+      "package": "prowler",
+      "installable": true,
+      "description": "Cloud security posture assessment for supported providers.",
+      "example": "prowler --help",
+      "source": "https://github.com/prowler-cloud/prowler",
+      "caveat": "Use authorized cloud credentials and least-privilege roles."
+    },
+    {
+      "id": "scoutsuite",
+      "name": "ScoutSuite",
+      "category": "Cloud & Container Security",
+      "executable": "scout",
+      "install_kind": "pip",
+      "package": "scoutsuite",
+      "installable": true,
+      "description": "Multi-cloud security auditing and configuration review.",
+      "example": "scout --help",
+      "source": "https://github.com/nccgroup/ScoutSuite",
+      "caveat": "Cloud credentials and reports are sensitive."
+    },
+    {
+      "id": "kube-hunter",
+      "name": "Kube-Hunter",
+      "category": "Cloud & Container Security",
+      "executable": "kube-hunter",
+      "install_kind": "pip",
+      "package": "kube-hunter",
+      "installable": true,
+      "description": "Kubernetes security assessment for authorized clusters.",
+      "example": "kube-hunter --help",
+      "source": "https://github.com/aquasecurity/kube-hunter",
+      "caveat": "Active probes can affect services; confirm scope."
+    },
+    {
+      "id": "kubeaudit",
+      "name": "KubeAudit",
+      "category": "Cloud & Container Security",
+      "executable": "kubeaudit",
+      "install_kind": "go",
+      "package": "github.com/Shopify/kubeaudit@latest",
+      "installable": true,
+      "description": "Audit Kubernetes workload configuration for common security issues.",
+      "example": "kubeaudit --help",
+      "source": "https://github.com/Shopify/kubeaudit",
+      "caveat": "Requires manifests or authorized cluster access."
+    },
+    {
+      "id": "cloudfox",
+      "name": "CloudFox",
+      "category": "Cloud & Container Security",
+      "executable": "cloudfox",
+      "install_kind": "go",
+      "package": "github.com/BishopFox/cloudfox@latest",
+      "installable": true,
+      "description": "Cloud asset and permission enumeration for authorized security reviews.",
+      "example": "cloudfox --help",
+      "source": "https://github.com/BishopFox/cloudfox",
+      "caveat": "Cloud credentials and reports are sensitive."
+    },
+    {
+      "id": "kubeletctl",
+      "name": "Kubeletctl",
+      "category": "Cloud & Container Security",
+      "executable": "kubeletctl",
+      "install_kind": "go",
+      "package": "github.com/cyberark/kubeletctl@latest",
+      "installable": true,
+      "description": "Kubelet endpoint assessment utility for authorized cluster tests.",
+      "example": "kubeletctl --help",
+      "source": "https://github.com/cyberark/kubeletctl",
+      "caveat": "Only target clusters you administer or are authorized to assess."
+    },
+    {
+      "id": "kube-bench",
+      "name": "Kube-Bench",
+      "category": "Cloud & Container Security",
+      "executable": "kube-bench",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Check Kubernetes configuration against CIS benchmarks.",
+      "example": "",
+      "source": "https://github.com/aquasecurity/kube-bench",
+      "caveat": "Usually requires host/cluster context unavailable on stock Android."
+    },
+    {
+      "id": "sslscan",
+      "name": "SSLScan",
+      "category": "Network & TLS Assessment",
+      "executable": "sslscan",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Probe TLS protocol and cipher configuration for authorized hosts.",
+      "example": "",
+      "source": "https://github.com/rbsec/sslscan",
+      "caveat": "Native compilation and TLS library compatibility may be required."
+    },
+    {
+      "id": "zmap",
+      "name": "ZMap",
+      "category": "Network & TLS Assessment",
+      "executable": "zmap",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Internet-scale network measurement scanner for tightly scoped audits.",
+      "example": "",
+      "source": "https://github.com/zmap/zmap",
+      "caveat": "High-impact scanner; no broad public scanning without explicit authorization."
+    },
+    {
+      "id": "tshark",
+      "name": "TShark",
+      "category": "Network & TLS Assessment",
+      "executable": "tshark",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Command-line packet analysis utility.",
+      "example": "",
+      "source": "https://www.wireshark.org/docs/man-pages/tshark.html",
+      "caveat": "Capture permissions and Android kernel support vary."
+    },
+    {
+      "id": "proxychains-ng",
+      "name": "ProxyChains-NG",
+      "category": "Network & TLS Assessment",
+      "executable": "proxychains4",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Route compatible applications through configured proxy chains.",
+      "example": "",
+      "source": "https://github.com/rofl0r/proxychains-ng",
+      "caveat": "Does not guarantee anonymity or authorization; manual-only."
+    },
+    {
+      "id": "chisel",
+      "name": "Chisel",
+      "category": "Network & TLS Assessment",
+      "executable": "chisel",
+      "install_kind": "go",
+      "package": "github.com/jpillora/chisel@latest",
+      "installable": true,
+      "description": "TCP/UDP tunnel for authorized lab connectivity and troubleshooting.",
+      "example": "chisel --help",
+      "source": "https://github.com/jpillora/chisel",
+      "caveat": "Tunneling can bypass network controls; network-owner approval required."
+    },
+    {
+      "id": "ligolo-ng",
+      "name": "Ligolo-ng",
+      "category": "Network & TLS Assessment",
+      "executable": "ligolo-ng",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Tunneling framework used in authorized network assessment labs.",
+      "example": "",
+      "source": "https://github.com/nicocha30/ligolo-ng",
+      "caveat": "Advanced routing and privileges may be required; manual-only."
+    },
+    {
+      "id": "gosec",
+      "name": "Gosec",
+      "category": "Developer & Supply Chain Security",
+      "executable": "gosec",
+      "install_kind": "go",
+      "package": "github.com/securego/gosec/v2/cmd/gosec@latest",
+      "installable": true,
+      "description": "Static security analysis for Go source code.",
+      "example": "gosec -help",
+      "source": "https://github.com/securego/gosec",
+      "caveat": "Run on source code you are authorized to review."
+    },
+    {
+      "id": "rizin",
+      "name": "Rizin",
+      "category": "Forensics & Reverse Engineering",
+      "executable": "rizin",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Reverse-engineering framework for binary inspection.",
+      "example": "",
+      "source": "https://github.com/rizinorg/rizin",
+      "caveat": "Native build and architecture plugin support vary on Android."
+    },
+    {
+      "id": "yara-x",
+      "name": "YARA-X",
+      "category": "Forensics & Reverse Engineering",
+      "executable": "yr",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Modern YARA-compatible pattern matching engine for defensive triage.",
+      "example": "",
+      "source": "https://github.com/VirusTotal/yara-x",
+      "caveat": "Separate project from classic YARA; Termux recipe not verified."
+    },
+    {
+      "id": "plaso-log2timeline",
+      "name": "Plaso/log2timeline",
+      "category": "Forensics & Reverse Engineering",
+      "executable": "log2timeline.py",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Build forensic timelines from supported evidence sources.",
+      "example": "",
+      "source": "https://github.com/log2timeline/plaso",
+      "caveat": "Dependency-heavy; best suited to a supported Linux workstation."
+    },
+    {
+      "id": "volatility-3",
+      "name": "Volatility 3",
+      "category": "Forensics & Reverse Engineering",
+      "executable": "vol",
+      "install_kind": "pip",
+      "package": "volatility3",
+      "installable": true,
+      "description": "Memory-forensics framework for supported memory images.",
+      "example": "vol --help",
+      "source": "https://github.com/volatilityfoundation/volatility3",
+      "caveat": "Use legally obtained images and compatible symbols/plugins."
+    },
+    {
+      "id": "metagoofil",
+      "name": "Metagoofil",
+      "category": "Privacy & Metadata",
+      "executable": "metagoofil",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Collect metadata from publicly available documents for authorized reconnaissance.",
+      "example": "",
+      "source": "https://github.com/opsdisk/metagoofil",
+      "caveat": "Search-provider terms and compatibility change; manual-only."
+    },
+    {
+      "id": "hydra",
+      "name": "Hydra",
+      "category": "Password & Authentication Auditing",
+      "executable": "hydra",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Network login auditing for controlled password-policy tests.",
+      "example": "",
+      "source": "https://github.com/vanhauser-thc/thc-hydra",
+      "caveat": "Can lock accounts and disrupt services; manual-only and explicit authorization required."
+    },
+    {
+      "id": "cewl",
+      "name": "CeWL",
+      "category": "Password & Authentication Auditing",
+      "executable": "cewl",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Generate wordlists from authorized website content for password-policy audits.",
+      "example": "",
+      "source": "https://github.com/digininja/CeWL",
+      "caveat": "Use only approved targets."
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "category": "Password & Authentication Auditing",
+      "executable": "crunch",
+      "install_kind": "manual",
+      "package": null,
+      "installable": false,
+      "description": "Generate custom test wordlists for offline password auditing labs.",
+      "example": "",
+      "source": "https://github.com/jim3ma/crunch",
+      "caveat": "Large wordlists can consume substantial storage and compute."
     }
   ]
 }
