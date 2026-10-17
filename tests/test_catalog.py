@@ -445,17 +445,19 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(query.call_args.args[0][-1], "sample-package")
         self.assertEqual(query.call_args.kwargs["timeout"], 5)
 
-    def test_pip_resolved_version_parses_pip_show_metadata(self):
+    def test_pip_resolved_version_reads_only_version_metadata(self):
         from unittest.mock import patch, Mock
         tool = {"install_kind":"pip", "package":"sample-package"}
         with patch.object(APP.Path, "is_file", return_value=True), \
              patch.object(APP.subprocess, "run", return_value=Mock(
-                 returncode=0, stdout="Name: sample-package\nVersion: 4.5.6\n", stderr=""
+                 returncode=0, stdout="4.5.6\n", stderr=""
              )) as query:
             result = APP.collect_resolved_version(tool)
         self.assertEqual(result["resolved_version"], "4.5.6")
         self.assertEqual(result["version_evidence"], "package_manager_metadata")
-        self.assertEqual(query.call_args.args[0][-2:], ["show", "sample-package"])
+        command = query.call_args.args[0]
+        self.assertEqual(command[-1], "sample-package")
+        self.assertIn("importlib.metadata.version", command[2])
 
     def test_version_query_failure_never_invents_a_version(self):
         from unittest.mock import patch
