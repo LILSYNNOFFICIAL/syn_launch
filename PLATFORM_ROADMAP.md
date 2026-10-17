@@ -23,7 +23,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Record batch operation outcomes separately from before/after PATH matches, and label functional verification as not run.
 - [x] Capture the most recent installer subprocess command, exit code, timeout/launch error, timestamps, and output bounds in batch summaries; entries that never launched a subprocess retain a null exit code.
 - [x] Record requested package specs and explicit Go module version requests in each batch result; mark unpinned packages and unresolved versions honestly.
-- [x] Collect resolved-version metadata for Termux packages (`dpkg-query`) and isolated Python packages (`pip show`), with explicit query status and no inferred version when evidence is absent.
+- [x] Collect resolved-version metadata for Termux packages (`dpkg-query`) and isolated Python packages (`importlib.metadata`), with explicit query status and no inferred version when evidence is absent.
 - [ ] Extend resolved-version collection to Go, Cargo, and npm, then reconcile resolved versions with requested specs.
 - [ ] Add bounded post-install checks that do not run arbitrary commands from catalog metadata.
 - [ ] Make updates and uninstall behavior explicit, reversible where possible, and auditable.
