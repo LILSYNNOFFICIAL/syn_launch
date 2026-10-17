@@ -258,9 +258,10 @@ def choose(data,tools=None):
     if not value.isdigit() or int(value)==0: return
     i=int(value)-1
     if i<0 or i>=len(tools): say("Invalid number."); return
-    t=tools[i]; show_tool(t); action=ask("[i]nstall / [h]elp / [b]ack: ").lower()
+    t=tools[i]; show_tool(t); action=ask("[i]nstall / [h]elp / [f]avorite / [b]ack: ").lower()
     if action=="i": install_one(t)
     elif action=="h": say("Review the example and source; replace placeholders only with authorized test values." if t.get("example") else "No example supplied. Read upstream documentation.")
+    elif action=="f": toggle_favorite(t)
 
 def category(data,selected=None):
     if selected:
