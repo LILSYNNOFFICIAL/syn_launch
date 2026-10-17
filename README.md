@@ -42,7 +42,9 @@ python main.py --category "Mobile App Security"
 python main.py --tool Nmap
 ~~~
 
-- `--check` validates the catalog and reports the current runtime environment.
+- `--check` validates the catalog and reports a concise runtime summary.
+- `--doctor` reports architecture, Android/Termux signals, process UID, free storage, available runtimes, and catalog install-method counts.
+- `--profile` prints a machine-readable JSON runtime profile. Detection signals do not certify individual tools as compatible.
 - `--list` lists the catalog and current PATH-based status.
 - `--search` searches tool names, categories, and descriptions.
 - `--category` lists tools from a category.
