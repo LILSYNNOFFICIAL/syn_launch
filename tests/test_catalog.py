@@ -66,5 +66,27 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("Catalog:", result.stdout)
 
+
+    def test_subprocess_timeout_terminates_process(self):
+        import time
+        started = time.monotonic()
+        ok = APP.run([sys.executable, "-c", "import time; time.sleep(5)"], "timeout regression test", timeout=0.2)
+        self.assertFalse(ok)
+        self.assertLess(time.monotonic() - started, 3.0)
+
+    def test_subprocess_arguments_are_not_shell_interpreted(self):
+        import contextlib
+        import io
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            marker = Path(tmp) / "should-not-exist"
+            argument = f"literal;touch {marker}"
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                ok = APP.run([sys.executable, "-c", "import sys; print(sys.argv[1])", argument], "argument safety regression")
+            self.assertTrue(ok)
+            self.assertIn(argument, output.getvalue())
+            self.assertFalse(marker.exists())
+
 if __name__ == "__main__":
     unittest.main()
