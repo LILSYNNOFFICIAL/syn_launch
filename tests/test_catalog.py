@@ -58,8 +58,42 @@ class CatalogTests(unittest.TestCase):
     def test_catalog_rejects_non_https_source(self):
         broken = copy.deepcopy(self.data)
         broken["tools"][0]["source"] = "http://example.com/tool"
-        with self.assertRaisesRegex(ValueError, "source must use HTTPS"):
+        with self.assertRaisesRegex(ValueError, "valid HTTPS URL"):
             APP.validate_catalog(broken)
+
+    def test_catalog_rejects_https_url_with_credentials(self):
+        broken = copy.deepcopy(self.data)
+        broken["tools"][0]["source"] = "https://trusted.example@evil.example/path"
+        with self.assertRaisesRegex(ValueError, "valid HTTPS URL"):
+            APP.validate_catalog(broken)
+
+    def test_catalog_rejects_invalid_executable_name(self):
+        broken = copy.deepcopy(self.data)
+        broken["tools"][0]["executable"] = "python;touch"
+        with self.assertRaisesRegex(ValueError, "invalid executable name"):
+            APP.validate_catalog(broken)
+
+    def test_catalog_requires_boolean_installable_flag(self):
+        broken = copy.deepcopy(self.data)
+        broken["tools"][0]["installable"] = "true"
+        with self.assertRaisesRegex(ValueError, "installable flag mismatch"):
+            APP.validate_catalog(broken)
+
+    def test_show_tool_does_not_execute_local_binary(self):
+        import contextlib
+        import io
+        original_installed = APP.installed
+        original_docs = APP.show_local_docs
+        called = []
+        try:
+            APP.installed = lambda tool: True
+            APP.show_local_docs = lambda tool: called.append(tool["id"])
+            with contextlib.redirect_stdout(io.StringIO()):
+                APP.show_tool(self.tools[0])
+            self.assertEqual(called, [])
+        finally:
+            APP.installed = original_installed
+            APP.show_local_docs = original_docs
 
     def test_check_cli(self):
         result = subprocess.run([sys.executable, str(ROOT / "main.py"), "--check"], capture_output=True, text=True, timeout=15)
