@@ -609,7 +609,7 @@
       "installable": true,
       "description": "HTTP(S) debugging proxy for your own apps and test traffic.",
       "example": "mitmproxy --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/mitmproxy/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -713,7 +713,7 @@
       "installable": true,
       "description": "subfinder utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "subfinder --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/projectdiscovery/subfinder/v2/cmd/subfinder",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -739,7 +739,7 @@
       "installable": true,
       "description": "assetfinder utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "assetfinder --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/tomnomnom/assetfinder",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -752,7 +752,7 @@
       "installable": true,
       "description": "dnsx utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "dnsx --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/projectdiscovery/dnsx/cmd/dnsx",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -765,7 +765,7 @@
       "installable": true,
       "description": "httpx utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "httpx --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/projectdiscovery/httpx/cmd/httpx",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -778,7 +778,7 @@
       "installable": true,
       "description": "naabu utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "naabu --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/projectdiscovery/naabu/v2/cmd/naabu",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -791,7 +791,7 @@
       "installable": true,
       "description": "gau utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "gau --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/lc/gau/v2/cmd/gau",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -804,7 +804,7 @@
       "installable": true,
       "description": "waybackurls utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "waybackurls --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/tomnomnom/waybackurls",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -817,7 +817,7 @@
       "installable": true,
       "description": "katana utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "katana --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/projectdiscovery/katana/cmd/katana",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -830,7 +830,7 @@
       "installable": true,
       "description": "unfurl utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "unfurl --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/tomnomnom/unfurl",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -843,7 +843,7 @@
       "installable": true,
       "description": "gauplus utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "gauplus --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/bp0lr/gauplus",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -856,7 +856,7 @@
       "installable": true,
       "description": "recon-ng utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "recon-ng --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/recon-ng/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -869,7 +869,7 @@
       "installable": true,
       "description": "OSRFramework utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "osrframework --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/osrframework/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -882,7 +882,7 @@
       "installable": true,
       "description": "holehe utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "holehe --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/holehe/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -895,7 +895,7 @@
       "installable": true,
       "description": "h8mail utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "h8mail --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/h8mail/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -908,7 +908,7 @@
       "installable": true,
       "description": "email-validator utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "email_validator --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/email-validator/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -921,7 +921,7 @@
       "installable": true,
       "description": "dnstwist utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
       "example": "dnstwist --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/dnstwist/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -986,7 +986,7 @@
       "installable": true,
       "description": "Wapiti utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "wapiti3 --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/wapiti3/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -999,7 +999,7 @@
       "installable": true,
       "description": "dirsearch utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "dirsearch --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/dirsearch/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1051,7 +1051,7 @@
       "installable": true,
       "description": "Wfuzz utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "wfuzz --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/wfuzz/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1103,7 +1103,7 @@
       "installable": true,
       "description": "curlie utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
       "example": "curlie --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/rs/curlie",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -1181,7 +1181,7 @@
       "installable": true,
       "description": "Semgrep utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "semgrep --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/semgrep/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1194,7 +1194,7 @@
       "installable": true,
       "description": "Bandit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "bandit --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/bandit/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1207,7 +1207,7 @@
       "installable": true,
       "description": "pip-audit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "pip-audit --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/pip-audit/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1220,7 +1220,7 @@
       "installable": true,
       "description": "Safety utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "safety --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/safety/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1233,7 +1233,7 @@
       "installable": true,
       "description": "Checkov utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "checkov --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/checkov/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1298,7 +1298,7 @@
       "installable": true,
       "description": "TruffleHog utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "trufflehog --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/trufflesecurity/trufflehog/v3",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -1311,7 +1311,7 @@
       "installable": true,
       "description": "detect-secrets utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "detect-secrets --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/detect-secrets/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1376,7 +1376,7 @@
       "installable": true,
       "description": "yamllint utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "yamllint --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/yamllint/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1415,7 +1415,7 @@
       "installable": true,
       "description": "govulncheck utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "govulncheck --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -1428,7 +1428,7 @@
       "installable": true,
       "description": "OSV-Scanner utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
       "example": "osv-scanner --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/google/osv-scanner/v2/cmd/osv-scanner",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
@@ -1766,7 +1766,7 @@
       "installable": true,
       "description": "hashid utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "hashid --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/hashid/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1779,7 +1779,7 @@
       "installable": true,
       "description": "Passlib utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "passlib --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/passlib/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1792,7 +1792,7 @@
       "installable": true,
       "description": "bcrypt utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "bcrypt --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/bcrypt/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1831,7 +1831,7 @@
       "installable": true,
       "description": "Certbot utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "certbot --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/certbot/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -1857,7 +1857,7 @@
       "installable": true,
       "description": "SSLyze utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
       "example": "sslyze --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/sslyze/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -2052,7 +2052,7 @@
       "installable": true,
       "description": "Ansible utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
       "example": "ansible --help",
-      "source": "https://pypi.org/",
+      "source": "https://pypi.org/project/ansible-core/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
     },
     {
@@ -2078,7 +2078,7 @@
       "installable": true,
       "description": "restic utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
       "example": "restic --help",
-      "source": "https://pkg.go.dev/",
+      "source": "https://pkg.go.dev/github.com/restic/restic/cmd/restic",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
     },
     {
