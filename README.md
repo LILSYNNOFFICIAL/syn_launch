@@ -6,7 +6,7 @@
 [![Catalog](https://img.shields.io/badge/catalog-269%2B%20entries-brightgreen)](catalog.json)
 [![Use](https://img.shields.io/badge/use-authorized%20testing-orange)](#responsible-use)
 
-**A searchable, Android-aware security toolkit catalog and installer for Termux.**
+**A mobile-first security platform foundation for Termux: searchable tool catalog, installer, and device/runtime diagnostics.**
 
 SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, and example command. Local version/help probes are available only after you explicitly choose Help. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
 
