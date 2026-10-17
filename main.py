@@ -415,6 +415,53 @@ def requested_package_evidence(tool):
     return result
 
 
+def collect_resolved_version(tool):
+    """Read installed-version metadata from trusted package managers only."""
+    kind, package = tool.get("install_kind"), tool.get("package")
+    result = {
+        "resolved_version": None,
+        "version_evidence": "not_supported",
+        "version_query_exit_code": None,
+    }
+    if kind == "pkg" and isinstance(package, str) and PKG_RE.fullmatch(package):
+        manager = shutil.which("dpkg-query")
+        if not manager:
+            result["version_evidence"] = "query_unavailable"
+            return result
+        command = [manager, "-W", "-f=" + "{Version}", package]
+    elif kind == "pip" and isinstance(package, str) and PIP_RE.fullmatch(package):
+        manager = VENV_DIR / "bin" / "pip"
+        if not manager.is_file():
+            result["version_evidence"] = "query_unavailable"
+            return result
+        command = [str(manager), "show", package]
+    else:
+        return result
+    try:
+        completed = subprocess.run(
+            command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, text=True, timeout=5, check=False,
+            env=build_child_env(),
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        result["version_evidence"] = "query_failed"
+        return result
+    result["version_query_exit_code"] = completed.returncode
+    if completed.returncode != 0:
+        result["version_evidence"] = "not_found" if completed.returncode == 1 else "query_failed"
+        return result
+    if kind == "pkg":
+        version = completed.stdout.strip()
+    else:
+        version = next((line.split(":", 1)[1].strip() for line in completed.stdout.splitlines()
+                        if line.lower().startswith("version:")), "")
+    if version:
+        result.update({"resolved_version": version, "version_evidence": "package_manager_metadata"})
+    else:
+        result["version_evidence"] = "metadata_missing"
+    return result
+
+
 def progress(items,worker,label,confirmed=False):
     if not items: say("No items to install."); return
     good=0; failed=[]; results=[]
@@ -432,9 +479,13 @@ def progress(items,worker,label,confirmed=False):
             state="operation_succeeded_executable_not_detected"
         else:
             state="operation_failed_or_unavailable"
+        version_result = collect_resolved_version(t) if ok else {
+            "resolved_version": None, "version_evidence": "not_collected",
+            "version_query_exit_code": None,
+        }
         results.append({
             "id":t["id"], "name":t["name"], "install_kind":t["install_kind"],
-            "package":t.get("package"), **requested_package_evidence(t),
+            "package":t.get("package"), **requested_package_evidence(t), **version_result,
             "operation_returned_success":bool(ok),
             "path_match_before_attempt":bool(path_before),
             "path_match_after_attempt":bool(path_after),
