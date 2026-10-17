@@ -470,7 +470,7 @@ class CatalogTests(unittest.TestCase):
 
     def test_unsupported_package_manager_does_not_run_a_probe(self):
         from unittest.mock import patch
-        tool = {"install_kind":"go", "package":"example.org/sample@v1.2.3"}
+        tool = {"install_kind":"manual", "package":None}
         with patch.object(APP.subprocess, "run") as query:
             result = APP.collect_resolved_version(tool)
         query.assert_not_called()
