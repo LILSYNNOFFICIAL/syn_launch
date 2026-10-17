@@ -111,6 +111,19 @@ class CatalogTests(unittest.TestCase):
             APP.installed = original_installed
             APP.show_local_docs = original_docs
 
+    def test_bootstrap_pins_remote_and_disables_hooks(self):
+        script = (ROOT / "install.sh").read_text(encoding="utf-8")
+        self.assertIn('ORIGIN" != "https://github.com/LILSYNNOFFICIAL/syn_launch.git"', script)
+        self.assertIn('BRANCH" != "main"', script)
+        self.assertIn('git -C "$BASE" -c core.hooksPath=/dev/null fetch --no-tags origin main', script)
+        self.assertIn('git -c core.hooksPath=/dev/null clone --branch main --single-branch', script)
+        self.assertIn('git -C "$BASE" diff --quiet', script)
+
+    def test_bootstrap_uses_isolated_official_pypi(self):
+        script = (ROOT / "install.sh").read_text(encoding="utf-8")
+        self.assertIn('--isolated --disable-pip-version-check --index-url https://pypi.org/simple', script)
+        self.assertIn('unset PYTHONPATH PYTHONHOME PYTHONSTARTUP', script)
+
     def test_package_manager_environment_overrides_are_removed(self):
         from unittest.mock import patch
         with patch.dict("os.environ", {
