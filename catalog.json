@@ -32,7 +32,7 @@
       "install_kind": "pkg",
       "package": "git",
       "installable": true,
-      "description": "Distributed version control and repository inspection.",
+      "description": "Distributed version control for source code, change history, and repository collaboration.",
       "example": "git status",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -45,7 +45,7 @@
       "install_kind": "pkg",
       "package": "curl",
       "installable": true,
-      "description": "HTTP client for API testing, headers, TLS troubleshooting, and downloads.",
+      "description": "HTTP client for API testing, response headers, TLS troubleshooting, and downloads.",
       "example": "curl -I https://example.com",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -58,7 +58,7 @@
       "install_kind": "pkg",
       "package": "wget",
       "installable": true,
-      "description": "wget utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Command-line file downloader with support for common HTTP and FTP workflows.",
       "example": "wget --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -71,7 +71,7 @@
       "install_kind": "pkg",
       "package": "jq",
       "installable": true,
-      "description": "Parse, filter, and transform JSON safely from the command line.",
+      "description": "Parse, filter, and transform JSON from APIs, logs, and command-line pipelines.",
       "example": "jq --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -84,7 +84,7 @@
       "install_kind": "pkg",
       "package": "ripgrep",
       "installable": true,
-      "description": "Fast recursive text search for source code, logs, and evidence.",
+      "description": "Fast recursive text search for source code, logs, and forensic notes.",
       "example": "rg --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -97,7 +97,7 @@
       "install_kind": "pkg",
       "package": "fd",
       "installable": true,
-      "description": "fd utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Fast file finder with sensible defaults and filtering.",
       "example": "fd --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -110,7 +110,7 @@
       "install_kind": "pkg",
       "package": "fzf",
       "installable": true,
-      "description": "fzf utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Interactive fuzzy finder for files, history, and command output.",
       "example": "fzf --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -123,7 +123,7 @@
       "install_kind": "pkg",
       "package": "tmux",
       "installable": true,
-      "description": "tmux utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Terminal multiplexer for persistent sessions and split panes.",
       "example": "tmux --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -136,7 +136,7 @@
       "install_kind": "pkg",
       "package": "nano",
       "installable": true,
-      "description": "nano utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Simple terminal text editor for configuration and notes.",
       "example": "nano --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -149,7 +149,7 @@
       "install_kind": "pkg",
       "package": "vim",
       "installable": true,
-      "description": "vim utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Modal terminal text editor for code and configuration.",
       "example": "vim --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -162,7 +162,7 @@
       "install_kind": "pkg",
       "package": "openssh",
       "installable": true,
-      "description": "openssh utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "SSH client and key-management tools for authorized remote administration.",
       "example": "ssh --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -175,7 +175,7 @@
       "install_kind": "pkg",
       "package": "rsync",
       "installable": true,
-      "description": "rsync utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Synchronize files and preserve metadata between local or remote paths.",
       "example": "rsync --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -188,7 +188,7 @@
       "install_kind": "pkg",
       "package": "tree",
       "installable": true,
-      "description": "tree utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Display directory structures as readable trees.",
       "example": "tree --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -201,7 +201,7 @@
       "install_kind": "pkg",
       "package": "file",
       "installable": true,
-      "description": "file utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Identify file types from file signatures and content.",
       "example": "file --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -214,7 +214,7 @@
       "install_kind": "pkg",
       "package": "less",
       "installable": true,
-      "description": "less utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Page through long command output and text files.",
       "example": "less --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -227,7 +227,7 @@
       "install_kind": "pkg",
       "package": "sqlite",
       "installable": true,
-      "description": "sqlite3 utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Inspect and query SQLite databases from the terminal.",
       "example": "sqlite3 --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -253,7 +253,7 @@
       "install_kind": "pkg",
       "package": "nodejs",
       "installable": true,
-      "description": "Node.js utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "JavaScript runtime and npm ecosystem for developer and security tools.",
       "example": "node --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -266,7 +266,7 @@
       "install_kind": "pkg",
       "package": "ruby",
       "installable": true,
-      "description": "Ruby utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Ruby runtime for scripts and tools that depend on Ruby gems.",
       "example": "ruby --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -279,7 +279,7 @@
       "install_kind": "pkg",
       "package": "perl",
       "installable": true,
-      "description": "Perl utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Perl runtime used by many classic command-line and security utilities.",
       "example": "perl --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -292,7 +292,7 @@
       "install_kind": "pkg",
       "package": "php",
       "installable": true,
-      "description": "PHP utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "PHP runtime for application testing and local development.",
       "example": "php --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -305,7 +305,7 @@
       "install_kind": "pkg",
       "package": "golang",
       "installable": true,
-      "description": "Go compiler and toolchain for supported upstream CLI tools.",
+      "description": "Go compiler and module toolchain for supported upstream command-line tools.",
       "example": "go --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -318,7 +318,7 @@
       "install_kind": "pkg",
       "package": "rust",
       "installable": true,
-      "description": "Rust compiler and Cargo package manager for native CLI tools.",
+      "description": "Rust compiler and Cargo package manager for native command-line utilities.",
       "example": "rustc --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -331,7 +331,7 @@
       "install_kind": "pkg",
       "package": "clang",
       "installable": true,
-      "description": "Clang utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "C/C++ compiler toolchain for native builds where Android dependencies permit.",
       "example": "clang --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -344,7 +344,7 @@
       "install_kind": "pkg",
       "package": "make",
       "installable": true,
-      "description": "Make utility for termux core. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Terminal, programming, file, and package-management utility for Termux workflows.",
       "example": "make --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -370,7 +370,7 @@
       "install_kind": "pkg",
       "package": "netcat-openbsd",
       "installable": true,
-      "description": "Netcat utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test.",
       "example": "nc --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -383,7 +383,7 @@
       "install_kind": "pkg",
       "package": "nmap",
       "installable": true,
-      "description": "Ncat utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test.",
       "example": "ncat --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -396,7 +396,7 @@
       "install_kind": "pkg",
       "package": "dnsutils",
       "installable": true,
-      "description": "DNS utils utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "DNS query utilities including dig and nslookup for name-resolution troubleshooting.",
       "example": "dig example.com A",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -409,7 +409,7 @@
       "install_kind": "pkg",
       "package": "whois",
       "installable": true,
-      "description": "Whois utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Query domain and IP registration records from supported registry services.",
       "example": "whois example.com",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -422,7 +422,7 @@
       "install_kind": "pkg",
       "package": "traceroute",
       "installable": true,
-      "description": "Traceroute utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Inspect network paths and hop behavior toward a destination.",
       "example": "traceroute --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -435,7 +435,7 @@
       "install_kind": "pkg",
       "package": "mtr",
       "installable": true,
-      "description": "MTR utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Combine route tracing and repeated latency/loss measurements.",
       "example": "mtr --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -448,7 +448,7 @@
       "install_kind": "pkg",
       "package": "iperf3",
       "installable": true,
-      "description": "iperf3 utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Measure network throughput between endpoints you control.",
       "example": "iperf3 --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -461,7 +461,7 @@
       "install_kind": "pkg",
       "package": "tcpdump",
       "installable": true,
-      "description": "Packet capture; permissions vary on Android.",
+      "description": "Capture and inspect packets when device permissions and kernel support allow it.",
       "example": "tcpdump --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -487,7 +487,7 @@
       "install_kind": "pkg",
       "package": "openssl",
       "installable": true,
-      "description": "OpenSSL utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "TLS client, certificate inspection, and cryptographic command-line utilities.",
       "example": "openssl s_client -connect example.com:443 -servername example.com",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -500,7 +500,7 @@
       "install_kind": "pkg",
       "package": "socat",
       "installable": true,
-      "description": "socat utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Bidirectional data relay for authorized networking and troubleshooting.",
       "example": "socat --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -513,9 +513,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "hping3 utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=hping3&type=repositories",
+      "description": "Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test.",
+      "example": "hping3 --help",
+      "source": "https://github.com/antirez/hping",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -526,9 +526,9 @@
       "install_kind": "root",
       "package": null,
       "installable": false,
-      "description": "arp-scan utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=arp-scan&type=repositories",
+      "description": "Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test.",
+      "example": "arp-scan --help",
+      "source": "https://github.com/royhills/arp-scan",
       "caveat": "Root or special kernel/network capabilities required; not expected to work on stock Android."
     },
     {
@@ -539,7 +539,7 @@
       "install_kind": "pkg",
       "package": "net-tools",
       "installable": true,
-      "description": "net-tools utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Legacy network utilities such as ifconfig and netstat.",
       "example": "ifconfig --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -552,7 +552,7 @@
       "install_kind": "pkg",
       "package": "iproute2",
       "installable": true,
-      "description": "iproute2 utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Modern IP address, link, and route inspection utilities.",
       "example": "ip --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -565,7 +565,7 @@
       "install_kind": "pkg",
       "package": "termux-tools",
       "installable": true,
-      "description": "Termux wake lock utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Keep the device awake during a user-requested long-running Termux task.",
       "example": "termux-wake-lock --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -578,7 +578,7 @@
       "install_kind": "pkg",
       "package": "inetutils",
       "installable": true,
-      "description": "ping utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Check reachability and latency where Android permissions permit ICMP.",
       "example": "ping --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -591,7 +591,7 @@
       "install_kind": "pkg",
       "package": "httpie",
       "installable": true,
-      "description": "HTTPie utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Human-friendly HTTP client for API requests and response inspection.",
       "example": "http --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -604,9 +604,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "xh utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=xh&type=repositories",
+      "description": "Fast HTTP client inspired by HTTPie, useful for API troubleshooting.",
+      "example": "xh --help",
+      "source": "https://github.com/ducaale/xh",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -617,7 +617,7 @@
       "install_kind": "pip",
       "package": "mitmproxy",
       "installable": true,
-      "description": "HTTP(S) debugging proxy for your own apps and test traffic.",
+      "description": "Interactive HTTP(S) proxy for debugging your own apps and test traffic.",
       "example": "mitmproxy --help",
       "source": "https://pypi.org/project/mitmproxy/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -630,7 +630,7 @@
       "install_kind": "pkg",
       "package": "termux-services",
       "installable": true,
-      "description": "Termux services utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Manage supported Termux background services using runit.",
       "example": "sv --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -643,7 +643,7 @@
       "install_kind": "pkg",
       "package": "inetutils",
       "installable": true,
-      "description": "inetutils utility for network & dns. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Network utilities including tools such as telnet and ftp clients.",
       "example": "telnet --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -695,7 +695,7 @@
       "install_kind": "pip",
       "package": "spiderfoot",
       "installable": true,
-      "description": "SpiderFoot utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Automated OSINT collection and correlation; resource-intensive on some Android devices.",
       "example": "sf.py --help",
       "source": "https://github.com/smicallef/spiderfoot",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -734,8 +734,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Amass utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
+      "description": "Attack-surface mapping and asset discovery for authorized domains.",
+      "example": "amass -h",
       "source": "https://github.com/owasp-amass/amass",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
@@ -747,7 +747,7 @@
       "install_kind": "go",
       "package": "github.com/tomnomnom/assetfinder@latest",
       "installable": true,
-      "description": "assetfinder utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "assetfinder --help",
       "source": "https://pkg.go.dev/github.com/tomnomnom/assetfinder",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -760,7 +760,7 @@
       "install_kind": "go",
       "package": "github.com/projectdiscovery/dnsx/cmd/dnsx@latest",
       "installable": true,
-      "description": "dnsx utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "dnsx --help",
       "source": "https://pkg.go.dev/github.com/projectdiscovery/dnsx/cmd/dnsx",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -786,7 +786,7 @@
       "install_kind": "go",
       "package": "github.com/projectdiscovery/naabu/v2/cmd/naabu@latest",
       "installable": true,
-      "description": "naabu utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "naabu --help",
       "source": "https://pkg.go.dev/github.com/projectdiscovery/naabu/v2/cmd/naabu",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -799,7 +799,7 @@
       "install_kind": "go",
       "package": "github.com/lc/gau/v2/cmd/gau@latest",
       "installable": true,
-      "description": "gau utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "gau --help",
       "source": "https://pkg.go.dev/github.com/lc/gau/v2/cmd/gau",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -812,7 +812,7 @@
       "install_kind": "go",
       "package": "github.com/tomnomnom/waybackurls@latest",
       "installable": true,
-      "description": "waybackurls utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "waybackurls --help",
       "source": "https://pkg.go.dev/github.com/tomnomnom/waybackurls",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -825,7 +825,7 @@
       "install_kind": "go",
       "package": "github.com/projectdiscovery/katana/cmd/katana@latest",
       "installable": true,
-      "description": "katana utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "katana --help",
       "source": "https://pkg.go.dev/github.com/projectdiscovery/katana/cmd/katana",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -838,7 +838,7 @@
       "install_kind": "go",
       "package": "github.com/tomnomnom/unfurl@latest",
       "installable": true,
-      "description": "unfurl utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "unfurl --help",
       "source": "https://pkg.go.dev/github.com/tomnomnom/unfurl",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -851,7 +851,7 @@
       "install_kind": "go",
       "package": "github.com/bp0lr/gauplus@latest",
       "installable": true,
-      "description": "gauplus utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "gauplus --help",
       "source": "https://pkg.go.dev/github.com/bp0lr/gauplus",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -864,7 +864,7 @@
       "install_kind": "pip",
       "package": "recon-ng",
       "installable": true,
-      "description": "recon-ng utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "recon-ng --help",
       "source": "https://github.com/lanmaster53/recon-ng",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -877,7 +877,7 @@
       "install_kind": "pip",
       "package": "osrframework",
       "installable": true,
-      "description": "OSRFramework utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "osrframework --help",
       "source": "https://github.com/i3visio/osrframework",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -890,7 +890,7 @@
       "install_kind": "pip",
       "package": "holehe",
       "installable": true,
-      "description": "holehe utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "holehe --help",
       "source": "https://pypi.org/project/holehe/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -903,7 +903,7 @@
       "install_kind": "pip",
       "package": "h8mail",
       "installable": true,
-      "description": "h8mail utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "h8mail --help",
       "source": "https://github.com/khast3x/h8mail",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -916,7 +916,7 @@
       "install_kind": "pip",
       "package": "email-validator",
       "installable": true,
-      "description": "email-validator utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "email_validator --help",
       "source": "https://pypi.org/project/email-validator/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -929,7 +929,7 @@
       "install_kind": "pip",
       "package": "dnstwist",
       "installable": true,
-      "description": "dnstwist utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "dnstwist --help",
       "source": "https://github.com/elceef/dnstwist",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -942,9 +942,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "urlcrazy utility for osint & recon. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=urlcrazy&type=repositories",
+      "description": "Generate domain permutations to support defensive typosquatting and lookalike-domain review.",
+      "example": "urlcrazy --help",
+      "source": "https://github.com/urbanadventurer/urlcrazy",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -955,7 +955,7 @@
       "install_kind": "pkg",
       "package": "whatweb",
       "installable": true,
-      "description": "WhatWeb utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "whatweb https://example.com",
       "source": "https://github.com/urbanadventurer/WhatWeb",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -968,9 +968,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Nikto utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Nikto&type=repositories",
+      "description": "Web server misconfiguration and known-file checks for authorized targets.",
+      "example": "nikto -Help",
+      "source": "https://github.com/sullo/nikto",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -994,7 +994,7 @@
       "install_kind": "pip",
       "package": "wapiti3",
       "installable": true,
-      "description": "Wapiti utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "wapiti3 --help",
       "source": "https://github.com/wapiti-scanner/wapiti",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1007,7 +1007,7 @@
       "install_kind": "pip",
       "package": "dirsearch",
       "installable": true,
-      "description": "dirsearch utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "dirsearch --help",
       "source": "https://github.com/maurosoria/dirsearch",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1033,7 +1033,7 @@
       "install_kind": "go",
       "package": "github.com/OJ/gobuster/v3@latest",
       "installable": true,
-      "description": "Gobuster utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "gobuster --help",
       "source": "https://github.com/OJ/gobuster",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1046,9 +1046,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Feroxbuster utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Feroxbuster&type=repositories",
+      "description": "Recursive content discovery for authorized web assessments.",
+      "example": "feroxbuster --help",
+      "source": "https://github.com/epi052/feroxbuster",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1059,7 +1059,7 @@
       "install_kind": "pip",
       "package": "wfuzz",
       "installable": true,
-      "description": "Wfuzz utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "wfuzz --help",
       "source": "https://github.com/xmendez/wfuzz",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1072,8 +1072,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Desktop GUI is not generally a native Termux CLI install.",
-      "example": "",
+      "description": "Web application security proxy and scanner; desktop/Java environment is normally required.",
+      "example": "See the official ZAP installation and automation documentation.",
       "source": "https://www.zaproxy.org/",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
@@ -1085,9 +1085,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Desktop Java GUI; use a supported desktop environment.",
-      "example": "",
-      "source": "https://github.com/search?q=Burp%20Suite&type=repositories",
+      "description": "Web application testing proxy from PortSwigger; desktop Java support is normally required.",
+      "example": "See the official Burp Suite installation documentation.",
+      "source": "https://portswigger.net/burp",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1098,9 +1098,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Wappalyzer utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Wappalyzer&type=repositories",
+      "description": "Identify web technologies and frameworks from supported page signals.",
+      "example": "See the upstream CLI documentation.",
+      "source": "https://github.com/wappalyzer/wappalyzer",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1111,7 +1111,7 @@
       "install_kind": "go",
       "package": "github.com/rs/curlie@latest",
       "installable": true,
-      "description": "curlie utility for web app testing. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "curlie --help",
       "source": "https://pkg.go.dev/github.com/rs/curlie",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1124,8 +1124,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Inspect and test JSON Web Tokens in a controlled lab.",
-      "example": "",
+      "description": "Inspect and test JSON Web Tokens in a controlled lab or authorized application.",
+      "example": "python jwt_tool.py --help",
       "source": "https://github.com/ticarpi/jwt_tool",
       "caveat": "Never paste production tokens into public services."
     },
@@ -1138,7 +1138,7 @@
       "package": null,
       "installable": false,
       "description": "Check CORS configuration for common security misconfigurations.",
-      "example": "",
+      "example": "python corsy.py -h",
       "source": "https://github.com/s0md3v/Corsy",
       "caveat": "Only test approved origins and endpoints."
     },
@@ -1151,7 +1151,7 @@
       "package": null,
       "installable": false,
       "description": "XSS detection and context analysis for authorized web testing.",
-      "example": "",
+      "example": "python xsstrike.py --help",
       "source": "https://github.com/s0md3v/XSStrike",
       "caveat": "Active probes can trigger application behavior."
     },
@@ -1163,8 +1163,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Command-injection testing for controlled authorized assessments.",
-      "example": "",
+      "description": "Command-injection testing framework for controlled authorized assessments.",
+      "example": "python commix.py --help",
       "source": "https://github.com/commixproject/commix",
       "caveat": "Potentially executes commands on vulnerable targets; lab or written authorization only."
     },
@@ -1177,7 +1177,7 @@
       "package": null,
       "installable": false,
       "description": "Server-side template injection testing for authorized applications.",
-      "example": "",
+      "example": "python tplmap.py --help",
       "source": "https://github.com/epinna/tplmap",
       "caveat": "Potentially intrusive; use labs or approved scope."
     },
@@ -1189,7 +1189,7 @@
       "install_kind": "pip",
       "package": "semgrep",
       "installable": true,
-      "description": "Semgrep utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "semgrep --help",
       "source": "https://github.com/semgrep/semgrep",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1202,7 +1202,7 @@
       "install_kind": "pip",
       "package": "bandit",
       "installable": true,
-      "description": "Bandit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "bandit --help",
       "source": "https://github.com/PyCQA/bandit",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1215,7 +1215,7 @@
       "install_kind": "pip",
       "package": "pip-audit",
       "installable": true,
-      "description": "pip-audit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "pip-audit --help",
       "source": "https://github.com/pypa/pip-audit",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1228,7 +1228,7 @@
       "install_kind": "pip",
       "package": "safety",
       "installable": true,
-      "description": "Safety utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "safety --help",
       "source": "https://pypi.org/project/safety/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1241,7 +1241,7 @@
       "install_kind": "pip",
       "package": "checkov",
       "installable": true,
-      "description": "Checkov utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "checkov --help",
       "source": "https://github.com/bridgecrewio/checkov",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1254,9 +1254,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Trivy utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Trivy&type=repositories",
+      "description": "Scan container images, filesystems, repositories, and supported infrastructure artifacts for risks.",
+      "example": "trivy --help",
+      "source": "https://github.com/aquasecurity/trivy",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1267,9 +1267,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Grype utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Grype&type=repositories",
+      "description": "Scan container images and filesystems for known package vulnerabilities.",
+      "example": "grype --help",
+      "source": "https://github.com/anchore/grype",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1280,9 +1280,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Syft utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Syft&type=repositories",
+      "description": "Generate software bills of materials from supported images and directories.",
+      "example": "syft --help",
+      "source": "https://github.com/anchore/syft",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1319,7 +1319,7 @@
       "install_kind": "pip",
       "package": "detect-secrets",
       "installable": true,
-      "description": "detect-secrets utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "detect-secrets --help",
       "source": "https://pypi.org/project/detect-secrets/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1332,9 +1332,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "checksec utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=checksec&type=repositories",
+      "description": "Inspect binary security properties such as PIE, NX, canaries, and RELRO.",
+      "example": "checksec --help",
+      "source": "https://github.com/slimm609/checksec.sh",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1345,9 +1345,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Lynis utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Lynis&type=repositories",
+      "description": "Audit Unix/Linux system configuration; Android's restricted environment limits coverage.",
+      "example": "lynis --help",
+      "source": "https://github.com/CISOfy/lynis",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1358,7 +1358,7 @@
       "install_kind": "pkg",
       "package": "shellcheck",
       "installable": true,
-      "description": "ShellCheck utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "shellcheck --version",
       "source": "https://github.com/koalaman/shellcheck",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1371,9 +1371,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Hadolint utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Hadolint&type=repositories",
+      "description": "Lint Dockerfiles for common errors and best practices.",
+      "example": "hadolint --help",
+      "source": "https://github.com/hadolint/hadolint",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1384,7 +1384,7 @@
       "install_kind": "pip",
       "package": "yamllint",
       "installable": true,
-      "description": "yamllint utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "yamllint --help",
       "source": "https://github.com/adrienverge/yamllint",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1397,7 +1397,7 @@
       "install_kind": "pkg",
       "package": "nodejs",
       "installable": true,
-      "description": "npm audit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "npm --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1410,9 +1410,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "cargo-audit utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=cargo-audit&type=repositories",
+      "description": "Check Rust dependency lockfiles against RustSec advisories.",
+      "example": "cargo audit --help",
+      "source": "https://github.com/RustSec/cargo-audit",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1423,7 +1423,7 @@
       "install_kind": "go",
       "package": "golang.org/x/vuln/cmd/govulncheck@latest",
       "installable": true,
-      "description": "govulncheck utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "govulncheck --help",
       "source": "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1436,7 +1436,7 @@
       "install_kind": "go",
       "package": "github.com/google/osv-scanner/v2/cmd/osv-scanner@latest",
       "installable": true,
-      "description": "OSV-Scanner utility for audit, sast & supply chain. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "osv-scanner --help",
       "source": "https://pkg.go.dev/github.com/google/osv-scanner/v2/cmd/osv-scanner",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -1462,7 +1462,7 @@
       "install_kind": "pkg",
       "package": "binwalk",
       "installable": true,
-      "description": "Binwalk utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "binwalk --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1488,7 +1488,7 @@
       "install_kind": "pkg",
       "package": "foremost",
       "installable": true,
-      "description": "Foremost utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "foremost --help",
       "source": "https://github.com/korczis/foremost",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1501,7 +1501,7 @@
       "install_kind": "pkg",
       "package": "vim",
       "installable": true,
-      "description": "xxd utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "xxd --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1514,7 +1514,7 @@
       "install_kind": "pkg",
       "package": "util-linux",
       "installable": true,
-      "description": "hexdump utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "hexdump --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1527,7 +1527,7 @@
       "install_kind": "pkg",
       "package": "binutils",
       "installable": true,
-      "description": "strings utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "strings --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1540,7 +1540,7 @@
       "install_kind": "pkg",
       "package": "binutils",
       "installable": true,
-      "description": "readelf utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "readelf --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1553,7 +1553,7 @@
       "install_kind": "pkg",
       "package": "binutils",
       "installable": true,
-      "description": "objdump utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "objdump --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1566,7 +1566,7 @@
       "install_kind": "pkg",
       "package": "radare2",
       "installable": true,
-      "description": "radare2 utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "r2 --help",
       "source": "https://github.com/radareorg/radare2",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1579,7 +1579,7 @@
       "install_kind": "pkg",
       "package": "gdb",
       "installable": true,
-      "description": "GDB utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "gdb --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1592,9 +1592,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "strace utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=strace&type=repositories",
+      "description": "Trace system calls for debugging programs where Android ptrace restrictions allow it.",
+      "example": "strace -V",
+      "source": "https://github.com/strace/strace",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1605,9 +1605,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "ltrace utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=ltrace&type=repositories",
+      "description": "Trace dynamic library calls where supported by the platform and binary.",
+      "example": "ltrace --help",
+      "source": "https://github.com/dkogan/ltrace",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1618,9 +1618,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Sleuth Kit utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Sleuth%20Kit&type=repositories",
+      "description": "Filesystem forensic tools for supported disk images and evidence copies.",
+      "example": "fls -h",
+      "source": "https://github.com/sleuthkit/sleuthkit",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1631,9 +1631,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "bulk_extractor utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=bulk_extractor&type=repositories",
+      "description": "Extract structured artifacts from forensic images without relying on filesystem layout.",
+      "example": "bulk_extractor -h",
+      "source": "https://github.com/simsong/bulk_extractor",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1644,9 +1644,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "pdfid utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=pdfid&type=repositories",
+      "description": "Inspect PDF token counts to triage potentially suspicious documents.",
+      "example": "pdfid.py -h",
+      "source": "https://github.com/DidierStevens/DidierStevensSuite",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1657,9 +1657,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "peepdf utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=peepdf&type=repositories",
+      "description": "Analyze PDF structure for suspicious objects and scripts.",
+      "example": "peepdf --help",
+      "source": "https://github.com/jesparza/peepdf",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1670,7 +1670,7 @@
       "install_kind": "pkg",
       "package": "tesseract",
       "installable": true,
-      "description": "Tesseract OCR utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "tesseract scan.png stdout",
       "source": "https://github.com/tesseract-ocr/tesseract",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1683,7 +1683,7 @@
       "install_kind": "pkg",
       "package": "pngcheck",
       "installable": true,
-      "description": "pngcheck utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "pngcheck --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1696,7 +1696,7 @@
       "install_kind": "pkg",
       "package": "ffmpeg",
       "installable": true,
-      "description": "ffprobe utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "ffprobe --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1709,7 +1709,7 @@
       "install_kind": "pkg",
       "package": "mediainfo",
       "installable": true,
-      "description": "MediaInfo utility for forensics & file analysis. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "mediainfo --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1722,7 +1722,7 @@
       "install_kind": "pkg",
       "package": "gnupg",
       "installable": true,
-      "description": "GnuPG utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "gpg --version",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1735,7 +1735,7 @@
       "install_kind": "pkg",
       "package": "age",
       "installable": true,
-      "description": "age utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "age --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1748,9 +1748,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Password auditing may require GPU/OpenCL hardware unavailable on Android.",
-      "example": "",
-      "source": "https://github.com/search?q=Hashcat&type=repositories",
+      "description": "Offline password-hash auditing and recovery; compatible GPU/OpenCL support is generally absent on stock Android.",
+      "example": "hashcat --help",
+      "source": "https://github.com/hashcat/hashcat",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1761,9 +1761,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "John the Ripper utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=John%20the%20Ripper&type=repositories",
+      "description": "Offline password-hash auditing for hashes you are authorized to examine.",
+      "example": "john --list=formats",
+      "source": "https://github.com/openwall/john",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1774,7 +1774,7 @@
       "install_kind": "pip",
       "package": "hashid",
       "installable": true,
-      "description": "hashid utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "hashid --help",
       "source": "https://pypi.org/project/hashid/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1787,7 +1787,7 @@
       "install_kind": "pip",
       "package": "passlib",
       "installable": true,
-      "description": "Passlib utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "passlib --help",
       "source": "https://pypi.org/project/passlib/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1800,7 +1800,7 @@
       "install_kind": "pip",
       "package": "bcrypt",
       "installable": true,
-      "description": "bcrypt utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "bcrypt --help",
       "source": "https://pypi.org/project/bcrypt/",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1813,7 +1813,7 @@
       "install_kind": "pkg",
       "package": "openssh",
       "installable": true,
-      "description": "ssh-keygen utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "ssh-keygen --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1826,7 +1826,7 @@
       "install_kind": "pkg",
       "package": "age",
       "installable": true,
-      "description": "age-keygen utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "age-keygen --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1839,7 +1839,7 @@
       "install_kind": "pip",
       "package": "certbot",
       "installable": true,
-      "description": "Certbot utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "certbot --help",
       "source": "https://github.com/certbot/certbot",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1852,9 +1852,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "testssl.sh utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=testssl.sh&type=repositories",
+      "description": "Probe TLS/SSL configuration for authorized services using a shell-based test suite.",
+      "example": "testssl.sh --help",
+      "source": "https://github.com/testssl/testssl.sh",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1865,7 +1865,7 @@
       "install_kind": "pip",
       "package": "sslyze",
       "installable": true,
-      "description": "SSLyze utility for cryptography & password hygiene. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "sslyze --help",
       "source": "https://github.com/nabla-c0d3/sslyze",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -1878,7 +1878,7 @@
       "install_kind": "pkg",
       "package": "termux-api",
       "installable": true,
-      "description": "Termux Wi-Fi info utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies.",
       "example": "termux-wifi-connectioninfo",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1891,7 +1891,7 @@
       "install_kind": "pkg",
       "package": "termux-api",
       "installable": true,
-      "description": "Termux Wi-Fi scan utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies.",
       "example": "termux-wifi-scaninfo --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1904,9 +1904,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "iw utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=iw&type=repositories",
+      "description": "Linux wireless configuration utility; stock Android may not expose the required wireless interfaces.",
+      "example": "iw --help",
+      "source": "https://wireless.wiki.kernel.org/en/users/documentation/iw",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1917,9 +1917,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Wireless auditing needs compatible adapter/driver and often root; stock phones usually lack monitor/injection support.",
-      "example": "",
-      "source": "https://github.com/search?q=Aircrack-ng&type=repositories",
+      "description": "Wireless security auditing suite requiring compatible adapters, drivers, and often root access.",
+      "example": "aircrack-ng --help",
+      "source": "https://github.com/aircrack-ng/aircrack-ng",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1930,9 +1930,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Kismet utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Kismet&type=repositories",
+      "description": "Wireless network detector and packet capture framework requiring supported hardware and permissions.",
+      "example": "kismet --help",
+      "source": "https://github.com/kismetwireless/kismet",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1943,9 +1943,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "BlueZ tools utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=BlueZ%20tools&type=repositories",
+      "description": "Bluetooth command-line utilities; Android's Bluetooth stack may not expose BlueZ interfaces.",
+      "example": "bluetoothctl --help",
+      "source": "https://github.com/bluez/bluez",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -1956,7 +1956,7 @@
       "install_kind": "pkg",
       "package": "termux-tools",
       "installable": true,
-      "description": "termux-info utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies.",
       "example": "termux-info --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1969,7 +1969,7 @@
       "install_kind": "pkg",
       "package": "termux-tools",
       "installable": true,
-      "description": "termux-open utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies.",
       "example": "termux-open --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -1982,7 +1982,7 @@
       "install_kind": "pkg",
       "package": "termux-api",
       "installable": true,
-      "description": "Termux clipboard utility for wireless & android environment. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies.",
       "example": "termux-clipboard-get --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2008,9 +2008,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Docker CLI utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Docker%20CLI&type=repositories",
+      "description": "Docker client for connecting to a reachable Docker Engine; the daemon is not provided by stock Termux.",
+      "example": "docker --help",
+      "source": "https://github.com/docker/cli",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2021,9 +2021,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Podman utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Podman&type=repositories",
+      "description": "Container engine and CLI; Android kernel and namespace support can prevent normal operation.",
+      "example": "podman --help",
+      "source": "https://github.com/containers/podman",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2034,9 +2034,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "kubectl utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=kubectl&type=repositories",
+      "description": "Kubernetes CLI for clusters you administer or are authorized to assess.",
+      "example": "kubectl version --client",
+      "source": "https://github.com/kubernetes/kubectl",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2047,9 +2047,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Terraform utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=Terraform&type=repositories",
+      "description": "Infrastructure-as-code workflow for cloud resources you control.",
+      "example": "terraform -help",
+      "source": "https://github.com/hashicorp/terraform",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2060,7 +2060,7 @@
       "install_kind": "pip",
       "package": "ansible-core",
       "installable": true,
-      "description": "Ansible utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "ansible --help",
       "source": "https://github.com/ansible/ansible",
       "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
@@ -2073,9 +2073,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "rclone utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=rclone&type=repositories",
+      "description": "Manage file transfers and backups across supported storage providers.",
+      "example": "rclone version",
+      "source": "https://github.com/rclone/rclone",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2086,7 +2086,7 @@
       "install_kind": "go",
       "package": "github.com/restic/restic/cmd/restic@latest",
       "installable": true,
-      "description": "restic utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "restic --help",
       "source": "https://github.com/restic/restic",
       "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
@@ -2099,9 +2099,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "age-plugin-yubikey utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=age-plugin-yubikey&type=repositories",
+      "description": "Use supported YubiKey PIV keys with age encryption; requires compatible hardware.",
+      "example": "age-plugin-yubikey --help",
+      "source": "https://github.com/str4d/age-plugin-yubikey",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2112,9 +2112,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "rkhunter utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=rkhunter&type=repositories",
+      "description": "Rootkit and configuration checks for supported Unix/Linux systems; limited relevance on stock Android.",
+      "example": "rkhunter --help",
+      "source": "https://github.com/Rootkit-Hunter/rootkit_hunter",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2125,9 +2125,9 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "chkrootkit utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
-      "example": "",
-      "source": "https://github.com/search?q=chkrootkit&type=repositories",
+      "description": "Rootkit checks for supported Unix/Linux hosts; not a reliable stock-Android integrity check.",
+      "example": "chkrootkit -h",
+      "source": "https://github.com/Magentron/chkrootkit",
       "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
     },
     {
@@ -2151,7 +2151,7 @@
       "install_kind": "pkg",
       "package": "clamav",
       "installable": true,
-      "description": "FreshClam utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "freshclam --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2164,7 +2164,7 @@
       "install_kind": "pkg",
       "package": "yq",
       "installable": true,
-      "description": "yq utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "yq --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2177,7 +2177,7 @@
       "install_kind": "pkg",
       "package": "xmlstarlet",
       "installable": true,
-      "description": "xmlstarlet utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "xmlstarlet --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2190,7 +2190,7 @@
       "install_kind": "pkg",
       "package": "coreutils",
       "installable": true,
-      "description": "base64 utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "base64 --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2203,7 +2203,7 @@
       "install_kind": "pkg",
       "package": "coreutils",
       "installable": true,
-      "description": "sha256sum utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "sha256sum --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2216,7 +2216,7 @@
       "install_kind": "pkg",
       "package": "gzip",
       "installable": true,
-      "description": "gzip utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "gzip --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2229,7 +2229,7 @@
       "install_kind": "pkg",
       "package": "tar",
       "installable": true,
-      "description": "tar utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "tar --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2242,7 +2242,7 @@
       "install_kind": "pkg",
       "package": "zip",
       "installable": true,
-      "description": "zip utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "zip --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2255,7 +2255,7 @@
       "install_kind": "pkg",
       "package": "unzip",
       "installable": true,
-      "description": "unzip utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "unzip --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2268,7 +2268,7 @@
       "install_kind": "pkg",
       "package": "parallel",
       "installable": true,
-      "description": "GNU Parallel utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "parallel --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2281,7 +2281,7 @@
       "install_kind": "pkg",
       "package": "procps",
       "installable": true,
-      "description": "watch utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "watch --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2294,7 +2294,7 @@
       "install_kind": "pkg",
       "package": "lsof",
       "installable": true,
-      "description": "lsof utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "lsof --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2307,7 +2307,7 @@
       "install_kind": "pkg",
       "package": "procps",
       "installable": true,
-      "description": "ps utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "ps --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2320,7 +2320,7 @@
       "install_kind": "pkg",
       "package": "htop",
       "installable": true,
-      "description": "htop utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "htop --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2333,7 +2333,7 @@
       "install_kind": "pkg",
       "package": "stress-ng",
       "installable": true,
-      "description": "stress-ng utility for cloud, containers & misc. Check the upstream documentation and verify compatibility before using it.",
+      "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "stress-ng --help",
       "source": "https://github.com/termux/termux-packages",
       "caveat": "Package availability differs by Termux repository, architecture, and release."
@@ -2425,7 +2425,7 @@
       "package": null,
       "installable": false,
       "description": "Penetration-testing framework for controlled labs and authorized engagements.",
-      "example": "",
+      "example": "msfconsole --help",
       "source": "https://github.com/rapid7/metasploit-framework",
       "caveat": "Large framework; stock Termux support is not verified."
     },
@@ -2438,7 +2438,7 @@
       "package": null,
       "installable": false,
       "description": "Router and embedded-device security assessment framework.",
-      "example": "",
+      "example": "python rsf.py --help",
       "source": "https://github.com/threat9/routersploit",
       "caveat": "Use only against devices you own or are authorized to test."
     },
@@ -2633,7 +2633,7 @@
       "package": null,
       "installable": false,
       "description": "High-performance DNS stub resolver for scoped enumeration.",
-      "example": "",
+      "example": "massdns --help",
       "source": "https://github.com/blechschmidt/massdns",
       "caveat": "Native build and resolver setup are required; no Termux recipe verified."
     },
@@ -2645,8 +2645,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Nuclei's maintained template collection; templates are executable test logic.",
-      "example": "",
+      "description": "Nuclei's maintained template collection; templates are executable test logic, not passive data.",
+      "example": "nuclei -tl",
       "source": "https://github.com/projectdiscovery/nuclei-templates",
       "caveat": "Review template contents and provenance before running."
     },
@@ -2659,7 +2659,7 @@
       "package": null,
       "installable": false,
       "description": "WordPress security scanner and vulnerability enumeration.",
-      "example": "",
+      "example": "wpscan --help",
       "source": "https://github.com/wpscanteam/wpscan",
       "caveat": "Some features require an API token; respect rate limits."
     },
@@ -2749,7 +2749,7 @@
       "install_kind": "pip",
       "package": "ldapdomaindump",
       "installable": true,
-      "description": "Export LDAP directory information for authorized audits.",
+      "description": "Export LDAP directory information for authorized domain auditing.",
       "example": "ldapdomaindump --help",
       "source": "https://github.com/dirkjanm/ldapdomaindump",
       "caveat": "Treat output as confidential."
@@ -2775,7 +2775,7 @@
       "install_kind": "pip",
       "package": "bloodyAD",
       "installable": true,
-      "description": "Active Directory administration and security testing utility.",
+      "description": "Active Directory administration and security testing utility; some operations modify directory state.",
       "example": "bloodyAD --help",
       "source": "https://github.com/CravateRouge/bloodyAD",
       "caveat": "Some operations modify directory state; review each action."
@@ -2789,7 +2789,7 @@
       "package": null,
       "installable": false,
       "description": "WinRM client for authorized Windows lab assessments.",
-      "example": "",
+      "example": "evil-winrm --help",
       "source": "https://github.com/Hackplayers/evil-winrm",
       "caveat": "Credentialed remote shell access; manual-only."
     },
@@ -2801,8 +2801,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Network protocol analysis and poisoning tool for isolated labs.",
-      "example": "",
+      "description": "Network protocol analysis and poisoning tool for isolated labs; can intercept credentials and disrupt networks.",
+      "example": "python Responder.py --help",
       "source": "https://github.com/lgandx/Responder",
       "caveat": "Poisoning can intercept credentials or disrupt networks; lab-only."
     },
@@ -2840,7 +2840,7 @@
       "install_kind": "pip",
       "package": "apkleaks",
       "installable": true,
-      "description": "Search APKs for embedded endpoints and secrets during defensive review.",
+      "description": "Search Android APKs for embedded endpoints and secrets during defensive review.",
       "example": "apkleaks --help",
       "source": "https://github.com/dwisiswant0/apkleaks",
       "caveat": "Review results locally; never use discovered secrets to access accounts."
@@ -2880,7 +2880,7 @@
       "package": null,
       "installable": false,
       "description": "Decompile Android DEX/APK bytecode for analysis.",
-      "example": "",
+      "example": "jadx --help",
       "source": "https://github.com/skylot/jadx",
       "caveat": "Java runtime and GUI components may limit stock Termux support."
     },
@@ -2893,7 +2893,7 @@
       "package": null,
       "installable": false,
       "description": "Decode Android resources and smali for app auditing.",
-      "example": "",
+      "example": "apktool --help",
       "source": "https://github.com/iBotPeaches/Apktool",
       "caveat": "Manual Java setup and Android build tools may be required."
     },
@@ -2905,8 +2905,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Mobile app security testing framework for APK/IPA analysis.",
-      "example": "",
+      "description": "Mobile app security testing framework for APK/IPA analysis; resource-heavy for a phone.",
+      "example": "See the official MobSF installation documentation.",
       "source": "https://github.com/MobSF/Mobile-Security-Framework-MobSF",
       "caveat": "Resource-heavy; not treated as a native Termux install."
     },
@@ -2918,7 +2918,7 @@
       "install_kind": "pip",
       "package": "prowler",
       "installable": true,
-      "description": "Cloud security posture assessment for supported providers.",
+      "description": "Cloud security posture assessment for supported cloud providers.",
       "example": "prowler --help",
       "source": "https://github.com/prowler-cloud/prowler",
       "caveat": "Use authorized cloud credentials and least-privilege roles."
@@ -2983,7 +2983,7 @@
       "install_kind": "go",
       "package": "github.com/cyberark/kubeletctl@latest",
       "installable": true,
-      "description": "Kubelet endpoint assessment utility for authorized cluster tests.",
+      "description": "Cloud/container security audit utility. Use authorized credentials, least privilege, and approved scope.",
       "example": "kubeletctl --help",
       "source": "https://github.com/cyberark/kubeletctl",
       "caveat": "Only target clusters you administer or are authorized to assess."
@@ -2997,7 +2997,7 @@
       "package": null,
       "installable": false,
       "description": "Check Kubernetes configuration against CIS benchmarks.",
-      "example": "",
+      "example": "kube-bench --help",
       "source": "https://github.com/aquasecurity/kube-bench",
       "caveat": "Usually requires host/cluster context unavailable on stock Android."
     },
@@ -3010,7 +3010,7 @@
       "package": null,
       "installable": false,
       "description": "Probe TLS protocol and cipher configuration for authorized hosts.",
-      "example": "",
+      "example": "sslscan --help",
       "source": "https://github.com/rbsec/sslscan",
       "caveat": "Native compilation and TLS library compatibility may be required."
     },
@@ -3023,7 +3023,7 @@
       "package": null,
       "installable": false,
       "description": "Internet-scale network measurement scanner for tightly scoped audits.",
-      "example": "",
+      "example": "zmap --help",
       "source": "https://github.com/zmap/zmap",
       "caveat": "High-impact scanner; no broad public scanning without explicit authorization."
     },
@@ -3036,7 +3036,7 @@
       "package": null,
       "installable": false,
       "description": "Command-line packet analysis utility.",
-      "example": "",
+      "example": "tshark --help",
       "source": "https://www.wireshark.org/docs/man-pages/tshark.html",
       "caveat": "Capture permissions and Android kernel support vary."
     },
@@ -3048,8 +3048,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Route compatible applications through configured proxy chains.",
-      "example": "",
+      "description": "Route compatible applications through configured proxy chains; does not guarantee anonymity.",
+      "example": "proxychains4 --help",
       "source": "https://github.com/rofl0r/proxychains-ng",
       "caveat": "Does not guarantee anonymity or authorization; manual-only."
     },
@@ -3075,7 +3075,7 @@
       "package": null,
       "installable": false,
       "description": "Tunneling framework used in authorized network assessment labs.",
-      "example": "",
+      "example": "See the official Ligolo-ng documentation.",
       "source": "https://github.com/nicocha30/ligolo-ng",
       "caveat": "Advanced routing and privileges may be required; manual-only."
     },
@@ -3101,7 +3101,7 @@
       "package": null,
       "installable": false,
       "description": "Reverse-engineering framework for binary inspection.",
-      "example": "",
+      "example": "rizin -h",
       "source": "https://github.com/rizinorg/rizin",
       "caveat": "Native build and architecture plugin support vary on Android."
     },
@@ -3113,8 +3113,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Modern YARA-compatible pattern matching engine for defensive triage.",
-      "example": "",
+      "description": "Modern YARA-compatible pattern-matching engine for defensive triage.",
+      "example": "yr --help",
       "source": "https://github.com/VirusTotal/yara-x",
       "caveat": "Separate project from classic YARA; Termux recipe not verified."
     },
@@ -3127,7 +3127,7 @@
       "package": null,
       "installable": false,
       "description": "Build forensic timelines from supported evidence sources.",
-      "example": "",
+      "example": "log2timeline.py --help",
       "source": "https://github.com/log2timeline/plaso",
       "caveat": "Dependency-heavy; best suited to a supported Linux workstation."
     },
@@ -3152,7 +3152,7 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Collect metadata from publicly available documents for authorized reconnaissance.",
+      "description": "Collect metadata from public documents for authorized reconnaissance.",
       "example": "",
       "source": "https://github.com/opsdisk/metagoofil",
       "caveat": "Search-provider terms and compatibility change; manual-only."
@@ -3165,8 +3165,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Network login auditing for controlled password-policy tests.",
-      "example": "",
+      "description": "Network login auditing for controlled password-policy tests; can lock accounts and disrupt services.",
+      "example": "hydra -h",
       "source": "https://github.com/vanhauser-thc/thc-hydra",
       "caveat": "Can lock accounts and disrupt services; manual-only and explicit authorization required."
     },
@@ -3179,7 +3179,7 @@
       "package": null,
       "installable": false,
       "description": "Generate wordlists from authorized website content for password-policy audits.",
-      "example": "",
+      "example": "cewl --help",
       "source": "https://github.com/digininja/CeWL",
       "caveat": "Use only approved targets."
     },
@@ -3191,8 +3191,8 @@
       "install_kind": "manual",
       "package": null,
       "installable": false,
-      "description": "Generate custom test wordlists for offline password auditing labs.",
-      "example": "",
+      "description": "Generate custom test wordlists for offline password-auditing labs.",
+      "example": "crunch --help",
       "source": "https://github.com/jim3ma/crunch",
       "caveat": "Large wordlists can consume substantial storage and compute."
     }
