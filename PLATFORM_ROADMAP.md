@@ -26,7 +26,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Collect resolved-version metadata for Termux packages (`dpkg-query`) and isolated Python packages (`importlib.metadata`), with explicit query status and no inferred version when evidence is absent.
 - [x] Extend resolved-version collection to Go build metadata, Cargo install metadata, and global npm package metadata without launching cataloged tool executables.
 - [ ] Reconcile resolved versions with requested specs, including mismatches and floating requests.
-- [ ] Add bounded post-install checks that do not run arbitrary commands from catalog metadata.
+- [x] Add bounded metadata-only post-install checks using package-manager records and PATH discovery, with explicit status and no execution of cataloged tool binaries.
 - [ ] Make updates and uninstall behavior explicit, reversible where possible, and auditable.
 - [x] Add advisory dependency/runtime and disk-space preflight checks before bulk installs; missing `pkg` blocks package batches, while other warnings require explicit continuation. Exact package sizes and tool functionality remain unverified.
 
