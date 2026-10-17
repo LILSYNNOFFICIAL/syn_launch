@@ -48,6 +48,10 @@ python main.py --tool Nmap
 - `--category` lists tools from a category.
 - `--tool` displays a tool's information and best-effort local help/version output if the executable is installed.
 
+## Personal catalog and favorites
+
+Use **Custom tools / favorites** in the main menu to add a tool entry without editing the project files, browse or remove your custom entries, and favorite frequently used tools. Personal entries are stored separately in `~/.syn_launch/custom_tools.json`; favorites are stored in `~/.syn_launch/favorites.json`. These files are user-local and are not committed to the GitHub repository. Custom entries go through the same ID, HTTPS-source, install-method, and package syntax checks as the built-in catalog. Adding an entry saves metadata only; it does not install the tool. Removing an entry does not uninstall its software.
+
 ## What's included
 
 **244 catalog entries across 19 categories.** Coverage includes:
