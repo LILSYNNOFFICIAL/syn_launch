@@ -531,7 +531,7 @@ class CatalogTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "package.json").write_text(json.dumps({"version":"9.9.9"}), encoding="utf-8")
             with patch.object(APP.shutil, "which", return_value="/usr/bin/npm"), \
-                 patch.object(APP.subprocess, "run", return_value=Mock(returncode=0, stdout=tmp, stderr="")):
+                 patch.object(APP, "bounded_probe", return_value=(tmp, False, False)):
                 result = APP.collect_resolved_version(tool)
         self.assertIsNone(result["resolved_version"])
         self.assertEqual(result["version_evidence"], "invalid_package_path")
