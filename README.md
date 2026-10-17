@@ -38,6 +38,7 @@ Rich is optional. If unavailable, SYN_LAUNCH falls back to plain terminal output
 - **178 catalog entries** across 9 categories.
 - Numbered menus and search designed for small screens.
 - Tool purpose, install method, source link, compatibility note, and example command.
+- When a command is installed, selecting it probes standard version/help flags and shows output from that installed executable (bounded by time and line limits).
 - Detects whether an executable appears in PATH. This is a hint, not a full version/self-test.
 - Termux package installation through pkg, Python tools in an isolated virtual environment, and Go builds through go install.
 - Manual/root/hardware entries are labelled instead of pretending to install.
