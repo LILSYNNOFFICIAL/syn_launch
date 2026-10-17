@@ -24,7 +24,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [ ] Record the requested package/version and installer result with structured exit-code evidence.
 - [ ] Add bounded post-install checks that do not run arbitrary commands from catalog metadata.
 - [ ] Make updates and uninstall behavior explicit, reversible where possible, and auditable.
-- [ ] Add dependency and disk-space preflight checks before bulk installs.
+- [x] Add advisory dependency/runtime and disk-space preflight checks before bulk installs; missing `pkg` blocks package batches, while other warnings require explicit continuation. Exact package sizes and tool functionality remain unverified.
 
 ## Stage 4: Authorized assessment workflows
 
