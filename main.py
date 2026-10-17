@@ -48,12 +48,12 @@ def menu(label,opts):
  for i,x in enumerate(opts,1): say(f" {i:>2}. {x}")
  say("  0. Back / exit")
  return ask()
-def run(command,label,timeout=900):
+def run(command,label,timeout=900,env=None):
  logfile=LOG_DIR/(time.strftime("%Y%m%d-%H%M%S")+".log")
  say(f"\n→ {label}\nCommand: {' '.join(command)}\nLog: {logfile}")
  try:
   with logfile.open("a",encoding="utf-8") as log:
-   p=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,errors="replace")
+   p=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,errors="replace",env=env)
    start=time.time()
    while True:
     line=p.stdout.readline() if p.stdout else ""
@@ -92,7 +92,7 @@ def install_go(t):
  if installed(t): return True
  if not shutil.which("go"): say("Go is missing. Install Termux package golang first."); return False
  env=os.environ.copy(); env["GOBIN"]=str(BIN_DIR)
- return run(["go","install",t["package"]],"Building "+t["name"],2400) if t.get("package") else False
+ return run(["go","install",t["package"]],"Building "+t["name"],2400,env=env) if t.get("package") else False
 def install_one(t):
  kind=t["install_kind"]
  if kind=="pkg": return install_pkg(t)
