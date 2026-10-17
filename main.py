@@ -487,6 +487,9 @@ def collect_resolved_version(tool):
         except ValueError:
             result["version_evidence"] = "invalid_package_path"
             return result
+        if package_dir == root or not package_dir.is_dir():
+            result["version_evidence"] = "invalid_package_path"
+            return result
         metadata_path = package_dir / "package.json"
         if not metadata_path.is_file():
             result["version_evidence"] = "not_found"
@@ -561,10 +564,9 @@ def progress(items,worker,label,confirmed=False):
             state="operation_succeeded_executable_not_detected"
         else:
             state="operation_failed_or_unavailable"
-        version_result = collect_resolved_version(t) if ok else {
-            "resolved_version": None, "version_evidence": "not_collected",
-            "version_query_exit_code": None,
-        }
+        # Query package-manager metadata even after an unsuccessful operation: the
+        # package may already be installed, or an install may have partially succeeded.
+        version_result = collect_resolved_version(t)
         results.append({
             "id":t["id"], "name":t["name"], "install_kind":t["install_kind"],
             "package":t.get("package"), **requested_package_evidence(t), **version_result,

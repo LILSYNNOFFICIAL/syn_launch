@@ -523,6 +523,43 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(result["resolved_version"], "3.4.5")
         self.assertEqual(result["version_evidence"], "package_manager_metadata")
 
+    def test_npm_package_path_cannot_resolve_to_global_root(self):
+        import json
+        import tempfile
+        from unittest.mock import patch, Mock
+        tool = {"install_kind":"npm", "package":".."}
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "package.json").write_text(json.dumps({"version":"9.9.9"}), encoding="utf-8")
+            with patch.object(APP.shutil, "which", return_value="/usr/bin/npm"), \
+                 patch.object(APP.subprocess, "run", return_value=Mock(returncode=0, stdout=tmp, stderr="")):
+                result = APP.collect_resolved_version(tool)
+        self.assertIsNone(result["resolved_version"])
+        self.assertEqual(result["version_evidence"], "invalid_package_path")
+
+    def test_version_metadata_is_collected_even_if_operation_failed(self):
+        import tempfile
+        import contextlib
+        import io
+        from unittest.mock import patch, Mock
+        original_state = APP.STATE_DIR
+        fake_tools = [{"id":"first", "name":"First", "install_kind":"pkg", "package":"sample-package", "executable":"first"}]
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.STATE_DIR = Path(tmp)
+                with patch.object(APP, "installed", side_effect=[False, False]), \
+                     patch.object(APP, "collect_resolved_version", return_value={
+                         "resolved_version":"1.2.3", "version_evidence":"package_manager_metadata",
+                         "version_query_exit_code":0
+                     }) as query, \
+                     patch.object(APP, "LAST_COMMAND_RESULT", {"command":None,"label":None,"exit_code":None,"timed_out":False,"launch_error":None}), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    APP.progress(fake_tools, lambda tool: False, "test")
+                summary=json.loads((Path(tmp)/"last_install_summary.json").read_text(encoding="utf-8"))
+                self.assertEqual(summary["results"][0]["resolved_version"], "1.2.3")
+                query.assert_called_once_with(fake_tools[0])
+        finally:
+            APP.STATE_DIR = original_state
+
     def test_go_resolved_version_reads_build_metadata_without_running_tool(self):
         from unittest.mock import patch
         tool = {"install_kind":"go", "package":"example.org/sample/cmd/tool@v1.2.3", "executable":"sample-tool"}
