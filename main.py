@@ -180,7 +180,7 @@ def run(command, label, timeout=900, env=None):
 def bounded_probe(command, timeout=5, max_bytes=65536):
     """Run an explicit help/version probe with a time and retained-output cap."""
     if not isinstance(command, (list, tuple)) or not command or not all(isinstance(x, str) and x for x in command):
-        return "", False
+        return "", False, False
     proc = None
     output = bytearray()
     truncated = False
@@ -207,7 +207,7 @@ def bounded_probe(command, timeout=5, max_bytes=65536):
                     if len(chunk) > room:
                         truncated = True
         proc.wait(timeout=max(0.1, deadline - time.monotonic()))
-        return output.decode("utf-8", errors="replace"), truncated
+        return output.decode("utf-8", errors="replace"), truncated, False
     except subprocess.TimeoutExpired:
         try:
             if proc and proc.poll() is None:
@@ -215,9 +215,9 @@ def bounded_probe(command, timeout=5, max_bytes=65536):
                 proc.wait(timeout=2)
         except (OSError, subprocess.TimeoutExpired):
             pass
-        return output.decode("utf-8", errors="replace"), True
+        return output.decode("utf-8", errors="replace"), truncated, True
     except OSError:
-        return output.decode("utf-8", errors="replace"), truncated
+        return output.decode("utf-8", errors="replace"), truncated, False
     finally:
         if proc and proc.stdout and not proc.stdout.closed:
             proc.stdout.close()
@@ -231,10 +231,10 @@ def show_local_docs(t):
         output=""
         for flag in flags:
             try:
-                candidate,truncated=bounded_probe([path,flag],timeout=5,max_bytes=65536)
+                candidate,truncated,timed_out=bounded_probe([path,flag],timeout=5,max_bytes=65536)
                 candidate=candidate.strip()
-                if candidate:
-                    output=candidate+("\n[probe output truncated at 64 KiB]" if truncated else "")
+                if candidate or truncated or timed_out:
+                    output=candidate+("\n[probe output truncated at 64 KiB]" if truncated else "")+("\n[probe timed out after 5 seconds]" if timed_out else "")
                     break
             except (OSError,subprocess.TimeoutExpired): continue
         if output:
