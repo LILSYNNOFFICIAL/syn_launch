@@ -33,6 +33,7 @@ CARGO_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 NPM_RE = re.compile(r"^(?:@[A-Za-z0-9._-]+/)?[A-Za-z0-9._-]+$")
 EXECUTABLE_RE = re.compile(r"^[A-Za-z0-9_.+-]{1,128}$")
 MAX_COMMAND_OUTPUT_BYTES = 10 * 1024 * 1024
+LAST_COMMAND_RESULT = {"command": None, "label": None, "exit_code": None, "timed_out": False, "launch_error": None}
 
 def say(message=""):
     if RICH: console.print(message, markup=False)
@@ -155,6 +156,12 @@ def build_child_env(overrides=None):
 def run(command, label, timeout=900, env=None):
     if not isinstance(command,(list,tuple)) or not command or not all(isinstance(x,str) and x for x in command):
         say("Refusing invalid command arguments."); return False
+    global LAST_COMMAND_RESULT
+    LAST_COMMAND_RESULT = {
+        "command": list(command), "label": str(label), "started_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "exit_code": None, "timed_out": False, "launch_error": None,
+        "output_truncated": False, "output_bytes": 0,
+    }
     logfile=LOG_DIR/(time.strftime("%Y%m%d-%H%M%S")+"-"+str(os.getpid())+".log")
     say(f"\n→ {label}\nCommand: {' '.join(command)}\nLog: {logfile}")
     child_env=build_child_env(env)
@@ -189,9 +196,17 @@ def run(command, label, timeout=900, env=None):
                             sys.stdout.write(notice); sys.stdout.flush(); log.write(notice); log.flush(); output_truncated=True
             proc.stdout.close()
             code=proc.wait(timeout=max(0.1,deadline-time.monotonic()))
+            LAST_COMMAND_RESULT.update({
+                "exit_code": code, "finished_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "output_bytes": total_output, "output_truncated": output_truncated,
+            })
             if code: say(f"Command exited with status {code}.")
             return code==0
     except subprocess.TimeoutExpired:
+        LAST_COMMAND_RESULT.update({
+            "timed_out": True, "finished_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "output_bytes": total_output, "output_truncated": output_truncated,
+        })
         say(f"Timed out after {timeout}s; terminating the process.")
         try:
             if proc and proc.poll() is None:
@@ -201,6 +216,10 @@ def run(command, label, timeout=900, env=None):
         except (OSError,subprocess.TimeoutExpired): pass
         return False
     except (OSError,ValueError) as exc:
+        LAST_COMMAND_RESULT.update({
+            "launch_error": str(exc), "finished_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "output_bytes": total_output, "output_truncated": output_truncated,
+        })
         say(f"Could not run command: {exc}")
         return False
 
@@ -381,8 +400,11 @@ def progress(items,worker,label,confirmed=False):
     if not items: say("No items to install."); return
     good=0; failed=[]; results=[]
     def attempt(t):
-        return worker(t,confirmed=confirmed) if worker is install_one else worker(t)
-    def record(t,ok,path_before,path_after):
+        global LAST_COMMAND_RESULT
+        LAST_COMMAND_RESULT = {"command": None, "label": None, "exit_code": None, "timed_out": False, "launch_error": None}
+        ok = worker(t,confirmed=confirmed) if worker is install_one else worker(t)
+        return ok, dict(LAST_COMMAND_RESULT)
+    def record(t,ok,path_before,path_after,command_result):
         if path_before:
             state="already_path_matched_unverified"
         elif path_after:
@@ -397,30 +419,39 @@ def progress(items,worker,label,confirmed=False):
             "path_match_before_attempt":bool(path_before),
             "path_match_after_attempt":bool(path_after),
             "result_state":state, "verification":"not_run",
+            "installer_command": command_result.get("command"),
+            "installer_label": command_result.get("label"),
+            "installer_exit_code": command_result.get("exit_code"),
+            "installer_timed_out": bool(command_result.get("timed_out")),
+            "installer_launch_error": command_result.get("launch_error"),
+            "installer_output_bytes": command_result.get("output_bytes", 0),
+            "installer_output_truncated": bool(command_result.get("output_truncated", False)),
+            "installer_started_at": command_result.get("started_at"),
+            "installer_finished_at": command_result.get("finished_at"),
         })
     if RICH:
         with Progress(SpinnerColumn(),TextColumn("[progress.description]{task.description}"),BarColumn(),TextColumn("{task.completed}/{task.total}"),TimeElapsedColumn(),console=console,transient=False) as bar:
             task=bar.add_task(label,total=len(items))
             for t in items:
                 bar.update(task,description=label+": "+t["name"])
-                path_before=installed(t); ok=attempt(t); path_after=installed(t)
+                path_before=installed(t); ok,command_result=attempt(t); path_after=installed(t)
                 good+=int(bool(ok))
                 if not ok: failed.append(t["name"])
-                record(t,ok,path_before,path_after); bar.advance(task)
+                record(t,ok,path_before,path_after,command_result); bar.advance(task)
     else:
         for i,t in enumerate(items,1):
             print(f"\n[{i}/{len(items)}] {label}: {t['name']}")
-            path_before=installed(t); ok=attempt(t); path_after=installed(t)
+            path_before=installed(t); ok,command_result=attempt(t); path_after=installed(t)
             good+=int(bool(ok))
             if not ok: failed.append(t["name"])
-            record(t,ok,path_before,path_after)
+            record(t,ok,path_before,path_after,command_result)
     summary={
         "summary_schema":2, "succeeded":good, "failed":failed, "total":len(items),
         "operation_success_count":good, "operation_failure_count":len(failed),
         "path_match_after_attempt_count":sum(1 for result in results if result["path_match_after_attempt"]),
         "verified_tools":0, "results":results,
         "timestamp":time.strftime("%Y-%m-%d %H:%M:%S"),
-        "note":"succeeded records the install/build operation's return value or an existing PATH match; it does not prove the tool works. PATH matches remain unverified, and no functional verification was run.",
+        "note":"succeeded records the install/build operation's return value or an existing PATH match; it does not prove the tool works. Exit codes refer to the captured installer subprocess; pre-existing PATH matches and validation failures have no subprocess exit code. PATH matches remain unverified, and no functional verification was run.",
     }
     p=STATE_DIR/"last_install_summary.json"; save_private_json(p,summary)
     say(f"Finished: {good}/{len(items)} operations returned success. This is not a count of functionally verified tools.")
