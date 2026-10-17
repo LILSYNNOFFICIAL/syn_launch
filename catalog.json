@@ -3153,7 +3153,7 @@
       "package": null,
       "installable": false,
       "description": "Collect metadata from public documents for authorized reconnaissance.",
-      "example": "",
+      "example": "python metagoofil.py --help",
       "source": "https://github.com/opsdisk/metagoofil",
       "caveat": "Search-provider terms and compatibility change; manual-only."
     },
