@@ -227,5 +227,44 @@ class CatalogTests(unittest.TestCase):
             self.assertIn(argument, output.getvalue())
             self.assertFalse(marker.exists())
 
+
+    def test_architecture_normalization(self):
+        cases = {
+            "aarch64": "arm64", "arm64-v8a": "arm64",
+            "armv7l": "armv7", "x86_64": "x86_64",
+            "amd64": "x86_64", "i686": "x86",
+        }
+        for machine, expected in cases.items():
+            with self.subTest(machine=machine):
+                self.assertEqual(APP.normalized_architecture(machine), expected)
+
+    def test_environment_profile_is_structured_and_cautious(self):
+        profile = APP.environment_profile({"tools": self.tools, "categories": self.data["categories"]})
+        self.assertEqual(profile["application"], "SYN_LAUNCH")
+        self.assertEqual(profile["profile_schema"], 1)
+        self.assertEqual(profile["catalog_entries"], len(self.tools))
+        self.assertIn("not proof", profile["compatibility_note"])
+        self.assertIn("runtimes", profile)
+        self.assertIn("install_method_counts", profile)
+
+    def test_profile_cli_outputs_valid_json(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "main.py"), "--profile"],
+            capture_output=True, text=True, timeout=15
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        profile = json.loads(result.stdout)
+        self.assertEqual(profile["application"], "SYN_LAUNCH")
+        self.assertEqual(profile["catalog_entries"], self.data["tool_count"])
+
+    def test_doctor_cli_reports_architecture_and_runtimes(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "main.py"), "--doctor"],
+            capture_output=True, text=True, timeout=15
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Architecture:", result.stdout)
+        self.assertIn("proot:", result.stdout)
+
 if __name__ == "__main__":
     unittest.main()
