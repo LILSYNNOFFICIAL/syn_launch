@@ -40,6 +40,7 @@ python main.py --list
 python main.py --search nuclei
 python main.py --category "Mobile App Security"
 python main.py --tool Nmap
+python main.py --compatibility-report > compatibility-report.json
 ~~~
 
 - `--check` validates the catalog and reports a concise runtime summary.
