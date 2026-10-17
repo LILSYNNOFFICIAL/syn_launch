@@ -560,6 +560,40 @@ class CatalogTests(unittest.TestCase):
         finally:
             APP.STATE_DIR = original_state
 
+    def test_post_install_check_is_metadata_only_and_not_functional_verification(self):
+        import tempfile
+        import contextlib
+        import io
+        from unittest.mock import patch
+        original_state = APP.STATE_DIR
+        tool = {"id":"first", "name":"First", "install_kind":"pkg", "package":"sample-package", "executable":"first"}
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.STATE_DIR = Path(tmp)
+                with patch.object(APP, "installed", side_effect=[False, True]), \
+                     patch.object(APP, "collect_resolved_version", return_value={
+                         "resolved_version":"1.2.3", "version_evidence":"package_manager_metadata",
+                         "version_query_exit_code":0
+                     }), contextlib.redirect_stdout(io.StringIO()):
+                    APP.progress([tool], lambda item: True, "test")
+                entry=json.loads((Path(tmp)/"last_install_summary.json").read_text(encoding="utf-8"))["results"][0]
+                self.assertEqual(entry["post_install_check"]["status"], "metadata_and_executable_present")
+                self.assertEqual(entry["post_install_check"]["check_type"], "metadata_only")
+                self.assertEqual(entry["verification"], "not_run")
+        finally:
+            APP.STATE_DIR = original_state
+
+    def test_cargo_metadata_file_size_is_bounded(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {"install_kind":"cargo", "package":"sample-crate"}
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp, ".crates2.json")
+            path.write_text(" " * (2 * 1024 * 1024 + 1), encoding="utf-8")
+            with patch.dict(APP.os.environ, {"CARGO_HOME":tmp}):
+                result=APP.collect_resolved_version(tool)
+        self.assertEqual(result["version_evidence"], "metadata_too_large")
+
     def test_go_resolved_version_reads_build_metadata_without_running_tool(self):
         from unittest.mock import patch
         tool = {"install_kind":"go", "package":"example.org/sample/cmd/tool@v1.2.3", "executable":"sample-tool"}
