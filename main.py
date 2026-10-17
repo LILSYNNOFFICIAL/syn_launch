@@ -178,7 +178,7 @@ def progress(items,worker,label):
  say(f"Finished: {good} succeeded, {len(bad)} failed/unavailable.")
  if bad: say("Needs attention: "+", ".join(bad))
 def installer(data):
- c=menu("Installer",["Attempt every distinct Termux pkg package in the catalog","Install one selected tool","Install Python and Go runtimes","Show last install summary"])
+ c=menu("Installer",["Attempt every distinct Termux pkg package in the catalog","Install one selected tool","Install Python and Go runtimes","Install all Python/Go catalog tools (large download/build)","Show last install summary"])
  if c=="1":
   packages={}
   for t in data["tools"]:
@@ -194,6 +194,13 @@ def installer(data):
   runtime=[t for t in data["tools"] if t["name"] in ("Python","Go")]
   progress(runtime,install_pkg,"Toolchain prerequisites")
  elif c=="4":
+  items=[t for t in data["tools"] if t["install_kind"] in ("pip","go")]
+  say(f"This attempts {len(items)} Python/Go tool installs. Builds may take a long time, consume storage/data, or fail on Android-incompatible dependencies.")
+  if ask("Type YES to continue: ")!="YES": return
+  runtime=[t for t in data["tools"] if t["name"] in ("Python","Go")]
+  progress(runtime,install_pkg,"Installing toolchain prerequisites")
+  progress(items,install_one,"Python/Go catalog tools")
+ elif c=="5":
   p=STATE_DIR/"last_install_summary.json"; say(p.read_text() if p.exists() else "No install summary yet.")
 def health(data):
  say(f"Python: {sys.version.split()[0]} | Platform: {platform.platform()}")
