@@ -563,7 +563,7 @@ def run_install_preflight(items, mode):
     report = build_install_preflight(items, mode, free_bytes, commands)
     report["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
     save_private_json(STATE_DIR / "last_preflight.json", report)
-    say("\\nBulk-install preflight (no installers or catalog tools executed):")
+    say("\nBulk-install preflight (no installers or catalog tools executed):")
     say(f"Mode: {mode} | Selected entries: {report['tool_count']} | Distinct packages/modules: {report['distinct_package_count']}")
     say("Free storage: " + ("unknown" if free_bytes is None else f"{free_bytes:,} bytes"))
     if report["missing_commands"]:
