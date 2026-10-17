@@ -499,18 +499,82 @@ def installer(data):
     elif choice=="5":
         p=STATE_DIR/"last_install_summary.json"; say(p.read_text(encoding="utf-8") if p.exists() else "No install summary yet.")
 
-def health(data):
+def normalized_architecture(machine=None):
+    """Normalize common Android/Linux machine names without certifying ABI support."""
+    machine = (machine or platform.machine() or "unknown").lower()
+    aliases = {
+        "aarch64": "arm64", "arm64": "arm64", "arm64-v8a": "arm64",
+        "armv7l": "armv7", "armv7": "armv7",
+        "i686": "x86", "i386": "x86", "x86_64": "x86_64", "amd64": "x86_64",
+    }
+    return aliases.get(machine, machine)
+
+
+def environment_profile(data):
+    """Report runtime signals only; do not infer individual tool compatibility."""
+    prefix = os.environ.get("PREFIX", "")
+    termux_root = Path("/data/data/com.termux/files/usr")
+    android_markers = bool(os.environ.get("ANDROID_ROOT") or os.environ.get("ANDROID_DATA") or termux_root.exists())
+    is_termux = bool(prefix.startswith("/data/data/com.termux/") or termux_root.exists() or shutil.which("termux-info"))
+    try:
+        disk = shutil.disk_usage(APP_DIR)
+        free_bytes, total_bytes = disk.free, disk.total
+    except OSError:
+        free_bytes = total_bytes = None
+    try:
+        process_uid_is_zero = os.geteuid() == 0
+    except AttributeError:
+        process_uid_is_zero = False
+    install_counts = {}
+    for tool in data["tools"]:
+        kind = tool["install_kind"]
+        install_counts[kind] = install_counts.get(kind, 0) + 1
+    runtimes = {cmd: shutil.which(cmd) for cmd in ("pkg", "apt", "python", "python3", "pip", "go", "cargo", "rustc", "npm", "node", "git", "proot", "docker", "adb")}
+    return {
+        "application": "SYN_LAUNCH", "profile_schema": 1,
+        "os": platform.system(), "os_release": platform.release(),
+        "machine_raw": platform.machine() or "unknown",
+        "architecture_family": normalized_architecture(),
+        "python": platform.python_version(),
+        "android_markers_detected": android_markers, "termux_detected": is_termux,
+        "termux_prefix": prefix or None, "process_uid_is_zero": process_uid_is_zero,
+        "root_note": "UID 0 inside a container/proot does not prove Android host root access.",
+        "storage_free_bytes": free_bytes, "storage_total_bytes": total_bytes,
+        "runtimes": runtimes, "catalog_entries": len(data["tools"]),
+        "catalog_categories": len(data["categories"]),
+        "install_method_counts": dict(sorted(install_counts.items())),
+        "compatibility_note": "Catalog presence and architecture detection are not proof that a tool installs or runs; verify each tool on this device.",
+    }
+
+
+def print_environment_profile(data):
+    print(json.dumps(environment_profile(data), indent=2, sort_keys=True))
+
+
+def health(data, detailed=False):
+    profile = environment_profile(data)
     say(f"Python: {sys.version.split()[0]} | Platform: {platform.platform()}")
+    say(f"Architecture: {profile['machine_raw']} (family: {profile['architecture_family']})")
+    say(f"Android markers: {'detected' if profile['android_markers_detected'] else 'not detected'} | Termux: {'detected' if profile['termux_detected'] else 'not detected'}")
+    say(f"Process UID 0: {'yes' if profile['process_uid_is_zero'] else 'no'} (does not prove Android host root)")
+    if profile["storage_free_bytes"] is not None:
+        say(f"Storage free: {profile['storage_free_bytes'] / (1024 ** 3):.2f} GiB / {profile['storage_total_bytes'] / (1024 ** 3):.2f} GiB")
     say(f"Catalog: {len(data['tools'])} entries across {len(data['categories'])} categories")
     say("Termux pkg: "+("available" if shutil.which("pkg") else "not found"))
-    for cmd in ("go","cargo","npm","git"): say(f"{cmd}: "+(shutil.which(cmd) or "not found"))
+    for cmd in ("pkg", "python", "python3", "go", "cargo", "rustc", "npm", "node", "git", "proot", "docker", "adb"):
+        say(f"{cmd}: " + (shutil.which(cmd) or "not found"))
+    if detailed:
+        say("Install-method counts: " + json.dumps(profile["install_method_counts"], sort_keys=True))
+        say(profile["compatibility_note"])
     say("Rich UI: "+("enabled" if RICH else "plain-text fallback"))
     say("State directory: "+str(STATE_DIR))
     say(f"Detected executables: {sum(installed(t) for t in data['tools'])}/{len(data['tools'])} entries (PATH check only, not full self-tests)")
 
 def main():
     parser=argparse.ArgumentParser(description="SYN_LAUNCH Termux security-tool catalog and installer")
-    parser.add_argument("--check",action="store_true",help="validate catalog and print environment status")
+    parser.add_argument("--check",action="store_true",help="validate catalog and print concise environment status")
+    parser.add_argument("--doctor",action="store_true",help="show detailed platform, architecture, runtime, and storage diagnostics")
+    parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
@@ -519,7 +583,9 @@ def main():
     try: data=load_catalog()
     except (OSError,json.JSONDecodeError,ValueError) as exc:
         print("Catalog validation failed:",exc,file=sys.stderr); return 2
+    if args.profile: print_environment_profile(data); return 0
     if args.check: health(data); return 0
+    if args.doctor: health(data, detailed=True); return 0
     if args.list: show_list(data["tools"]); return 0
     if args.search:
         matches=[t for t in data["tools"] if args.search.lower() in t["name"].lower() or args.search.lower() in t["category"].lower() or args.search.lower() in t["description"].lower()]

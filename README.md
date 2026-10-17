@@ -6,7 +6,7 @@
 [![Catalog](https://img.shields.io/badge/catalog-269%2B%20entries-brightgreen)](catalog.json)
 [![Use](https://img.shields.io/badge/use-authorized%20testing-orange)](#responsible-use)
 
-**A searchable, Android-aware security toolkit catalog and installer for Termux.**
+**A mobile-first security platform foundation for Termux: searchable tool catalog, installer, and device/runtime diagnostics.**
 
 SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, and example command. Local version/help probes are available only after you explicitly choose Help. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
 
@@ -42,7 +42,9 @@ python main.py --category "Mobile App Security"
 python main.py --tool Nmap
 ~~~
 
-- `--check` validates the catalog and reports the current runtime environment.
+- `--check` validates the catalog and reports a concise runtime summary.
+- `--doctor` reports architecture, Android/Termux signals, process UID, free storage, available runtimes, and catalog install-method counts.
+- `--profile` prints a machine-readable JSON runtime profile. Detection signals do not certify individual tools as compatible.
 - `--list` lists the catalog and current PATH-based status.
 - `--search` searches tool names, categories, and descriptions.
 - `--category` lists tools from a category.
@@ -132,6 +134,10 @@ The progress bar counts completed attempts, not downloaded bytes. Command output
 Use reconnaissance, scanners, fuzzers, proxies, password-auditing tools, and exploitation frameworks only on systems, apps, accounts, and networks you own or have explicit written permission to assess. Confirm target scope, rate limits, test windows, and stop conditions. Avoid actions that disrupt services or expose real user data.
 
 Some tools can trigger account lockouts, execute commands on vulnerable systems, change cloud/directory state, or capture sensitive traffic. They are labeled with specific caveats. Protect reports, logs, tokens, hashes, and collected directory data. PhoneInfoga and similar services **do not reveal live GPS location merely from a phone number**.
+
+## Platform roadmap
+
+See [PLATFORM_ROADMAP.md](PLATFORM_ROADMAP.md) for the staged plan covering compatibility metadata, verified tool lifecycle, authorized assessment workflows, and optional Linux environments.
 
 ## Development and verification
 
