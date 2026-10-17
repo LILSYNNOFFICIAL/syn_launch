@@ -63,6 +63,7 @@ Rich is optional. If unavailable, SYN_LAUNCH falls back to plain terminal output
 - **Install all Termux packages:** attempts every distinct package name marked as a Termux package. Some names may not exist for a particular architecture or repository. Failures are reported.
 - **Install one selected tool:** uses the catalog's declared method.
 - **Install Python and Go runtimes:** bootstraps toolchains needed for Python/Go-based catalog entries.
+- **Install all Python/Go catalog tools:** an explicit opt-in batch that attempts every declared Python and Go installer. Expect large downloads, native dependency failures, and long compile times on some Android devices.
 - **Python tools:** use `~/.syn_launch/venv` to avoid polluting Termux's system Python.
 - **Go tools:** can require large downloads and compilation; module compatibility may change.
 - **Manual/root/hardware tools:** are catalog-only until a verified compatible method exists.
