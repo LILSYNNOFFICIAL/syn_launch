@@ -204,7 +204,7 @@ def bounded_probe(command, timeout=5, max_bytes=65536):
                     room = max(0, max_bytes - len(output))
                     if room:
                         output.extend(chunk[:room])
-                    if len(chunk) > room or len(output) >= max_bytes:
+                    if len(chunk) > room:
                         truncated = True
         proc.wait(timeout=max(0.1, deadline - time.monotonic()))
         return output.decode("utf-8", errors="replace"), truncated
@@ -234,7 +234,7 @@ def show_local_docs(t):
                 candidate,truncated=bounded_probe([path,flag],timeout=5,max_bytes=65536)
                 candidate=candidate.strip()
                 if candidate:
-                    output=candidate+("\\n[probe output truncated at 64 KiB]" if truncated else "")
+                    output=candidate+("\n[probe output truncated at 64 KiB]" if truncated else "")
                     break
             except (OSError,subprocess.TimeoutExpired): continue
         if output:
