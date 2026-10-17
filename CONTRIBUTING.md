@@ -18,7 +18,9 @@ Use the official upstream repository or package documentation where possible. Do
 ## Installer safety
 
 - Never use `shell=True` or concatenate user-controlled input into a shell command.
-- Validate any new package/module syntax.
+- Validate any new package/module syntax and require a well-formed HTTPS source URL without embedded credentials.
+- Keep executable names to one safe command token; catalog browsing must not execute them.
+- Bound subprocess runtime and retained output, and add regression tests for security checks.
 - Keep installs opt-in and explain when third-party build scripts execute.
 - Do not run scans or payloads automatically.
 - Avoid collecting credentials, targets, or private reports in logs.
