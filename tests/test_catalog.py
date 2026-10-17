@@ -413,6 +413,26 @@ class CatalogTests(unittest.TestCase):
         finally:
             APP.STATE_DIR = original_state
 
+    def test_requested_package_evidence_does_not_claim_resolution(self):
+        pkg = APP.requested_package_evidence({"install_kind":"pkg","package":"sample-package"})
+        self.assertEqual(pkg["requested_package"], "sample-package")
+        self.assertIsNone(pkg["requested_version"])
+        self.assertEqual(pkg["version_specification"], "unpinned")
+        self.assertIsNone(pkg["resolved_version"])
+        self.assertEqual(pkg["version_evidence"], "not_collected")
+
+        go = APP.requested_package_evidence({"install_kind":"go","package":"example.org/sample/cmd/tool@v1.2.3"})
+        self.assertEqual(go["requested_package"], "example.org/sample/cmd/tool")
+        self.assertEqual(go["requested_version"], "v1.2.3")
+        self.assertEqual(go["version_specification"], "requested_version")
+        self.assertIsNone(go["resolved_version"])
+
+    def test_requested_latest_go_version_is_marked_floating(self):
+        go = APP.requested_package_evidence({"install_kind":"go","package":"example.org/sample@latest"})
+        self.assertEqual(go["requested_version"], "latest")
+        self.assertEqual(go["version_specification"], "floating_latest")
+        self.assertEqual(go["version_evidence"], "not_collected")
+
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "main.py"), "--profile"],

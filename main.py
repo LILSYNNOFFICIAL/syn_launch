@@ -396,6 +396,25 @@ def search(data,query=None):
     if matches: choose(data,matches)
     else: say("No matches.")
 
+def requested_package_evidence(tool):
+    """Describe the catalog package spec without implying resolution."""
+    kind = tool.get("install_kind")
+    package = tool.get("package")
+    result = {
+        "requested_package": package,
+        "requested_version": None,
+        "version_specification": "unpinned" if package else "not_applicable",
+        "resolved_version": None,
+        "version_evidence": "not_collected",
+    }
+    if kind == "go" and isinstance(package, str) and "@" in package:
+        module, version = package.rsplit("@", 1)
+        result["requested_package"] = module
+        result["requested_version"] = version
+        result["version_specification"] = "floating_latest" if version == "latest" else "requested_version"
+    return result
+
+
 def progress(items,worker,label,confirmed=False):
     if not items: say("No items to install."); return
     good=0; failed=[]; results=[]
@@ -415,7 +434,8 @@ def progress(items,worker,label,confirmed=False):
             state="operation_failed_or_unavailable"
         results.append({
             "id":t["id"], "name":t["name"], "install_kind":t["install_kind"],
-            "package":t.get("package"), "operation_returned_success":bool(ok),
+            "package":t.get("package"), **requested_package_evidence(t),
+            "operation_returned_success":bool(ok),
             "path_match_before_attempt":bool(path_before),
             "path_match_after_attempt":bool(path_after),
             "result_state":state, "verification":"not_run",
