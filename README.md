@@ -3,7 +3,7 @@
 [![Termux](https://img.shields.io/badge/platform-Termux%20%2F%20Android-00BCD4?logo=android&logoColor=white)](https://termux.dev/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Catalog](https://img.shields.io/badge/catalog-244%2B%20entries-brightgreen)](catalog.json)
+[![Catalog](https://img.shields.io/badge/catalog-259%2B%20entries-brightgreen)](catalog.json)
 [![Use](https://img.shields.io/badge/use-authorized%20testing-orange)](#responsible-use)
 
 **A searchable, Android-aware security toolkit catalog and installer for Termux.**
@@ -46,7 +46,7 @@ python main.py --tool Nmap
 - `--list` lists the catalog and current PATH-based status.
 - `--search` searches tool names, categories, and descriptions.
 - `--category` lists tools from a category.
-- `--tool` displays a tool's information and best-effort local help/version output if the executable is installed.
+- `--tool` displays a tool's metadata without executing the local binary. In the interactive menu, choose Help to request bounded help/version probing.
 
 ## Personal catalog and favorites
 
@@ -54,7 +54,7 @@ Use **Custom tools / favorites** in the main menu to add a tool entry without ed
 
 ## What's included
 
-**244 catalog entries across 19 categories.** Coverage includes:
+**259 catalog entries across 19 categories.** Coverage includes:
 
 - **Termux Core**
 - **Network & DNS**
@@ -76,7 +76,7 @@ Use **Custom tools / favorites** in the main menu to add a tool entry without ed
 - **Privacy & Metadata**
 - **Password & Authentication Auditing**
 
-Advanced entries include Nuclei, Dalfox, Ghauri, RustScan, Kiterunner, ProjectDiscovery tools, Impacket, NetExec, BloodHound Python Collector, Kerbrute, Certipy, Frida, Objection, Androguard, Prowler, ScoutSuite, CloudFox, Kube-Hunter, pwntools, ROPgadget, Volatility 3, and more.
+Advanced entries include Nuclei, Dalfox, Ghauri, RustScan, Kiterunner, ffuf, gau, hakrawler, TruffleHog, Gitleaks, OSV-Scanner, govulncheck, Checkov, Bandit, pip-audit, Syft, Grype, Cosign, Terrascan, Semgrep, Trivy, mitmproxy, testssl.sh, ssh-audit, JWT Tool, Apktool, JADX, angr, pwndbg, and more. Some entries are intentionally manual-only where a reliable Termux install path is not established.
 
 Some high-impact or desktop-focused projects such as Metasploit, Responder, Hydra, Hashcat, masscan, JADX, and MobSF are explicitly marked manual-only or compatibility-limited. SYN_LAUNCH does not silently root the phone or claim these work on stock Android.
 
@@ -103,11 +103,15 @@ Each bulk action requires an explicit confirmation. Individual third-party insta
 | MANUAL | No verified automatic Termux install path is provided. |
 | ROOT/HW | Requires root, kernel permissions, special hardware, or another environment constraint. |
 
-The progress bar counts completed attempts, not downloaded bytes. Output is logged under `~/.syn_launch/logs/`; log files are restricted to the current user where Android filesystem permissions allow it. The app does not store target lists or run scans automatically.
+The progress bar counts completed attempts, not downloaded bytes. Command output is capped at 10 MiB per subprocess to limit log growth; remaining output is drained without being retained. Output is logged under `~/.syn_launch/logs/`; log files are restricted to the current user where Android filesystem permissions allow it. The app does not store target lists or run scans automatically.
 
 ## Security and supply-chain safeguards
 
 - Uses argument arrays rather than shell command strings for package installation.
+- Validates upstream links as HTTPS URLs with a hostname and rejects embedded URL credentials.
+- Validates executable names, boolean install flags, and metadata lengths before a catalog entry is accepted.
+- Browsing a tool no longer executes its local binary. Version/help probing occurs only after the user explicitly chooses Help.
+- Caps displayed and logged subprocess output at 10 MiB while continuing to drain the process pipe, reducing log-flood and disk-exhaustion risk.
 - Validates catalog IDs, install methods, HTTPS source links, and package/module syntax before use.
 - Uses an isolated Python virtual environment instead of installing Python security packages into Termux's system Python.
 - Installs Go binaries into a dedicated user bin directory.
@@ -136,7 +140,7 @@ python -m unittest discover -s tests -v
 python main.py --check
 ~~~
 
-GitHub Actions runs syntax, bootstrap-shell, catalog-integrity, and environment checks on pushes and pull requests. CI on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
+GitHub Actions runs syntax, bootstrap-shell, JSON, catalog-integrity, CLI, and regression checks on pushes and pull requests. CI success on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
 
 ## Contributing
 
