@@ -90,6 +90,25 @@ class CatalogTests(unittest.TestCase):
             APP.CUSTOM_PATH = original
 
 
+
+    def test_favorites_persist_and_toggle(self):
+        import contextlib
+        import io
+        import tempfile
+        original = APP.FAVORITES_PATH
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.FAVORITES_PATH = Path(tmp) / "favorites.json"
+                tool = self.tools[0]
+                with contextlib.redirect_stdout(io.StringIO()):
+                    APP.toggle_favorite(tool)
+                self.assertIn(tool["id"], APP.get_favorites())
+                with contextlib.redirect_stdout(io.StringIO()):
+                    APP.toggle_favorite(tool)
+                self.assertNotIn(tool["id"], APP.get_favorites())
+        finally:
+            APP.FAVORITES_PATH = original
+
     def test_malformed_custom_catalog_fails_closed(self):
         import tempfile
         original = APP.CUSTOM_PATH
