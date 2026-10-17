@@ -527,7 +527,7 @@ class CatalogTests(unittest.TestCase):
         from unittest.mock import patch
         tool = {"install_kind":"go", "package":"example.org/sample/cmd/tool@v1.2.3", "executable":"sample-tool"}
         with patch.object(APP.shutil, "which", side_effect=["/usr/bin/go", "/home/user/.local/bin/sample-tool"]), \
-             patch.object(APP, "bounded_probe", return_value=("/home/user/.local/bin/sample-tool: go1.23.0\\n    mod example.org/sample/cmd/tool v1.2.3 h1:checksum\\n", False, False)) as probe:
+             patch.object(APP, "bounded_probe", return_value=("/home/user/.local/bin/sample-tool: go1.23.0\n    mod example.org/sample/cmd/tool v1.2.3 h1:checksum\n", False, False)) as probe:
             result = APP.collect_resolved_version(tool)
         self.assertEqual(result["resolved_version"], "v1.2.3")
         self.assertEqual(result["version_evidence"], "package_manager_metadata")
