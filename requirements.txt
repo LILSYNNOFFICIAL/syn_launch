@@ -1,0 +1,2 @@
+# Optional terminal UI. The app works without this dependency.
+rich>=13.7,<15
