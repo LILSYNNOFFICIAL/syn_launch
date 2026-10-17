@@ -13,16 +13,18 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 ## Stage 2: Compatibility metadata
 
-- Add per-tool support declarations: native Termux, Android ABI constraints, root/hardware requirements, external service/API needs, and known blockers.
-- Keep unknown compatibility as unknown. Never infer "works" merely because a package exists or an executable is in PATH.
-- Add a report that separates installable, installed, smoke-tested, and device-verified states.
+- [ ] Add reviewed per-tool support declarations: native Termux, Android ABI constraints, root/hardware requirements, external service/API needs, and known blockers.
+- [x] Keep unknown compatibility explicitly unknown; never infer "works" merely because a package exists or an executable is in PATH.
+- [x] Add a report that separates catalog installability, PATH evidence, compatibility assessment, smoke-test evidence, and device-validation evidence.
+- [ ] Populate compatibility declarations only from upstream documentation or repeatable tests; a declaration is not device verification.
 
 ## Stage 3: Reliable tool lifecycle
 
-- Record the requested package/version and installer result.
-- Add bounded post-install checks that do not run arbitrary commands from catalog metadata.
-- Make updates and uninstall behavior explicit, reversible where possible, and auditable.
-- Add dependency and disk-space preflight checks before bulk installs.
+- [x] Record batch operation outcomes separately from before/after PATH matches, and label functional verification as not run.
+- [ ] Record the requested package/version and installer result with structured exit-code evidence.
+- [ ] Add bounded post-install checks that do not run arbitrary commands from catalog metadata.
+- [ ] Make updates and uninstall behavior explicit, reversible where possible, and auditable.
+- [ ] Add dependency and disk-space preflight checks before bulk installs.
 
 ## Stage 4: Authorized assessment workflows
 

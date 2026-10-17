@@ -256,10 +256,17 @@ class CatalogTests(unittest.TestCase):
         }
         with patch.object(APP.shutil, "which", side_effect=lambda command: "/test/fake-tool" if command == "fake-tool" else None):
             report = APP.compatibility_report({"tools": [fake], "categories": ["Test"]})
+        self.assertEqual(report["report_schema"], 2)
         self.assertEqual(report["summary"]["catalog_entries"], 1)
+        self.assertEqual(report["summary"]["catalog_installable_entries"], 0)
         self.assertEqual(report["summary"]["path_match_entries"], 1)
+        self.assertEqual(report["summary"]["not_detected_entries"], 0)
         self.assertEqual(report["summary"]["verified_tools"], 0)
+        self.assertFalse(report["summary"]["tools_executed_by_report"])
         self.assertEqual(report["tools"][0]["status"], "path_match_unverified")
+        self.assertEqual(report["tools"][0]["compatibility_assessment"], "not_assessed")
+        self.assertEqual(report["tools"][0]["smoke_test"], "not_run")
+        self.assertEqual(report["tools"][0]["device_validation"], "not_run")
         self.assertEqual(report["tools"][0]["verification"], "not_run")
 
     def test_compatibility_report_cli_outputs_json_for_entire_catalog(self):
@@ -272,8 +279,38 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(report["application"], "SYN_LAUNCH")
         self.assertEqual(report["summary"]["catalog_entries"], self.data["tool_count"])
         self.assertEqual(len(report["tools"]), self.data["tool_count"])
+        self.assertEqual(report["report_schema"], 2)
         self.assertEqual(report["summary"]["verified_tools"], 0)
+        self.assertFalse(report["summary"]["tools_executed_by_report"])
         self.assertTrue(all(item["verification"] == "not_run" for item in report["tools"]))
+        self.assertTrue(all(item["smoke_test"] == "not_run" for item in report["tools"]))
+        self.assertTrue(all(item["device_validation"] == "not_run" for item in report["tools"]))
+
+    def test_install_summary_separates_path_detection_from_verification(self):
+        import tempfile
+        import contextlib
+        import io
+        from unittest.mock import patch
+        original_state = APP.STATE_DIR
+        fake_tools = [
+            {"id":"first", "name":"First", "install_kind":"pkg", "package":"first", "executable":"first"},
+            {"id":"second", "name":"Second", "install_kind":"pkg", "package":"second", "executable":"second"},
+        ]
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                APP.STATE_DIR = Path(tmp)
+                with patch.object(APP, "installed", side_effect=[False, True, False, False]), contextlib.redirect_stdout(io.StringIO()):
+                    APP.progress(fake_tools, lambda tool: tool["id"] == "first", "test")
+                summary = json.loads((Path(tmp) / "last_install_summary.json").read_text(encoding="utf-8"))
+                self.assertEqual(summary["summary_schema"], 2)
+                self.assertEqual(summary["operation_success_count"], 1)
+                self.assertEqual(summary["path_match_after_attempt_count"], 1)
+                self.assertEqual(summary["results"][0]["result_state"], "path_match_unverified_after_attempt")
+                self.assertEqual(summary["results"][0]["verification"], "not_run")
+                self.assertEqual(summary["results"][1]["result_state"], "operation_failed_or_unavailable")
+                self.assertEqual(summary["verified_tools"], 0)
+        finally:
+            APP.STATE_DIR = original_state
 
     def test_profile_cli_outputs_valid_json(self):
         result = subprocess.run(

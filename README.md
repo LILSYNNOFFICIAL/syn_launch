@@ -10,7 +10,7 @@
 
 SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, and example command. Local version/help probes are available only after you explicitly choose Help. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
 
-> **Important:** cataloged does not mean installed, compatible, or verified on every phone. Termux is not desktop Linux. Android permissions, kernel features, CPU architecture, package repositories, Python wheels, native libraries, external adapters, and root access all affect compatibility. The app reports install attempts and does not claim a tool works until it is actually detected in PATH.
+> **Important:** cataloged does not mean installed, compatible, or verified on every phone. Termux is not desktop Linux. Android permissions, kernel features, CPU architecture, package repositories, Python wheels, native libraries, external adapters, and root access all affect compatibility. PATH detection is discovery only. SYN_LAUNCH reports compatibility as unknown/not assessed until there is explicit metadata or evidence, and it does not claim a tool works merely because its executable name appears in PATH.
 
 ## Quick start
 
@@ -46,7 +46,7 @@ python main.py --compatibility-report > compatibility-report.json
 - `--check` validates the catalog and reports a concise runtime summary.
 - `--doctor` reports architecture, Android/Termux signals, process UID, free storage, available runtimes, and catalog install-method counts.
 - `--profile` prints a machine-readable JSON runtime profile. Detection signals do not certify individual tools as compatible.
-- `--compatibility-report` prints JSON for every catalog entry, including PATH detection, install method, package metadata, caveats, and an explicit `verification: not_run` field. It does not execute any cataloged tool. A PATH match is not proof of installation health or compatibility.
+- `--compatibility-report` prints report schema 2 JSON for every catalog entry, separating declared installability, PATH detection, optional compatibility metadata, smoke-test evidence, and device-validation evidence. Missing compatibility metadata is reported as `not_assessed`; smoke tests, device validation, and functional verification remain `not_run` unless separately evidenced. It does not execute any cataloged tool. A PATH match is discovery only, not proof of installation health or compatibility.
 - `--list` lists the catalog and current PATH-based status.
 - `--search` searches tool names, categories, and descriptions.
 - `--category` lists tools from a category.
@@ -92,7 +92,7 @@ The Installer menu provides:
 2. **One tool:** installs one selected tool using its declared method.
 3. **Toolchain prerequisites:** attempts Python, Go, Rust, and Node.js runtime packages where cataloged.
 4. **Python/Go/Cargo/npm batch:** opt-in attempt of all declared third-party installs. This can consume substantial bandwidth/storage, compile for a long time, and fail when upstream dependencies are incompatible with Android.
-5. **Last install summary:** shows successful attempts and failures from the last batch.
+5. **Last install summary:** shows operation outcomes, before/after PATH matches, and explicit unverified status for the last batch.
 
 Each bulk action requires an explicit confirmation. Individual third-party installs require typing `INSTALL`. Manual/root entries do not pretend to install automatically.
 
@@ -107,7 +107,7 @@ Each bulk action requires an explicit confirmation. Individual third-party insta
 | MANUAL | No verified automatic Termux install path is provided. |
 | ROOT/HW | Requires root, kernel permissions, special hardware, or another environment constraint. |
 
-The progress bar counts completed attempts, not downloaded bytes. Command output is capped at 10 MiB per subprocess to limit log growth; remaining output is drained without being retained. Output is logged under `~/.syn_launch/logs/`; log files are restricted to the current user where Android filesystem permissions allow it. The app does not store target lists or run scans automatically.
+The progress bar counts completed operations, not downloaded bytes or verified tools. Batch summaries now retain one result per entry, including whether the operation returned success, whether an executable-name PATH match existed before/after, and `verification: not_run`. A successful package-manager/build command is not a functional self-test. Command output is capped at 10 MiB per subprocess to limit log growth; remaining output is drained without being retained. Output is logged under `~/.syn_launch/logs/`; log files are restricted to the current user where Android filesystem permissions allow it. The app does not store target lists or run scans automatically.
 
 ## Security and supply-chain safeguards
 
