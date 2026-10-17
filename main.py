@@ -379,27 +379,52 @@ def search(data,query=None):
 
 def progress(items,worker,label,confirmed=False):
     if not items: say("No items to install."); return
-    good=0; failed=[]
+    good=0; failed=[]; results=[]
     def attempt(t):
         return worker(t,confirmed=confirmed) if worker is install_one else worker(t)
+    def record(t,ok,path_before,path_after):
+        if path_before:
+            state="already_path_matched_unverified"
+        elif path_after:
+            state="path_match_unverified_after_attempt"
+        elif ok:
+            state="operation_succeeded_executable_not_detected"
+        else:
+            state="operation_failed_or_unavailable"
+        results.append({
+            "id":t["id"], "name":t["name"], "install_kind":t["install_kind"],
+            "package":t.get("package"), "operation_returned_success":bool(ok),
+            "path_match_before_attempt":bool(path_before),
+            "path_match_after_attempt":bool(path_after),
+            "result_state":state, "verification":"not_run",
+        })
     if RICH:
         with Progress(SpinnerColumn(),TextColumn("[progress.description]{task.description}"),BarColumn(),TextColumn("{task.completed}/{task.total}"),TimeElapsedColumn(),console=console,transient=False) as bar:
             task=bar.add_task(label,total=len(items))
             for t in items:
-                bar.update(task,description=label+": "+t["name"]); ok=attempt(t); good+=int(bool(ok))
+                bar.update(task,description=label+": "+t["name"])
+                path_before=installed(t); ok=attempt(t); path_after=installed(t)
+                good+=int(bool(ok))
                 if not ok: failed.append(t["name"])
-                bar.advance(task)
+                record(t,ok,path_before,path_after); bar.advance(task)
     else:
         for i,t in enumerate(items,1):
-            print(f"\n[{i}/{len(items)}] {label}: {t['name']}"); ok=attempt(t); good+=int(bool(ok))
+            print(f"\n[{i}/{len(items)}] {label}: {t['name']}")
+            path_before=installed(t); ok=attempt(t); path_after=installed(t)
+            good+=int(bool(ok))
             if not ok: failed.append(t["name"])
-    summary={"succeeded":good,"failed":failed,"total":len(items),"timestamp":time.strftime("%Y-%m-%d %H:%M:%S")}
-    p=STATE_DIR/"last_install_summary.json"; p.write_text(json.dumps(summary,indent=2),encoding="utf-8")
-    try: p.chmod(0o600)
-    except OSError: pass
-    say(f"Finished: {good}/{len(items)} successful attempts.")
+            record(t,ok,path_before,path_after)
+    summary={
+        "summary_schema":2, "succeeded":good, "failed":failed, "total":len(items),
+        "operation_success_count":good, "operation_failure_count":len(failed),
+        "path_match_after_attempt_count":sum(1 for result in results if result["path_match_after_attempt"]),
+        "verified_tools":0, "results":results,
+        "timestamp":time.strftime("%Y-%m-%d %H:%M:%S"),
+        "note":"succeeded records the install/build operation's return value or an existing PATH match; it does not prove the tool works. PATH matches remain unverified, and no functional verification was run.",
+    }
+    p=STATE_DIR/"last_install_summary.json"; save_private_json(p,summary)
+    say(f"Finished: {good}/{len(items)} operations returned success. This is not a count of functionally verified tools.")
     if failed: say("Failed/unavailable: "+", ".join(failed))
-
 
 def add_custom_tool(data):
     say("Add a personal catalog entry. This saves metadata only; it does not install the tool.")
@@ -551,12 +576,14 @@ def environment_profile(data):
 
 
 def compatibility_report(data):
-    """Describe what is discoverable on this device without claiming it works."""
+    """Separate catalog claims, PATH evidence, compatibility metadata, and actual verification."""
     profile = environment_profile(data)
     tools = []
     for tool in data["tools"]:
         executable = tool.get("executable", "")
         path = shutil.which(executable) if re.fullmatch(r"[A-Za-z0-9_.+-]{1,128}", executable) else None
+        compatibility = tool.get("compatibility")
+        compatibility_is_declared = isinstance(compatibility, dict) and bool(compatibility)
         tools.append({
             "id": tool["id"],
             "name": tool["name"],
@@ -564,25 +591,35 @@ def compatibility_report(data):
             "executable": executable,
             "path": path,
             "status": "path_match_unverified" if path else "not_detected",
-            "verification": "not_run",
+            "catalog_installable": bool(tool.get("installable", False)),
             "install_kind": tool["install_kind"],
             "package": tool.get("package"),
+            "compatibility_assessment": "declared_but_not_device_verified" if compatibility_is_declared else "not_assessed",
+            "compatibility_metadata": compatibility if compatibility_is_declared else None,
+            "verification": "not_run",
+            "smoke_test": "not_run",
+            "device_validation": "not_run",
             "caveat": tool["caveat"],
         })
     return {
-        "report_schema": 1,
+        "report_schema": 2,
         "application": "SYN_LAUNCH",
         "device_profile": profile,
         "summary": {
             "catalog_entries": len(tools),
+            "catalog_installable_entries": sum(1 for tool in tools if tool["catalog_installable"]),
             "path_match_entries": sum(1 for tool in tools if tool["path"]),
+            "not_detected_entries": sum(1 for tool in tools if not tool["path"]),
             "unique_path_match_executables": len({tool["executable"] for tool in tools if tool["path"]}),
+            "compatibility_assessed_entries": sum(1 for tool in tools if tool["compatibility_assessment"] == "declared_but_not_device_verified"),
+            "smoke_tested_entries": sum(1 for tool in tools if tool["smoke_test"] == "passed"),
+            "device_verified_entries": sum(1 for tool in tools if tool["device_validation"] == "verified"),
             "verified_tools": 0,
-            "note": "PATH matches are not installation, compatibility, or functional verification. No tools were executed by this report.",
+            "tools_executed_by_report": False,
+            "note": "Installability is catalog metadata; PATH presence is discovery only. Compatibility declarations, if present, are not device verification. Smoke tests and device validation remain not_run unless separately recorded as evidence.",
         },
         "tools": tools,
     }
-
 
 def print_environment_profile(data):
     print(json.dumps(environment_profile(data), indent=2, sort_keys=True))
