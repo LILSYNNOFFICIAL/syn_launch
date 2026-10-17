@@ -96,10 +96,11 @@ class CatalogTests(unittest.TestCase):
             APP.show_local_docs = original_docs
 
     def test_bounded_probe_caps_output(self):
-        output, truncated = APP.bounded_probe(
+        output, truncated, timed_out = APP.bounded_probe(
             [sys.executable, "-c", "print('A' * 5000)"], timeout=5, max_bytes=1024
         )
         self.assertTrue(truncated)
+        self.assertFalse(timed_out)
         self.assertLessEqual(len(output.encode("utf-8")), 1024)
         self.assertEqual(output, "A" * 1024)
 
