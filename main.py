@@ -138,6 +138,7 @@ def run(command, label, timeout=900, env=None):
                             selector.unregister(key.fileobj); continue
                         decoded=chunk.decode("utf-8",errors="replace")
                         sys.stdout.write(decoded); sys.stdout.flush(); log.write(decoded); log.flush()
+            proc.stdout.close()
             code=proc.wait(timeout=max(0.1,deadline-time.monotonic()))
             if code: say(f"Command exited with status {code}.")
             return code==0
@@ -147,6 +148,7 @@ def run(command, label, timeout=900, env=None):
             if proc and proc.poll() is None:
                 os.killpg(proc.pid,signal.SIGKILL) if os.name=="posix" else proc.kill()
                 proc.wait(timeout=5)
+            if proc and proc.stdout and not proc.stdout.closed: proc.stdout.close()
         except (OSError,subprocess.TimeoutExpired): pass
         return False
     except (OSError,ValueError) as exc:
