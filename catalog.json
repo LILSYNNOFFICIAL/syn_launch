@@ -1013,21 +1013,21 @@
       "compatibility": {
         "status": "source_documented_not_device_verified",
         "platform": "Termux on Android",
-        "install_source": "https://github.com/termux/termux-packages/tree/master/root-packages/mtr",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/mtr",
         "evidence_kind": "upstream Termux package recipe",
-        "evidence_scope": "Confirms the named recipe directory exists in the current upstream Termux package repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
-        "architecture_policy": "Recipe presence is source evidence only. Confirm the package is available from the device's configured Termux repository and compatible with its ABI before installation.",
+        "evidence_scope": "Confirms the named recipe directory exists in the pinned upstream Termux root-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Recipe presence is source evidence only. Confirm the root-packages repository is configured and compatible with the device ABI before installation.",
         "root_required": false,
         "hardware_requirements": [],
         "external_services": [],
         "known_blockers": [
           "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
           "Some ICMP/raw-socket modes may require privileges or kernel capabilities unavailable to an unrooted Android app.",
-          "The recipe is under the upstream root-packages tree; confirm the relevant repository is configured before expecting pkg install to find it."
+          "The recipe is in the separate upstream termux-root-packages repository; confirm that repository is configured before expecting pkg install to find it."
         ],
         "reviewed_on": "2026-10-18",
-        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
-        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/root-packages/mtr"
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/mtr"
       }
     },
     {
@@ -1077,10 +1077,10 @@
       "compatibility": {
         "status": "source_documented_not_device_verified",
         "platform": "Termux on Android",
-        "install_source": "https://github.com/termux/termux-packages/tree/master/root-packages/tcpdump",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/tcpdump",
         "evidence_kind": "upstream Termux package recipe",
-        "evidence_scope": "Confirms the named recipe directory exists in the current upstream Termux package repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
-        "architecture_policy": "Recipe presence is source evidence only. Confirm the package is available from the device's configured Termux repository and compatible with its ABI before installation.",
+        "evidence_scope": "Confirms the named recipe directory exists in the pinned upstream Termux root-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Recipe presence is source evidence only. Confirm the root-packages repository is configured and compatible with the device ABI before installation.",
         "root_required": true,
         "hardware_requirements": [
           "Capture privileges and suitable kernel/network-interface access for the intended capture mode."
@@ -1089,11 +1089,11 @@
         "known_blockers": [
           "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
           "Packet capture is generally restricted by Android app sandboxing and interface permissions; package installation does not grant host-level capture access.",
-          "The recipe is under the upstream root-packages tree; confirm the relevant repository is configured before expecting pkg install to find it."
+          "The recipe is in the separate upstream termux-root-packages repository; confirm that repository is configured before expecting pkg install to find it."
         ],
         "reviewed_on": "2026-10-18",
-        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
-        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/root-packages/tcpdump"
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/tcpdump"
       }
     },
     {
