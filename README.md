@@ -58,6 +58,19 @@ python main.py --compatibility-report > compatibility-report.json
 - `--category` lists tools from a category.
 - `--tool` displays a tool's metadata without executing the local binary. In the interactive menu, choose Help to request bounded help/version probing.
 
+## Documentation and project wiki
+
+- [Project wiki home](wiki/README.md)
+- [Installation and first run](wiki/Installation.md)
+- [Compatibility and verification model](wiki/Compatibility-and-Verification.md)
+- [Catalog and tool lifecycle](wiki/Catalog-and-Tool-Lifecycle.md)
+- [Security and responsible use](wiki/Security-and-Responsible-Use.md)
+- [Troubleshooting](wiki/Troubleshooting.md)
+- [Development and contributing](wiki/Development-and-Contributing.md)
+- [Platform roadmap](PLATFORM_ROADMAP.md)
+
+The catalog now includes source-backed compatibility declarations for nine core Termux packages. These identify the upstream Termux package recipe and state the intended platform constraints; they are **not** evidence that a particular tool has been installed, smoke-tested, or validated on a device. The compatibility report keeps those evidence levels separate.
+
 ## Personal catalog and favorites
 
 Use **Custom tools / favorites** in the main menu to add a tool entry without editing the project files, browse or remove your custom entries, and favorite frequently used tools. Personal entries are stored separately in `~/.syn_launch/custom_tools.json`; favorites are stored in `~/.syn_launch/favorites.json`. These files are user-local and are not committed to the GitHub repository. Custom entries go through the same ID, HTTPS-source, install-method, and package syntax checks as the built-in catalog. Adding an entry saves metadata only; it does not install the tool. Removing an entry does not uninstall its software.
