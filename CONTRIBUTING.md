@@ -39,3 +39,22 @@ python main.py --search Nuclei
 ~~~
 
 CI success on Ubuntu is not evidence that a package works on Android. Record real Termux/architecture results separately.
+
+## Compatibility metadata requirements
+
+When adding a `compatibility` object, use an official upstream package recipe or project documentation as evidence and link directly to it with HTTPS. A source-backed declaration is not a device test. Use the status `source_documented_not_device_verified` until there is repeatable evidence for a specific device, OS, architecture, and tool version.
+
+The object must include `status`, `platform`, `install_source`, `evidence_kind`, `architecture_policy`, boolean `root_required`, list fields `hardware_requirements`, `external_services`, and `known_blockers`, plus `reviewed_on`. Keep caveats specific and evidence-based. Do not turn package availability, successful installation, or a PATH match into a functional compatibility claim.
+
+Before opening a pull request, run:
+
+```bash
+python -m py_compile main.py
+bash -n install.sh
+python -m unittest discover -s tests -v
+python main.py --check
+python main.py --compatibility-report > compatibility-report.json
+python -m json.tool catalog.json > /dev/null
+```
+
+The generated compatibility report includes local runtime and executable-path details. Review it for sensitive local information before sharing.
