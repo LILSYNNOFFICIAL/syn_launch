@@ -1111,6 +1111,17 @@ def smoke_evidence_path():
     return STATE_DIR / "smoke_tests.json"
 
 
+def executable_identity(path):
+    """Return lightweight file identity so a replaced binary cannot inherit an old passing probe."""
+    if not path:
+        return None
+    try:
+        info = os.stat(path)
+        return {"size_bytes": info.st_size, "mtime_ns": info.st_mtime_ns}
+    except OSError:
+        return None
+
+
 def load_smoke_evidence():
     """Load private, locally recorded bounded-probe evidence without treating it as device certification."""
     try:
@@ -1124,37 +1135,44 @@ def load_smoke_evidence():
             and item.get("status") in {"passed", "output_observed_nonzero", "timed_out", "no_response", "not_detected"}}
 
 
-def smoke_test_tool(tool, data):
+def smoke_test_tool(tool):
     """Run only bounded --version/--help probes for one explicitly selected catalog entry."""
     executable = tool.get("executable", "")
     path = shutil.which(executable) if re.fullmatch(r"[A-Za-z0-9_.+-]{1,128}", executable) else None
     record = {
         "tool_id": tool["id"], "tool_name": tool["name"],
-        "status": "not_detected", "path": path, "probe": None, "exit_code": None,
-        "output_observed": False, "output_bytes": 0, "output_truncated": False,
-        "timed_out": False, "tested_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "status": "not_detected", "path": path, "binary_identity": executable_identity(path),
+        "probe": None, "exit_code": None, "output_observed": False, "output_bytes": 0,
+        "output_truncated": False, "timed_out": False, "attempts": [],
+        "tested_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "scope": "Bounded help/version response only; not a functional test of tool features or device compatibility."
     }
     if path:
+        attempts = []
         for flag in ("--version", "--help", "-h"):
             output, truncated, timed_out, returncode = bounded_probe(
                 [path, flag], timeout=5, max_bytes=65536, include_returncode=True
             )
-            record.update({
-                "probe": flag, "exit_code": returncode,
-                "output_observed": bool(output.strip()), "output_bytes": len(output.encode("utf-8")),
-                "output_truncated": truncated, "timed_out": timed_out
-            })
+            attempt = {
+                "probe": flag, "exit_code": returncode, "output_observed": bool(output.strip()),
+                "output_bytes": len(output.encode("utf-8")), "output_truncated": truncated,
+                "timed_out": timed_out
+            }
+            attempts.append(attempt)
             if output.strip() and returncode == 0 and not timed_out:
+                record.update(attempt)
                 record["status"] = "passed"
                 break
-            if output.strip():
-                record["status"] = "output_observed_nonzero"
-            elif timed_out:
-                record["status"] = "timed_out"
         else:
-            if record["status"] not in {"output_observed_nonzero", "timed_out"}:
+            with_output = next((item for item in attempts if item["output_observed"]), None)
+            timed = next((item for item in attempts if item["timed_out"]), None)
+            representative = with_output or timed
+            if representative:
+                record.update(representative)
+                record["status"] = "output_observed_nonzero" if with_output else "timed_out"
+            else:
                 record["status"] = "no_response"
+        record["attempts"] = attempts
     evidence = load_smoke_evidence()
     evidence[tool["id"]] = record
     save_private_json(smoke_evidence_path(), evidence)
@@ -1173,6 +1191,9 @@ def compatibility_report(data):
         compatibility_is_declared = isinstance(compatibility, dict) and bool(compatibility)
         smoke = saved_evidence.get(tool["id"], {})
         smoke_status = smoke.get("status", "not_run")
+        current_identity = executable_identity(path)
+        if smoke and (smoke.get("path") != path or smoke.get("binary_identity") != current_identity):
+            smoke_status = "stale_evidence"
         tools.append({
             "id": tool["id"],
             "name": tool["name"],
@@ -1187,7 +1208,7 @@ def compatibility_report(data):
             "compatibility_metadata": compatibility if compatibility_is_declared else None,
             "verification": "not_run",
             "smoke_test": smoke_status,
-            "smoke_test_evidence": smoke or None,
+            "smoke_test_evidence": ({**smoke, "report_status": smoke_status} if smoke else None),
             "device_validation": "not_run",
             "caveat": tool["caveat"],
         })
@@ -1203,7 +1224,7 @@ def compatibility_report(data):
             "unique_path_match_executables": len({tool["executable"] for tool in tools if tool["path"]}),
             "compatibility_assessed_entries": sum(1 for tool in tools if tool["compatibility_assessment"] == "declared_but_not_device_verified"),
             "smoke_tested_entries": sum(1 for tool in tools if tool["smoke_test"] == "passed"),
-            "smoke_test_attempted_entries": sum(1 for tool in tools if tool["smoke_test"] not in {"not_run", "not_detected"}),
+            "smoke_test_attempted_entries": sum(1 for tool in tools if tool["smoke_test"] in {"passed", "output_observed_nonzero", "timed_out", "no_response"}),
             "device_verified_entries": sum(1 for tool in tools if tool["device_validation"] == "verified"),
             "verified_tools": 0,
             "tools_executed_by_report": False,
@@ -1261,7 +1282,7 @@ def main():
         matches=[t for t in data["tools"] if t["name"].lower()==args.smoke_test.lower() or t["id"].lower()==args.smoke_test.lower()]
         if not matches:
             print("Tool not found. Use --search to find its exact name or ID.", file=sys.stderr); return 1
-        record=smoke_test_tool(matches[0], data)
+        record=smoke_test_tool(matches[0])
         print(json.dumps(record, indent=2, ensure_ascii=False))
         return 0 if record["status"] == "passed" else 1
     if args.check: health(data); return 0
