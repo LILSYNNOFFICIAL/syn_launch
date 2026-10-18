@@ -14,7 +14,7 @@ SYN_LAUNCH reports distinct evidence levels to prevent overclaiming.
 
 ## Current source-backed subset
 
-Seventy-five catalog entries map to 60 distinct Termux package recipes or subpackage definitions found in the upstream repository tree. This includes core utilities and selected networking, developer, and file-analysis tools. Metadata links to the actual recipe directory where possible (for example, curl uses `libcurl`, and SQLite uses `libsqlite`). The status remains `source_documented_not_device_verified`. Recipe presence does not prove the package is enabled for the current device ABI, installable from the configured repository, or functional.
+Eighty-two catalog entries map to 64 distinct Termux package recipes or subpackage definitions found in the upstream repository tree. This includes core utilities and selected networking, developer, and file-analysis tools. Metadata links to the actual recipe directory where possible (for example, curl uses `libcurl`, SQLite uses `libsqlite`, and OpenSSH keyscan uses the `openssh` recipe). Recent additions cover Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, and OpenSSH keyscan. The status remains `source_documented_not_device_verified`. Recipe presence does not prove the package is enabled for the current device ABI, installable from the configured repository, or functional.
 
 ## Current report behavior
 
