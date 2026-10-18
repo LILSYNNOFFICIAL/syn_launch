@@ -42,7 +42,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Add reviewed adapters for local Termux/device inventory, static APK archive inventory, and local JSON evidence-report generation; these do not make network requests or execute catalog tools.
 - [x] Add a narrowly scoped HTTPS adapter that sends one certificate-verified HEAD request with a five-second timeout, no redirect following, no body read, URL scope validation, and allowlisted response headers.
 - [x] Add adapter regression tests for scope rejection, invalid APKs, archive/resource limits, evidence schema/severity validation, authorization gates, and private report persistence.
-- [ ] Add any remote web/API adapters only after per-tool safety review, explicit per-step confirmation, bounded requests, output limits, stop conditions, and authorized staging tests.
+- [ ] Test the HTTPS HEAD adapter against an explicitly authorized staging endpoint. Current automated tests mock the connection and do not count as real staging verification.
+- [ ] Add further remote web/API adapters only after per-tool safety review, explicit per-step confirmation, bounded requests, output limits, stop conditions, and authorized staging tests.
 - [ ] Add signature-aware APK analysis only after a reviewed parser/verifier implementation; current inventory does not verify signatures or decode the binary manifest.
 - Do not launch scans automatically or treat a discovered host as permission to test it.
 
