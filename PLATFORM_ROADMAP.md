@@ -9,14 +9,16 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Explain that container/proot UID 0 is not proof of Android host root.
 - [x] Add regression tests for architecture normalization and the CLI profile.
 - [x] Run a baseline smoke test on one physical Android 16 / Termux / ARM64 device with Python 3.14.6 (commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e`); the test does not validate individual cataloged tools.
-- [ ] Re-run device validation on the latest code and validate 32-bit/other supported architectures.
+- [ ] Re-run device validation on the latest code after compatibility-schema changes and validate 32-bit/other supported architectures.
 
 ## Stage 2: Compatibility metadata
 
-- [ ] Add reviewed per-tool support declarations: native Termux, Android ABI constraints, root/hardware requirements, external service/API needs, and known blockers.
+- [x] Add source-backed compatibility declarations for nine core Termux packages, including upstream recipe links, root/hardware/external-service fields, architecture caveats, and known blockers. These are not device verification.
+- [ ] Expand reviewed support declarations across additional tools and document per-tool API/service dependencies where upstream sources establish them.
 - [x] Keep unknown compatibility explicitly unknown; never infer "works" merely because a package exists or an executable is in PATH.
 - [x] Add a report that separates catalog installability, PATH evidence, compatibility assessment, smoke-test evidence, and device-validation evidence.
-- [ ] Populate compatibility declarations only from upstream documentation or repeatable tests; a declaration is not device verification.
+- [x] Populate an initial curated subset from upstream Termux package recipes; the schema labels these `source_documented_not_device_verified` and requires HTTPS evidence URLs.
+- [ ] Expand source-backed declarations to a verifiable subset of security tools after reviewing each project's official install and platform documentation.
 
 ## Stage 3: Reliable tool lifecycle
 
@@ -49,3 +51,10 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - CI validates Python syntax, shell syntax, catalog schema, and unit/regression tests.
 - Device compatibility claims require actual device evidence and must name the tested Android version, Termux source, architecture, and tool version.
 - Security changes require tests for unsafe input, untrusted environment overrides, subprocess timeouts, and failure paths.
+
+## Documentation and evidence maintenance
+
+- [x] Add a repository-hosted wiki under `wiki/` with installation, compatibility, lifecycle, security, troubleshooting, and contributor pages.
+- [x] Document the physical-device test as a historical baseline tied to its exact commit, not a current release guarantee.
+- [ ] Re-run the full test suite and CLI/report checks on the latest commit; confirm GitHub Actions results before treating the change as verified.
+- [ ] Repeat physical-device checks after the new compatibility metadata validator lands. CI on a desktop runner cannot substitute for Android/Termux evidence.
