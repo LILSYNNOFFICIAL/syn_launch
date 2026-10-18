@@ -13,12 +13,13 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 ## Stage 2: Compatibility metadata
 
-- [x] Add source-backed compatibility declarations for nine core Termux packages, including upstream recipe links, root/hardware/external-service fields, architecture caveats, and known blockers. These are not device verification.
+- [x] Expand source-backed compatibility declarations to 75 catalog entries across 60 Termux package recipes/subpackage definitions, with HTTPS evidence links, explicit evidence scope, root/hardware/external-service fields, architecture caveats, and known blockers. These are not device verification.
 - [ ] Expand reviewed support declarations across additional tools and document per-tool API/service dependencies where upstream sources establish them.
 - [x] Keep unknown compatibility explicitly unknown; never infer "works" merely because a package exists or an executable is in PATH.
 - [x] Add a report that separates catalog installability, PATH evidence, compatibility assessment, smoke-test evidence, and device-validation evidence.
-- [x] Populate an initial curated subset from upstream Termux package recipes; the schema labels these `source_documented_not_device_verified` and requires HTTPS evidence URLs.
-- [ ] Expand source-backed declarations to a verifiable subset of security tools after reviewing each project's official install and platform documentation.
+- [x] Expand the curated subset using the live upstream Termux repository tree; the schema labels entries `source_documented_not_device_verified`, requires HTTPS evidence URLs, and validates the evidence-scope field.
+- [x] Add source-backed metadata for Termux-packaged network, forensics, developer, and core utilities where a matching upstream recipe or subpackage definition was found.
+- [ ] Review upstream runtime/platform documentation for tools not distributed by the Termux package recipes; do not infer support from install commands alone.
 
 ## Stage 3: Reliable tool lifecycle
 
@@ -56,5 +57,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 - [x] Add a repository-hosted wiki under `wiki/` with installation, compatibility, lifecycle, security, troubleshooting, and contributor pages.
 - [x] Document the physical-device test as a historical baseline tied to its exact commit, not a current release guarantee.
-- [ ] Re-run the full test suite and CLI/report checks on the latest commit; confirm GitHub Actions results before treating the change as verified.
-- [ ] Repeat physical-device checks after the new compatibility metadata validator lands. CI on a desktop runner cannot substitute for Android/Termux evidence.
+- [x] Add an explicit single-tool bounded `--smoke-test NAME_OR_ID` mode, privately persist probe outcomes, and expose saved evidence in report schema 3 without changing device-validation status.
+- [x] Add CI coverage for the bounded Python runtime smoke test and schema-3 compatibility report.
+- [ ] Re-run the full test suite and CLI/report checks after the final documentation and workflow changes; confirm GitHub Actions results before treating the change as verified.
+- [ ] Repeat physical-device checks after the compatibility validator and smoke-test/report changes. CI on a desktop runner cannot substitute for Android/Termux evidence.
