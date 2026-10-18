@@ -85,6 +85,29 @@ class WorkflowPlannerTests(unittest.TestCase):
             self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
             self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
 
+    def test_cli_generates_private_assessment_report_from_local_json(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            evidence = Path(tmp) / "evidence.json"
+            evidence.write_text(json.dumps({"findings": [
+                {"title": "Test finding", "severity": "low", "asset": "local test",
+                 "evidence": "fixture", "remediation": "review"}
+            ]}), encoding="utf-8")
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = str(Path(tmp) / "state")
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
+                 "--workflow-run", "assessment-report", "--target-scope", str(evidence), "--authorized"],
+                env=env, capture_output=True, text=True, timeout=10,
+            )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        report_path = Path(report["saved_report"])
+        self.assertTrue(report_path.is_file())
+        self.assertEqual(report["finding_count"], 1)
+        self.assertEqual(report["severity_counts"]["low"], 1)
+        self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
+        self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
+
     def test_cli_rejects_workflow_without_approved_adapter(self):
         with tempfile.TemporaryDirectory() as tmp:
             env = os.environ.copy()
