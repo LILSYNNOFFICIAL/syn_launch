@@ -74,3 +74,4 @@ fi
 git -c user.name="SYN_LAUNCH Wiki Sync" -c user.email="syn-launch-wiki-sync@users.noreply.github.com" commit -m "docs: sync published wiki from repository documentation"
 git push origin HEAD
 echo "Published wiki pages pushed successfully."
+
