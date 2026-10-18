@@ -3552,7 +3552,29 @@
       "description": "Linux wireless configuration utility; stock Android may not expose the required wireless interfaces.",
       "example": "iw --help",
       "source": "https://wireless.wiki.kernel.org/en/users/documentation/iw",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/iw",
+        "evidence_kind": "upstream Termux root-packages recipe",
+        "evidence_scope": "Confirms the named recipe directory exists in the pinned termux-root-packages revision 06591fc024101b04095ec4417d51907512b46e3c; it does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "This recipe is in the separate Termux root-packages repository. Confirm repository configuration and device ABI support; recipe presence alone is not installability evidence.",
+        "root_required": true,
+        "hardware_requirements": [
+          "Wireless chipset/driver/firmware exposing the requested nl80211 capabilities."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The recipe is in the separate Termux root-packages repository; this does not make it available from the default repository.",
+          "Wireless device configuration depends on kernel drivers, firmware, Android permissions, and device support; many operations are unavailable on stock Android.",
+          "The catalog keeps this entry non-installable by default until the root repository and device capability are verified."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/iw"
+      }
     },
     {
       "id": "aircrack-ng",
@@ -3565,7 +3587,30 @@
       "description": "Wireless security auditing suite requiring compatible adapters, drivers, and often root access.",
       "example": "aircrack-ng --help",
       "source": "https://github.com/aircrack-ng/aircrack-ng",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/aircrack-ng",
+        "evidence_kind": "upstream Termux root-packages recipe",
+        "evidence_scope": "Confirms the named recipe directory exists in the pinned termux-root-packages revision 06591fc024101b04095ec4417d51907512b46e3c; it does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "This recipe is in the separate Termux root-packages repository. Confirm repository configuration and device ABI support; recipe presence alone is not installability evidence.",
+        "root_required": true,
+        "hardware_requirements": [
+          "Compatible wireless chipset/driver/firmware and any required external adapter for the intended capability."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The recipe is in the separate Termux root-packages repository; this does not make it available from the default repository.",
+          "Monitor mode, injection, and capture capabilities depend on chipset, driver, firmware, kernel, root privileges, and supported external adapters; package presence proves none of these.",
+          "Use wireless auditing only on networks and devices you own or are explicitly authorized to test.",
+          "The catalog keeps this entry non-installable by default until the root repository and device capability are verified."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/aircrack-ng"
+      }
     },
     {
       "id": "kismet",
@@ -5195,7 +5240,29 @@
       "description": "Command-line packet analysis utility.",
       "example": "tshark --help",
       "source": "https://www.wireshark.org/docs/man-pages/tshark.html",
-      "caveat": "Capture permissions and Android kernel support vary."
+      "caveat": "Capture permissions and Android kernel support vary.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/tshark",
+        "evidence_kind": "upstream Termux root-packages recipe",
+        "evidence_scope": "Confirms the named recipe directory exists in the pinned termux-root-packages revision 06591fc024101b04095ec4417d51907512b46e3c; it does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "This recipe is in the separate Termux root-packages repository. Confirm repository configuration and device ABI support; recipe presence alone is not installability evidence.",
+        "root_required": true,
+        "hardware_requirements": [
+          "Compatible network interface and packet-capture permissions for the intended capture mode."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The recipe is in the separate Termux root-packages repository; this does not make it available from the default repository.",
+          "Packet capture depends on libpcap/interface access and Android sandbox permissions; installing the CLI does not grant capture privileges.",
+          "The catalog keeps this entry non-installable by default until the root repository and device capability are verified."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/tshark"
+      }
     },
     {
       "id": "proxychains-ng",
