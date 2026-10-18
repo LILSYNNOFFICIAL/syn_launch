@@ -1205,7 +1205,29 @@
       "description": "Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test.",
       "example": "hping3 --help",
       "source": "https://github.com/antirez/hping",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/hping3",
+        "evidence_kind": "upstream Termux root-packages recipe",
+        "evidence_scope": "Confirms the named upstream recipe directory exists in the pinned termux-root-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "This recipe is in the separate Termux root-packages repository. Confirm that repository is configured and supports the device ABI; recipe presence alone is not installability evidence.",
+        "root_required": true,
+        "hardware_requirements": [
+          "Suitable raw packet/network privileges for the intended operation."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The recipe is in the separate Termux root-packages repository; it is not a default-repository availability guarantee.",
+          "Raw packet creation and some operations require privileges and suitable kernel/network support; rootless Android may not support intended features.",
+          "The catalog currently does not enable automated installation for this entry."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/hping3"
+      }
     },
     {
       "id": "arp-scan",
@@ -1218,7 +1240,29 @@
       "description": "Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test.",
       "example": "arp-scan --help",
       "source": "https://github.com/royhills/arp-scan",
-      "caveat": "Root or special kernel/network capabilities required; not expected to work on stock Android."
+      "caveat": "Root or special kernel/network capabilities required; not expected to work on stock Android.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/arp-scan",
+        "evidence_kind": "upstream Termux root-packages recipe",
+        "evidence_scope": "Confirms the named upstream recipe directory exists in the pinned termux-root-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "This recipe is in the separate Termux root-packages repository. Confirm that repository is configured and supports the device ABI; recipe presence alone is not installability evidence.",
+        "root_required": true,
+        "hardware_requirements": [
+          "A compatible local network interface and permissions for ARP/raw packet operations."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The recipe is in the separate Termux root-packages repository; it is not a default-repository availability guarantee.",
+          "ARP discovery requires a suitable local network interface and raw packet privileges; Android app sandboxing and Wi-Fi client isolation can prevent expected results.",
+          "The catalog currently does not enable automated installation for this entry."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "06591fc024101b04095ec4417d51907512b46e3c",
+        "source_snapshot_url": "https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/arp-scan"
+      }
     },
     {
       "id": "net-tools",
@@ -1385,13 +1429,32 @@
       "name": "xh",
       "category": "Network & DNS",
       "executable": "xh",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "xh",
+      "installable": true,
       "description": "Fast HTTP client inspired by HTTPie, useful for API troubleshooting.",
       "example": "xh --help",
-      "source": "https://github.com/ducaale/xh",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Termux package recipe is documented at a pinned upstream revision; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/xh",
+        "evidence_kind": "upstream Termux Rust package recipe",
+        "evidence_scope": "Confirms the named upstream recipe directory exists in the pinned termux-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The pinned recipe builds xh with Rust/Cargo; this is packaging evidence, not proof the configured repository has a build for this device ABI.",
+          "Review the exact request target and credentials before using an HTTP client against live services."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/xh"
+      }
     },
     {
       "id": "mitmproxy",
@@ -2007,13 +2070,32 @@
       "name": "Feroxbuster",
       "category": "Web App Testing",
       "executable": "feroxbuster",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "feroxbuster",
+      "installable": true,
       "description": "Recursive content discovery for authorized web assessments.",
       "example": "feroxbuster --help",
-      "source": "https://github.com/epi052/feroxbuster",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Termux package recipe is documented at a pinned upstream revision; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/feroxbuster",
+        "evidence_kind": "upstream Termux Rust package recipe",
+        "evidence_scope": "Confirms the named upstream recipe directory exists in the pinned termux-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The pinned recipe builds feroxbuster with Rust and depends on OpenSSL; device installation and runtime behavior remain unverified.",
+          "Content discovery can generate substantial traffic. Use only against explicitly authorized targets and apply rate limits."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/feroxbuster"
+      }
     },
     {
       "id": "wfuzz",
@@ -2072,13 +2154,32 @@
       "name": "curlie",
       "category": "Web App Testing",
       "executable": "curlie",
-      "install_kind": "go",
-      "package": "github.com/rs/curlie@latest",
+      "install_kind": "pkg",
+      "package": "curlie",
       "installable": true,
       "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "curlie --help",
-      "source": "https://pkg.go.dev/github.com/rs/curlie",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Termux package recipe is documented at a pinned upstream revision; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/curlie",
+        "evidence_kind": "upstream Termux Go package recipe",
+        "evidence_scope": "Confirms the named upstream recipe directory exists in the pinned termux-packages repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The pinned recipe builds curlie with Go; package availability and runtime behavior depend on configured repositories and device architecture.",
+          "This is an HTTP client; use only against intended and authorized targets."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/curlie"
+      }
     },
     {
       "id": "jwt-tool",
@@ -5387,5 +5488,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux recipe declarations pin upstream packaging-tree revisions; selected Python entries pin upstream packaging metadata and record only the requirements/classifiers visible in those files. Neither evidence type proves Android/Termux support, current package availability, installation success, ABI compatibility, or runtime functionality."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes are pinned to exact upstream revisions; Python metadata reviews are pinned to their reviewed upstream source revisions. Recipe presence does not prove repository availability, installation success, ABI support, or runtime functionality."
 }
