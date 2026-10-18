@@ -59,10 +59,10 @@ jobs:
               assert metadata["evidence_scope"], tool
           for tool_id in ("xh", "feroxbuster", "curlie"):
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
-              assert tool["install_kind"] == "pkg" and tool["installable"], tool
+              assert tool["install_kind"] == "pkg" and tool["catalog_installable"], tool
           for tool_id in ("hping3", "arp-scan"):
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
-              assert not tool["installable"], tool
+              assert not tool["catalog_installable"], tool
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
