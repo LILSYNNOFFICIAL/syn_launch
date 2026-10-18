@@ -9,7 +9,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Explain that container/proot UID 0 is not proof of Android host root.
 - [x] Add regression tests for architecture normalization and the CLI profile.
 - [x] Run a baseline smoke test on one physical Android 16 / Termux / ARM64 device with Python 3.14.6 (commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e`); the test does not validate individual cataloged tools.
-- [ ] Re-run device validation on the latest code after compatibility-schema changes and validate 32-bit/other supported architectures.
+- [ ] Run `bash device_check.sh` on the physical Android/Termux device, inspect the private evidence bundle, then perform human-reviewed device validation; validate 32-bit/other supported architectures separately.
 
 ## Stage 2: Compatibility metadata
 
