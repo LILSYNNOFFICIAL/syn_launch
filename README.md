@@ -205,3 +205,25 @@ SYN_LAUNCH is a launcher/catalog, not the author of the listed tools. The catalo
 ## License
 
 SYN_LAUNCH code is released under the MIT License. Third-party tools retain their own licenses and terms.
+
+
+## Dry-run assessment workflow plans
+
+SYN_LAUNCH includes a scope-bound workflow planner for review preparation. It does **not** launch scans, execute catalog tools, or generate permission to test an asset.
+
+List plans:
+
+```bash
+python main.py --workflow-list
+```
+
+Emit a JSON plan only after declaring the target scope and confirming authorization:
+
+```bash
+python main.py --workflow-plan web-api-review --target-scope "https://staging.example.test/api" --authorized
+python main.py --workflow-plan mobile-app-review --target-scope "owner-provided APK and isolated test device" --authorized
+python main.py --workflow-plan device-configuration-audit --target-scope "my own Android device and Termux environment" --authorized
+python main.py --workflow-plan assessment-report --target-scope "approved engagement evidence set" --authorized
+```
+
+The `--authorized` flag is an operator declaration only. SYN_LAUNCH does not verify legal authority. Plans include explicit scope, stop conditions, and a declaration that no network actions or subprocesses were executed. See [Workflow Planning](wiki/Workflow-Planning.md) for details.
