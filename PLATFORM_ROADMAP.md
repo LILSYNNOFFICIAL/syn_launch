@@ -46,7 +46,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Require an explicit target-scope string and operator authorization declaration to emit a plan; validate printable scope length and reject unknown workflow IDs.
 - [x] Include stop conditions and explicit no-network/no-subprocess execution fields in every plan.
 - [x] Add reviewed adapters for local Termux/device inventory, static APK archive inventory, and local JSON evidence-report generation; these do not make network requests or execute catalog tools.
-- [x] Add a narrowly scoped HTTPS adapter that sends one certificate-verified HEAD request with a five-second socket timeout and explicitly disclosed unbounded system DNS resolution, no redirect following, no body read, URL scope validation, and allowlisted response headers.
+- [x] Add a narrowly scoped HTTPS adapter that sends one certificate-verified HEAD request with a three-second DNS-resolution budget and five-second socket timeout, no redirect following, no body read, URL scope validation, and allowlisted response headers.
 - [x] Add adapter regression tests for scope rejection, invalid APKs, archive/resource limits, evidence schema/severity validation, authorization gates, and private report persistence.
 - [ ] Test the HTTPS HEAD adapter against an explicitly authorized staging endpoint. Current automated tests mock the connection and do not count as real staging verification.
 - [ ] Add further remote web/API adapters only after per-tool safety review, explicit per-step confirmation, bounded requests, output limits, stop conditions, and authorized staging tests.
@@ -72,6 +72,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Add [Optional Linux Environments](wiki/Optional-Linux-Environments.md) with upstream PRoot-Distro and Kali NetHunter sources, edition differences, and support boundaries.
 
 - [x] Add a repository-hosted wiki under `wiki/` with installation, compatibility, lifecycle, security, troubleshooting, and contributor pages.
+- [x] Document the enabled [GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/wiki) and clarify that the repository `wiki/` folder requires explicit synchronization to update the published wiki.
 - [x] Document the physical-device test as a historical baseline tied to its exact commit, not a current release guarantee.
 - [x] Add an explicit single-tool bounded `--smoke-test NAME_OR_ID` mode, privately persist probe outcomes, and expose saved evidence in report schema 3 without changing device-validation status.
 - [x] Add CI coverage for the bounded Python runtime smoke test and schema-3 compatibility report.
