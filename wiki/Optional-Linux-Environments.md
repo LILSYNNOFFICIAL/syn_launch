@@ -16,7 +16,7 @@ Important limits documented upstream include:
 
 SYN_LAUNCH support policy:
 - Native Termux remains the primary supported environment.
-- PRoot presence may be detected as environment context in a future capability profile, but is not an installability or compatibility guarantee.
+- The local device audit already records PRoot and PRoot-Distro presence indicators, but these are not installability or compatibility guarantees.
 - Any future PRoot integration must be opt-in, read-only during discovery, and must never reset or remove a container without a separate explicit action.
 
 ## Kali NetHunter
