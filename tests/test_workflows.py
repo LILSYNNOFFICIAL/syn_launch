@@ -39,6 +39,51 @@ class WorkflowPlannerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown workflow"):
             build_workflow_plan("arbitrary-command", "localhost", True)
 
+    def test_cli_workflow_run_requires_explicit_authorization(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = tmp
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
+                 "--workflow-run", "device-configuration-audit", "--target-scope", "local-device"],
+                env=env, capture_output=True, text=True, timeout=10,
+            )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("--authorized", result.stderr)
+
+    def test_cli_executes_only_approved_local_device_adapter_and_saves_private_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = tmp
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
+                 "--workflow-run", "device-configuration-audit", "--target-scope", "local-device",
+                 "--authorized"],
+                env=env, capture_output=True, text=True, timeout=10,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            report_path = Path(report["saved_report"])
+            self.assertTrue(report_path.is_file())
+            self.assertEqual(report["workflow_id"], "device-configuration-audit")
+            self.assertFalse(report["execution"]["network_actions_executed"])
+            self.assertFalse(report["execution"]["subprocesses_executed"])
+            self.assertEqual(report["device_validation"], "not_run")
+            self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
+
+    def test_cli_rejects_unimplemented_remote_workflow_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = tmp
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
+                 "--workflow-run", "web-api-review", "--target-scope", "https://staging.example.test",
+                 "--authorized"],
+                env=env, capture_output=True, text=True, timeout=10,
+            )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("No execution adapter is approved", result.stderr)
+
     def test_cli_lists_workflows_as_json(self):
         with tempfile.TemporaryDirectory() as tmp:
             env = os.environ.copy()
