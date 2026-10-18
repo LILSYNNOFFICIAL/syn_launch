@@ -5,7 +5,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 ## Unreleased
 
 ### Compatibility evidence
-- Expanded structured, source-linked compatibility declarations to 82 catalog entries spanning 64 distinct upstream Termux package recipe/subpackage directories, including Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, and OpenSSH keyscan.
+- Expanded structured, source-linked compatibility declarations to 84 catalog entries spanning 66 distinct upstream Termux package recipe/subpackage directories, including Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, OpenSSH keyscan, MTR, and tcpdump.
 - Added an explicit evidence-scope field and stricter schema validation for compatibility declarations.
 - Kept recipe presence, catalog installability, PATH discovery, smoke-test outcome, and device validation as separate evidence states.
 
