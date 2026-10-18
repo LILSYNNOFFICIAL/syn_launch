@@ -83,6 +83,7 @@ class WorkflowPlannerTests(unittest.TestCase):
             self.assertFalse(report["execution"]["subprocesses_executed"])
             self.assertEqual(report["device_validation"], "not_run")
             self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
 
     def test_cli_rejects_workflow_without_approved_adapter(self):
         with tempfile.TemporaryDirectory() as tmp:
