@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Validate Python syntax
-        run: python -m py_compile main.py
+        run: python -m py_compile main.py workflow_planner.py workflow_adapters.py
       - name: Validate bootstrap shell syntax
         run: bash -n install.sh
       - name: Validate local device-check script syntax
