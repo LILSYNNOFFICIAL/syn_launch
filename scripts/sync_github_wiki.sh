@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Publish versioned wiki/ Markdown pages to the separate GitHub Wiki git repository.
 # Safe by default: inspect the diff only. Pass --push to commit and push.
-MODE="\${1:-}"
+MODE="${1:-}"
 if [[ "$MODE" != "" && "$MODE" != "--push" ]]; then
   echo "Usage: $0 [--push]" >&2
   exit 2
@@ -11,7 +11,7 @@ fi
 
 ROOT="$(git rev-parse --show-toplevel)"
 SOURCE="$ROOT/wiki"
-REMOTE="\${SYN_LAUNCH_WIKI_REMOTE:-https://github.com/LILSYNNOFFICIAL/syn_launch.wiki.git}"
+REMOTE="${SYN_LAUNCH_WIKI_REMOTE:-https://github.com/LILSYNNOFFICIAL/syn_launch.wiki.git}"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
