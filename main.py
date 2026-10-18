@@ -370,14 +370,128 @@ def install_one(t,confirmed=False):
         if ask("Type INSTALL to continue: ")!="INSTALL": say("Cancelled."); return False
     return {"pkg":install_pkg,"pip":install_pip,"go":install_go,"cargo":install_cargo,"npm":install_npm}[kind](t)
 
+def append_lifecycle_event(event):
+    """Append a private, timestamped lifecycle audit record."""
+    path = STATE_DIR / "lifecycle_audit.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as stream:
+        try:
+            path.chmod(0o600)
+        except OSError:
+            pass
+        stream.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    try:
+        path.chmod(0o600)
+    except OSError:
+        pass
+
+
+def uninstall_one(t, confirmed=False):
+    """Remove one package only through its matching package manager."""
+    kind, package = t.get("install_kind"), t.get("package")
+    result = {
+        "event_schema": 1,
+        "operation": "uninstall",
+        "tool_id": t.get("id"),
+        "tool_name": t.get("name"),
+        "install_kind": kind,
+        "requested_package": package,
+        "started_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "status": "not_started",
+        "path_match_before": installed(t),
+        "version_before": collect_resolved_version(t),
+        "command": None,
+        "exit_code": None,
+        "timed_out": False,
+        "launch_error": None,
+        "path_match_after": None,
+        "version_after": None,
+    }
+    if not confirmed:
+        say("Uninstall requires explicit confirmation.")
+        result["status"] = "cancelled_not_confirmed"
+    elif kind == "pkg" and isinstance(package, str) and PKG_RE.fullmatch(package) and shutil.which("pkg"):
+        result["command"] = ["pkg", "uninstall", "-y", package]
+        result["status"] = "operation_failed"
+        run(result["command"], "Removing Termux package " + package, 1800)
+        command_result = dict(LAST_COMMAND_RESULT)
+        result.update({
+            "exit_code": command_result.get("exit_code"),
+            "timed_out": bool(command_result.get("timed_out")),
+            "launch_error": command_result.get("launch_error"),
+            "status": "operation_succeeded" if command_result.get("exit_code") == 0 and not command_result.get("timed_out") else "operation_failed",
+        })
+    elif kind == "pip" and isinstance(package, str) and PIP_RE.fullmatch(package) and (VENV_DIR / "bin" / "pip").is_file():
+        result["command"] = [str(VENV_DIR / "bin" / "pip"), "uninstall", "--isolated", "-y", package]
+        result["status"] = "operation_failed"
+        run(result["command"], "Removing isolated Python package " + package, 900)
+        command_result = dict(LAST_COMMAND_RESULT)
+        result.update({
+            "exit_code": command_result.get("exit_code"),
+            "timed_out": bool(command_result.get("timed_out")),
+            "launch_error": command_result.get("launch_error"),
+            "status": "operation_succeeded" if command_result.get("exit_code") == 0 and not command_result.get("timed_out") else "operation_failed",
+        })
+    elif kind == "cargo" and isinstance(package, str) and CARGO_RE.fullmatch(package) and shutil.which("cargo"):
+        result["command"] = ["cargo", "uninstall", package]
+        result["status"] = "operation_failed"
+        run(result["command"], "Removing Cargo-installed package " + package, 900)
+        command_result = dict(LAST_COMMAND_RESULT)
+        result.update({
+            "exit_code": command_result.get("exit_code"),
+            "timed_out": bool(command_result.get("timed_out")),
+            "launch_error": command_result.get("launch_error"),
+            "status": "operation_succeeded" if command_result.get("exit_code") == 0 and not command_result.get("timed_out") else "operation_failed",
+        })
+    elif kind == "npm" and isinstance(package, str) and NPM_RE.fullmatch(package) and shutil.which("npm"):
+        result["command"] = ["npm", "uninstall", "--global", "--registry=https://registry.npmjs.org", "--strict-ssl=true", package]
+        result["status"] = "operation_failed"
+        run(result["command"], "Removing global npm package " + package, 900)
+        command_result = dict(LAST_COMMAND_RESULT)
+        result.update({
+            "exit_code": command_result.get("exit_code"),
+            "timed_out": bool(command_result.get("timed_out")),
+            "launch_error": command_result.get("launch_error"),
+            "status": "operation_succeeded" if command_result.get("exit_code") == 0 and not command_result.get("timed_out") else "operation_failed",
+        })
+    elif kind in {"manual", "root", "go"}:
+        say("Automatic uninstall is not supported for this entry; no command was run.")
+        result["status"] = "unsupported"
+    else:
+        say("Uninstall unavailable: invalid package metadata or required package manager is missing.")
+        result["status"] = "unavailable_or_invalid"
+    result["finished_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    result["path_match_after"] = installed(t)
+    result["version_after"] = collect_resolved_version(t)
+    try:
+        append_lifecycle_event(result)
+        say("Lifecycle audit appended to " + str(STATE_DIR / "lifecycle_audit.jsonl"))
+    except OSError as exc:
+        say("WARNING: could not persist lifecycle audit record: " + str(exc))
+    say("Uninstall result: " + result["status"] + ". A successful package-manager exit is not a functional verification.")
+    return result["status"] == "operation_succeeded"
+
 def choose(data,tools=None):
     tools=tools or data["tools"]; show_list(tools)
     value=ask("Tool number: ")
     if not value.isdigit() or int(value)==0: return
     i=int(value)-1
     if i<0 or i>=len(tools): say("Invalid number."); return
-    t=tools[i]; show_tool(t); action=ask("[i]nstall / [h]elp / [f]avorite / [b]ack: ").lower()
+    t=tools[i]; show_tool(t); action=ask("[i]nstall / [u]ninstall / [h]elp / [f]avorite / [b]ack: ").lower()
     if action=="i": install_one(t)
+    elif action=="u":
+        kind, package = t.get("install_kind"), t.get("package")
+        if kind not in {"pkg", "pip", "cargo", "npm"} or not isinstance(package, str):
+            say("Automatic uninstall is not supported for this tool; no command was run.")
+            return
+        say("This removes the package named below, not just its launcher. Termux may remove dependencies too.")
+        say("Package manager: " + kind + " | Exact package: " + package)
+        if ask("Type REMOVE " + package + " to confirm: ") == "REMOVE " + package:
+            uninstall_one(t, confirmed=True)
+        else:
+            say("Cancelled. No uninstall command was run.")
     elif action=="h":
         if installed(t): show_local_docs(t)
         else: say("Executable is not detected in PATH. Review the upstream documentation link and example.")
@@ -778,7 +892,7 @@ def run_install_preflight(items, mode):
 
 
 def installer(data):
-    choice=menu("Installer",["Attempt all distinct Termux packages","Install one selected tool","Install Python, Go, Rust and Node.js runtimes","Attempt all Python/Go/Cargo/npm tools (large download/build)","Show last install summary"])
+    choice=menu("Installer",["Attempt all distinct Termux packages","Install or remove one selected tool","Install Python, Go, Rust and Node.js runtimes","Attempt all Python/Go/Cargo/npm tools (large download/build)","Show last install summary","Show recent lifecycle audit"])
     if choice=="1":
         packages={}
         for t in data["tools"]:
@@ -809,6 +923,16 @@ def installer(data):
             progress(items,install_one,"Security tool installs",confirmed=True)
     elif choice=="5":
         p=STATE_DIR/"last_install_summary.json"; say(p.read_text(encoding="utf-8") if p.exists() else "No install summary yet.")
+    elif choice=="6":
+        p=STATE_DIR/"lifecycle_audit.jsonl"
+        if not p.exists():
+            say("No lifecycle audit records yet.")
+        else:
+            try:
+                lines = p.read_text(encoding="utf-8").splitlines()
+                say("\\n".join(lines[-20:]) if lines else "Lifecycle audit is empty.")
+            except OSError as exc:
+                say("Could not read lifecycle audit: " + str(exc))
 
 def normalized_architecture(machine=None):
     """Normalize common Android/Linux machine names without certifying ABI support."""
