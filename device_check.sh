@@ -19,7 +19,6 @@ if ! command -v "$PYTHON_BIN" >/dev/null 2>&1; then
 fi
 
 STATE_DIR="${SYN_LAUNCH_HOME:-$HOME/.syn_launch}"
-export SYN_LAUNCH_HOME="$STATE_DIR"
 mkdir -p "$STATE_DIR"
 chmod 700 "$STATE_DIR" 2>/dev/null || true
 STAMP="$(date +%Y%m%d-%H%M%S)"
@@ -49,11 +48,11 @@ run_check "Installer shell syntax" "installer-syntax.log" bash -n install.sh
 run_check "Device-check shell syntax" "device-check-syntax.log" bash -n device_check.sh
 run_check "Catalog JSON syntax" "catalog-json.log" "$PYTHON_BIN" -m json.tool catalog.json
 run_check "Unit and regression tests" "unit-tests.log" "$PYTHON_BIN" -m unittest discover -s tests -v
-run_check "Runtime check" "check.log" "$PYTHON_BIN" main.py --check
-run_check "Detailed diagnostics" "doctor.log" "$PYTHON_BIN" main.py --doctor
-run_check "Structured environment profile" "profile.json" "$PYTHON_BIN" main.py --profile
-run_check "Compatibility report" "compatibility-report.json" "$PYTHON_BIN" main.py --compatibility-report
-run_check "Explicit bounded Python smoke test" "python-smoke-test.json" "$PYTHON_BIN" main.py --smoke-test python
+run_check "Runtime check" "check.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --check
+run_check "Detailed diagnostics" "doctor.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --doctor
+run_check "Structured environment profile" "profile.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --profile
+run_check "Compatibility report" "compatibility-report.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --compatibility-report
+run_check "Explicit bounded Python smoke test" "python-smoke-test.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --smoke-test python
 
 if "$PYTHON_BIN" - "$OUT" <<'PY' >"$OUT/report-validation.log" 2>&1
 import json
