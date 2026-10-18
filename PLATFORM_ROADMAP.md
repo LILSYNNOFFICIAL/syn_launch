@@ -47,9 +47,10 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 ## Stage 5: Optional Linux environments
 
-- Evaluate proot-based userland support separately from native Termux operation.
-- Investigate Kali NetHunter/other supported environments only as optional integrations.
-- Document hardware, kernel, root, and ABI requirements per capability. Never imply that a userspace image grants kernel features or Android host root.
+- [x] Review upstream PRoot-Distro capabilities and limitations; document that simulated root is not host root and kernel-dependent features remain unavailable: [PRoot-Distro](https://github.com/termux/proot-distro).
+- [x] Review official Kali NetHunter editions and requirements; document Rootless, Lite, and full NetHunter as distinct capability profiles: [NetHunter overview](https://www.kali.org/docs/nethunter/) and [Rootless guide](https://www.kali.org/docs/nethunter/nethunter-rootless/).
+- [x] Document hardware, kernel, root, and ABI caveats without implying a userspace image grants kernel features or Android host root.
+- [ ] Implement optional environment detection and inventory after device evidence is available; do not automatically install, reset, or flash an environment.
 
 ## Release gates
 
@@ -58,6 +59,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - Security changes require tests for unsafe input, untrusted environment overrides, subprocess timeouts, and failure paths.
 
 ## Documentation and evidence maintenance
+
+- [x] Add [Optional Linux Environments](wiki/Optional-Linux-Environments.md) with upstream PRoot-Distro and Kali NetHunter sources, edition differences, and support boundaries.
 
 - [x] Add a repository-hosted wiki under `wiki/` with installation, compatibility, lifecycle, security, troubleshooting, and contributor pages.
 - [x] Document the physical-device test as a historical baseline tied to its exact commit, not a current release guarantee.
