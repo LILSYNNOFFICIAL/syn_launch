@@ -451,7 +451,30 @@
       "description": "Identify file types from file signatures and content.",
       "example": "file --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux package availability and runtime unverified",
+        "install_source": "https://github.com/file/file/blob/4ee5ca8fb938c3168bcededd0ce7c2e03daea485/README.md",
+        "evidence_kind": "upstream native utility documentation (README.md)",
+        "evidence_scope": "Confirms only the upstream native build or runtime information in the pinned file. It does not establish that the catalog's Termux package is currently available, that compilation succeeds for Android/Termux, or that runtime functionality works on this device.",
+        "source_revision": "4ee5ca8fb938c3168bcededd0ce7c2e03daea485",
+        "source_snapshot_url": "https://github.com/file/file/blob/4ee5ca8fb938c3168bcededd0ce7c2e03daea485/README.md",
+        "declared_build_requirements": [
+          "C compiler and platform build tools",
+          "libmagic build/runtime components"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the configured repository, target ABI, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README describes file(1) and libmagic but does not establish the current Termux package recipe or configured-repository availability.",
+          "Native library build details and ABI behavior are not verified on Android/Termux.",
+          "File-type identification is heuristic and should not be treated as proof that a file is safe."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "less",
@@ -3596,7 +3619,31 @@
       "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "foremost --help",
       "source": "https://github.com/korczis/foremost",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux package availability and runtime unverified",
+        "install_source": "https://github.com/korczis/foremost/blob/9b2ccf2a6d924e7a57971af6b92e6a287d28efb1/Makefile",
+        "evidence_kind": "upstream C build metadata (Makefile)",
+        "evidence_scope": "Confirms only the upstream native build or runtime information in the pinned file. It does not establish that the catalog's Termux package is currently available, that compilation succeeds for Android/Termux, or that runtime functionality works on this device.",
+        "source_revision": "9b2ccf2a6d924e7a57971af6b92e6a287d28efb1",
+        "source_snapshot_url": "https://github.com/korczis/foremost/blob/9b2ccf2a6d924e7a57971af6b92e6a287d28efb1/Makefile",
+        "declared_build_requirements": [
+          "GCC-compatible C compiler",
+          "Make",
+          "Unix-like filesystem and file I/O"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the configured repository, target ABI, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Makefile uses GCC-oriented flags and Unix installation paths; Android/Termux build behavior is unverified.",
+          "This upstream Makefile does not prove that the catalog's `pkg` package is currently available for the configured repository or device ABI.",
+          "File carving can produce large outputs and false positives; preserve original evidence and work on authorized copies."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "xxd",
@@ -4002,7 +4049,31 @@
       "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "pngcheck --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux package availability and runtime unverified",
+        "install_source": "https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/Makefile",
+        "evidence_kind": "upstream C build metadata (Makefile)",
+        "evidence_scope": "Confirms only the upstream native build or runtime information in the pinned file. It does not establish that the catalog's Termux package is currently available, that compilation succeeds for Android/Termux, or that runtime functionality works on this device.",
+        "source_revision": "bd33ad6490269df07cac81e5305f4ebf56c2b637",
+        "source_snapshot_url": "https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/Makefile",
+        "declared_build_requirements": [
+          "C compiler",
+          "Make",
+          "zlib headers and library"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the configured repository, target ABI, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Makefile requires zlib and a C compiler; Android/Termux package availability and native build behavior are not verified.",
+          "This upstream Makefile does not prove that the catalog's `pkg` package is currently available for the configured repository or device ABI.",
+          "Malformed-file analysis can be CPU- and memory-intensive; analyze untrusted files in a bounded environment."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ffprobe",
@@ -5442,7 +5513,30 @@
       "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "stress-ng --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux package availability and runtime unverified",
+        "install_source": "https://github.com/ColinIanKing/stress-ng/blob/9beb21e28c727a5e02572ee2031977f23587d7e7/README.md",
+        "evidence_kind": "upstream native utility documentation (README.md)",
+        "evidence_scope": "Confirms only the upstream native build or runtime information in the pinned file. It does not establish that the catalog's Termux package is currently available, that compilation succeeds for Android/Termux, or that runtime functionality works on this device.",
+        "source_revision": "9beb21e28c727a5e02572ee2031977f23587d7e7",
+        "source_snapshot_url": "https://github.com/ColinIanKing/stress-ng/blob/9beb21e28c727a5e02572ee2031977f23587d7e7/README.md",
+        "declared_build_requirements": [
+          "C compiler and native build tools",
+          "Linux kernel interfaces for many stressors"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the configured repository, target ABI, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README describes hundreds of stressors and kernel-interface tests; many are Linux-specific and may be unavailable on Android.",
+          "Heavy stress tests can overheat, exhaust memory/storage, trigger thermal throttling, or destabilize a mobile device; use conservative bounds.",
+          "This upstream README does not prove that the catalog's `pkg` package is currently available or that each stressor works on the target ABI."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "nuclei",
