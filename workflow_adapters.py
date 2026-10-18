@@ -15,8 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ADAPTER_SCHEMA = 1
-MAX_APK_BYTES = 1024 * 1024 * 1024
-MAX_APK_ENTRIES = 100_000
+MAX_APK_BYTES = 256 * 1024 * 1024
+MAX_APK_ENTRIES = 50_000
 
 
 def _mode(path: Path) -> dict:
@@ -119,20 +119,34 @@ def run_mobile_apk_inventory(scope: str) -> dict:
             entries = archive.infolist()
             if len(entries) > MAX_APK_ENTRIES:
                 raise ValueError(f"APK contains more than {MAX_APK_ENTRIES} archive entries")
-            names = [item.filename for item in entries]
-            bad_member = next((item.filename for item in entries if item.flag_bits & 0x1), None)
+            manifest_present = False
+            dex = []
+            native_abis = set()
+            signature_files = []
+            bad_member = None
+            for item in entries:
+                name = item.filename
+                if name == "AndroidManifest.xml":
+                    manifest_present = True
+                if (name == "classes.dex" or
+                    (name.startswith("classes") and name.endswith(".dex") and name[7:-4].isdigit())):
+                    if len(dex) < 100:
+                        dex.append(name)
+                parts = name.split("/")
+                if name.startswith("lib/") and len(parts) >= 3 and parts[2].endswith(".so"):
+                    if len(native_abis) < 100:
+                        native_abis.add(parts[1])
+                if (name.startswith("META-INF/") and
+                    name.upper().endswith((".RSA", ".DSA", ".EC", ".SF", "MANIFEST.MF")) and
+                    len(signature_files) < 100):
+                    signature_files.append(name)
+                if bad_member is None and item.flag_bits & 0x1:
+                    bad_member = name
     except (OSError, zipfile.BadZipFile, zipfile.LargeZipFile) as exc:
         raise ValueError("Input is not a readable APK/ZIP archive") from exc
-    dex = sorted(name for name in names if name == "classes.dex" or
-                 (name.startswith("classes") and name.endswith(".dex") and name[7:-4].isdigit()))
-    native_abis = sorted({
-        name.split("/")[1] for name in names
-        if name.startswith("lib/") and len(name.split("/")) >= 3 and name.split("/")[2].endswith(".so")
-    })
-    signature_files = sorted(
-        name for name in names
-        if name.startswith("META-INF/") and name.upper().endswith((".RSA", ".DSA", ".EC", ".SF", "MANIFEST.MF"))
-    )
+    dex.sort()
+    native_abis = sorted(native_abis)
+    signature_files.sort()
     return {
         "adapter_schema": ADAPTER_SCHEMA,
         "workflow_id": "mobile-app-review",
@@ -143,10 +157,11 @@ def run_mobile_apk_inventory(scope: str) -> dict:
         "archive": {
             "valid_zip_container": True,
             "entry_count": len(names),
-            "android_manifest_present": "AndroidManifest.xml" in names,
+            "android_manifest_present": manifest_present,
             "dex_files": dex,
             "native_library_abis": native_abis,
             "signature_related_file_names": signature_files,
+            "signature_related_names_truncated": len(signature_files) == 100,
             "encrypted_member_name": bad_member,
         },
         "execution": {
