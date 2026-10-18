@@ -36,9 +36,11 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 ## Stage 4: Authorized assessment workflows
 
-- Compose curated reconnaissance, web/API assessment, configuration audit, mobile-app analysis, and reporting workflows.
-- Require the operator to confirm authorization and target scope before active network actions.
-- Use safe defaults, rate limits, stop conditions, and clear impact warnings.
+- [x] Add scope-bound, dry-run workflow plans for web/API review, mobile-app review, local device/Termux configuration audit, and assessment reporting.
+- [x] Require an explicit target-scope string and operator authorization declaration to emit a plan; validate printable scope length and reject unknown workflow IDs.
+- [x] Include stop conditions and explicit no-network/no-subprocess execution fields in every plan.
+- [ ] Add reviewed tool-to-step mappings and approved command adapters only after per-tool safety review, with per-step confirmation, timeouts, output limits, and stop conditions.
+- [ ] Test any future adapters on explicitly authorized staging targets and keep dry-run planning as the default.
 - Do not launch scans automatically or treat a discovered host as permission to test it.
 
 ## Stage 5: Optional Linux environments
