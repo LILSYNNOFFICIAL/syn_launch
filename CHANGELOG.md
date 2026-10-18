@@ -16,7 +16,8 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 - Require an explicit scope and literal boolean authorization confirmation before a plan can be emitted.
 - Plans include stop conditions and explicitly record that no network actions or subprocesses were executed.
 - Added CLI integration and regression tests for authorization handling, invalid scopes, and dry-run behavior.
-- Added read-only local device inventory, static APK archive inventory, and local JSON evidence-report adapters. They avoid network activity and subprocess execution; APK inventory does not extract, execute, or verify signatures, and evidence summaries do not independently validate findings.
+- Added read-only local device inventory, static APK archive inventory, and local JSON evidence-report adapters. APK inventory does not extract, execute, or verify signatures, and evidence summaries do not independently validate findings.
+- Added a narrowly scoped HTTPS HEAD adapter with TLS certificate verification, strict URL validation, a five-second timeout, no redirects, no response-body reads, and allowlisted headers. It sends one real network request and still requires testing against an authorized staging endpoint.
 
 ### Bounded smoke testing
 - Added `python main.py --smoke-test NAME_OR_ID` for one explicitly selected catalog entry.
