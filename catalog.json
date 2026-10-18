@@ -6117,7 +6117,29 @@
       "description": "Dynamic instrumentation CLI for authorized mobile app testing.",
       "example": "frida --help",
       "source": "https://github.com/frida/frida-tools",
-      "caveat": "Device-side frida-server, ABI compatibility, and app privileges are separate requirements."
+      "caveat": "Device-side frida-server, ABI compatibility, and app privileges are separate requirements.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/frida/frida-tools/blob/6a83bcf71155ad9daf2a604ada339e611df39fa2/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "6a83bcf71155ad9daf2a604ada339e611df39fa2",
+        "source_snapshot_url": "https://github.com/frida/frida-tools/blob/6a83bcf71155ad9daf2a604ada339e611df39fa2/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Android/iOS/device processes and debugging targets explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned setup.py requires frida>=17.10.0,<18.0.0; Frida's native bindings and device/ABI support are platform-specific and not verified for this Termux environment.",
+          "Dynamic instrumentation can inspect or modify process behavior; only instrument applications and devices you own or are authorized to assess."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "objection",
@@ -6130,7 +6152,29 @@
       "description": "Runtime mobile app inspection built on Frida.",
       "example": "objection --help",
       "source": "https://github.com/sensepost/objection",
-      "caveat": "Requires a compatible Frida setup and authorized app/device."
+      "caveat": "Requires a compatible Frida setup and authorized app/device.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/sensepost/objection/blob/35c4e2c9e68a0354b21db4833252e0c4acd5bd28/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "35c4e2c9e68a0354b21db4833252e0c4acd5bd28",
+        "source_snapshot_url": "https://github.com/sensepost/objection/blob/35c4e2c9e68a0354b21db4833252e0c4acd5bd28/pyproject.toml",
+        "declared_python_requirement": ">=3.11",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Mobile application/device process selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata requires frida>=16.0.0 and frida-tools>=10.0.0; native Frida bindings and Android/Termux compatibility are not verified.",
+          "Objection performs dynamic mobile-app instrumentation; use only with explicit authorization and avoid exposing application secrets."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "apkleaks",
@@ -6143,7 +6187,27 @@
       "description": "Search Android APKs for embedded endpoints and secrets during defensive review.",
       "example": "apkleaks --help",
       "source": "https://github.com/dwisiswant0/apkleaks",
-      "caveat": "Review results locally; never use discovered secrets to access accounts."
+      "caveat": "Review results locally; never use discovered secrets to access accounts.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/dwisiswant0/apkleaks/blob/dd5271a3f3302732f7ad9f5c36e9704fff49193f/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "dd5271a3f3302732f7ad9f5c36e9704fff49193f",
+        "source_snapshot_url": "https://github.com/dwisiswant0/apkleaks/blob/dd5271a3f3302732f7ad9f5c36e9704fff49193f/pyproject.toml",
+        "declared_python_requirement": ">=3.8",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata loads dependencies from requirements.txt; dependency availability and APK parser behavior on Android are not verified.",
+          "APK string and secret detection is heuristic; protect extracted endpoint names, keys, and other potentially sensitive findings."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "androguard",
@@ -6277,7 +6341,29 @@
       "description": "Cloud security posture assessment for supported cloud providers.",
       "example": "prowler --help",
       "source": "https://github.com/prowler-cloud/prowler",
-      "caveat": "Use authorized cloud credentials and least-privilege roles."
+      "caveat": "Use authorized cloud credentials and least-privilege roles.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/prowler-cloud/prowler/blob/f45173997b8331e6cba3deac78bc2e1043b9281d/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "f45173997b8331e6cba3deac78bc2e1043b9281d",
+        "source_snapshot_url": "https://github.com/prowler-cloud/prowler/blob/f45173997b8331e6cba3deac78bc2e1043b9281d/pyproject.toml",
+        "declared_python_requirement": ">=3.10,<3.14",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Cloud provider APIs and Kubernetes APIs depending on selected provider and checks"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata pins cloud SDKs including boto3/botocore and Kubernetes libraries; the reviewed revision explicitly excludes Python 3.14 and does not establish Android compatibility.",
+          "Cloud audits use credentials and collect sensitive resource/configuration data; least-privilege credentials and explicit account scope are required."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "scoutsuite",
@@ -6290,7 +6376,29 @@
       "description": "Multi-cloud security auditing and configuration review.",
       "example": "scout --help",
       "source": "https://github.com/nccgroup/ScoutSuite",
-      "caveat": "Cloud credentials and reports are sensitive."
+      "caveat": "Cloud credentials and reports are sensitive.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/nccgroup/ScoutSuite/blob/7909f2fc6186063e5c9e7ddef8c4d7d1072c8f3d/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "7909f2fc6186063e5c9e7ddef8c4d7d1072c8f3d",
+        "source_snapshot_url": "https://github.com/nccgroup/ScoutSuite/blob/7909f2fc6186063e5c9e7ddef8c4d7d1072c8f3d/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Cloud provider APIs depending on configured credentials and selected provider"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned setup.py loads dependencies from a separate requirements manifest; current dependency and Android compatibility are not verified.",
+          "Cloud inventory reports can contain sensitive identities, permissions, and infrastructure details; restrict scope and protect output."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kube-hunter",
@@ -6303,7 +6411,29 @@
       "description": "Kubernetes security assessment for authorized clusters.",
       "example": "kube-hunter --help",
       "source": "https://github.com/aquasecurity/kube-hunter",
-      "caveat": "Active probes can affect services; confirm scope."
+      "caveat": "Active probes can affect services; confirm scope.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/aquasecurity/kube-hunter/blob/bc47f08e88ea2a5fb059bf3b8a8edb1aefb4c6cc/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "bc47f08e88ea2a5fb059bf3b8a8edb1aefb4c6cc",
+        "source_snapshot_url": "https://github.com/aquasecurity/kube-hunter/blob/bc47f08e88ea2a5fb059bf3b8a8edb1aefb4c6cc/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Kubernetes API and node endpoints explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned setup.py reads runtime dependencies from setup configuration; their Android compatibility is not verified.",
+          "Kube-hunter performs active Kubernetes security probes; use only against clusters you are authorized to test."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kubeaudit",
@@ -6680,7 +6810,27 @@
       "description": "Memory-forensics framework for supported memory images.",
       "example": "vol --help",
       "source": "https://github.com/volatilityfoundation/volatility3",
-      "caveat": "Use legally obtained images and compatible symbols/plugins."
+      "caveat": "Use legally obtained images and compatible symbols/plugins.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/volatilityfoundation/volatility3/blob/77ff0b1932d77527f850c8ced01d85805ea7bf97/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "77ff0b1932d77527f850c8ced01d85805ea7bf97",
+        "source_snapshot_url": "https://github.com/volatilityfoundation/volatility3/blob/77ff0b1932d77527f850c8ced01d85805ea7bf97/pyproject.toml",
+        "declared_python_requirement": ">=3.8.0",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata declares pefile and optional/native analysis dependencies including yara-python and capstone; Android wheels/builds are not verified.",
+          "Memory-forensics conclusions depend on the memory image, symbols, and plugins; parsing does not independently verify the provenance or completeness of an image."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "metagoofil",
@@ -7216,7 +7366,29 @@
       "description": "Identify risky AWS IAM permissions from IAM policy data for defensive cloud reviews.",
       "example": "cloudsplaining --help",
       "source": "https://github.com/salesforce/cloudsplaining",
-      "caveat": "Handle policy exports as sensitive data; findings need review against actual role usage."
+      "caveat": "Handle policy exports as sensitive data; findings need review against actual role usage.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/salesforce/cloudsplaining/blob/f2ed0ba2ddf6457143203d46971c91ba236b6597/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "f2ed0ba2ddf6457143203d46971c91ba236b6597",
+        "source_snapshot_url": "https://github.com/salesforce/cloudsplaining/blob/f2ed0ba2ddf6457143203d46971c91ba236b6597/pyproject.toml",
+        "declared_python_requirement": ">=3.10",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "AWS APIs or exported IAM policy data depending on the workflow"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata declares boto3/botocore and rust-just; cloud SDK and native dependency support on Android are not verified.",
+          "IAM findings depend on policy inputs and AWS context; protect cloud credentials and review recommendations before changing permissions."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "puredns",
@@ -7299,7 +7471,27 @@
       "description": "Identify packers, obfuscators and compiler fingerprints in Android APKs.",
       "example": "apkid --help",
       "source": "https://github.com/rednaga/APKiD",
-      "caveat": "Analyze APKs you own or are authorized to examine; Python/native dependency compatibility varies."
+      "caveat": "Analyze APKs you own or are authorized to examine; Python/native dependency compatibility varies.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/rednaga/APKiD/blob/5cb6b2572a2fe1580d7dd2fd807ada5fb6377a12/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "5cb6b2572a2fe1580d7dd2fd807ada5fb6377a12",
+        "source_snapshot_url": "https://github.com/rednaga/APKiD/blob/5cb6b2572a2fe1580d7dd2fd807ada5fb6377a12/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned setup.py requires yara-python-dex>=1.0.1; native YARA bindings and Android build compatibility are not verified.",
+          "Packers/compiler identification is heuristic and can produce false positives or miss unfamiliar formats."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "steghide",
