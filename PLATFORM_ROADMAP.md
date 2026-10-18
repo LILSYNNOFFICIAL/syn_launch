@@ -73,6 +73,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 - [x] Add a repository-hosted wiki under `wiki/` with installation, compatibility, lifecycle, security, troubleshooting, and contributor pages.
 - [x] Document the enabled [GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/wiki) and clarify that the repository `wiki/` folder requires explicit synchronization to update the published wiki.
+- [x] Add `scripts/sync_github_wiki.sh`, a dry-run-first publisher that converts local Markdown links and can push the versioned pages when run with existing GitHub credentials.
 - [x] Document the physical-device test as a historical baseline tied to its exact commit, not a current release guarantee.
 - [x] Add an explicit single-tool bounded `--smoke-test NAME_OR_ID` mode, privately persist probe outcomes, and expose saved evidence in report schema 3 without changing device-validation status.
 - [x] Add CI coverage for the bounded Python runtime smoke test and schema-3 compatibility report.
