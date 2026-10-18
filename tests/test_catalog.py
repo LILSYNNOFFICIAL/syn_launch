@@ -211,6 +211,30 @@ class CatalogTests(unittest.TestCase):
                 self.assertEqual(report["summary"]["smoke_tested_entries"], 1)
                 self.assertEqual(report["tools"][0]["device_validation"], "not_run")
 
+    def test_compatibility_report_marks_replaced_binary_evidence_stale(self):
+        import tempfile
+        from unittest.mock import patch
+        fake = {
+            "id": "stale-tool", "name": "Stale Tool", "category": "Test",
+            "executable": "stale-tool", "install_kind": "manual", "package": None,
+            "caveat": "Test-only entry."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)):
+                APP.save_private_json(APP.smoke_evidence_path(), {
+                    "stale-tool": {
+                        "tool_id": "stale-tool", "status": "passed",
+                        "path": "/old/path/stale-tool",
+                        "binary_identity": {"size_bytes": 1, "mtime_ns": 1}
+                    }
+                })
+                with patch.object(APP.shutil, "which", return_value="/new/path/stale-tool"), patch.object(
+                    APP, "executable_identity", return_value={"size_bytes": 2, "mtime_ns": 2}
+                ):
+                    report = APP.compatibility_report({"tools": [fake], "categories": ["Test"]})
+                self.assertEqual(report["tools"][0]["smoke_test"], "stale_evidence")
+                self.assertEqual(report["summary"]["smoke_tested_entries"], 0)
+
     def test_check_cli(self):
         result = subprocess.run([sys.executable, str(ROOT / "main.py"), "--check"], capture_output=True, text=True, timeout=15)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
