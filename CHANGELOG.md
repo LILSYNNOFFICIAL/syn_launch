@@ -5,9 +5,15 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 ## Unreleased
 
 ### Compatibility evidence
-- Expanded structured, source-linked compatibility declarations to 75 catalog entries spanning 60 distinct upstream Termux package recipe/subpackage directories.
+- Expanded structured, source-linked compatibility declarations to 82 catalog entries spanning 64 distinct upstream Termux package recipe/subpackage directories, including Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, and OpenSSH keyscan.
 - Added an explicit evidence-scope field and stricter schema validation for compatibility declarations.
 - Kept recipe presence, catalog installability, PATH discovery, smoke-test outcome, and device validation as separate evidence states.
+
+### Authorized workflow planning
+- Added dry-run JSON plans for web/API review, mobile-app review, local device/Termux configuration audit, and assessment reporting.
+- Require an explicit scope and literal boolean authorization confirmation before a plan can be emitted.
+- Plans include stop conditions and explicitly record that no network actions or subprocesses were executed.
+- Added CLI integration and regression tests for authorization handling, invalid scopes, and dry-run behavior. The planner does not execute assessments or verify authorization.
 
 ### Bounded smoke testing
 - Added `python main.py --smoke-test NAME_OR_ID` for one explicitly selected catalog entry.
