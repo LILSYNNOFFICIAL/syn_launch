@@ -35,7 +35,22 @@
       "description": "Distributed version control for source code, change history, and repository collaboration.",
       "example": "git status",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/git",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Git's Termux package recipe is the source for the install route; no claim that every Git workflow is available on every Android device.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "curl",
@@ -48,7 +63,22 @@
       "description": "HTTP client for API testing, response headers, TLS troubleshooting, and downloads.",
       "example": "curl -I https://example.com",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/curl",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "curl's Termux package recipe is the source for the install route; TLS backends and build features can vary by package build.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "wget",
@@ -61,7 +91,22 @@
       "description": "Command-line file downloader with support for common HTTP and FTP workflows.",
       "example": "wget --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/wget",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "wget's Termux package recipe is the source for the install route; network access and certificates depend on device configuration.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "jq",
@@ -74,7 +119,22 @@
       "description": "Parse, filter, and transform JSON from APIs, logs, and command-line pipelines.",
       "example": "jq --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/jq",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "jq's Termux package recipe is the source for the install route; the declaration does not validate a specific installed binary.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "ripgrep",
@@ -87,7 +147,22 @@
       "description": "Fast recursive text search for source code, logs, and forensic notes.",
       "example": "rg --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/ripgrep",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "ripgrep's Termux package recipe is the source for the install route; this is not a functional test of an installed executable.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "fd",
@@ -165,7 +240,22 @@
       "description": "SSH client and key-management tools for authorized remote administration.",
       "example": "ssh --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/openssh",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "OpenSSH's Termux package recipe is the source for the install route; daemon use, key storage, and network reachability depend on device settings.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "rsync",
@@ -230,7 +320,22 @@
       "description": "Inspect and query SQLite databases from the terminal.",
       "example": "sqlite3 --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/sqlite",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "SQLite's Termux package recipe is the source for the install route; database file access remains subject to Android storage permissions.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "python",
@@ -243,7 +348,22 @@
       "description": "Python runtime for scripts and Python-based security utilities.",
       "example": "python --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/python",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Python's Termux package recipe is the source for the install route; third-party wheels and native modules may not support Android.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "node-js",
@@ -256,7 +376,22 @@
       "description": "JavaScript runtime and npm ecosystem for developer and security tools.",
       "example": "node --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/nodejs",
+        "evidence_kind": "upstream Termux package recipe",
+        "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Node.js's Termux package recipe is the source for the install route; native npm dependencies may require Android-specific builds.",
+          "Repository availability, Android version, architecture, and installed package revision may change the result."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "ruby",
