@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 228, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 231, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -180,6 +180,18 @@ jobs:
               assert metadata["declared_rust_requirement"] == rust_requirement, tool
               assert metadata["source_revision"] == source_revision, tool
               assert metadata["source_snapshot_url"].endswith("/Cargo.toml"), tool
+          expected_native_metadata = {
+              "massdns": ("30c380908b4f9afd0931d3d83f85884844831846", "upstream C build metadata (Makefile)", "/Makefile"),
+              "lynis": ("9319416fa0726369ab0a48f686155a90363f3f9c", "upstream project runtime documentation (README.md)", "/README.md"),
+              "zmap": ("7268b1a2204bc9231efefa27ba7cb2fa56717979", "upstream CMake build metadata (CMakeLists.txt)", "/CMakeLists.txt"),
+          }
+          for tool_id, (source_revision, evidence_kind, suffix) in expected_native_metadata.items():
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              metadata = tool["compatibility_metadata"]
+              assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
+              assert metadata["source_revision"] == source_revision, tool
+              assert metadata["evidence_kind"] == evidence_kind, tool
+              assert metadata["source_snapshot_url"].endswith(suffix), tool
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
