@@ -46,12 +46,13 @@ python main.py --search nuclei
 python main.py --category "Mobile App Security"
 python main.py --tool Nmap
 python main.py --compatibility-report > compatibility-report.json
+python main.py --smoke-test python
 ~~~
 
 - `--check` validates the catalog and reports a concise runtime summary.
 - `--doctor` reports architecture, Android/Termux signals, process UID, free storage, available runtimes, and catalog install-method counts.
 - `--profile` prints a machine-readable JSON runtime profile. Detection signals do not certify individual tools as compatible.
-- `--compatibility-report` prints report schema 2 JSON for every catalog entry, separating declared installability, PATH detection, optional compatibility metadata, smoke-test evidence, and device-validation evidence. Missing compatibility metadata is reported as `not_assessed`; smoke tests, device validation, and functional verification remain `not_run` unless separately evidenced. It does not execute any cataloged tool. A PATH match is discovery only, not proof of installation health or compatibility.
+- `--compatibility-report` prints report schema 3 JSON for every catalog entry, separating declared installability, PATH detection, optional compatibility metadata, smoke-test evidence, and device-validation evidence. Missing compatibility metadata is reported as `not_assessed`. The report itself never executes cataloged tools; it incorporates only previously saved smoke-test evidence. Use `--smoke-test NAME_OR_ID` to explicitly run bounded `--version`/`--help` probes for one selected entry. A passing probe confirms only that a help/version response exited successfully, not that tool features work or the device is compatible. Device validation and full functional verification remain separate. A PATH match is discovery only, not proof of installation health or compatibility.
 - Bulk installer actions run a preflight that checks free storage, selected package/module counts, and required package-manager/runtime commands before attempting installation. Low or unknown storage and missing runtimes are disclosed; warnings require an explicit `CONTINUE`. This is advisory, does not estimate exact download sizes, and does not verify tool functionality. The latest report is saved privately to `~/.syn_launch/last_preflight.json`. Install summaries also capture the most recent installer subprocess command, label, exit code, timeout/launch failure, timestamps, and bounded-output metadata when a subprocess actually ran. A missing exit code is expected for pre-existing PATH matches or validation failures that never launched a subprocess. Each batch record preserves the requested catalog package and any explicitly pinned Go module version. After each operation attempt, whether it returned success or failure, SYN_LAUNCH queries installed metadata using `dpkg-query` for Termux packages and the isolated environment's Python `importlib.metadata` API for Python packages, emitting only the version string. A resolved version is recorded only when the package manager returns version metadata; query failures, missing packages, and unsupported package managers remain explicit, and this metadata is not a functional test. Go module versions are read from bounded `go version -m` build metadata without launching the tool; Cargo versions come from Cargo's local install metadata, and npm versions come from the installed package's `package.json`. Cargo metadata reads are capped at 2 MiB, npm package metadata at 1 MiB, and the npm global-root query at 4 KiB. Ambiguous Cargo versions are left unresolved. Batch summaries include a bounded metadata-only post-install status that never executes the cataloged tool; `verification` remains `not_run`. The selected-tool menu supports explicitly confirmed updates for Termux packages, isolated Python packages, Go modules, Cargo crates, and global npm packages, plus uninstall for Termux packages, isolated Python packages, Cargo crates, and global npm packages. Go/manual/root uninstall remains unsupported until package ownership can be established safely. Each attempt writes a private JSONL lifecycle audit record with before/after metadata and subprocess evidence. Updates are not automatically reversible, may alter dependencies, and a successful package-manager exit is not a functional test.
 - `--list` lists the catalog and current PATH-based status.
 - `--search` searches tool names, categories, and descriptions.
@@ -69,7 +70,7 @@ python main.py --compatibility-report > compatibility-report.json
 - [Development and contributing](wiki/Development-and-Contributing.md)
 - [Platform roadmap](PLATFORM_ROADMAP.md)
 
-The catalog now includes source-backed compatibility declarations for nine core Termux packages. These identify the upstream Termux package recipe and state the intended platform constraints; they are **not** evidence that a particular tool has been installed, smoke-tested, or validated on a device. The compatibility report keeps those evidence levels separate.
+The catalog now includes source-backed compatibility declarations for **75 catalog entries across 60 distinct Termux package recipes/subpackage definitions**. These links establish that a recipe is present in the upstream repository tree; they do not establish current repository availability, ABI support on a particular phone, successful installation, or runtime functionality. The compatibility report keeps those evidence levels separate.
 
 ## Personal catalog and favorites
 
@@ -173,6 +174,7 @@ python main.py --check
 python main.py --doctor
 python main.py --profile
 python main.py --compatibility-report > compatibility-report.json
+python main.py --smoke-test python
 python -m unittest discover -s tests -v
 ~~~
 
