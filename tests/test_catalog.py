@@ -53,9 +53,15 @@ class CatalogTests(unittest.TestCase):
             self.assertIs(type(metadata["root_required"]), bool)
             self.assertIsInstance(metadata["known_blockers"], list)
 
+    def test_compatibility_coverage_and_unassessed_entries_are_explicit(self):
+        declared = [tool for tool in self.tools if tool.get("compatibility")]
+        unassessed = {tool["id"] for tool in self.tools if not tool.get("compatibility")}
+        self.assertEqual(len(declared), 266)
+        self.assertEqual(unassessed, {"burp-suite", "wappalyzer", "dnsgen"})
+
     def test_compatibility_declarations_pin_reproducible_source_snapshots(self):
         declared = [tool for tool in self.tools if tool.get("compatibility")]
-        self.assertGreaterEqual(len(declared), 95)
+        self.assertGreaterEqual(len(declared), 266)
         for tool in declared:
             with self.subTest(tool=tool["id"]):
                 metadata = tool["compatibility"]
