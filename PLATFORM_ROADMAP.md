@@ -13,7 +13,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 ## Stage 2: Compatibility metadata
 
-- [x] Maintain 88 source-backed declarations: 84 Termux recipe-backed entries across 66 recipes/subpackage definitions pinned to revision `e85983636adcf748134c3feb1df27f44e78322e1`, plus four pinned upstream Python packaging-metadata reviews (pip-audit, yamllint, dirsearch, Sherlock). Each records evidence scope and blockers; none is device verification.
+- [x] Maintain 88 source-backed declarations: 82 Termux recipe-backed entries from revision `e85983636adcf748134c3feb1df27f44e78322e1`, two root-packages recipe entries from revision `06591fc024101b04095ec4417d51907512b46e3c`, plus four pinned upstream Python packaging-metadata reviews (pip-audit, yamllint, dirsearch, Sherlock). Each records evidence scope and blockers; none is device verification.
 - [ ] Expand reviewed support declarations across additional tools and document per-tool API/service dependencies where upstream sources establish them.
 - [x] Keep unknown compatibility explicitly unknown; never infer "works" merely because a package exists or an executable is in PATH.
 - [x] Add a report that separates catalog installability, PATH evidence, compatibility assessment, smoke-test evidence, and device-validation evidence.
