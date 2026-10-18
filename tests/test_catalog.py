@@ -536,6 +536,80 @@ class CatalogTests(unittest.TestCase):
         self.assertIsNone(result["resolved_version"])
         self.assertEqual(result["version_evidence"], "invalid_package_path")
 
+    def test_uninstall_cancelled_does_not_run_package_manager_and_audits(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {"id":"sample", "name":"Sample", "install_kind":"pkg", "package":"sample-package", "executable":"sample"}
+        original_state = APP.STATE_DIR
+        with tempfile.TemporaryDirectory() as tmp:
+            try:
+                APP.STATE_DIR = Path(tmp)
+                with patch.object(APP, "installed", return_value=True), \\
+                     patch.object(APP, "collect_resolved_version", side_effect=[
+                         {"resolved_version":"1.2.3","version_evidence":"package_manager_metadata"},
+                         {"resolved_version":"1.2.3","version_evidence":"package_manager_metadata"},
+                     ]), \\
+                     patch.object(APP, "run") as run, \\
+                     patch.object(APP, "append_lifecycle_event", wraps=APP.append_lifecycle_event) as audit:
+                    result = APP.uninstall_one(tool, confirmed=False)
+                self.assertFalse(result)
+                run.assert_not_called()
+                audit.assert_called_once()
+                event = audit.call_args.args[0]
+                self.assertEqual(event["status"], "cancelled_not_confirmed")
+                self.assertEqual(event["operation"], "uninstall")
+            finally:
+                APP.STATE_DIR = original_state
+
+    def test_uninstall_uses_package_manager_and_records_exit_evidence(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {"id":"sample", "name":"Sample", "install_kind":"cargo", "package":"sample-crate", "executable":"sample"}
+        original_state = APP.STATE_DIR
+        with tempfile.TemporaryDirectory() as tmp:
+            try:
+                APP.STATE_DIR = Path(tmp)
+                command_result = {"command":["cargo","uninstall","sample-crate"],"exit_code":0,"timed_out":False,"launch_error":None}
+                with patch.object(APP, "installed", side_effect=[True, False]), \\
+                     patch.object(APP, "collect_resolved_version", side_effect=[
+                         {"resolved_version":"1.2.3","version_evidence":"package_manager_metadata"},
+                         {"resolved_version":None,"version_evidence":"not_found"},
+                     ]), \\
+                     patch.object(APP.shutil, "which", return_value="/usr/bin/cargo"), \\
+                     patch.object(APP, "run", return_value=True) as run, \\
+                     patch.object(APP, "LAST_COMMAND_RESULT", command_result):
+                    result = APP.uninstall_one(tool, confirmed=True)
+                self.assertTrue(result)
+                run.assert_called_once_with(["cargo","uninstall","sample-crate"], "Removing Cargo-installed package sample-crate", 900)
+                events = [json.loads(line) for line in (Path(tmp)/"lifecycle_audit.jsonl").read_text(encoding="utf-8").splitlines()]
+                self.assertEqual(len(events), 1)
+                self.assertEqual(events[0]["status"], "operation_succeeded")
+                self.assertEqual(events[0]["exit_code"], 0)
+                self.assertEqual(events[0]["version_before"]["resolved_version"], "1.2.3")
+                self.assertIsNone(events[0]["version_after"]["resolved_version"])
+            finally:
+                APP.STATE_DIR = original_state
+
+    def test_uninstall_refuses_unsupported_go_and_never_runs_command(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {"id":"sample", "name":"Sample", "install_kind":"go", "package":"example.org/sample@v1.2.3", "executable":"sample"}
+        original_state = APP.STATE_DIR
+        with tempfile.TemporaryDirectory() as tmp:
+            try:
+                APP.STATE_DIR = Path(tmp)
+                with patch.object(APP, "installed", return_value=True), \\
+                     patch.object(APP, "collect_resolved_version", return_value={"resolved_version":None,"version_evidence":"not_supported"}), \\
+                     patch.object(APP, "run") as run:
+                    result = APP.uninstall_one(tool, confirmed=True)
+                self.assertFalse(result)
+                run.assert_not_called()
+                event = json.loads((Path(tmp)/"lifecycle_audit.jsonl").read_text(encoding="utf-8").splitlines()[0])
+                self.assertEqual(event["status"], "unsupported")
+                self.assertIsNone(event["command"])
+            finally:
+                APP.STATE_DIR = original_state
+
     def test_version_metadata_is_collected_even_if_operation_failed(self):
         import tempfile
         import contextlib
