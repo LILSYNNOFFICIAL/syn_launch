@@ -47,7 +47,7 @@ run_check "Python syntax" "python-syntax.log" "$PYTHON_BIN" -m py_compile main.p
 run_check "Installer shell syntax" "installer-syntax.log" bash -n install.sh
 run_check "Device-check shell syntax" "device-check-syntax.log" bash -n device_check.sh
 run_check "Catalog JSON syntax" "catalog-json.log" "$PYTHON_BIN" -m json.tool catalog.json
-run_check "Unit and regression tests" "unit-tests.log" "$PYTHON_BIN" -m unittest discover -s tests -v
+run_check "Unit and regression tests" "unit-tests.log" env -u SYN_LAUNCH_HOME "$PYTHON_BIN" -m unittest discover -s tests -v
 run_check "Runtime check" "check.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --check
 run_check "Detailed diagnostics" "doctor.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --doctor
 run_check "Structured environment profile" "profile.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --profile
