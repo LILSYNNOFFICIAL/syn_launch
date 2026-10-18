@@ -240,6 +240,48 @@ class WorkflowAdapterTests(unittest.TestCase):
         self.assertEqual(report["request_status"], "request_rejected")
         self.assertEqual(report["error_type"], "TargetAddressRejected")
 
+    def test_web_api_adapter_fails_closed_when_dns_has_mixed_public_and_private_answers(self):
+        mixed_answer = [
+            (2, 1, 6, "", ("93.184.216.34", 443)),
+            (2, 1, 6, "", ("10.0.0.8", 443)),
+        ]
+        with patch("workflow_adapters.socket.getaddrinfo", return_value=mixed_answer), patch(
+            "workflow_adapters._PinnedHTTPSConnection"
+        ) as connection:
+            report = run_web_api_review("https://staging.example.test/")
+        connection.assert_not_called()
+        self.assertEqual(report["request_status"], "request_rejected")
+        self.assertEqual(report["error_type"], "TargetAddressRejected")
+
+    def test_web_api_adapter_rejects_ipv6_loopback_and_empty_dns_answers(self):
+        cases = (
+            ([(10, 1, 6, "", ("::1", 443, 0, 0))], "request_rejected", "TargetAddressRejected"),
+            ([], "request_failed", "OSError"),
+        )
+        for dns_answer, expected_status, expected_error in cases:
+            with self.subTest(dns_answer=dns_answer):
+                with patch("workflow_adapters.socket.getaddrinfo", return_value=dns_answer), patch(
+                    "workflow_adapters._PinnedHTTPSConnection"
+                ) as connection:
+                    report = run_web_api_review("https://staging.example.test/")
+                connection.assert_not_called()
+                self.assertEqual(report["request_status"], expected_status)
+                self.assertEqual(report["error_type"], expected_error)
+
+    def test_web_api_adapter_rejects_malformed_scope_before_dns(self):
+        invalid = (
+            "https://staging.example.test:invalid/",
+            "https://staging.example.test/path with spaces",
+            "https://staging.example.test/path\\nheader",
+            "https://staging.example.test/" + ("a" * 2049),
+        )
+        for scope in invalid:
+            with self.subTest(scope=scope[:80]):
+                with patch("workflow_adapters.socket.getaddrinfo") as resolver:
+                    with self.assertRaises(ValueError):
+                        run_web_api_review(scope)
+                resolver.assert_not_called()
+
     def test_web_api_adapter_reports_bounded_request_failure(self):
         class Connection:
             def __init__(self, *args, **kwargs):
