@@ -41,6 +41,31 @@ class CatalogTests(unittest.TestCase):
         for t in self.tools:
             self.assertTrue(t["source"].startswith("https://"), t["name"])
 
+    def test_source_backed_compatibility_metadata_is_explicit_and_not_verified(self):
+        declared = [tool for tool in self.tools if tool.get("compatibility")]
+        self.assertGreaterEqual(len(declared), 9)
+        for tool in declared:
+            metadata = tool["compatibility"]
+            self.assertEqual(metadata["status"], "source_documented_not_device_verified", tool["name"])
+            self.assertTrue(metadata["install_source"].startswith("https://"), tool["name"])
+            self.assertIn("not_device_verified", metadata["status"])
+            self.assertIs(type(metadata["root_required"]), bool)
+            self.assertIsInstance(metadata["known_blockers"], list)
+
+    def test_catalog_rejects_invalid_compatibility_evidence(self):
+        broken = copy.deepcopy(self.data)
+        tool = next(t for t in broken["tools"] if t.get("compatibility"))
+        tool["compatibility"]["install_source"] = "http://example.invalid/package"
+        with self.assertRaisesRegex(ValueError, "compatibility evidence must be a valid HTTPS URL"):
+            APP.validate_catalog(broken)
+
+    def test_catalog_rejects_incomplete_compatibility_metadata(self):
+        broken = copy.deepcopy(self.data)
+        tool = next(t for t in broken["tools"] if t.get("compatibility"))
+        del tool["compatibility"]["root_required"]
+        with self.assertRaisesRegex(ValueError, "incomplete compatibility metadata"):
+            APP.validate_catalog(broken)
+
     def test_catalog_rejects_duplicate_ids(self):
         broken = copy.deepcopy(self.data)
         broken["tools"].append(copy.deepcopy(broken["tools"][0]))
