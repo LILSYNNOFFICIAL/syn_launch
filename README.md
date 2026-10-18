@@ -79,6 +79,7 @@ python main.py --smoke-test python
 - [Development and contributing](wiki/Development-and-Contributing.md)
 - [Workflow planning and bounded adapters](wiki/Workflow-Planning.md)
 - [Optional Linux Environments](wiki/Optional-Linux-Environments.md)
+- [GitHub Wiki publishing guide](wiki/Publishing-GitHub-Wiki.md)
 - [Platform roadmap](PLATFORM_ROADMAP.md)
 - [Changelog](CHANGELOG.md)
 
