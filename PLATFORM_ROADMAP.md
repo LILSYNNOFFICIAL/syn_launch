@@ -13,7 +13,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 
 ## Stage 2: Compatibility metadata
 
-- [x] Expand source-backed compatibility declarations to 82 catalog entries across 64 Termux package recipes/subpackage definitions, with HTTPS evidence links, explicit evidence scope, root/hardware/external-service fields, architecture caveats, and known blockers. These are not device verification.
+- [x] Expand source-backed compatibility declarations to 84 catalog entries across 66 Termux package recipes/subpackage definitions, with HTTPS evidence links, explicit evidence scope, root/hardware/external-service fields, architecture caveats, and known blockers. These are not device verification.
 - [ ] Expand reviewed support declarations across additional tools and document per-tool API/service dependencies where upstream sources establish them.
 - [x] Keep unknown compatibility explicitly unknown; never infer "works" merely because a package exists or an executable is in PATH.
 - [x] Add a report that separates catalog installability, PATH evidence, compatibility assessment, smoke-test evidence, and device-validation evidence.
