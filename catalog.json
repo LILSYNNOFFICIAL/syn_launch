@@ -1764,7 +1764,34 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "email_validator --help",
       "source": "https://pypi.org/project/email-validator/",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/JoshData/python-email-validator/blob/4f3293942e624a7630083c66930127102433ccb1/setup.cfg",
+        "evidence_kind": "upstream Python packaging metadata (setup.cfg)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "4f3293942e624a7630083c66930127102433ccb1",
+        "source_snapshot_url": "https://github.com/JoshData/python-email-validator/blob/4f3293942e624a7630083c66930127102433ccb1/setup.cfg",
+        "declared_python_requirement": ">=3.10 (upstream classifiers include Python 3.10 through 3.15)",
+        "declared_dependencies": [
+          "dnspython>=2.0.0",
+          "idna>=2.0.0"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "DNS resolution service if deliverability checks are enabled."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream setup.cfg declares Python >=3.10 and dependencies dnspython/idna, but does not establish Android/Termux support.",
+          "Deliverability checks require DNS/network access; syntax-only validation has different behavior.",
+          "Compatible dependency wheels and runtime behavior remain unverified on the target device."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "dnstwist",
@@ -4998,7 +5025,30 @@
       "description": "Audit SSH server/client configuration and algorithm support.",
       "example": "ssh-audit --help",
       "source": "https://github.com/jtesta/ssh-audit",
-      "caveat": "Audit only SSH services you own or have permission to assess."
+      "caveat": "Audit only SSH services you own or have permission to assess.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/jtesta/ssh-audit/blob/1df77bfbb664ec435cd662b938c1080012df3354/setup.cfg",
+        "evidence_kind": "upstream Python packaging metadata (setup.cfg)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "1df77bfbb664ec435cd662b938c1080012df3354",
+        "source_snapshot_url": "https://github.com/jtesta/ssh-audit/blob/1df77bfbb664ec435cd662b938c1080012df3354/setup.cfg",
+        "declared_python_requirement": ">=3.10,<4 (upstream classifiers include Python 3.10 through 3.15)",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "The explicitly scoped SSH server when the operator chooses to run an audit."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Audit only SSH services you own or have permission to assess.",
+          "Upstream setup.cfg declares Python >=3.10,<4 and lists Python 3.10 through 3.15; this does not prove Android/Termux compatibility.",
+          "This tool actively connects to SSH servers when run; use only an explicitly authorized host and account for network reachability and rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "smuggler",
