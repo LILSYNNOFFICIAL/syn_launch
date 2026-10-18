@@ -59,22 +59,18 @@ print("Synced repository Markdown into the temporary wiki checkout. Wiki-only pa
 PY
 
 cd "$TMP/wiki"
-if [[ -z "$(git status --porcelain)" ]]; then
+git add -- '*.md'
+if git diff --cached --quiet; then
   echo "Published wiki already matches repository wiki/ Markdown."
   exit 0
 fi
 
-git --no-pager diff --stat
+git --no-pager diff --cached --stat
 if [[ "$MODE" != "--push" ]]; then
   echo "Dry run only. Review changes, then rerun with --push to publish."
   exit 0
 fi
 
-git add -- '*.md'
-if git diff --cached --quiet; then
-  echo "No Markdown changes to publish."
-  exit 0
-fi
 git -c user.name="SYN_LAUNCH Wiki Sync" -c user.email="syn-launch-wiki-sync@users.noreply.github.com" commit -m "docs: sync published wiki from repository documentation"
 git push origin HEAD
 echo "Published wiki pages pushed successfully."
