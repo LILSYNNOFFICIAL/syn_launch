@@ -39,6 +39,19 @@ class WorkflowPlannerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown workflow"):
             build_workflow_plan("arbitrary-command", "localhost", True)
 
+    def test_cli_rejects_http_scope_before_any_network_request(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = tmp
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
+                 "--workflow-run", "web-api-review", "--target-scope", "http://example.test/",
+                 "--authorized"],
+                env=env, capture_output=True, text=True, timeout=10,
+            )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("requires an explicit HTTPS URL", result.stderr)
+
     def test_cli_workflow_run_requires_explicit_authorization(self):
         with tempfile.TemporaryDirectory() as tmp:
             env = os.environ.copy()
@@ -71,13 +84,13 @@ class WorkflowPlannerTests(unittest.TestCase):
             self.assertEqual(report["device_validation"], "not_run")
             self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
 
-    def test_cli_rejects_unimplemented_remote_workflow_execution(self):
+    def test_cli_rejects_workflow_without_approved_adapter(self):
         with tempfile.TemporaryDirectory() as tmp:
             env = os.environ.copy()
             env["SYN_LAUNCH_HOME"] = tmp
             result = subprocess.run(
                 [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
-                 "--workflow-run", "web-api-review", "--target-scope", "https://staging.example.test",
+                 "--workflow-run", "unknown-external-workflow", "--target-scope", "https://staging.example.test",
                  "--authorized"],
                 env=env, capture_output=True, text=True, timeout=10,
             )
