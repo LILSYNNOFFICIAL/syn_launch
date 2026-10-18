@@ -1,12 +1,14 @@
 import json
 import os
 import tempfile
+import time
 import unittest
 import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
 from workflow_adapters import (
+    _resolve_addresses_with_timeout,
     run_device_configuration_audit,
     run_mobile_apk_inventory,
     run_assessment_report,
@@ -154,6 +156,16 @@ class WorkflowAdapterTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "Evidence JSON must be"):
                     run_assessment_report(str(evidence))
 
+    def test_dns_resolution_has_an_independent_timeout(self):
+        def slow_resolution(*args, **kwargs):
+            time.sleep(0.08)
+            return []
+        started = time.monotonic()
+        with patch("workflow_adapters.socket.getaddrinfo", side_effect=slow_resolution):
+            with self.assertRaisesRegex(TimeoutError, "exceeded its time budget"):
+                _resolve_addresses_with_timeout("staging.example.test", timeout_seconds=0.01)
+        self.assertLess(time.monotonic() - started, 0.06)
+
     def test_web_api_adapter_sends_one_head_and_filters_headers(self):
         class Response:
             status = 200
@@ -200,6 +212,8 @@ class WorkflowAdapterTests(unittest.TestCase):
         self.assertNotIn("location", report["response"]["headers"])
         self.assertFalse(report["request"]["redirects_followed"])
         self.assertFalse(report["request"]["response_body_read"])
+        self.assertTrue(report["request"]["dns_resolution_bounded"])
+        self.assertEqual(report["request"]["dns_timeout_seconds"], 3)
         self.assertEqual(report["execution"]["request_count"], 1)
 
     def test_web_api_adapter_rejects_unsafe_or_ambiguous_url_scope(self):
