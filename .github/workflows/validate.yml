@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 221, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 224, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -168,12 +168,15 @@ jobs:
           expected_rust = {
               "zizmor": ("1.97.0", "ea0f7ac34e131fe9491e946e81b3d8fbee2b5171"),
               "yara-x": ("1.95.0", "649cd3bb08e1c4ecc1524cc016c7aa27a75d2193"),
+              "age-plugin-yubikey": ("1.70", "cafbc75fbd309e6f7ab62749052f98a91a89764e"),
+              "pwninit": ("No explicit rust-version field is declared in the pinned Cargo.toml.", "0c123dd79c2ebfc1dca68aeec0dc2b840c066c32"),
+              "rusthound-ce": ("1.85", "bb9e7522106726b85f9bf5f7ca2d598f9dc87ce8"),
           }
           for tool_id, (rust_requirement, source_revision) in expected_rust.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
               assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
-              assert metadata["evidence_kind"] == "upstream Rust workspace metadata (Cargo.toml)", tool
+              assert metadata["evidence_kind"] in ("upstream Rust workspace metadata (Cargo.toml)", "upstream Rust package metadata (Cargo.toml)"), tool
               assert metadata["declared_rust_requirement"] == rust_requirement, tool
               assert metadata["source_revision"] == source_revision, tool
               assert metadata["source_snapshot_url"].endswith("/Cargo.toml"), tool
