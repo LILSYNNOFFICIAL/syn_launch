@@ -4772,7 +4772,30 @@
       "description": "Use supported YubiKey PIV keys with age encryption; requires compatible hardware.",
       "example": "age-plugin-yubikey --help",
       "source": "https://github.com/str4d/age-plugin-yubikey",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Rust package/workspace metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/str4d/age-plugin-yubikey/blob/cafbc75fbd309e6f7ab62749052f98a91a89764e/Cargo.toml",
+        "evidence_kind": "upstream Rust package metadata (Cargo.toml)",
+        "evidence_scope": "Confirms only the declared Rust toolchain requirement and dependency declarations in the pinned upstream Cargo.toml. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "cafbc75fbd309e6f7ab62749052f98a91a89764e",
+        "source_snapshot_url": "https://github.com/str4d/age-plugin-yubikey/blob/cafbc75fbd309e6f7ab62749052f98a91a89764e/Cargo.toml",
+        "declared_rust_requirement": "1.70",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [
+          "YubiKey or supported PIV hardware token"
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Cargo.toml declares Rust 1.70 as its minimum version; target-specific build behavior remains unverified.",
+          "The pcsc and yubikey dependencies require supported smart-card/PIV access; Android hardware APIs and USB/NFC connectivity may not expose the required interface.",
+          "A compatible YubiKey or PIV token is required for hardware-backed key operations; metadata does not verify token support."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "rkhunter",
@@ -7623,7 +7646,28 @@
       "description": "Prepare local binary-exploitation challenge environments and libc/loader files.",
       "example": "See the upstream README for usage.",
       "source": "https://github.com/io12/pwninit",
-      "caveat": "For CTFs and binaries you are authorized to analyze; native dependencies vary."
+      "caveat": "For CTFs and binaries you are authorized to analyze; native dependencies vary.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Rust package/workspace metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/io12/pwninit/blob/0c123dd79c2ebfc1dca68aeec0dc2b840c066c32/Cargo.toml",
+        "evidence_kind": "upstream Rust package metadata (Cargo.toml)",
+        "evidence_scope": "Confirms only the declared Rust toolchain requirement and dependency declarations in the pinned upstream Cargo.toml. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "0c123dd79c2ebfc1dca68aeec0dc2b840c066c32",
+        "source_snapshot_url": "https://github.com/io12/pwninit/blob/0c123dd79c2ebfc1dca68aeec0dc2b840c066c32/Cargo.toml",
+        "declared_rust_requirement": "No explicit rust-version field is declared in the pinned Cargo.toml.",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Cargo.toml does not declare a minimum Rust version or Android/Termux support.",
+          "The dependency graph includes compression, archive, ELF parsing, and HTTP components; Android build behavior is not verified.",
+          "Challenge setup may download files and modify a local workspace; review challenge sources and operate only on authorized local binaries."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "pwndbg",
@@ -8094,7 +8138,28 @@
       "description": "Collect Active Directory relationship data for authorized BloodHound assessments.",
       "example": "See upstream installation and usage documentation.",
       "source": "https://github.com/g0h4n/RustHound-CE",
-      "caveat": "Directory collection accesses sensitive identity data; obtain explicit scope and protect output files."
+      "caveat": "Directory collection accesses sensitive identity data; obtain explicit scope and protect output files.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Rust package/workspace metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/g0h4n/RustHound-CE/blob/bb9e7522106726b85f9bf5f7ca2d598f9dc87ce8/Cargo.toml",
+        "evidence_kind": "upstream Rust package metadata (Cargo.toml)",
+        "evidence_scope": "Confirms only the declared Rust toolchain requirement and dependency declarations in the pinned upstream Cargo.toml. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "bb9e7522106726b85f9bf5f7ca2d598f9dc87ce8",
+        "source_snapshot_url": "https://github.com/g0h4n/RustHound-CE/blob/bb9e7522106726b85f9bf5f7ca2d598f9dc87ce8/Cargo.toml",
+        "declared_rust_requirement": "1.85",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Cargo.toml declares Rust 1.85 as its minimum; Android/Termux compilation and runtime are not verified.",
+          "LDAP, Kerberos, SMB, and Windows-oriented dependencies may have target-specific build or runtime constraints.",
+          "Directory collection requires an explicitly authorized Active Directory environment and can produce sensitive identity data; protect credentials and output."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "pacu",
