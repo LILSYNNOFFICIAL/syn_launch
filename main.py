@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse, json, os, platform, re, selectors, shutil, signal, subprocess, sys, time
 from pathlib import Path
 from urllib.parse import urlsplit
+from workflow_planner import WORKFLOWS, build_workflow_plan
 
 APP_DIR = Path(__file__).resolve().parent
 CATALOG_PATH = APP_DIR / "catalog.json"
@@ -1272,10 +1273,28 @@ def main():
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
     parser.add_argument("--tool",metavar="NAME",help="show status and local help for a tool")
+    parser.add_argument("--workflow-list",action="store_true",help="list available dry-run assessment workflow plans")
+    parser.add_argument("--workflow-plan",metavar="WORKFLOW_ID",help="emit a scope-bound dry-run plan; does not run tools")
+    parser.add_argument("--target-scope",metavar="SCOPE",help="explicit assets/environment covered by a workflow plan")
+    parser.add_argument("--authorized",action="store_true",help="confirm you have authorization for the declared scope")
     args=parser.parse_args()
     try: data=load_catalog()
     except (OSError,json.JSONDecodeError,ValueError) as exc:
         print("Catalog validation failed:",exc,file=sys.stderr); return 2
+    if args.workflow_list:
+        print(json.dumps([{"id": key, "title": value["title"], "purpose": value["purpose"]} for key, value in sorted(WORKFLOWS.items())], indent=2))
+        return 0
+    if args.workflow_plan:
+        if not args.target_scope:
+            print("--workflow-plan requires --target-scope.", file=sys.stderr); return 2
+        if not args.authorized:
+            print("--workflow-plan requires --authorized. This is an operator declaration, not an authorization check.", file=sys.stderr); return 2
+        try:
+            plan = build_workflow_plan(args.workflow_plan, args.target_scope, args.authorized)
+        except ValueError as exc:
+            print("Workflow plan rejected: " + str(exc), file=sys.stderr); return 2
+        print(json.dumps(plan, indent=2, ensure_ascii=False))
+        return 0
     if args.profile: print_environment_profile(data); return 0
     if args.compatibility_report: print_compatibility_report(data); return 0
     if args.smoke_test:
