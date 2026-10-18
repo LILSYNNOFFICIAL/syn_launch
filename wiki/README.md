@@ -15,6 +15,7 @@ SYN_LAUNCH is a mobile-first Termux catalog, installer, and device/runtime diagn
 - [Troubleshooting](Troubleshooting.md)
 - [Development and contributing](Development-and-Contributing.md)
 - [Platform roadmap](../PLATFORM_ROADMAP.md)
+- [Changelog](../CHANGELOG.md)
 
 ## Evidence rule
 
