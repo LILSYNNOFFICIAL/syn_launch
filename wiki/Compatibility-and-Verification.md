@@ -40,6 +40,8 @@ Three additional pinned root-repository recipe reviews cover `iw`, Aircrack-ng, 
 
 Forty-six Go module metadata reviews have been added for subfinder, dnsx, httpx, naabu, gau, waybackurls, katana, unfurl, ffuf, gobuster, PhoneInfoga, Nuclei, Kiterunner, KXSS, CRLFuzz, Interactsh, Tlsx, MapCIDR, Uncover, ASNMap, anew, qsreplace, hakrawler, Chisel, Alterx, Shuffledns, PureDNS, gowitness, kubeaudit, kube-linter, gauplus, TruffleHog, OSV-Scanner, Kerbrute, CloudFox, kubeletctl, Cosign, Terrascan, staticcheck, and Dockle, plus Trivy, Grype, Syft, kube-bench, and Ligolo-ng. Each records the pinned `go.mod` revision and declared Go version. Several recent projects require Go 1.26+; their toolchain requirements and large dependency graphs may exceed the device's installed Go version or build resources. The catalog's `@latest` install selectors remain unpinned, and module metadata does not prove that the current Termux toolchain or dependencies build on the device.
 
+Three native build/runtime reviews cover massdns (C11/Make), Lynis (Unix shell audit), and ZMap (CMake/native networking). These source files do not establish Android support, raw-packet permissions, or successful native builds.
+
 Five Rust package/workspace reviews cover Zizmor, YARA-X, age-plugin-yubikey, pwninit, and RustHound-CE. Their pinned Cargo manifests document Rust 1.97.0, 1.95.0, 1.70, no explicit minimum, and 1.85 respectively. YubiKey hardware access, native dependencies, and directory-network capabilities are not verified on Android/Termux.
 
 
