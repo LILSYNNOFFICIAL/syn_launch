@@ -25,3 +25,4 @@ This is a repository-hosted wiki so pages are versioned with the code. It is not
 
 
 - [Workflow Planning](Workflow-Planning.md): scope-bound dry-run plans, authorization declaration, and safety limits.
+- [Optional Linux Environments](Optional-Linux-Environments.md): documented PRoot and NetHunter editions, capabilities, and limitations.
