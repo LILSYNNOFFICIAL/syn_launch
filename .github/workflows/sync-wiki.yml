@@ -1,0 +1,47 @@
+name: Sync repository docs to GitHub Wiki
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "wiki/**"
+      - "scripts/sync_github_wiki.sh"
+      - ".github/workflows/sync-wiki.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: syn-launch-wiki-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-wiki:
+    name: Publish wiki pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Verify Wiki publishing token
+        env:
+          WIKI_TOKEN: ${{ secrets.SYN_LAUNCH_WIKI_TOKEN }}
+        shell: bash
+        run: |
+          if [[ -z "$WIKI_TOKEN" ]]; then
+            echo "::error::Add a repository Actions secret named SYN_LAUNCH_WIKI_TOKEN. It must be a GitHub token authorized to write to LILSYNNOFFICIAL/syn_launch Wiki."
+            exit 1
+          fi
+
+      - name: Sync all Markdown pages to the Wiki
+        env:
+          WIKI_TOKEN: ${{ secrets.SYN_LAUNCH_WIKI_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SYN_LAUNCH_WIKI_REMOTE="https://x-access-token:${WIKI_TOKEN}@github.com/LILSYNNOFFICIAL/syn_launch.wiki.git"
+          bash scripts/sync_github_wiki.sh --push
