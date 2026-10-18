@@ -427,6 +427,26 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(go["version_specification"], "requested_version")
         self.assertIsNone(go["resolved_version"])
 
+    def test_version_reconciliation_marks_exact_go_version_match(self):
+        tool = {"install_kind":"go", "package":"example.org/sample@v1.2.3"}
+        result = APP.reconcile_requested_version(tool, {"resolved_version":"v1.2.3"})
+        self.assertEqual(result["status"], "exact_match")
+        self.assertEqual(result["comparison_basis"], "exact_string")
+
+    def test_version_reconciliation_marks_explicit_mismatch(self):
+        tool = {"install_kind":"go", "package":"example.org/sample@v1.2.3"}
+        result = APP.reconcile_requested_version(tool, {"resolved_version":"v1.2.4"})
+        self.assertEqual(result["status"], "mismatch")
+        self.assertEqual(result["requested_version"], "v1.2.3")
+        self.assertEqual(result["resolved_version"], "v1.2.4")
+
+    def test_version_reconciliation_never_guesses_for_latest_or_unpinned(self):
+        latest = {"install_kind":"go", "package":"example.org/sample@latest"}
+        unpinned = {"install_kind":"cargo", "package":"sample-crate"}
+        self.assertEqual(APP.reconcile_requested_version(latest, {"resolved_version":"v1.2.3"})["status"], "floating_request")
+        self.assertEqual(APP.reconcile_requested_version(unpinned, {"resolved_version":"1.2.3"})["status"], "not_comparable_unpinned")
+        self.assertEqual(APP.reconcile_requested_version(unpinned, {"resolved_version":None})["status"], "unresolved")
+
     def test_requested_latest_go_version_is_marked_floating(self):
         go = APP.requested_package_evidence({"install_kind":"go","package":"example.org/sample@latest"})
         self.assertEqual(go["requested_version"], "latest")
@@ -652,6 +672,7 @@ class CatalogTests(unittest.TestCase):
                     APP.progress([tool], lambda item: True, "test")
                 entry=json.loads((Path(tmp)/"last_install_summary.json").read_text(encoding="utf-8"))["results"][0]
                 self.assertEqual(entry["post_install_check"]["status"], "metadata_and_executable_present")
+                self.assertEqual(entry["version_reconciliation"]["status"], "not_comparable_unpinned")
                 self.assertEqual(entry["post_install_check"]["check_type"], "metadata_only")
                 self.assertEqual(entry["verification"], "not_run")
         finally:
