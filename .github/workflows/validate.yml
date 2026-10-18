@@ -203,7 +203,7 @@ jobs:
               "mobsf": "08872c8454e59f8a6347c35b46852c9929f5eb5e",
               "pacu": "e597f23ecfb88b82f706c5f0cac9d4577c2af262",
               "metagoofil": "8d50624f1534e63c8bb64ee132d8c2298dba6724",
-              "bloodhound-python-collector": "fd3f322e066d66314bfb31d4ae6f497df587217",
+              "bloodhound-python-collector": "fd3f322e066d66314bfb31d4ae6f497df5872177",
           })
           for tool_id, expected_revision in expected_python_revisions.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
