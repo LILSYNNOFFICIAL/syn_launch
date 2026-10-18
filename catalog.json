@@ -3347,7 +3347,31 @@
       "description": "Lint Dockerfiles for common errors and best practices.",
       "example": "hadolint --help",
       "source": "https://github.com/hadolint/hadolint",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Haskell package metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/hadolint/hadolint/blob/8ae25c05945f030b1ad520f1802e4143e7d0055d/hadolint.cabal",
+        "evidence_kind": "upstream Haskell package metadata (hadolint.cabal)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "8ae25c05945f030b1ad520f1802e4143e7d0055d",
+        "source_snapshot_url": "https://github.com/hadolint/hadolint/blob/8ae25c05945f030b1ad520f1802e4143e7d0055d/hadolint.cabal",
+        "declared_build_requirements": [
+          "GHC 9.10.3 is listed in tested-with metadata",
+          "Cabal build system",
+          "Haskell package dependencies"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Cabal file lists GHC 9.10.3 as the tested compiler; Haskell toolchain availability and build resource requirements on Android/Termux are unverified.",
+          "This source metadata does not establish availability of a prebuilt binary for the target architecture.",
+          "Dockerfile lint findings depend on configured rules and do not prove the resulting image is secure."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "yamllint",
@@ -4858,7 +4882,31 @@
       "description": "Infrastructure-as-code workflow for cloud resources you control.",
       "example": "terraform -help",
       "source": "https://github.com/hashicorp/terraform",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/hashicorp/terraform/blob/44fcc1316e98d4a03cc348c05e6d5ba8e36bf51c/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "44fcc1316e98d4a03cc348c05e6d5ba8e36bf51c",
+        "source_snapshot_url": "https://github.com/hashicorp/terraform/blob/44fcc1316e98d4a03cc348c05e6d5ba8e36bf51c/go.mod",
+        "declared_build_requirements": [
+          "Go 1.26.8 toolchain",
+          "Native build tools required by selected dependencies"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.26.8; the installed Termux Go version and build resource requirements are unverified.",
+          "Terraform provider/plugin workflows may download large binaries and access external cloud APIs; credentials and backend state must be protected.",
+          "Plan/apply operations can create, modify, or delete infrastructure; this metadata does not authorize cloud changes."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_go_requirement": "1.26.8"
+      }
     },
     {
       "id": "ansible",
@@ -5017,7 +5065,31 @@
       "description": "Rootkit checks for supported Unix/Linux hosts; not a reliable stock-Android integrity check.",
       "example": "chkrootkit -h",
       "source": "https://github.com/Magentron/chkrootkit",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Shell/C local-audit metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/Magentron/chkrootkit/blob/c00b5a40f61cc969e56fa2fe3375741c4164c896/README",
+        "evidence_kind": "upstream local-audit runtime documentation (README)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "c00b5a40f61cc969e56fa2fe3375741c4164c896",
+        "source_snapshot_url": "https://github.com/Magentron/chkrootkit/blob/c00b5a40f61cc969e56fa2fe3375741c4164c896/README",
+        "declared_build_requirements": [
+          "POSIX shell",
+          "C compiler for native helper programs",
+          "Host system utilities and privileged visibility for some checks"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README describes a Unix host rootkit checker; Android's filesystem, kernel, and restricted userspace differ substantially.",
+          "Many checks need elevated permissions and host-level visibility that a normal Termux session lacks; results on stock Android may be incomplete or misleading.",
+          "Rootkit checks are heuristic and can produce false positives or false negatives; this is not a reliable standalone Android integrity verdict."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "clamav",
@@ -7993,7 +8065,31 @@
       "description": "Parse and inspect executable formats including ELF, PE, and Mach-O.",
       "example": "See LIEF's official Python and native API documentation.",
       "source": "https://github.com/lief-project/LIEF",
-      "caveat": "Native dependency and wheel support on Android is unverified."
+      "caveat": "Native dependency and wheel support on Android is unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "C/C++ build metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/lief-project/LIEF/blob/15777f106f6220046cf26ee99940d1f56751325e/CMakeLists.txt",
+        "evidence_kind": "upstream CMake build metadata (CMakeLists.txt)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "15777f106f6220046cf26ee99940d1f56751325e",
+        "source_snapshot_url": "https://github.com/lief-project/LIEF/blob/15777f106f6220046cf26ee99940d1f56751325e/CMakeLists.txt",
+        "declared_build_requirements": [
+          "CMake 3.24 or newer",
+          "C and C++ compilers",
+          "Native libraries and optional language-binding toolchains"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned CMake file requires CMake 3.24 and C/C++ compilers; Android/Termux ABI and native dependency support are not verified.",
+          "Python bindings have separate packaging/build requirements; the root CMake project alone does not establish Python package installability.",
+          "Binary-format parsing is input-dependent; analyze untrusted files with resource limits and preserve originals."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "apk-mitm",
