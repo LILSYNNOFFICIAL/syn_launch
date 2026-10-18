@@ -1494,7 +1494,30 @@
       "description": "Search supported public websites for a username's public profiles.",
       "example": "sherlock --help",
       "source": "https://github.com/sherlock-project/sherlock",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/sherlock-project/sherlock/blob/e40a45ec2a074b90703b3b4b842c8a3adbd6ada3/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "e40a45ec2a074b90703b3b4b842c8a3adbd6ada3",
+        "source_snapshot_url": "https://github.com/sherlock-project/sherlock/blob/e40a45ec2a074b90703b3b4b842c8a3adbd6ada3/pyproject.toml",
+        "declared_python_requirement": "^3.9",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check all dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Third-party websites queried by the operator-selected search run."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream pyproject declares Python ^3.9; this does not prove Android/Termux compatibility.",
+          "Dependencies include pandas and openpyxl; compatible wheels/native builds and storage use need device-specific checks.",
+          "Queries may contact many third-party sites; respect each site's terms, rate limits, and privacy expectations."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "maigret",
@@ -1832,7 +1855,30 @@
       "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "dirsearch --help",
       "source": "https://github.com/maurosoria/dirsearch",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/maurosoria/dirsearch/blob/b45e01bb891457d6846e6af0a3755e032f937d78/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "b45e01bb891457d6846e6af0a3755e032f937d78",
+        "source_snapshot_url": "https://github.com/maurosoria/dirsearch/blob/b45e01bb891457d6846e6af0a3755e032f937d78/pyproject.toml",
+        "declared_python_requirement": ">=3.11 (upstream metadata lists Python 3.11 through 3.14)",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check all dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Only the explicitly scoped target endpoint when the operator chooses to run the tool."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream pyproject declares Python >=3.11 but does not establish Android/Termux compatibility.",
+          "Dependencies are declared dynamically and need separate review on the target environment.",
+          "This is an active web path scanner; only run against the exact authorized scope and follow rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ffuf",
@@ -2040,7 +2086,30 @@
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "pip-audit --help",
       "source": "https://github.com/pypa/pip-audit",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/pypa/pip-audit/blob/828e77a4d4aa6bee8d315681db6928771d951a7c/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "828e77a4d4aa6bee8d315681db6928771d951a7c",
+        "source_snapshot_url": "https://github.com/pypa/pip-audit/blob/828e77a4d4aa6bee8d315681db6928771d951a7c/pyproject.toml",
+        "declared_python_requirement": ">=3.10 (upstream metadata lists Python 3.10 through 3.14)",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check all dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Configured vulnerability-data source and package metadata service, depending on audit configuration."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream pyproject declares Python >=3.10 and lists Python 3.14, but does not establish Android/Termux compatibility.",
+          "Dependency tree includes cyclonedx-python-lib, pip-api, requests, CacheControl, and other packages whose Android build/wheel support is not verified here.",
+          "Auditing normally needs a configured vulnerability-data source and package metadata; this catalog review performs no audit or network request."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "safety",
@@ -2228,7 +2297,27 @@
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "yamllint --help",
       "source": "https://github.com/adrienverge/yamllint",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/adrienverge/yamllint/blob/96246fb0d5fba8c8cba48747342de3351ea64bea/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "96246fb0d5fba8c8cba48747342de3351ea64bea",
+        "source_snapshot_url": "https://github.com/adrienverge/yamllint/blob/96246fb0d5fba8c8cba48747342de3351ea64bea/pyproject.toml",
+        "declared_python_requirement": ">=3.10",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check all dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream pyproject declares Python >=3.10; this is not an Android/Termux support statement.",
+          "The dependency list includes PyYAML, whose wheel/build availability must be checked for the device's Python and ABI."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "npm-audit",
@@ -5138,5 +5227,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Each Termux recipe declaration includes a pinned upstream repository revision and a snapshot URL; this proves only that packaging metadata was present at that revision, not current repository availability, successful installation, ABI compatibility, or runtime functionality."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux recipe declarations pin upstream packaging-tree revisions; selected Python entries pin upstream pyproject metadata and report the declared Python requirement only. Neither evidence type proves Android/Termux support, current package availability, installation success, ABI compatibility, or runtime functionality."
 }
