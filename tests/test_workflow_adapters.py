@@ -9,6 +9,7 @@ from workflow_adapters import (
     run_device_configuration_audit,
     run_mobile_apk_inventory,
     run_assessment_report,
+    run_web_api_review,
     run_workflow_adapter,
 )
 
@@ -122,6 +123,76 @@ class WorkflowAdapterTests(unittest.TestCase):
             with patch("workflow_adapters.MAX_EVIDENCE_JSON_BYTES", 1):
                 with self.assertRaisesRegex(ValueError, "Evidence JSON must be"):
                     run_assessment_report(str(evidence))
+
+    def test_web_api_adapter_sends_one_head_and_filters_headers(self):
+        class Response:
+            status = 200
+            reason = "OK"
+            def getheaders(self):
+                return [
+                    ("Strict-Transport-Security", "max-age=31536000"),
+                    ("Content-Type", "application/json"),
+                    ("Set-Cookie", "session=should-not-be-retained"),
+                    ("Location", "https://other.example.test/"),
+                ]
+
+        class Connection:
+            def __init__(self, host, port, timeout, context):
+                self.host, self.port, self.timeout = host, port, timeout
+                self.context = context
+                self.request_args = None
+                self.closed = False
+            def request(self, method, path, headers):
+                self.request_args = (method, path, headers)
+            def getresponse(self):
+                return Response()
+            def close(self):
+                self.closed = True
+
+        with patch("workflow_adapters.http.client.HTTPSConnection", Connection) as factory:
+            report = run_web_api_review("https://staging.example.test/api/v1")
+        connection = factory.return_value
+        self.assertEqual(report["request_status"], "response_received")
+        self.assertEqual(report["response"]["status_code"], 200)
+        self.assertEqual(connection.request_args[0:2], ("HEAD", "/api/v1"))
+        self.assertEqual(connection.timeout, 5)
+        self.assertTrue(connection.closed)
+        self.assertIn("strict-transport-security", report["response"]["headers"])
+        self.assertNotIn("set-cookie", report["response"]["headers"])
+        self.assertNotIn("location", report["response"]["headers"])
+        self.assertFalse(report["request"]["redirects_followed"])
+        self.assertFalse(report["request"]["response_body_read"])
+        self.assertEqual(report["execution"]["request_count"], 1)
+
+    def test_web_api_adapter_rejects_unsafe_or_ambiguous_url_scope(self):
+        invalid = (
+            "http://staging.example.test/",
+            "https://user:pass@staging.example.test/",
+            "https://staging.example.test/?token=x",
+            "https://staging.example.test:8443/",
+            "https://*.example.test/",
+            "https://staging.example.test/a/../admin",
+        )
+        for scope in invalid:
+            with self.subTest(scope=scope):
+                with self.assertRaises(ValueError):
+                    run_web_api_review(scope)
+
+    def test_web_api_adapter_reports_bounded_request_failure(self):
+        class Connection:
+            def __init__(self, *args, **kwargs):
+                self.closed = False
+            def request(self, *args, **kwargs):
+                raise TimeoutError("details are not copied into report")
+            def close(self):
+                self.closed = True
+
+        with patch("workflow_adapters.http.client.HTTPSConnection", Connection):
+            report = run_web_api_review("https://staging.example.test/")
+        self.assertEqual(report["request_status"], "request_failed")
+        self.assertEqual(report["error_type"], "TimeoutError")
+        self.assertNotIn("details", report)
+        self.assertTrue(report["execution"]["network_actions_executed"])
 
     def test_unapproved_workflows_remain_plan_only(self):
         with self.assertRaisesRegex(ValueError, "No execution adapter is approved"):
