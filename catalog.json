@@ -67,7 +67,7 @@
       "compatibility": {
         "status": "source_documented_not_device_verified",
         "platform": "Termux on Android",
-        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/curl",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/libcurl",
         "evidence_kind": "upstream Termux package recipe",
         "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
         "root_required": false,
@@ -324,7 +324,7 @@
       "compatibility": {
         "status": "source_documented_not_device_verified",
         "platform": "Termux on Android",
-        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/sqlite",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/libsqlite",
         "evidence_kind": "upstream Termux package recipe",
         "architecture_policy": "Only architectures currently supported by the user's configured Termux repositories; no per-device ABI verification is implied.",
         "root_required": false,
