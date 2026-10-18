@@ -2302,7 +2302,33 @@
       "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "whatweb https://example.com",
       "source": "https://github.com/urbanadventurer/WhatWeb",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Ruby gem/runtime metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/urbanadventurer/WhatWeb/blob/d279d93042d034f3fd29d5a893d44ccc0595d3f8/README.md",
+        "evidence_kind": "upstream Ruby runtime documentation (README.md)",
+        "evidence_scope": "Confirms only the Ruby runtime or dependency information in the pinned upstream gemspec/README. It does not establish Android/Termux support, successful installation, native dependency availability, or runtime functionality.",
+        "source_revision": "d279d93042d034f3fd29d5a893d44ccc0595d3f8",
+        "source_snapshot_url": "https://github.com/urbanadventurer/WhatWeb/blob/d279d93042d034f3fd29d5a893d44ccc0595d3f8/README.md",
+        "declared_ruby_requirement": "README.md documents a Ruby-based scanner but does not state a minimum Ruby version.",
+        "declared_dependencies": [
+          "addressable",
+          "ipaddr",
+          "json",
+          "optional mongo/rchardet"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target Ruby version, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README identifies WhatWeb as a Ruby-based scanner but does not establish a minimum Ruby version or Android/Termux compatibility.",
+          "Optional dependencies and plugins may alter network behavior and resource use; no device-level test is available.",
+          "Scanning aggression controls affect request volume; use only on authorized targets and protect logs that may contain sensitive details."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "nikto",
@@ -5613,7 +5639,35 @@
       "description": "Penetration-testing framework for controlled labs and authorized engagements.",
       "example": "msfconsole --help",
       "source": "https://github.com/rapid7/metasploit-framework",
-      "caveat": "Large framework; stock Termux support is not verified."
+      "caveat": "Large framework; stock Termux support is not verified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Ruby gem/runtime metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/rapid7/metasploit-framework/blob/b22ce1fbae63e8caeb3a773366a6d3336bd66fb8/metasploit-framework.gemspec",
+        "evidence_kind": "upstream Ruby gem metadata (gemspec)",
+        "evidence_scope": "Confirms only the Ruby runtime or dependency information in the pinned upstream gemspec/README. It does not establish Android/Termux support, successful installation, native dependency availability, or runtime functionality.",
+        "source_revision": "b22ce1fbae63e8caeb3a773366a6d3336bd66fb8",
+        "source_snapshot_url": "https://github.com/rapid7/metasploit-framework/blob/b22ce1fbae63e8caeb3a773366a6d3336bd66fb8/metasploit-framework.gemspec",
+        "declared_ruby_requirement": ">= 3.2",
+        "declared_dependencies": [
+          "Rails components",
+          "nokogiri",
+          "packetfu",
+          "pcaprub",
+          "pg",
+          "metasploit-payloads"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target Ruby version, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned gemspec requires Ruby >=3.2 and declares a very large framework dependency graph, including native packet-capture and database-related components; Android/Termux support is unverified.",
+          "Many modules need services, payload handling, networking privileges, databases, or native libraries unavailable in a generic phone environment.",
+          "Modules can exploit systems or alter state; use only in isolated labs or expressly authorized engagements."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "routersploit",
@@ -6186,7 +6240,34 @@
       "description": "WordPress security scanner and vulnerability enumeration.",
       "example": "wpscan --help",
       "source": "https://github.com/wpscanteam/wpscan",
-      "caveat": "Some features require an API token; respect rate limits."
+      "caveat": "Some features require an API token; respect rate limits.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Ruby gem/runtime metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/wpscanteam/wpscan/blob/5d672f66ee512301b654a2d79c9ddf6f8509eeb4/wpscan.gemspec",
+        "evidence_kind": "upstream Ruby gem metadata (gemspec)",
+        "evidence_scope": "Confirms only the Ruby runtime or dependency information in the pinned upstream gemspec/README. It does not establish Android/Termux support, successful installation, native dependency availability, or runtime functionality.",
+        "source_revision": "5d672f66ee512301b654a2d79c9ddf6f8509eeb4",
+        "source_snapshot_url": "https://github.com/wpscanteam/wpscan/blob/5d672f66ee512301b654a2d79c9ddf6f8509eeb4/wpscan.gemspec",
+        "declared_ruby_requirement": ">= 3.3",
+        "declared_dependencies": [
+          "activesupport >=7.1,<8.2",
+          "addressable ~>2.9",
+          "ethon >=0.14,<0.19",
+          "nokogiri ~>1.16",
+          "typhoeus >=1.3,<1.7"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target Ruby version, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned gemspec requires Ruby >=3.3 and native/network dependencies; Android/Termux installation and runtime are unverified.",
+          "Some vulnerability intelligence and API workflows require a WPScan API token and external service access.",
+          "The scanner actively probes WordPress sites; use only on explicitly authorized targets and respect rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "impacket",
@@ -6521,7 +6602,37 @@
       "description": "WinRM client for authorized Windows lab assessments.",
       "example": "evil-winrm --help",
       "source": "https://github.com/Hackplayers/evil-winrm",
-      "caveat": "Credentialed remote shell access; manual-only."
+      "caveat": "Credentialed remote shell access; manual-only.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Ruby gem/runtime metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/Hackplayers/evil-winrm/blob/64d8e0f962d239643c4efadacce9f716bd5cb775/evil-winrm.gemspec",
+        "evidence_kind": "upstream Ruby gem metadata (gemspec)",
+        "evidence_scope": "Confirms only the Ruby runtime or dependency information in the pinned upstream gemspec/README. It does not establish Android/Termux support, successful installation, native dependency availability, or runtime functionality.",
+        "source_revision": "64d8e0f962d239643c4efadacce9f716bd5cb775",
+        "source_snapshot_url": "https://github.com/Hackplayers/evil-winrm/blob/64d8e0f962d239643c4efadacce9f716bd5cb775/evil-winrm.gemspec",
+        "declared_ruby_requirement": ">= 2.3",
+        "declared_dependencies": [
+          "benchmark",
+          "csv",
+          "fileutils",
+          "logger",
+          "readline",
+          "readline-ext",
+          "stringio",
+          "syslog"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target Ruby version, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned gemspec declares Ruby >=2.3, but Android/Termux Ruby and native/readline dependencies are not tested by this metadata review.",
+          "WinRM access requires an authorized Windows target and valid credentials; the tool opens remote command sessions.",
+          "Remote shell access can change target state; use only in a controlled lab or an explicitly authorized assessment."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "responder",
