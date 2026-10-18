@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 209, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 212, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -141,6 +141,8 @@ jobs:
               "staticcheck": "6ed650b396b48840c782b8d554eaded1299e42ae",
               "dockle": "35171ccb9b247592269f5c84be69331ef0ad6c19",
           }
+          expected_go.update({"actionlint": "1.25.0"})
+          expected_go_revisions.update({"actionlint": "011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7"})
           for tool_id, go_requirement in expected_go.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
@@ -149,6 +151,18 @@ jobs:
               assert metadata["declared_go_requirement"] == go_requirement, tool
               assert metadata["source_snapshot_url"].endswith("/go.mod"), tool
               assert metadata["source_revision"] == expected_go_revisions[tool_id], tool
+          expected_rust = {
+              "zizmor": ("1.97.0", "ea0f7ac34e131fe9491e946e81b3d8fbee2b5171"),
+              "yara-x": ("1.95.0", "649cd3bb08e1c4ecc1524cc016c7aa27a75d2193"),
+          }
+          for tool_id, (rust_requirement, source_revision) in expected_rust.items():
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              metadata = tool["compatibility_metadata"]
+              assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
+              assert metadata["evidence_kind"] == "upstream Rust workspace metadata (Cargo.toml)", tool
+              assert metadata["declared_rust_requirement"] == rust_requirement, tool
+              assert metadata["source_revision"] == source_revision, tool
+              assert metadata["source_snapshot_url"].endswith("/Cargo.toml"), tool
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
