@@ -160,7 +160,7 @@ def run_mobile_apk_inventory(scope: str) -> dict:
         "sha256": digest.hexdigest(),
         "archive": {
             "valid_zip_container": True,
-            "entry_count": len(names),
+            "entry_count": len(entries),
             "android_manifest_present": manifest_present,
             "dex_files": dex,
             "dex_file_count": dex_count,
