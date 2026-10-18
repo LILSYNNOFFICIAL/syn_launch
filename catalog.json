@@ -2083,7 +2083,41 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "recon-ng --help",
       "source": "https://github.com/lanmaster53/recon-ng",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream Python dependency/runtime documentation reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/lanmaster53/recon-ng/blob/32b08fe7b6993ca1f2d8f76ba8f5d23c7f34a11d/REQUIREMENTS",
+        "evidence_kind": "upstream Python dependency manifest (REQUIREMENTS)",
+        "evidence_scope": "Confirms only the Python dependency or runtime claims made in the pinned upstream file. It does not establish Android/Termux support, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "32b08fe7b6993ca1f2d8f76ba8f5d23c7f34a11d",
+        "source_snapshot_url": "https://github.com/lanmaster53/recon-ng/blob/32b08fe7b6993ca1f2d8f76ba8f5d23c7f34a11d/REQUIREMENTS",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned REQUIREMENTS file.",
+        "declared_dependencies": [
+          "pyyaml",
+          "dnspython",
+          "lxml",
+          "mechanize",
+          "requests",
+          "flask",
+          "flask-restful",
+          "flasgger",
+          "dicttoxml",
+          "XlsxWriter",
+          "unicodecsv",
+          "rq"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned REQUIREMENTS file lists framework and optional web-interface dependencies but does not declare a Python-version range or Android/Termux support.",
+          "Several dependencies and modules may be outdated or need platform-specific adjustments; no current Termux installation test is available.",
+          "Recon-ng modules can query external services and collect sensitive public-source data; configure API keys carefully and respect provider terms and scope."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "osrframework",
@@ -2294,7 +2328,28 @@
       "description": "Automate SQL injection testing only on explicitly authorized targets.",
       "example": "sqlmap --version",
       "source": "https://github.com/sqlmapproject/sqlmap",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream Python dependency/runtime documentation reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/sqlmapproject/sqlmap/blob/9a1660aa120c526f68b637e5f232137722353522/README.md",
+        "evidence_kind": "upstream project runtime documentation (README.md)",
+        "evidence_scope": "Confirms only the Python dependency or runtime claims made in the pinned upstream file. It does not establish Android/Termux support, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "9a1660aa120c526f68b637e5f232137722353522",
+        "source_snapshot_url": "https://github.com/sqlmapproject/sqlmap/blob/9a1660aa120c526f68b637e5f232137722353522/README.md",
+        "declared_python_requirement": "README.md states Python 2.7 and Python 3.x; it does not specify a Python 3 minimum.",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README claims Python 2.7 and 3.x support but does not specify a Python 3 minimum or Android/Termux support.",
+          "The catalog's Termux package path is separate from this upstream README evidence; package availability and device runtime remain unverified by this declaration.",
+          "SQL injection checks can issue intrusive requests, access data, or alter state depending on options; use only on explicitly authorized test systems."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "wapiti",
@@ -3831,7 +3886,28 @@
       "description": "Analyze PDF structure for suspicious objects and scripts.",
       "example": "peepdf --help",
       "source": "https://github.com/jesparza/peepdf",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream Python dependency/runtime documentation reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/jesparza/peepdf/blob/c74dc65c0ac7e506bae4f2582a2435ec50741f40/README.md",
+        "evidence_kind": "upstream project documentation (README.md)",
+        "evidence_scope": "Confirms only the Python dependency or runtime claims made in the pinned upstream file. It does not establish Android/Termux support, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "c74dc65c0ac7e506bae4f2582a2435ec50741f40",
+        "source_snapshot_url": "https://github.com/jesparza/peepdf/blob/c74dc65c0ac7e506bae4f2582a2435ec50741f40/README.md",
+        "declared_python_requirement": "The pinned README does not declare a supported Python version.",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The README describes optional PyV8 and pylibemu wrappers for JavaScript and shellcode analysis; these native/legacy dependencies are not verified on Android.",
+          "The project documentation does not establish current Python 3 or Android/Termux compatibility.",
+          "The tool can create or modify PDFs as well as analyze them; use copies of authorized evidence and review any transformation before sharing."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "tesseract-ocr",
@@ -7607,7 +7683,28 @@
       "description": "Check for potential HTTP request-smuggling conditions in controlled environments.",
       "example": "python smuggler.py -h",
       "source": "https://github.com/defparam/smuggler",
-      "caveat": "Potentially disruptive protocol tests; use a staging target and written approval."
+      "caveat": "Potentially disruptive protocol tests; use a staging target and written approval.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream Python dependency/runtime documentation reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/defparam/smuggler/blob/2be871e6151ce85167a277fab21c74c851d8b20b/README.md",
+        "evidence_kind": "upstream project runtime documentation (README.md)",
+        "evidence_scope": "Confirms only the Python dependency or runtime claims made in the pinned upstream file. It does not establish Android/Termux support, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "2be871e6151ce85167a277fab21c74c851d8b20b",
+        "source_snapshot_url": "https://github.com/defparam/smuggler/blob/2be871e6151ce85167a277fab21c74c851d8b20b/README.md",
+        "declared_python_requirement": "Python 3 (explicitly stated in the pinned README).",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README identifies Python 3 but does not establish Android/Termux compatibility or test dependency behavior.",
+          "The tool sends active HTTP request-smuggling/desynchronization probes; false positives and false negatives are possible and intermediaries may behave differently.",
+          "Only use against explicitly authorized endpoints, with a defined stop condition and awareness of service-impact risk."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "lief",
