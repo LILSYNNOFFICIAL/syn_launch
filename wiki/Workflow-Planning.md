@@ -35,7 +35,7 @@ Make one HTTPS HEAD request to an explicitly authorized URL:
 python main.py --workflow-run web-api-review --target-scope "https://staging.example.test/api/health" --authorized
 ```
 
-This performs a real network request. It permits only HTTPS on port 443, rejects embedded credentials, query strings, fragments, wildcards, and parent-directory path segments, uses certificate-verified TLS with a five-second socket timeout (system DNS resolution is not separately bounded), does not follow redirects, and does not read the response body. Only an allowlist of response headers is retained. This is not a vulnerability scan.
+This performs a real network request. It permits only HTTPS on port 443, rejects embedded credentials, query strings, fragments, wildcards, and parent-directory path segments, uses certificate-verified TLS with a three-second DNS-resolution budget and a five-second socket timeout, does not follow redirects, and does not read the response body. Only an allowlist of response headers is retained. This is not a vulnerability scan.
 
 Inventory an APK archive without extracting or executing it:
 
