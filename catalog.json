@@ -949,7 +949,24 @@
       "description": "Combine route tracing and repeated latency/loss measurements.",
       "example": "mtr --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/root-packages/mtr",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named recipe directory exists in the current upstream Termux package repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Recipe presence is source evidence only. Confirm the package is available from the device's configured Termux repository and compatible with its ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Some ICMP/raw-socket modes may require privileges or kernel capabilities unavailable to an unrooted Android app.",
+          "The recipe is under the upstream root-packages tree; confirm the relevant repository is configured before expecting pkg install to find it."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "iperf3",
@@ -992,7 +1009,26 @@
       "description": "Capture and inspect packets when device permissions and kernel support allow it.",
       "example": "tcpdump --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/root-packages/tcpdump",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named recipe directory exists in the current upstream Termux package repository tree; does not establish configured-repository availability, installation success, ABI support, required privileges, or runtime functionality on this device.",
+        "architecture_policy": "Recipe presence is source evidence only. Confirm the package is available from the device's configured Termux repository and compatible with its ABI before installation.",
+        "root_required": true,
+        "hardware_requirements": [
+          "Capture privileges and suitable kernel/network-interface access for the intended capture mode."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Packet capture is generally restricted by Android app sandboxing and interface permissions; package installation does not grant host-level capture access.",
+          "The recipe is under the upstream root-packages tree; confirm the relevant repository is configured before expecting pkg install to find it."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "termux-api",
