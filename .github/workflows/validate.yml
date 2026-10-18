@@ -22,6 +22,8 @@ jobs:
         run: python -m py_compile main.py
       - name: Validate bootstrap shell syntax
         run: bash -n install.sh
+      - name: Validate local device-check script syntax
+        run: bash -n device_check.sh
       - name: Validate catalog JSON
         run: python -m json.tool catalog.json > /dev/null
       - name: Validate catalog and security checks
