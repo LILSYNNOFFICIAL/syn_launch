@@ -244,7 +244,7 @@ python main.py --workflow-run device-configuration-audit --target-scope local-de
 
 The report also checks for PRoot, PRoot-Distro, and NetHunter command/rootfs markers. These are presence indicators only. It does not enter containers or establish host root or kernel capabilities.
 
-Make one bounded HTTPS HEAD request to an explicitly authorized endpoint. The adapter verifies TLS certificates, has a five-second timeout, does not follow redirects or read the response body, and only retains selected response headers:
+Make one bounded HTTPS HEAD request to an explicitly authorized endpoint. The adapter verifies TLS certificates, uses a five-second socket timeout (system DNS lookup is not separately bounded), does not follow redirects or read the response body, and only retains selected response headers:
 
 ```bash
 python main.py --workflow-run web-api-review --target-scope "https://staging.example.test/api/health" --authorized
