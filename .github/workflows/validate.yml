@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 231, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 235, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -189,6 +189,20 @@ jobs:
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
               assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
+              assert metadata["source_revision"] == source_revision, tool
+              assert metadata["evidence_kind"] == evidence_kind, tool
+              assert metadata["source_snapshot_url"].endswith(suffix), tool
+          expected_ruby = {
+              "evil-winrm": (">= 2.3", "64d8e0f962d239643c4efadacce9f716bd5cb775", "upstream Ruby gem metadata (gemspec)", "/evil-winrm.gemspec"),
+              "wpscan": (">= 3.3", "5d672f66ee512301b654a2d79c9ddf6f8509eeb4", "upstream Ruby gem metadata (gemspec)", "/wpscan.gemspec"),
+              "metasploit-framework": (">= 3.2", "b22ce1fbae63e8caeb3a773366a6d3336bd66fb8", "upstream Ruby gem metadata (gemspec)", "/metasploit-framework.gemspec"),
+              "whatweb": ("README.md documents a Ruby-based scanner but does not state a minimum Ruby version.", "d279d93042d034f3fd29d5a893d44ccc0595d3f8", "upstream Ruby runtime documentation (README.md)", "/README.md"),
+          }
+          for tool_id, (ruby_requirement, source_revision, evidence_kind, suffix) in expected_ruby.items():
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              metadata = tool["compatibility_metadata"]
+              assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
+              assert metadata["declared_ruby_requirement"] == ruby_requirement, tool
               assert metadata["source_revision"] == source_revision, tool
               assert metadata["evidence_kind"] == evidence_kind, tool
               assert metadata["source_snapshot_url"].endswith(suffix), tool
