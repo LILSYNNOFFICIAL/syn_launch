@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 121, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 132, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -90,7 +90,7 @@ jobs:
               metadata = tool["compatibility_metadata"]
               assert metadata["source_revision"] == "06591fc024101b04095ec4417d51907512b46e3c", tool
               assert "termux-root-packages" in metadata["source_snapshot_url"], tool
-          expected_metadata = {"pip-audit": "upstream Python packaging metadata (pyproject.toml)", "yamllint": "upstream Python packaging metadata (pyproject.toml)", "dirsearch": "upstream Python packaging metadata (pyproject.toml)", "sherlock": "upstream Python packaging metadata (pyproject.toml)", "bandit": "upstream Python packaging metadata (setup.cfg)", "detect-secrets": "upstream Python packaging metadata (setup.py)", "email-validator": "upstream Python packaging metadata (setup.cfg)", "ssh-audit": "upstream Python packaging metadata (setup.cfg)", "maigret": "upstream Python packaging metadata (pyproject.toml)", "h8mail": "upstream Python packaging metadata (setup.py)", "theharvester": "upstream Python packaging metadata (pyproject.toml)"}
+          expected_metadata = {"pip-audit": "upstream Python packaging metadata (pyproject.toml)", "yamllint": "upstream Python packaging metadata (pyproject.toml)", "dirsearch": "upstream Python packaging metadata (pyproject.toml)", "sherlock": "upstream Python packaging metadata (pyproject.toml)", "bandit": "upstream Python packaging metadata (setup.cfg)", "detect-secrets": "upstream Python packaging metadata (setup.py)", "email-validator": "upstream Python packaging metadata (setup.cfg)", "ssh-audit": "upstream Python packaging metadata (setup.cfg)", "maigret": "upstream Python packaging metadata (pyproject.toml)", "h8mail": "upstream Python packaging metadata (setup.py)", "theharvester": "upstream Python packaging metadata (pyproject.toml)", "holehe": "upstream Python packaging metadata (setup.py)", "dnstwist": "upstream Python packaging metadata (setup.py)", "wapiti": "upstream Python packaging metadata (pyproject.toml)", "wfuzz": "upstream Python packaging metadata (setup.py)", "wafw00f": "upstream Python packaging metadata (pyproject.toml)", "arjun": "upstream Python packaging metadata (setup.py)", "hashid": "upstream Python packaging metadata (setup.py)", "passlib": "upstream Python packaging metadata (setup.py)", "bcrypt": "upstream Python packaging metadata (pyproject.toml)", "ropgadget": "upstream Python packaging metadata (setup.py)", "ropper": "upstream Python packaging metadata (pyproject.toml)"}
           for tool_id, evidence_kind in expected_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
