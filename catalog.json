@@ -2004,7 +2004,29 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "gauplus --help",
       "source": "https://pkg.go.dev/github.com/bp0lr/gauplus",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/bp0lr/gauplus/blob/15a2900b88092da32ba45860e76527985421ec8e/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "15a2900b88092da32ba45860e76527985421ec8e",
+        "source_snapshot_url": "https://github.com/bp0lr/gauplus/blob/15a2900b88092da32ba45860e76527985421ec8e/go.mod",
+        "declared_go_requirement": "1.15",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.15; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Retrieves historical URLs from configured external providers; provider availability and rate limits apply."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "recon-ng",
@@ -2763,7 +2785,29 @@
       "description": "Search repositories and supported sources for exposed secrets.",
       "example": "trufflehog --help",
       "source": "https://pkg.go.dev/github.com/trufflesecurity/trufflehog/v3",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/trufflesecurity/trufflehog/blob/048de9ff07098d943136cd5231a0e93fbb3ea443/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "048de9ff07098d943136cd5231a0e93fbb3ea443",
+        "source_snapshot_url": "https://github.com/trufflesecurity/trufflehog/blob/048de9ff07098d943136cd5231a0e93fbb3ea443/go.mod",
+        "declared_go_requirement": "1.25.0; toolchain go1.25.10",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.25.0; toolchain go1.25.10; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Secret scanning may access external verification services depending on detector and options; avoid exposing findings or credentials in logs."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "detect-secrets",
@@ -3008,7 +3052,29 @@
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "osv-scanner --help",
       "source": "https://pkg.go.dev/github.com/google/osv-scanner/v2/cmd/osv-scanner",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/google/osv-scanner/blob/f455353546889009663c1f8b640d5880a01c889a/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "f455353546889009663c1f8b640d5880a01c889a",
+        "source_snapshot_url": "https://github.com/google/osv-scanner/blob/f455353546889009663c1f8b640d5880a01c889a/go.mod",
+        "declared_go_requirement": "1.27.0",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.27.0; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Vulnerability results depend on package manifests/lockfiles and OSV database access; metadata review does not run a scan."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "exiftool",
@@ -5586,7 +5652,29 @@
       "description": "Kerberos user enumeration and testing for controlled AD labs.",
       "example": "kerbrute -h",
       "source": "https://github.com/ropnop/kerbrute",
-      "caveat": "May trigger account lockouts; password spraying requires explicit approval."
+      "caveat": "May trigger account lockouts; password spraying requires explicit approval.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/ropnop/kerbrute/blob/9cfb81e4fab8037acb44c678773ca3f93bc2b39c/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "9cfb81e4fab8037acb44c678773ca3f93bc2b39c",
+        "source_snapshot_url": "https://github.com/ropnop/kerbrute/blob/9cfb81e4fab8037acb44c678773ca3f93bc2b39c/go.mod",
+        "declared_go_requirement": "1.13",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.13; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Kerberos enumeration and authentication attempts can affect accounts and trigger alerts; use only within an explicitly authorized identity-security engagement."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "certipy",
@@ -5891,7 +5979,29 @@
       "description": "Cloud asset and permission enumeration for authorized security reviews.",
       "example": "cloudfox --help",
       "source": "https://github.com/BishopFox/cloudfox",
-      "caveat": "Cloud credentials and reports are sensitive."
+      "caveat": "Cloud credentials and reports are sensitive.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/BishopFox/cloudfox/blob/d44899f21302269fc5e7743c662edafe15c7575c/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "d44899f21302269fc5e7743c662edafe15c7575c",
+        "source_snapshot_url": "https://github.com/BishopFox/cloudfox/blob/d44899f21302269fc5e7743c662edafe15c7575c/go.mod",
+        "declared_go_requirement": "1.25.9",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.25.9; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Cloud inventory depends on configured provider credentials and permissions; protect credentials and treat collected account/resource data as sensitive."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kubeletctl",
@@ -5904,7 +6014,29 @@
       "description": "Cloud/container security audit utility. Use authorized credentials, least privilege, and approved scope.",
       "example": "kubeletctl --help",
       "source": "https://github.com/cyberark/kubeletctl",
-      "caveat": "Only target clusters you administer or are authorized to assess."
+      "caveat": "Only target clusters you administer or are authorized to assess.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/cyberark/kubeletctl/blob/2ea775d00d600db5ae9556739056f009bbd5286f/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "2ea775d00d600db5ae9556739056f009bbd5286f",
+        "source_snapshot_url": "https://github.com/cyberark/kubeletctl/blob/2ea775d00d600db5ae9556739056f009bbd5286f/go.mod",
+        "declared_go_requirement": "1.19",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.19; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Interacts with Kubernetes kubelet endpoints; use only against clusters and endpoints you are authorized to assess."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kube-bench",
@@ -6364,7 +6496,29 @@
       "description": "Verify and sign software artifacts using Sigstore-supported workflows.",
       "example": "cosign version",
       "source": "https://github.com/sigstore/cosign",
-      "caveat": "Understand identity and trust policy before accepting artifact signatures."
+      "caveat": "Understand identity and trust policy before accepting artifact signatures.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/sigstore/cosign/blob/cfeaa4a435c9d42cf724b3e1aac20c1cc09c4be7/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "cfeaa4a435c9d42cf724b3e1aac20c1cc09c4be7",
+        "source_snapshot_url": "https://github.com/sigstore/cosign/blob/cfeaa4a435c9d42cf724b3e1aac20c1cc09c4be7/go.mod",
+        "declared_go_requirement": "1.26.0",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.26.0; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Verification results depend on the trust root, identity constraints, signatures, and artifact references supplied; keyless verification may contact external services."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "terrascan",
@@ -6377,7 +6531,29 @@
       "description": "Static analysis for infrastructure-as-code security and compliance issues.",
       "example": "terrascan --help",
       "source": "https://github.com/tenable/terrascan",
-      "caveat": "Policy coverage and Android build compatibility vary."
+      "caveat": "Policy coverage and Android build compatibility vary.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/tenable/terrascan/blob/dafb3e0ad72812fbecfc36d33e8bd4347f12b114/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "dafb3e0ad72812fbecfc36d33e8bd4347f12b114",
+        "source_snapshot_url": "https://github.com/tenable/terrascan/blob/dafb3e0ad72812fbecfc36d33e8bd4347f12b114/go.mod",
+        "declared_go_requirement": "1.24.0; toolchain go1.24.3",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.24.0; toolchain go1.24.3; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Policy results depend on the policy set and IaC context; static findings do not prove live cloud state."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ssh-audit",
@@ -6563,7 +6739,29 @@
       "description": "Static analysis and diagnostics for Go code, including bug-prone and inefficient patterns.",
       "example": "staticcheck -h",
       "source": "https://staticcheck.dev/",
-      "caveat": "Analyze the intended module and review diagnostics; toolchain compatibility may vary."
+      "caveat": "Analyze the intended module and review diagnostics; toolchain compatibility may vary.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/dominikh/go-tools/blob/6ed650b396b48840c782b8d554eaded1299e42ae/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "6ed650b396b48840c782b8d554eaded1299e42ae",
+        "source_snapshot_url": "https://github.com/dominikh/go-tools/blob/6ed650b396b48840c782b8d554eaded1299e42ae/go.mod",
+        "declared_go_requirement": "1.26.0",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.26.0; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Static analysis requires compatible Go source/module context; findings require interpretation and do not prove absence of defects."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kube-linter",
@@ -6611,7 +6809,29 @@
       "description": "Check container images for common security and configuration best-practice issues.",
       "example": "dockle --help",
       "source": "https://github.com/goodwithtech/dockle",
-      "caveat": "Image support and native dependencies vary; scan only images you are permitted to inspect."
+      "caveat": "Image support and native dependencies vary; scan only images you are permitted to inspect.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/goodwithtech/dockle/blob/35171ccb9b247592269f5c84be69331ef0ad6c19/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the Go module path and Go language/toolchain directive in the pinned upstream go.mod file only. It does not establish successful installation, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "35171ccb9b247592269f5c84be69331ef0ad6c19",
+        "source_snapshot_url": "https://github.com/goodwithtech/dockle/blob/35171ccb9b247592269f5c84be69331ef0ad6c19/go.mod",
+        "declared_go_requirement": "1.25.0; toolchain go1.25.11",
+        "architecture_policy": "Go module metadata does not prove that the module and all dependencies build for Android/Termux. Confirm the local Go version, CGO/native dependencies, and target ABI before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External services or target systems may be contacted depending on the selected command and configuration."
+        ],
+        "known_blockers": [
+          "Catalog install commands use an unpinned @latest module selector; the installed version can change independently of this reviewed metadata snapshot.",
+          "The pinned go.mod declares Go/toolchain requirement 1.25.0; toolchain go1.25.11; this does not establish that the configured Termux Go toolchain or all transitive dependencies build successfully on this device.",
+          "Container image analysis requires access to the image source/daemon or registry and may disclose image metadata; Docker daemon availability is separate."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "cloudsplaining",
