@@ -7038,7 +7038,28 @@
       "description": "Modern YARA-compatible pattern-matching engine for defensive triage.",
       "example": "yr --help",
       "source": "https://github.com/VirusTotal/yara-x",
-      "caveat": "Separate project from classic YARA; Termux recipe not verified."
+      "caveat": "Separate project from classic YARA; Termux recipe not verified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Rust workspace metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/VirusTotal/yara-x/blob/649cd3bb08e1c4ecc1524cc016c7aa27a75d2193/Cargo.toml",
+        "evidence_kind": "upstream Rust workspace metadata (Cargo.toml)",
+        "evidence_scope": "Confirms only the declared language toolchain requirement in the pinned upstream module/workspace file. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "649cd3bb08e1c4ecc1524cc016c7aa27a75d2193",
+        "source_snapshot_url": "https://github.com/VirusTotal/yara-x/blob/649cd3bb08e1c4ecc1524cc016c7aa27a75d2193/Cargo.toml",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Cargo workspace declares Rust 1.95.0 as its minimum version and uses native/build dependencies; Android/Termux compilation is not verified.",
+          "The project is a multi-crate workspace with optional language bindings and native components; the CLI feature set and dependency build must be checked separately.",
+          "Rule-based scanning results depend on the ruleset and input; detections can be incomplete or produce false positives."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_rust_requirement": "1.95.0",
+        "declared_dependencies": []
+      }
     },
     {
       "id": "plaso-log2timeline",
@@ -7515,7 +7536,28 @@
       "description": "Static analysis for GitHub Actions workflow security issues.",
       "example": "See the official zizmor installation guide.",
       "source": "https://github.com/zizmorcore/zizmor",
-      "caveat": "Prebuilt binary availability and native builds vary by Android architecture."
+      "caveat": "Prebuilt binary availability and native builds vary by Android architecture.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Rust workspace metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/zizmorcore/zizmor/blob/ea0f7ac34e131fe9491e946e81b3d8fbee2b5171/Cargo.toml",
+        "evidence_kind": "upstream Rust workspace metadata (Cargo.toml)",
+        "evidence_scope": "Confirms only the declared language toolchain requirement in the pinned upstream module/workspace file. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "ea0f7ac34e131fe9491e946e81b3d8fbee2b5171",
+        "source_snapshot_url": "https://github.com/zizmorcore/zizmor/blob/ea0f7ac34e131fe9491e946e81b3d8fbee2b5171/Cargo.toml",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Cargo workspace declares Rust 1.97.0 as its minimum version; the target Termux Rust toolchain must meet that requirement.",
+          "The workspace contains multiple crates and dependencies; Android linker, native-library, and build behavior are not verified.",
+          "The tool statically analyzes GitHub Actions workflows; it does not independently prove that findings are exploitable or that a workflow is safe."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_rust_requirement": "1.97.0",
+        "declared_dependencies": []
+      }
     },
     {
       "id": "actionlint",
@@ -7528,7 +7570,28 @@
       "description": "Lint GitHub Actions workflow files for syntax and common mistakes.",
       "example": "actionlint -help",
       "source": "https://github.com/rhysd/actionlint",
-      "caveat": "Manual-only until Termux package/build compatibility is verified."
+      "caveat": "Manual-only until Termux package/build compatibility is verified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/rhysd/actionlint/blob/011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the declared language toolchain requirement in the pinned upstream module/workspace file. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7",
+        "source_snapshot_url": "https://github.com/rhysd/actionlint/blob/011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7/go.mod",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod declares Go 1.25.0; the target Termux Go toolchain may be older or package dependencies may not build on-device.",
+          "Go module metadata does not establish Android/Termux runtime support or successful installation.",
+          "The tool analyzes workflow files locally; results depend on action metadata availability and supported configuration syntax."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_go_requirement": "1.25.0",
+        "declared_dependencies": []
+      }
     },
     {
       "id": "staticcheck",
