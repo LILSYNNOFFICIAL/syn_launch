@@ -44,7 +44,7 @@ run_check() {
   fi
 }
 
-run_check "Python syntax" "python-syntax.log" "$PYTHON_BIN" -m py_compile main.py workflow_planner.py
+run_check "Python syntax" "python-syntax.log" "$PYTHON_BIN" -m py_compile main.py workflow_planner.py workflow_adapters.py
 run_check "Installer shell syntax" "installer-syntax.log" bash -n install.sh
 run_check "Device-check shell syntax" "device-check-syntax.log" bash -n device_check.sh
 run_check "Catalog JSON syntax" "catalog-json.log" "$PYTHON_BIN" -m json.tool catalog.json
@@ -71,7 +71,7 @@ assert audit["execution"]["subprocesses_executed"] is False, audit
 assert "optional_linux_environments" in audit, audit
 assert report["report_schema"] == 3, report.get("report_schema")
 assert report["summary"]["catalog_entries"] == 269, report["summary"]
-assert report["summary"]["compatibility_assessed_entries"] >= 82, report["summary"]
+assert report["summary"]["compatibility_assessed_entries"] >= 100, report["summary"]
 assert report["summary"]["device_verified_entries"] == 0, report["summary"]
 assert report["summary"]["smoke_tested_entries"] >= 1, report["summary"]
 python_tool = next(tool for tool in report["tools"] if tool["id"] == "python")
