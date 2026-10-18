@@ -1304,9 +1304,12 @@ def main():
             print("--workflow-run requires --authorized. This is an operator declaration, not an authorization check.", file=sys.stderr); return 2
         try:
             report = run_workflow_adapter(args.workflow_run, args.target_scope)
-        except ValueError as exc:
+        except (ValueError, OSError) as exc:
             print("Workflow execution rejected: " + str(exc), file=sys.stderr); return 2
         report_dir = STATE_DIR / "workflow-runs"
+        report_dir.mkdir(parents=True, exist_ok=True)
+        try: report_dir.chmod(0o700)
+        except OSError: pass
         report_path = report_dir / (args.workflow_run + "-" + time.strftime("%Y%m%dT%H%M%S") + "-" + str(time.time_ns()) + ".json")
         save_private_json(report_path, report)
         report["saved_report"] = str(report_path)
