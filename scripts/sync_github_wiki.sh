@@ -42,6 +42,8 @@ for page in sorted(source.glob("*.md")):
             url = url[5:]
             if url.endswith(".md"):
                 url = url[:-3]
+        elif url == "README.md":
+            url = "Home"
         elif url.endswith(".md") and not url.startswith(("http://", "https://")):
             url = url[:-3]
         return f"[{label}]({url})"
@@ -57,7 +59,7 @@ print("Synced repository Markdown into the temporary wiki checkout. Wiki-only pa
 PY
 
 cd "$TMP/wiki"
-if git diff --quiet; then
+if [[ -z "$(git status --porcelain)" ]]; then
   echo "Published wiki already matches repository wiki/ Markdown."
   exit 0
 fi
