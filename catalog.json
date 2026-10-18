@@ -6703,8 +6703,27 @@
       "installable": true,
       "description": "Generate domain-name permutations for defensive asset discovery.",
       "example": "dnsgen --help",
-      "source": "https://github.com/ProjectAnte/dnsgen",
-      "caveat": "Use only with domains in scope."
+      "source": "https://github.com/AlephNullSK/dnsgen",
+      "caveat": "Use only with domains in scope.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python 3.9+; Android/Termux support not verified",
+        "install_source": "https://github.com/AlephNullSK/dnsgen/tree/7c98e7ecda2f626d49c47be9c98b234a2e4db5b7",
+        "evidence_kind": "pinned upstream Python project packaging metadata and source",
+        "evidence_scope": "The pinned project declares Python >=3.9 and dependencies in pyproject.toml. This documents the upstream source and declared runtime requirement only; it does not prove the PyPI artifact matches this revision, successful Termux installation, Android compatibility, or runtime functionality.",
+        "architecture_policy": "No Android ABI support is established by the platform-independent Python classifier. Validate the Python runtime and dependencies on each target device.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned upstream metadata declares Python >=3.9 and dependencies on click, rich, and tldextract; dependency resolution and runtime behavior are not tested on Android.",
+          "The repository source revision does not establish that the currently published package artifact is identical to this checkout.",
+          "Use generated permutations only for domains explicitly included in the assessment authorization."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "7c98e7ecda2f626d49c47be9c98b234a2e4db5b7",
+        "source_snapshot_url": "https://github.com/AlephNullSK/dnsgen/tree/7c98e7ecda2f626d49c47be9c98b234a2e4db5b7"
+      }
     },
     {
       "id": "shuffledns",

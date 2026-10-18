@@ -56,8 +56,8 @@ class CatalogTests(unittest.TestCase):
     def test_compatibility_coverage_and_unassessed_entries_are_explicit(self):
         declared = [tool for tool in self.tools if tool.get("compatibility")]
         unassessed = {tool["id"] for tool in self.tools if not tool.get("compatibility")}
-        self.assertEqual(len(declared), 266)
-        self.assertEqual(unassessed, {"burp-suite", "wappalyzer", "dnsgen"})
+        self.assertEqual(len(declared), 267)
+        self.assertEqual(unassessed, {"burp-suite", "wappalyzer"})
 
     def test_compatibility_declarations_pin_reproducible_source_snapshots(self):
         declared = [tool for tool in self.tools if tool.get("compatibility")]
@@ -76,6 +76,15 @@ class CatalogTests(unittest.TestCase):
             metadata = tool["compatibility"]
             self.assertTrue(metadata["evidence_kind"].startswith("upstream Python packaging metadata ("))
             self.assertTrue(metadata["declared_python_requirement"])
+
+    def test_dnsgen_compatibility_evidence_is_pinned_and_cautious(self):
+        tool = next(item for item in self.tools if item["id"] == "dnsgen")
+        metadata = tool["compatibility"]
+        self.assertEqual(metadata["source_revision"], "7c98e7ecda2f626d49c47be9c98b234a2e4db5b7")
+        self.assertIn(metadata["source_revision"], metadata["source_snapshot_url"])
+        self.assertIn("does not prove", metadata["evidence_scope"])
+        self.assertIn("Android", metadata["platform"])
+        self.assertFalse(metadata["root_required"])
 
     def test_catalog_rejects_invalid_compatibility_evidence(self):
         broken = copy.deepcopy(self.data)
