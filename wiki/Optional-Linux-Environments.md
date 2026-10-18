@@ -41,4 +41,4 @@ SYN_LAUNCH support policy:
 
 ## Current implementation status
 
-SYN_LAUNCH has read-only local device audit and APK archive inventory adapters. PRoot/NetHunter detection and installation management are not implemented. The roadmap tracks these as optional future work.
+SYN_LAUNCH's local device audit now records presence indicators for `proot`, `proot-distro`, `nethunter`/`nh`, the conventional PRoot-Distro installed-rootfs directory, and common NetHunter rootfs markers. These checks do not enter containers, run the launchers, prove root access, or verify kernel capabilities. Physical-device confirmation is still required. Installation management is not implemented.
