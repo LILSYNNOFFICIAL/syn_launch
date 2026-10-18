@@ -92,7 +92,9 @@ Cataloged security tools executed: none
 Only explicit tool probe: Python --version/--help bounded smoke test
 Device validation status: not_run (human review and device-specific evidence still required)
 EOF
-chmod 600 "$OUT"/* "$RESULTS" 2>/dev/null || true
+find "$OUT" -type d -exec chmod 700 {} + 2>/dev/null || true
+find "$OUT" -type f -exec chmod 600 {} + 2>/dev/null || true
+chmod 600 "$RESULTS" 2>/dev/null || true
 echo
 cat "$RESULTS"
 echo
