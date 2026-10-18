@@ -29,6 +29,12 @@ class WorkflowPlannerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "authorization"):
             build_workflow_plan("device-configuration-audit", "my own Termux device", False)
 
+    def test_plan_rejects_non_boolean_authorization_values(self):
+        for value in ("yes", 1, [], None):
+            with self.subTest(value=repr(value)):
+                with self.assertRaisesRegex(ValueError, "authorization"):
+                    build_workflow_plan("assessment-report", "approved evidence set", value)
+
     def test_plan_rejects_unknown_workflow(self):
         with self.assertRaisesRegex(ValueError, "unknown workflow"):
             build_workflow_plan("arbitrary-command", "localhost", True)
