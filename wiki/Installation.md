@@ -30,6 +30,7 @@ python main.py --search nuclei
 python main.py --category "Mobile App Security"
 python main.py --tool Nmap
 python main.py --compatibility-report > compatibility-report.json
+python main.py --smoke-test python
 ```
 
-The compatibility report is metadata and discovery output. It does not execute the cataloged tools. Review local paths and runtime details before sharing the report.
+The compatibility report is metadata/discovery output and never executes cataloged tools. `--smoke-test` explicitly probes one named entry's version/help response with time/output caps. It is not a full feature test. Review local paths, runtime details, and saved probe evidence before sharing reports.
