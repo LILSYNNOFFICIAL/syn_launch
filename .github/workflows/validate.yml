@@ -41,9 +41,28 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 95, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 100, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
+          for tool_id, source_repo, source_revision in (
+              ("xh", "termux-packages", "e85983636adcf748134c3feb1df27f44e78322e1"),
+              ("feroxbuster", "termux-packages", "e85983636adcf748134c3feb1df27f44e78322e1"),
+              ("curlie", "termux-packages", "e85983636adcf748134c3feb1df27f44e78322e1"),
+              ("hping3", "termux-root-packages", "06591fc024101b04095ec4417d51907512b46e3c"),
+              ("arp-scan", "termux-root-packages", "06591fc024101b04095ec4417d51907512b46e3c"),
+          ):
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              metadata = tool["compatibility_metadata"]
+              assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
+              assert metadata["source_revision"] == source_revision, tool
+              assert source_repo in metadata["source_snapshot_url"], tool
+              assert metadata["evidence_scope"], tool
+          for tool_id in ("xh", "feroxbuster", "curlie"):
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              assert tool["install_kind"] == "pkg" and tool["installable"], tool
+          for tool_id in ("hping3", "arp-scan"):
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              assert not tool["installable"], tool
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
