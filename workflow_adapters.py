@@ -11,11 +11,13 @@ import ipaddress
 import json
 import os
 import platform
+import queue
 import shutil
 import socket
 import ssl
 import stat
 import sys
+import threading
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -231,6 +233,28 @@ class _PinnedHTTPSConnection(http.client.HTTPSConnection):
             raise
 
 
+def _resolve_addresses_with_timeout(host: str, timeout_seconds: float = 3.0) -> list:
+    """Resolve a hostname in a daemon thread so OS resolver stalls cannot block the CLI indefinitely."""
+    result_queue = queue.Queue(maxsize=1)
+
+    def resolve() -> None:
+        try:
+            result_queue.put((True, socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)))
+        except BaseException as exc:
+            # Only the exception type is returned to the caller; resolver details may contain data.
+            result_queue.put((False, type(exc).__name__))
+
+    worker = threading.Thread(target=resolve, name="syn-launch-dns", daemon=True)
+    worker.start()
+    try:
+        succeeded, value = result_queue.get(timeout=timeout_seconds)
+    except queue.Empty as exc:
+        raise TimeoutError("DNS resolution exceeded its time budget") from exc
+    if not succeeded:
+        raise OSError("DNS resolution failed (" + value + ")")
+    return value
+
+
 def run_web_api_review(scope: str) -> dict:
     """Perform one bounded HTTPS HEAD request; never follows redirects or reads a body."""
     from urllib.parse import urlsplit
@@ -266,7 +290,7 @@ def run_web_api_review(scope: str) -> dict:
         "created_at": datetime.now(timezone.utc).isoformat(),
         "target_host": host,
         "target_path": path,
-        "request": {"method": "HEAD", "socket_timeout_seconds": 5, "dns_resolution_bounded": False, "redirects_followed": False, "response_body_read": False},
+        "request": {"method": "HEAD", "socket_timeout_seconds": 5, "dns_timeout_seconds": 3, "dns_resolution_bounded": True, "redirects_followed": False, "response_body_read": False},
         "response": None,
         "request_status": "request_failed",
         "execution": {
@@ -277,7 +301,7 @@ def run_web_api_review(scope: str) -> dict:
         },
         "limitations": [
             "This makes exactly one HTTPS HEAD request to the supplied host and path. It is an active network request and requires explicit authorization.",
-            "The five-second timeout applies to socket operations; operating-system DNS resolution is not independently time-bounded and may take longer.",
+            "DNS resolution has a three-second budget and socket operations have a five-second timeout. A stalled system resolver runs only in a daemon thread and cannot block CLI process exit indefinitely.",
             "Redirects are not followed and response bodies are not read. A server may handle HEAD differently from GET.",
             "This is not a vulnerability scan, API schema review, authentication test, or security certification.",
             "Only an allowlist of response headers is retained; the report does not independently prove application behavior.",
@@ -285,7 +309,7 @@ def run_web_api_review(scope: str) -> dict:
     }
     connection = None
     try:
-        addresses = socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
+        addresses = _resolve_addresses_with_timeout(host, timeout_seconds=3.0)
         resolved = []
         for address in addresses:
             ip_text = address[4][0].split("%", 1)[0]
