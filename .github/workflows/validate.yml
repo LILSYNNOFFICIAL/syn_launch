@@ -28,5 +28,23 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run environment check
         run: python main.py --check
+      - name: Run explicitly selected bounded Python smoke test
+        run: python main.py --smoke-test python
+      - name: Validate compatibility report and recorded smoke evidence
+        run: |
+          python main.py --compatibility-report > compatibility-report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
+          assert report["report_schema"] == 3, report.get("report_schema")
+          assert report["summary"]["catalog_entries"] == 269, report["summary"]
+          assert report["summary"]["smoke_tested_entries"] >= 1, report["summary"]
+          assert report["summary"]["device_verified_entries"] == 0, report["summary"]
+          python_tool = next(tool for tool in report["tools"] if tool["id"] == "python")
+          assert python_tool["smoke_test"] == "passed", python_tool
+          assert python_tool["device_validation"] == "not_run", python_tool
+          print("Compatibility report schema and bounded smoke evidence validated.")
+          PY
       - name: Check CLI search
         run: python main.py --search Nuclei
