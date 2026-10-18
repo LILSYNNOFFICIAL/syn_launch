@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 162, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 172, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -93,6 +93,11 @@ jobs:
               "chisel": "1.25.0; toolchain go1.27.0", "alterx": "1.25.0",
               "shuffledns": "1.24.0", "puredns": "1.15", "gowitness": "1.26.0",
               "kubeaudit": "1.22.1", "kube-linter": "1.26.4",
+              "gauplus": "1.15", "trufflehog": "1.25.0; toolchain go1.25.10",
+              "osv-scanner": "1.27.0", "kerbrute": "1.13", "cloudfox": "1.25.9",
+              "kubeletctl": "1.19", "cosign": "1.26.0",
+              "terrascan": "1.24.0; toolchain go1.24.3", "staticcheck": "1.26.0",
+              "dockle": "1.25.0; toolchain go1.25.11",
           }
           expected_go_revisions = {
               "subfinder": "7d9038297953f6a953ba3eb009fb859993959d00",
@@ -125,6 +130,16 @@ jobs:
               "gowitness": "601c84367aaf26eae7d1b5181b70633cb662cf66",
               "kubeaudit": "92c3147139a73eab8f6c9cbf9a1ee4d9c4196bd8",
               "kube-linter": "ead88f5c9d49e600a58eae2c7121deef82e378f7",
+              "gauplus": "15a2900b88092da32ba45860e76527985421ec8e",
+              "trufflehog": "048de9ff07098d943136cd5231a0e93fbb3ea443",
+              "osv-scanner": "f455353546889009663c1f8b640d5880a01c889a",
+              "kerbrute": "9cfb81e4fab8037acb44c678773ca3f93bc2b39c",
+              "cloudfox": "d44899f21302269fc5e7743c662edafe15c7575c",
+              "kubeletctl": "2ea775d00d600db5ae9556739056f009bbd5286f",
+              "cosign": "cfeaa4a435c9d42cf724b3e1aac20c1cc09c4be7",
+              "terrascan": "dafb3e0ad72812fbecfc36d33e8bd4347f12b114",
+              "staticcheck": "6ed650b396b48840c782b8d554eaded1299e42ae",
+              "dockle": "35171ccb9b247592269f5c84be69331ef0ad6c19",
           }
           for tool_id, go_requirement in expected_go.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
