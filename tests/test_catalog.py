@@ -59,6 +59,21 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(len(declared), 267)
         self.assertEqual(unassessed, {"burp-suite", "wappalyzer"})
 
+    def test_roadmap_upstream_source_review_count_matches_list(self):
+        roadmap = (ROOT / "PLATFORM_ROADMAP.md").read_text(encoding="utf-8")
+        line = next(
+            line for line in roadmap.splitlines()
+            if "pinned upstream source snapshots" in line and "OSRFramework" in line
+        )
+        self.assertIn("Review eleven additional catalog entries", line)
+        self.assertNotIn("Review nine additional catalog entries", line)
+        expected_names = (
+            "OSRFramework", "Nikto", "checksec", "PDFiD", "Kismet", "BlueZ tools",
+            "Dalfox", "Nuclei templates", "Quark Engine", "Podman", "Rootkit Hunter",
+        )
+        for name in expected_names:
+            self.assertIn(name, line)
+
     def test_optional_linux_environment_docs_match_detection_status(self):
         page = (ROOT / "wiki" / "Optional-Linux-Environments.md").read_text(encoding="utf-8")
         self.assertIn("already records PRoot and PRoot-Distro presence indicators", page)
