@@ -80,7 +80,7 @@ def build_workflow_plan(name: str, target_scope: str, authorized: bool) -> dict:
         raise ValueError("unknown workflow; use --workflow-list to see available plans")
     if not isinstance(target_scope, str) or not 1 <= len(target_scope.strip()) <= 500 or not all(ch.isprintable() for ch in target_scope.strip()):
         raise ValueError("target scope must be 1 to 500 printable characters")
-    if not authorized:
+    if authorized is not True:
         raise ValueError("explicit authorization confirmation is required")
     workflow = WORKFLOWS[name]
     return {
