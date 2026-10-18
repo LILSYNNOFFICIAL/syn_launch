@@ -1674,7 +1674,29 @@
       "description": "Automated OSINT collection and correlation; resource-intensive on some Android devices.",
       "example": "sf.py --help",
       "source": "https://github.com/smicallef/spiderfoot",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/smicallef/spiderfoot/blob/0f815a203afebf05c98b605dba5cf0475a0ee5fd/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "0f815a203afebf05c98b605dba5cf0475a0ee5fd",
+        "source_snapshot_url": "https://github.com/smicallef/spiderfoot/blob/0f815a203afebf05c98b605dba5cf0475a0ee5fd/requirements.txt",
+        "declared_python_requirement": "Not declared in the pinned requirements.txt.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "External websites, DNS, and service integrations selected by SpiderFoot modules"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned requirements manifest constrains cryptography to >=3.4.8,<4; this older range may conflict with current Python/platform dependencies and requires dedicated compatibility review.",
+          "SpiderFoot is a broad OSINT automation platform that may query many third-party services; inspect modules and scope before use and protect collected personal data."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "phoneinfoga",
@@ -5811,7 +5833,29 @@
       "description": "Network service assessment toolkit for authorized internal testing.",
       "example": "nxc --help",
       "source": "https://github.com/Pennyw0rth/NetExec",
-      "caveat": "Credentialed checks can affect systems; stay within approved scope."
+      "caveat": "Credentialed checks can affect systems; stay within approved scope.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/Pennyw0rth/NetExec/blob/0615464f7aed3daa64a3ebe414d1fd7dc830db0b/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "0615464f7aed3daa64a3ebe414d1fd7dc830db0b",
+        "source_snapshot_url": "https://github.com/Pennyw0rth/NetExec/blob/0615464f7aed3daa64a3ebe414d1fd7dc830db0b/pyproject.toml",
+        "declared_python_requirement": ">=3.11,<4.0",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Network services and identity infrastructure explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata declares cryptography, pyasn1-modules, and Impacket from a Git source; native crypto and dependency compatibility on Android is not verified.",
+          "NetExec can enumerate or authenticate to remote services; use only in authorized engagements and protect credentials and collected output."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "bloodhound-python-collector",
@@ -5837,7 +5881,29 @@
       "description": "SMB and Windows domain enumeration for authorized assessments.",
       "example": "enum4linux-ng --help",
       "source": "https://github.com/cddmp/enum4linux-ng",
-      "caveat": "Enumeration may disclose directory information."
+      "caveat": "Enumeration may disclose directory information.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/cddmp/enum4linux-ng/blob/288826fd9ee89b61d846e59f17b77bae4fb671ee/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "288826fd9ee89b61d846e59f17b77bae4fb671ee",
+        "source_snapshot_url": "https://github.com/cddmp/enum4linux-ng/blob/288826fd9ee89b61d846e59f17b77bae4fb671ee/setup.py",
+        "declared_python_requirement": ">=3.6",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "SMB and related network services explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned setup.py loads runtime dependencies from requirements.txt; those dependencies and their Android availability require separate validation.",
+          "SMB enumeration sends network requests and can disclose directory metadata; use only against authorized hosts."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kerbrute",
@@ -5885,7 +5951,29 @@
       "description": "Audit Active Directory Certificate Services in authorized domains.",
       "example": "certipy-ad -h",
       "source": "https://github.com/ly4k/Certipy",
-      "caveat": "Certificate abuse paths are sensitive; restrict use to approved domains."
+      "caveat": "Certificate abuse paths are sensitive; restrict use to approved domains.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/ly4k/Certipy/blob/3ae34426c58d266a1979ff9607514c3d7fe1aa21/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "3ae34426c58d266a1979ff9607514c3d7fe1aa21",
+        "source_snapshot_url": "https://github.com/ly4k/Certipy/blob/3ae34426c58d266a1979ff9607514c3d7fe1aa21/pyproject.toml",
+        "declared_python_requirement": ">=3.12",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Active Directory Certificate Services and directory endpoints explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata declares cryptography~=42.0.8, impacket~=0.13.0, ldap3~=2.9.1, and pyasn1~=0.6.1; Android compatibility is not established.",
+          "Certificate-services enumeration and operations can affect enterprise identity infrastructure; use only with explicit authorization."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ldapdomaindump",
@@ -5898,7 +5986,29 @@
       "description": "Export LDAP directory information for authorized domain auditing.",
       "example": "ldapdomaindump --help",
       "source": "https://github.com/dirkjanm/ldapdomaindump",
-      "caveat": "Treat output as confidential."
+      "caveat": "Treat output as confidential.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/dirkjanm/ldapdomaindump/blob/d559463eb29857f2660bf3867bfb9f8610d1ddb1/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "d559463eb29857f2660bf3867bfb9f8610d1ddb1",
+        "source_snapshot_url": "https://github.com/dirkjanm/ldapdomaindump/blob/d559463eb29857f2660bf3867bfb9f8610d1ddb1/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "LDAP and DNS services explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned setup.py declares dnspython and ldap3>=2.5 with several excluded versions; runtime and Android dependency support are not verified.",
+          "Directory dumps may contain sensitive identities and organizational data; use only with authorization and protect reports."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "coercer",
@@ -5911,7 +6021,29 @@
       "description": "Assess Windows authentication coercion exposure in controlled environments.",
       "example": "coercer --help",
       "source": "https://github.com/p0dalirius/Coercer",
-      "caveat": "Can trigger authentication traffic; explicit authorization required."
+      "caveat": "Can trigger authentication traffic; explicit authorization required.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/p0dalirius/Coercer/blob/6024441c708e330582ffc8e4eccc80b931807194/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "6024441c708e330582ffc8e4eccc80b931807194",
+        "source_snapshot_url": "https://github.com/p0dalirius/Coercer/blob/6024441c708e330582ffc8e4eccc80b931807194/pyproject.toml",
+        "declared_python_requirement": ">=3.7",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Windows/Active Directory services explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata declares Impacket>=0.10.0; Android support for the full protocol dependency tree is not verified.",
+          "Coercer tests authentication coercion behaviors and may trigger security controls; use only within an explicitly authorized assessment."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "bloodyad",
@@ -5924,7 +6056,29 @@
       "description": "Active Directory administration and security testing utility; some operations modify directory state.",
       "example": "bloodyAD --help",
       "source": "https://github.com/CravateRouge/bloodyAD",
-      "caveat": "Some operations modify directory state; review each action."
+      "caveat": "Some operations modify directory state; review each action.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/CravateRouge/bloodyAD/blob/48df0a8ee5bd0bad66fca21a2088449b48dc4ed0/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement or dependency declarations in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "48df0a8ee5bd0bad66fca21a2088449b48dc4ed0",
+        "source_snapshot_url": "https://github.com/CravateRouge/bloodyAD/blob/48df0a8ee5bd0bad66fca21a2088449b48dc4ed0/pyproject.toml",
+        "declared_python_requirement": ">=3.8",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Active Directory and LDAP endpoints explicitly selected by the operator"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Pinned metadata declares a strict cryptography==44.0.2 dependency; native wheel/build compatibility on Android is not verified.",
+          "Directory modification capabilities can change identity infrastructure; use read-only modes where appropriate and only with explicit authorization."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "evil-winrm",
@@ -7205,5 +7359,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes, Python packaging metadata, and Go module metadata are pinned to exact upstream revisions. Source metadata does not prove repository availability, installation success, ABI support, or runtime functionality."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes, Python packaging/dependency metadata, and Go module metadata are pinned to exact upstream revisions. Source metadata does not prove repository availability, installation success, ABI support, or runtime functionality."
 }
