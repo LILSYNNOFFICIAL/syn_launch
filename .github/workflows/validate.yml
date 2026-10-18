@@ -47,6 +47,11 @@ jobs:
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
+          for tool_id in ("mtr", "tcpdump"):
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              metadata = tool["compatibility_metadata"]
+              assert metadata["source_revision"] == "06591fc024101b04095ec4417d51907512b46e3c", tool
+              assert "termux-root-packages" in metadata["source_snapshot_url"], tool
           for tool_id in ("pip-audit", "yamllint", "dirsearch", "sherlock"):
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
