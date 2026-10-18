@@ -34,3 +34,7 @@ python main.py --smoke-test python
 ```
 
 The compatibility report is metadata/discovery output and never executes cataloged tools. `--smoke-test` explicitly probes one named entry's version/help response with time/output caps. It is not a full feature test. Review local paths, runtime details, and saved probe evidence before sharing reports.
+
+## Post-install validation
+
+From the repository root, run `bash device_check.sh` to collect a private diagnostic bundle. It does not install or update packages, contact targets, or execute the cataloged security tools. The script reports its checks and leaves device validation marked `not_run` pending human review.
