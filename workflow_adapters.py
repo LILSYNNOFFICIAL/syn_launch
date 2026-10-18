@@ -5,6 +5,7 @@ No network access, subprocess execution, APK extraction, or package/device mutat
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import platform
 import shutil
@@ -17,6 +18,9 @@ from pathlib import Path
 ADAPTER_SCHEMA = 1
 MAX_APK_BYTES = 256 * 1024 * 1024
 MAX_APK_ENTRIES = 50_000
+MAX_EVIDENCE_JSON_BYTES = 5 * 1024 * 1024
+MAX_FINDINGS = 500
+SEVERITIES = {"critical", "high", "medium", "low", "info", "unknown"}
 
 
 def _mode(path: Path) -> dict:
@@ -187,11 +191,83 @@ def run_mobile_apk_inventory(scope: str) -> dict:
     }
 
 
+
+def run_assessment_report(scope: str) -> dict:
+    """Validate and summarize a local JSON evidence bundle without contacting targets."""
+    candidate = Path(scope).expanduser()
+    if candidate.suffix.lower() != ".json":
+        raise ValueError("assessment-report adapter requires a local .json evidence file")
+    try:
+        path = candidate.resolve(strict=True)
+        info = path.stat()
+    except OSError as exc:
+        raise ValueError("Evidence JSON path does not resolve to a readable local file") from exc
+    if not path.is_file():
+        raise ValueError("Evidence path must identify a regular file")
+    if info.st_size <= 0 or info.st_size > MAX_EVIDENCE_JSON_BYTES:
+        raise ValueError(f"Evidence JSON must be between 1 byte and {MAX_EVIDENCE_JSON_BYTES} bytes")
+    raw = path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    try:
+        payload = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("Evidence file must be valid UTF-8 JSON") from exc
+    if not isinstance(payload, dict) or not isinstance(payload.get("findings"), list):
+        raise ValueError("Evidence JSON must be an object containing a findings list")
+    findings = payload["findings"]
+    if len(findings) > MAX_FINDINGS:
+        raise ValueError(f"Evidence JSON may contain at most {MAX_FINDINGS} findings")
+    normalized = []
+    counts = {severity: 0 for severity in sorted(SEVERITIES)}
+    required = ("title", "severity", "asset", "evidence", "remediation")
+    for index, finding in enumerate(findings):
+        if not isinstance(finding, dict):
+            raise ValueError(f"Finding {index + 1} must be an object")
+        item = {}
+        for key in required:
+            value = finding.get(key)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"Finding {index + 1} requires non-empty string field '{key}'")
+            if len(value) > 4000:
+                raise ValueError(f"Finding {index + 1} field '{key}' exceeds 4000 characters")
+            item[key] = value.strip()
+        severity = item["severity"].lower()
+        if severity not in SEVERITIES:
+            raise ValueError(f"Finding {index + 1} severity must be one of: {', '.join(sorted(SEVERITIES))}")
+        item["severity"] = severity
+        counts[severity] += 1
+        normalized.append(item)
+    return {
+        "adapter_schema": ADAPTER_SCHEMA,
+        "workflow_id": "assessment-report",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "input_basename": path.name,
+        "input_sha256": digest,
+        "finding_count": len(normalized),
+        "severity_counts": counts,
+        "findings": normalized,
+        "execution": {
+            "network_actions_executed": False,
+            "subprocesses_executed": False,
+            "catalog_tools_executed": False,
+            "evidence_file_modified": False,
+        },
+        "verification": "input_schema_validated_only",
+        "limitations": [
+            "This report organizes supplied evidence; it does not independently verify the findings or their severity.",
+            "Do not include live credentials, session tokens, or personal data in evidence fields.",
+            "Protect the source file and report as potentially sensitive assessment material.",
+        ],
+    }
+
+
 def run_workflow_adapter(workflow_id: str, scope: str) -> dict:
     if workflow_id == "device-configuration-audit":
         return run_device_configuration_audit(scope)
     if workflow_id == "mobile-app-review":
         return run_mobile_apk_inventory(scope)
+    if workflow_id == "assessment-report":
+        return run_assessment_report(scope)
     raise ValueError(
         "No execution adapter is approved for this workflow yet; use --workflow-plan to create a dry-run plan."
     )
