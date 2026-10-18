@@ -2960,7 +2960,28 @@
       "description": "Scan container images, filesystems, repositories, and supported infrastructure artifacts for risks.",
       "example": "trivy --help",
       "source": "https://github.com/aquasecurity/trivy",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/aquasecurity/trivy/blob/9dd3e28d275544dd16463162e99471ac761eb9f0/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the declared Go toolchain version and module dependencies in the pinned go.mod. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "9dd3e28d275544dd16463162e99471ac761eb9f0",
+        "source_snapshot_url": "https://github.com/aquasecurity/trivy/blob/9dd3e28d275544dd16463162e99471ac761eb9f0/go.mod",
+        "declared_go_requirement": "1.27.0",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.27.0 and declares a large cloud/container dependency graph; the target Termux toolchain and build resources are unverified.",
+          "Scanning OCI images and remote registries may require network access, authentication, and substantial storage; this metadata does not test those paths.",
+          "Findings depend on vulnerability database freshness and configuration; review before taking remediation actions."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "grype",
@@ -2973,7 +2994,28 @@
       "description": "Scan container images and filesystems for known package vulnerabilities.",
       "example": "grype --help",
       "source": "https://github.com/anchore/grype",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/anchore/grype/blob/8ea928e9f642c376b888a0ee63cb579f1bf47486/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the declared Go toolchain version and module dependencies in the pinned go.mod. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "8ea928e9f642c376b888a0ee63cb579f1bf47486",
+        "source_snapshot_url": "https://github.com/anchore/grype/blob/8ea928e9f642c376b888a0ee63cb579f1bf47486/go.mod",
+        "declared_go_requirement": "1.26.8",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.26.8; Android/Termux compilation and runtime are not verified.",
+          "Database updates, image registries, and source discovery can require network access and storage beyond a mobile device's available resources.",
+          "A scan result depends on catalog/database versions and artifact discovery; it is not proof that an artifact is free of vulnerabilities."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "syft",
@@ -2986,7 +3028,28 @@
       "description": "Generate software bills of materials from supported images and directories.",
       "example": "syft --help",
       "source": "https://github.com/anchore/syft",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/anchore/syft/blob/a81193226ffdd07b71126dda04e753d6d2e22324/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the declared Go toolchain version and module dependencies in the pinned go.mod. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "a81193226ffdd07b71126dda04e753d6d2e22324",
+        "source_snapshot_url": "https://github.com/anchore/syft/blob/a81193226ffdd07b71126dda04e753d6d2e22324/go.mod",
+        "declared_go_requirement": "1.26.8",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.26.8 and a substantial dependency graph; the target Termux toolchain and build resources are unverified.",
+          "Container/image sources and package ecosystems can require external tools, network access, or credentials not established by module metadata.",
+          "An SBOM's completeness depends on source type, detection support, and scan configuration."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "gitleaks",
@@ -6805,7 +6868,28 @@
       "description": "Check Kubernetes configuration against CIS benchmarks.",
       "example": "kube-bench --help",
       "source": "https://github.com/aquasecurity/kube-bench",
-      "caveat": "Usually requires host/cluster context unavailable on stock Android."
+      "caveat": "Usually requires host/cluster context unavailable on stock Android.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/aquasecurity/kube-bench/blob/e278a5915a982f2756026de6e2f9ca77077ef9f9/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the declared Go toolchain version and module dependencies in the pinned go.mod. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "e278a5915a982f2756026de6e2f9ca77077ef9f9",
+        "source_snapshot_url": "https://github.com/aquasecurity/kube-bench/blob/e278a5915a982f2756026de6e2f9ca77077ef9f9/go.mod",
+        "declared_go_requirement": "1.26.3",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.26.3; Android/Termux build and runtime are unverified.",
+          "Useful checks require a supported Kubernetes node, configuration files, permissions, and environment not present on a generic Android phone.",
+          "Benchmark results depend on Kubernetes distribution/version and correct benchmark profile selection."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "sslscan",
@@ -6963,7 +7047,28 @@
       "description": "Tunneling framework used in authorized network assessment labs.",
       "example": "See the official Ligolo-ng documentation.",
       "source": "https://github.com/nicocha30/ligolo-ng",
-      "caveat": "Advanced routing and privileges may be required; manual-only."
+      "caveat": "Advanced routing and privileges may be required; manual-only.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/nicocha30/ligolo-ng/blob/e543732f4be6dc899096ae322ae620bf010bfbfc/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the declared Go toolchain version and module dependencies in the pinned go.mod. It does not establish Android/Termux support, successful compilation, installation, ABI support, or runtime functionality.",
+        "source_revision": "e543732f4be6dc899096ae322ae620bf010bfbfc",
+        "source_snapshot_url": "https://github.com/nicocha30/ligolo-ng/blob/e543732f4be6dc899096ae322ae620bf010bfbfc/go.mod",
+        "declared_go_requirement": "1.25.0",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target device toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.25.0 and includes platform-sensitive networking dependencies; Android/Termux builds are not verified.",
+          "Tunneling behavior depends on routing, permissions, and network topology; no tunnel is started by this catalog metadata.",
+          "Use only in a controlled lab or an explicitly authorized engagement; tunneling can expose networks and bypass intended boundaries."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "gosec",
