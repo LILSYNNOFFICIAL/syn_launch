@@ -51,7 +51,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/git"
       }
     },
     {
@@ -81,7 +83,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/libcurl"
       }
     },
     {
@@ -111,7 +115,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/wget"
       }
     },
     {
@@ -141,7 +147,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/jq"
       }
     },
     {
@@ -171,7 +179,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/ripgrep"
       }
     },
     {
@@ -201,7 +211,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/fd"
       }
     },
     {
@@ -231,7 +243,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/fzf"
       }
     },
     {
@@ -261,7 +275,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/tmux"
       }
     },
     {
@@ -291,7 +307,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/nano"
       }
     },
     {
@@ -321,7 +339,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/vim"
       }
     },
     {
@@ -351,7 +371,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/openssh"
       }
     },
     {
@@ -381,7 +403,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rsync"
       }
     },
     {
@@ -411,7 +435,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/tree"
       }
     },
     {
@@ -454,7 +480,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/less"
       }
     },
     {
@@ -484,7 +512,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/libsqlite"
       }
     },
     {
@@ -514,7 +544,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/python"
       }
     },
     {
@@ -544,7 +576,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/nodejs"
       }
     },
     {
@@ -574,7 +608,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/ruby"
       }
     },
     {
@@ -604,7 +640,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/perl"
       }
     },
     {
@@ -634,7 +672,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/php"
       }
     },
     {
@@ -664,7 +704,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/golang"
       }
     },
     {
@@ -694,7 +736,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rust"
       }
     },
     {
@@ -724,7 +768,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/libllvm"
       }
     },
     {
@@ -754,7 +800,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/make"
       }
     },
     {
@@ -785,7 +833,9 @@
           "Raw-packet scan modes and some discovery features may be restricted on unrooted Android; behavior depends on scan type and permissions.",
           "Use only against explicitly authorized targets."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/nmap"
       }
     },
     {
@@ -815,7 +865,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/netcat-openbsd"
       }
     },
     {
@@ -845,7 +897,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/nmap"
       }
     },
     {
@@ -875,7 +929,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/dnsutils"
       }
     },
     {
@@ -905,7 +961,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/whois"
       }
     },
     {
@@ -935,7 +993,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/traceroute"
       }
     },
     {
@@ -965,7 +1025,9 @@
           "Some ICMP/raw-socket modes may require privileges or kernel capabilities unavailable to an unrooted Android app.",
           "The recipe is under the upstream root-packages tree; confirm the relevant repository is configured before expecting pkg install to find it."
         ],
-        "reviewed_on": "2026-10-18"
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/root-packages/mtr"
       }
     },
     {
@@ -995,7 +1057,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/iperf3"
       }
     },
     {
@@ -1027,7 +1091,9 @@
           "Packet capture is generally restricted by Android app sandboxing and interface permissions; package installation does not grant host-level capture access.",
           "The recipe is under the upstream root-packages tree; confirm the relevant repository is configured before expecting pkg install to find it."
         ],
-        "reviewed_on": "2026-10-18"
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/root-packages/tcpdump"
       }
     },
     {
@@ -1059,7 +1125,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-api"
       }
     },
     {
@@ -1089,7 +1157,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/openssl"
       }
     },
     {
@@ -1119,7 +1189,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/socat"
       }
     },
     {
@@ -1175,7 +1247,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/net-tools"
       }
     },
     {
@@ -1205,7 +1279,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/iproute2"
       }
     },
     {
@@ -1235,7 +1311,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-tools"
       }
     },
     {
@@ -1265,7 +1343,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/inetutils"
       }
     },
     {
@@ -1295,7 +1375,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/httpie"
       }
     },
     {
@@ -1351,7 +1433,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-services"
       }
     },
     {
@@ -1381,7 +1465,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/inetutils"
       }
     },
     {
@@ -2113,7 +2199,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "ShellCheck analyzes shell source; it does not prove runtime behavior or shell portability across every target environment."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/shellcheck"
       }
     },
     {
@@ -2169,7 +2257,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/nodejs"
       }
     },
     {
@@ -2238,7 +2328,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/exiftool"
       }
     },
     {
@@ -2268,7 +2360,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/binwalk"
       }
     },
     {
@@ -2299,7 +2393,9 @@
           "YARA rules must be obtained from a trusted source and reviewed before use.",
           "Scanning results depend on rule quality and can include false positives or false negatives."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/yara"
       }
     },
     {
@@ -2342,7 +2438,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/vim"
       }
     },
     {
@@ -2372,7 +2470,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/util-linux"
       }
     },
     {
@@ -2402,7 +2502,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/binutils"
       }
     },
     {
@@ -2432,7 +2534,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/binutils"
       }
     },
     {
@@ -2462,7 +2566,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/binutils"
       }
     },
     {
@@ -2493,7 +2599,9 @@
           "Analyze untrusted binaries in an isolated environment; parsing malformed files may expose tool vulnerabilities.",
           "Architecture support and analysis quality vary by binary format and processor target."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/radare2"
       }
     },
     {
@@ -2523,7 +2631,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gdb"
       }
     },
     {
@@ -2632,7 +2742,9 @@
           "OCR requires compatible traineddata files for the selected language and model.",
           "Recognition quality depends on image quality, language data, and preprocessing."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/tesseract"
       }
     },
     {
@@ -2675,7 +2787,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/ffmpeg"
       }
     },
     {
@@ -2705,7 +2819,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/mediainfo"
       }
     },
     {
@@ -2735,7 +2851,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gnupg"
       }
     },
     {
@@ -2765,7 +2883,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/age"
       }
     },
     {
@@ -2860,7 +2980,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/openssh"
       }
     },
     {
@@ -2890,7 +3012,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/age"
       }
     },
     {
@@ -2961,7 +3085,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-api"
       }
     },
     {
@@ -2993,7 +3119,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-api"
       }
     },
     {
@@ -3075,7 +3203,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-tools"
       }
     },
     {
@@ -3105,7 +3235,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-tools"
       }
     },
     {
@@ -3137,7 +3269,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-api"
       }
     },
     {
@@ -3169,7 +3303,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/termux-api"
       }
     },
     {
@@ -3332,7 +3468,9 @@
           "Detection quality depends on signature database freshness and configuration.",
           "Full filesystem access may be limited by Android app sandboxing and Termux permissions."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/clamav"
       }
     },
     {
@@ -3362,7 +3500,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/clamav"
       }
     },
     {
@@ -3392,7 +3532,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/yq"
       }
     },
     {
@@ -3422,7 +3564,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/xmlstarlet"
       }
     },
     {
@@ -3452,7 +3596,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/coreutils"
       }
     },
     {
@@ -3482,7 +3628,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/coreutils"
       }
     },
     {
@@ -3512,7 +3660,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gzip"
       }
     },
     {
@@ -3542,7 +3692,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/tar"
       }
     },
     {
@@ -3572,7 +3724,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/zip"
       }
     },
     {
@@ -3602,7 +3756,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/unzip"
       }
     },
     {
@@ -3632,7 +3788,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/parallel"
       }
     },
     {
@@ -3662,7 +3820,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/procps"
       }
     },
     {
@@ -3692,7 +3852,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/lsof"
       }
     },
     {
@@ -3722,7 +3884,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/procps"
       }
     },
     {
@@ -3752,7 +3916,9 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/htop"
       }
     },
     {
@@ -4810,7 +4976,9 @@
           "Connects to the explicitly named SSH service; use only for systems within the approved scope.",
           "Collected host keys must be verified through a trusted channel before being treated as authentic."
         ],
-        "reviewed_on": "2026-10-17"
+        "reviewed_on": "2026-10-17",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/openssh"
       }
     },
     {
@@ -4970,5 +5138,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. A recipe URL proves only that upstream packaging metadata was found, not successful installation, ABI compatibility, or functional behavior."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Each Termux recipe declaration includes a pinned upstream repository revision and a snapshot URL; this proves only that packaging metadata was present at that revision, not current repository availability, successful installation, ABI compatibility, or runtime functionality."
 }
