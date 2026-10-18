@@ -77,6 +77,8 @@ python main.py --smoke-test python
 - [Security and responsible use](wiki/Security-and-Responsible-Use.md)
 - [Troubleshooting](wiki/Troubleshooting.md)
 - [Development and contributing](wiki/Development-and-Contributing.md)
+- [Workflow planning and bounded adapters](wiki/Workflow-Planning.md)
+- [Optional Linux Environments](wiki/Optional-Linux-Environments.md)
 - [Platform roadmap](PLATFORM_ROADMAP.md)
 - [Changelog](CHANGELOG.md)
 
