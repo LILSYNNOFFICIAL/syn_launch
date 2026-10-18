@@ -2196,7 +2196,28 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "osrframework --help",
       "source": "https://github.com/i3visio/osrframework",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/osinter-project/osrframework/blob/82f9e4637a9ef3cdabe85b31f42bce9a5a880e1e/setup.py",
+        "evidence_kind": "upstream Python package setup metadata (setup.py)",
+        "evidence_scope": "Confirms the pinned upstream OSRFramework setup metadata exists. It does not establish dependency installation, current API/provider availability, Android/Termux support, ABI compatibility, or runtime functionality.",
+        "source_revision": "82f9e4637a9ef3cdabe85b31f42bce9a5a880e1e",
+        "source_snapshot_url": "https://github.com/osinter-project/osrframework/blob/82f9e4637a9ef3cdabe85b31f42bce9a5a880e1e/setup.py",
+        "architecture_policy": "Python packaging metadata does not prove all native/transitive dependencies work on Android/Termux. Provider access and current API behavior must be checked separately.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Third-party identity/search providers and APIs used by selected OSRFramework modules."
+        ],
+        "known_blockers": [
+          "Upstream setup metadata does not establish Android/Termux support or successful installation.",
+          "Some modules depend on third-party providers, credentials, rate limits, or APIs that may change or be unavailable.",
+          "The catalog package selector is not pinned to an immutable release."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "holehe",
@@ -2433,7 +2454,28 @@
       "description": "Web server misconfiguration and known-file checks for authorized targets.",
       "example": "nikto -Help",
       "source": "https://github.com/sullo/nikto",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Perl-based upstream project; Android/Termux runtime unverified",
+        "install_source": "https://github.com/sullo/nikto/blob/312645d873478a77986627ab1fc8cffe595e85d4/program/nikto.pl",
+        "evidence_kind": "upstream Nikto program entry point (Perl source)",
+        "evidence_scope": "Confirms the pinned upstream Nikto program entry point exists. It does not establish dependency availability, Android/Termux support, successful installation, or scan behavior.",
+        "source_revision": "312645d873478a77986627ab1fc8cffe595e85d4",
+        "source_snapshot_url": "https://github.com/sullo/nikto/blob/312645d873478a77986627ab1fc8cffe595e85d4/program/nikto.pl",
+        "architecture_policy": "The Perl entry point does not establish availability of all Perl modules or platform-specific dependencies on Android/Termux.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Authorized target web servers; optional DNS and network services."
+        ],
+        "known_blockers": [
+          "Nikto sends active HTTP requests and must only be used against explicitly authorized targets.",
+          "Perl module dependencies and TLS/network behavior must be checked on the target environment.",
+          "This source declaration is not an install recipe or device test."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "sqlmap",
@@ -3358,7 +3400,26 @@
       "description": "Inspect binary security properties such as PIE, NX, canaries, and RELRO.",
       "example": "checksec --help",
       "source": "https://github.com/slimm609/checksec.sh",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go project metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/slimm609/checksec/blob/0ee6a029b99be2f7d664b0b08881cfc7a83e5122/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the pinned checksec Go module metadata exists. It does not establish successful cross-compilation, Android/Termux support, or behavior on Android ELF binaries.",
+        "source_revision": "0ee6a029b99be2f7d664b0b08881cfc7a83e5122",
+        "source_snapshot_url": "https://github.com/slimm609/checksec/blob/0ee6a029b99be2f7d664b0b08881cfc7a83e5122/go.mod",
+        "architecture_policy": "Go module metadata does not prove the configured Termux Go toolchain and all dependencies build for the device ABI. Validate support for Android ELF formats separately.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "A Go module declaration does not prove the tool builds or runs on Android/Termux.",
+          "The catalog entry is not configured for automatic installation.",
+          "The set of binary security properties inspected may differ by binary format and build toolchain."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "lynis",
@@ -4133,7 +4194,26 @@
       "description": "Inspect PDF token counts to triage potentially suspicious documents.",
       "example": "pdfid.py -h",
       "source": "https://github.com/DidierStevens/DidierStevensSuite",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python source utility; Android/Termux runtime unverified",
+        "install_source": "https://github.com/DidierStevens/DidierStevensSuite/blob/7d625d0b05c4638b981a2a2cc9a8481d7b73e56d/pdfid.py",
+        "evidence_kind": "upstream PDFiD Python script",
+        "evidence_scope": "Confirms the pinned upstream PDFiD script exists. It does not establish successful execution on Android/Termux, full PDF parser safety, or correctness for every PDF variant.",
+        "source_revision": "7d625d0b05c4638b981a2a2cc9a8481d7b73e56d",
+        "source_snapshot_url": "https://github.com/DidierStevens/DidierStevensSuite/blob/7d625d0b05c4638b981a2a2cc9a8481d7b73e56d/pdfid.py",
+        "architecture_policy": "A Python script is architecture-independent at source level, but interpreter version, encoding, file access, and supported PDF constructs still require validation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Source presence does not establish device runtime verification.",
+          "PDF token counts are triage signals, not proof that a file is safe or malicious.",
+          "Analyze untrusted documents in a controlled environment and avoid opening suspicious files with vulnerable viewers."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "peepdf",
@@ -4860,7 +4940,28 @@
       "description": "Wireless network detector and packet capture framework requiring supported hardware and permissions.",
       "example": "kismet --help",
       "source": "https://github.com/kismetwireless/kismet",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream Linux wireless-monitoring project documentation reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/kismetwireless/kismet/blob/de2b100dcdb34e86eb1b3c1d559aac154ad315d9/README.md",
+        "evidence_kind": "upstream Kismet project documentation (README)",
+        "evidence_scope": "Confirms the pinned upstream Kismet project documentation exists. It does not establish that required capture interfaces, drivers, permissions, or hardware are available on Android.",
+        "source_revision": "de2b100dcdb34e86eb1b3c1d559aac154ad315d9",
+        "source_snapshot_url": "https://github.com/kismetwireless/kismet/blob/de2b100dcdb34e86eb1b3c1d559aac154ad315d9/README.md",
+        "architecture_policy": "A Linux source tree does not establish Android/Termux build support. Wireless capture depends on kernel drivers, adapter chipset, firmware, permissions, and compatible interfaces.",
+        "root_required": false,
+        "hardware_requirements": [
+          "Supported wireless adapter/driver and capture interface for intended operation."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Stock Android generally restricts monitor-mode access and packet capture; exact device/kernel/adapter support is unverified.",
+          "Required libraries and build configuration may not be available in Termux.",
+          "No root or hardware capability is inferred from this source review."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "bluez-tools",
@@ -4873,7 +4974,28 @@
       "description": "Bluetooth command-line utilities; Android's Bluetooth stack may not expose BlueZ interfaces.",
       "example": "bluetoothctl --help",
       "source": "https://github.com/bluez/bluez",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "BlueZ upstream Linux project; Android/Termux integration unverified",
+        "install_source": "https://github.com/bluez/bluez/tree/fa6ba55020dee3c3183041c854c347b4582448be/tools",
+        "evidence_kind": "upstream BlueZ tools source directory",
+        "evidence_scope": "Confirms the pinned upstream BlueZ tools source directory exists. It does not establish that these tools are independently packaged, build on Android/Termux, or can control Android's Bluetooth stack.",
+        "source_revision": "fa6ba55020dee3c3183041c854c347b4582448be",
+        "source_snapshot_url": "https://github.com/bluez/bluez/tree/fa6ba55020dee3c3183041c854c347b4582448be/tools",
+        "architecture_policy": "Linux BlueZ utilities may rely on D-Bus and BlueZ daemon interfaces that are absent or inaccessible on Android.",
+        "root_required": false,
+        "hardware_requirements": [
+          "Bluetooth adapter and OS stack exposing the expected BlueZ interfaces."
+        ],
+        "external_services": [],
+        "known_blockers": [
+          "Android typically uses its own Bluetooth stack and may not expose the BlueZ daemon interfaces expected by these utilities.",
+          "Upstream source directory presence does not establish a standalone installable package or Android support.",
+          "No Bluetooth state is changed by this compatibility declaration."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "termux-info",
@@ -5867,7 +5989,28 @@
       "description": "XSS parameter analysis for authorized web assessments.",
       "example": "dalfox --help",
       "source": "https://github.com/hahwul/dalfox",
-      "caveat": "Active probes may trigger application behavior."
+      "caveat": "Active probes may trigger application behavior.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go project source documentation reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/hahwul/dalfox/blob/79f618b264bd49290b968c19f3d1f0e9cce05125/README.md",
+        "evidence_kind": "upstream Dalfox project documentation (README)",
+        "evidence_scope": "Confirms the pinned upstream Dalfox project documentation exists. It does not establish that the current module and dependencies build on Android/Termux or that any target is authorized.",
+        "source_revision": "79f618b264bd49290b968c19f3d1f0e9cce05125",
+        "source_snapshot_url": "https://github.com/hahwul/dalfox/blob/79f618b264bd49290b968c19f3d1f0e9cce05125/README.md",
+        "architecture_policy": "Go-based project documentation does not prove that all dependencies build for the target Android ABI. Validate the actual Go module and local toolchain before installation.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Explicitly authorized web application targets."
+        ],
+        "known_blockers": [
+          "Dalfox performs active XSS testing and must only be used against explicitly authorized targets.",
+          "The catalog uses a floating @latest Go install selector, so installed code can differ from this evidence snapshot.",
+          "This source declaration does not prove build success or runtime compatibility on Android/Termux."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "arjun",
@@ -6604,7 +6747,28 @@
       "description": "Nuclei's maintained template collection; templates are executable test logic, not passive data.",
       "example": "nuclei -tl",
       "source": "https://github.com/projectdiscovery/nuclei-templates",
-      "caveat": "Review template contents and provenance before running."
+      "caveat": "Review template contents and provenance before running.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Nuclei template data repository; not a standalone runtime or Android compatibility claim",
+        "install_source": "https://github.com/projectdiscovery/nuclei-templates/blob/17f5725dc10ced09f464dd2d255c19957aad51e7/README.md",
+        "evidence_kind": "upstream Nuclei templates repository documentation",
+        "evidence_scope": "Confirms the pinned upstream template repository documentation exists. Templates are executable test definitions interpreted by Nuclei; this does not establish safe behavior, template compatibility, or authorization for any target.",
+        "source_revision": "17f5725dc10ced09f464dd2d255c19957aad51e7",
+        "source_snapshot_url": "https://github.com/projectdiscovery/nuclei-templates/blob/17f5725dc10ced09f464dd2d255c19957aad51e7/README.md",
+        "architecture_policy": "Templates are not a native executable. Compatibility depends on the Nuclei engine version, template syntax, external helpers, and target environment.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Targets and any services invoked by individual templates."
+        ],
+        "known_blockers": [
+          "Templates may send active probes or trigger impactful checks; inspect each template and use only within explicit authorization.",
+          "Template engine version and template revision can drift independently.",
+          "Repository documentation is not a security review of individual templates."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "wpscan",
@@ -7195,7 +7359,28 @@
       "description": "Rule-based Android malware behavior analysis and APK triage.",
       "example": "quark --help",
       "source": "https://github.com/quark-engine/quark-engine",
-      "caveat": "Use for defensive analysis of files you may inspect."
+      "caveat": "Use for defensive analysis of files you may inspect.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/ev-flow/quark-engine/blob/7accc95f104c6f30b8f64908ca022c30059121fd/setup.py",
+        "evidence_kind": "upstream Quark Engine Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms the pinned upstream Quark Engine setup metadata exists. It does not establish that native dependencies, analysis rules, or all APK-analysis features work on Android/Termux.",
+        "source_revision": "7accc95f104c6f30b8f64908ca022c30059121fd",
+        "source_snapshot_url": "https://github.com/ev-flow/quark-engine/blob/7accc95f104c6f30b8f64908ca022c30059121fd/setup.py",
+        "architecture_policy": "Python package metadata does not establish dependency availability or behavior on Android/Termux; validate native libraries, Python version, and rule database separately.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Rule database downloads or updates if required by the selected workflow."
+        ],
+        "known_blockers": [
+          "The catalog package selector is floating and can resolve to a newer release than this source snapshot.",
+          "Dependency and rule-data availability on Android/Termux is not established.",
+          "Static or rule-based APK analysis is not proof of benign or malicious behavior."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "jadx",
@@ -8968,5 +9153,5 @@
       }
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Pinned upstream source revisions make metadata review reproducible but do not establish Android/Termux support, installability, or runtime functionality."
+  "compatibility_metadata_note": "Source-pinned metadata records exactly what an upstream source snapshot supports; language, project, or recipe presence is not device verification. Do not infer installation success, ABI compatibility, permissions, hardware support, or runtime functionality from these declarations."
 }
