@@ -5,6 +5,7 @@ import argparse, json, os, platform, re, selectors, shutil, signal, subprocess, 
 from pathlib import Path
 from urllib.parse import urlsplit
 from workflow_planner import WORKFLOWS, build_workflow_plan
+from workflow_adapters import run_workflow_adapter
 
 APP_DIR = Path(__file__).resolve().parent
 CATALOG_PATH = APP_DIR / "catalog.json"
@@ -1275,6 +1276,7 @@ def main():
     parser.add_argument("--tool",metavar="NAME",help="show status and local help for a tool")
     parser.add_argument("--workflow-list",action="store_true",help="list available dry-run assessment workflow plans")
     parser.add_argument("--workflow-plan",metavar="WORKFLOW_ID",help="emit a scope-bound dry-run plan; does not run tools")
+    parser.add_argument("--workflow-run",metavar="WORKFLOW_ID",help="run an approved read-only local workflow adapter; unsupported workflows remain plan-only")
     parser.add_argument("--target-scope",metavar="SCOPE",help="explicit assets/environment covered by a workflow plan")
     parser.add_argument("--authorized",action="store_true",help="confirm you have authorization for the declared scope")
     args=parser.parse_args()
@@ -1294,6 +1296,21 @@ def main():
         except ValueError as exc:
             print("Workflow plan rejected: " + str(exc), file=sys.stderr); return 2
         print(json.dumps(plan, indent=2, ensure_ascii=False))
+        return 0
+    if args.workflow_run:
+        if not args.target_scope:
+            print("--workflow-run requires --target-scope.", file=sys.stderr); return 2
+        if not args.authorized:
+            print("--workflow-run requires --authorized. This is an operator declaration, not an authorization check.", file=sys.stderr); return 2
+        try:
+            report = run_workflow_adapter(args.workflow_run, args.target_scope)
+        except ValueError as exc:
+            print("Workflow execution rejected: " + str(exc), file=sys.stderr); return 2
+        report_dir = STATE_DIR / "workflow-runs"
+        report_path = report_dir / (args.workflow_run + "-" + time.strftime("%Y%m%dT%H%M%S") + "-" + str(time.time_ns()) + ".json")
+        save_private_json(report_path, report)
+        report["saved_report"] = str(report_path)
+        print(json.dumps(report, indent=2, ensure_ascii=False))
         return 0
     if args.profile: print_environment_profile(data); return 0
     if args.compatibility_report: print_compatibility_report(data); return 0
