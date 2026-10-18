@@ -6,7 +6,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 
 ### Compatibility evidence
 - Expanded structured, source-linked compatibility declarations to 84 catalog entries spanning 66 distinct upstream Termux package recipe/subpackage directories, including Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, OpenSSH keyscan, MTR, and tcpdump.
-- Added an explicit evidence-scope field and stricter schema validation for compatibility declarations.
+- Added an explicit evidence-scope field, pinned upstream source revisions and snapshot URLs, and CI checks for reproducible compatibility evidence.
 - Kept recipe presence, catalog installability, PATH discovery, smoke-test outcome, and device validation as separate evidence states.
 
 - Added `bash device_check.sh` to gather a private, read-only local diagnostic bundle; CI exercises the script but does not substitute for Android/Termux testing.
