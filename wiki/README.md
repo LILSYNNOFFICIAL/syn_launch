@@ -21,7 +21,7 @@ SYN_LAUNCH is a mobile-first Termux catalog, installer, and device/runtime diagn
 
 **Listed, installable, detected, source-documented, smoke-tested, and device-verified are different states.** SYN_LAUNCH must not upgrade one state into another without evidence. See [Compatibility and verification](Compatibility-and-Verification.md).
 
-This is a repository-hosted wiki so pages are versioned with the code. It is not a claim that GitHub's separate Wiki feature is enabled.
+GitHub's separate Wiki feature is enabled in repository settings, but its wiki repository is not yet initialized or accessible through the available GitHub content API. These versioned `wiki/` pages remain the complete documentation source until actual GitHub Wiki pages can be created.
 
 
 - [Workflow Planning](Workflow-Planning.md): scope-bound dry-run plans, authorization declaration, and safety limits.
