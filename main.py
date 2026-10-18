@@ -73,6 +73,35 @@ def validate_catalog(data):
         if not valid_source: raise ValueError(f"source must be a valid HTTPS URL without credentials: {t['name']}")
         if "example" in t and (not isinstance(t["example"], str) or len(t["example"]) > 1000):
             raise ValueError(f"invalid example: {t['name']}")
+        compatibility = t.get("compatibility")
+        if compatibility is not None:
+            if not isinstance(compatibility, dict):
+                raise ValueError(f"invalid compatibility metadata: {t['name']}")
+            required_compatibility = ("status", "platform", "install_source", "evidence_kind",
+                                      "architecture_policy", "root_required", "hardware_requirements",
+                                      "external_services", "known_blockers", "reviewed_on")
+            if any(field not in compatibility for field in required_compatibility):
+                raise ValueError(f"incomplete compatibility metadata: {t['name']}")
+            if compatibility.get("status") != "source_documented_not_device_verified":
+                raise ValueError(f"unsupported compatibility status: {t['name']}")
+            if type(compatibility.get("root_required")) is not bool:
+                raise ValueError(f"invalid root requirement metadata: {t['name']}")
+            for field in ("hardware_requirements", "external_services", "known_blockers"):
+                values = compatibility.get(field)
+                if not isinstance(values, list) or any(not isinstance(value, str) or not value.strip() or len(value) > 1000 for value in values):
+                    raise ValueError(f"invalid compatibility list {field}: {t['name']}")
+            for field in ("status", "platform", "evidence_kind", "architecture_policy", "reviewed_on"):
+                value = compatibility.get(field)
+                if not isinstance(value, str) or not value.strip() or len(value) > 500:
+                    raise ValueError(f"invalid compatibility field {field}: {t['name']}")
+            try:
+                evidence_url = urlsplit(compatibility.get("install_source", ""))
+                valid_evidence = evidence_url.scheme == "https" and bool(evidence_url.hostname) and not evidence_url.username and not evidence_url.password and not any(ch.isspace() for ch in compatibility["install_source"])
+                _ = evidence_url.port
+            except (ValueError, TypeError):
+                valid_evidence = False
+            if not valid_evidence:
+                raise ValueError(f"compatibility evidence must be a valid HTTPS URL: {t['name']}")
         expected=t["install_kind"] in {"pkg","pip","go","cargo","npm"}
         if type(t.get("installable")) is not bool or t.get("installable") != expected: raise ValueError(f"installable flag mismatch: {t['name']}")
         if expected:
