@@ -1,6 +1,7 @@
-"""Read-only local adapters for selected SYN_LAUNCH workflows.
+"""Scope-limited workflow adapters for SYN_LAUNCH.
 
-No network access, subprocess execution, APK extraction, or package/device mutation.
+Local adapters are read-only. The web adapter performs one explicit HTTPS HEAD request.
+No adapter executes catalog tools, extracts APKs, or mutates package/device state.
 """
 from __future__ import annotations
 
@@ -118,9 +119,12 @@ def run_mobile_apk_inventory(scope: str) -> dict:
     if info.st_size <= 0 or info.st_size > MAX_APK_BYTES:
         raise ValueError(f"APK size must be between 1 byte and {MAX_APK_BYTES} bytes")
     digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
+    try:
+        with path.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
+    except OSError as exc:
+        raise ValueError("APK could not be read for hashing") from exc
     try:
         with zipfile.ZipFile(path, "r") as archive:
             entries = archive.infolist()
@@ -270,7 +274,10 @@ def run_web_api_review(scope: str) -> dict:
         report["error_type"] = type(exc).__name__
     finally:
         if connection is not None:
-            connection.close()
+            try:
+                connection.close()
+            except OSError:
+                pass
     return report
 
 
@@ -288,7 +295,10 @@ def run_assessment_report(scope: str) -> dict:
         raise ValueError("Evidence path must identify a regular file")
     if info.st_size <= 0 or info.st_size > MAX_EVIDENCE_JSON_BYTES:
         raise ValueError(f"Evidence JSON must be between 1 byte and {MAX_EVIDENCE_JSON_BYTES} bytes")
-    raw = path.read_bytes()
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise ValueError("Evidence JSON could not be read") from exc
     digest = hashlib.sha256(raw).hexdigest()
     try:
         payload = json.loads(raw.decode("utf-8"))
