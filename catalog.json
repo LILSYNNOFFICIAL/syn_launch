@@ -6704,7 +6704,28 @@
       "description": "Generate domain-name permutations for defensive asset discovery.",
       "example": "dnsgen --help",
       "source": "https://github.com/ProjectAnte/dnsgen",
-      "caveat": "Use only with domains in scope."
+      "caveat": "Use only with domains in scope.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package release metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://pypi.org/project/dnsgen/1.0.4/",
+        "evidence_kind": "versioned PyPI release metadata (dnsgen 1.0.4)",
+        "evidence_scope": "Confirms the versioned PyPI release metadata for DNSGen 1.0.4 and its domain-permutation purpose. It does not establish the integrity of a local installation, Android/Termux support, dependency compatibility, or runtime functionality.",
+        "source_revision": "1.0.4",
+        "source_snapshot_url": "https://pypi.org/project/dnsgen/1.0.4/",
+        "architecture_policy": "The published package metadata does not establish that dependencies and the package work on Android/Termux. Validate Python version, dependencies, wordlist access, and runtime behavior separately.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "DNS or other network services only if paired with separate resolution tools; DNSGen itself generates candidate names and is not a resolver."
+        ],
+        "known_blockers": [
+          "The catalog install selector is unpinned; it may install a release other than the reviewed 1.0.4 metadata.",
+          "The upstream GitHub repository could not be independently resolved to a current immutable source tree in this review, so this declaration pins the versioned PyPI release metadata rather than a Git commit.",
+          "Generated domain candidates are not confirmed assets; any subsequent DNS resolution or probing must be within authorized scope."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "shuffledns",
