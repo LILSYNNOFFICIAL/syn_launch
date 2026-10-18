@@ -529,6 +529,29 @@ def requested_package_evidence(tool):
     return result
 
 
+def reconcile_requested_version(tool, version_result):
+    """Compare versions only when the catalog carries an explicit, non-floating request."""
+    request = requested_package_evidence(tool)
+    requested = request.get("requested_version")
+    resolved = version_result.get("resolved_version")
+    if request.get("version_specification") == "floating_latest":
+        status, basis = "floating_request", "floating_specification"
+    elif not requested:
+        status, basis = ("unresolved" if not resolved else "not_comparable_unpinned"), "no_exact_requested_version"
+    elif not resolved:
+        status, basis = "requested_version_unresolved", "exact_string"
+    elif requested == resolved:
+        status, basis = "exact_match", "exact_string"
+    else:
+        status, basis = "mismatch", "exact_string"
+    return {
+        "status": status,
+        "requested_version": requested,
+        "resolved_version": resolved,
+        "comparison_basis": basis,
+    }
+
+
 def collect_resolved_version(tool):
     """Read installed-version metadata from trusted package managers only."""
     kind, package = tool.get("install_kind"), tool.get("package")
@@ -680,6 +703,7 @@ def progress(items,worker,label,confirmed=False):
         # Query package-manager metadata even after an unsuccessful operation: the
         # package may already be installed, or an install may have partially succeeded.
         version_result = collect_resolved_version(t)
+        version_reconciliation = reconcile_requested_version(t, version_result)
         post_check = {
             "check_type": "metadata_only",
             "executable_detected": bool(path_after),
@@ -694,6 +718,7 @@ def progress(items,worker,label,confirmed=False):
         results.append({
             "id":t["id"], "name":t["name"], "install_kind":t["install_kind"],
             "package":t.get("package"), **requested_package_evidence(t), **version_result,
+            "version_reconciliation": version_reconciliation,
             "post_install_check": post_check,
             "operation_returned_success":bool(ok),
             "path_match_before_attempt":bool(path_before),
