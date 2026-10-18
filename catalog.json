@@ -1847,7 +1847,29 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "holehe --help",
       "source": "https://pypi.org/project/holehe/",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/megadose/holehe/blob/14da70f588538936b20d238783c5e28a0772a2b3/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "14da70f588538936b20d238783c5e28a0772a2b3",
+        "source_snapshot_url": "https://github.com/megadose/holehe/blob/14da70f588538936b20d238783c5e28a0772a2b3/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Third-party account/service endpoints queried by the tool"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py declares termcolor, bs4, httpx, trio, tqdm, and colorama; this review does not verify Android dependency availability.",
+          "This OSINT tool makes requests to external services and may trigger rate limits; use only for accounts and targets you are authorized to investigate."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "h8mail",
@@ -1936,7 +1958,29 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "dnstwist --help",
       "source": "https://github.com/elceef/dnstwist",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/elceef/dnstwist/blob/341395377f40761fe4152f43fd18eea757b6069a/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "341395377f40761fe4152f43fd18eea757b6069a",
+        "source_snapshot_url": "https://github.com/elceef/dnstwist/blob/341395377f40761fe4152f43fd18eea757b6069a/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py; it classifies the project as Python 3.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "DNS and optional external domain/reputation services, depending on configuration"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py has an empty install_requires list; optional/runtime dependencies and their availability need separate review.",
+          "Domain permutation and DNS lookups generate external queries; scope the domain and use only for authorized investigations."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "urlcrazy",
@@ -2001,7 +2045,29 @@
       "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "wapiti3 --help",
       "source": "https://github.com/wapiti-scanner/wapiti",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/wapiti-scanner/wapiti/blob/1e816981319a974f250caab219c0eb19c028e990/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "1e816981319a974f250caab219c0eb19c028e990",
+        "source_snapshot_url": "https://github.com/wapiti-scanner/wapiti/blob/1e816981319a974f250caab219c0eb19c028e990/pyproject.toml",
+        "declared_python_requirement": ">=3.12,<3.15",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "The explicitly scoped web application target and configured external services"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned pyproject declares httpx[brotli,socks]>=0.27,<1.0 and httpx-ntlm>=1.4,<2.0, among other dependencies; Android wheel/build support is not verified.",
+          "Wapiti is an active web vulnerability scanner; only run against the exact authorized scope and follow rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "dirsearch",
@@ -2108,7 +2174,29 @@
       "description": "Web application assessment utility for authorized testing. Review request behavior and rate limits before active use.",
       "example": "wfuzz --help",
       "source": "https://github.com/xmendez/wfuzz",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/xmendez/wfuzz/blob/2263cd0932fef333118cd197656f709141bab615/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "2263cd0932fef333118cd197656f709141bab615",
+        "source_snapshot_url": "https://github.com/xmendez/wfuzz/blob/2263cd0932fef333118cd197656f709141bab615/setup.py",
+        "declared_python_requirement": ">=2.6 (declared by the pinned setup.py; this legacy minimum is not evidence of compatibility with current Python or Android)",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "The explicitly scoped web application target"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py requires pycurl; building or installing pycurl may require native libcurl/toolchain support that is not verified on Android.",
+          "Fuzzing can generate high request volume and alter target behavior; use only against authorized targets with strict request and rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "owasp-zap",
@@ -3342,7 +3430,27 @@
       "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "hashid --help",
       "source": "https://pypi.org/project/hashid/",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/psypanda/hashID/blob/7e8473a823060e56d4b6090a98591e252bd9505e/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "7e8473a823060e56d4b6090a98591e252bd9505e",
+        "source_snapshot_url": "https://github.com/psypanda/hashID/blob/7e8473a823060e56d4b6090a98591e252bd9505e/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py does not declare a python_requires minimum; this is metadata evidence only and not a runtime test.",
+          "Hash-type identification is heuristic and does not verify a hash's origin or recover its plaintext."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "passlib",
@@ -3355,7 +3463,27 @@
       "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "passlib --help",
       "source": "https://pypi.org/project/passlib/",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/glic3rinu/passlib/blob/3f6b5c1f683b2b29780deda81a3eea7960c6409f/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "3f6b5c1f683b2b29780deda81a3eea7960c6409f",
+        "source_snapshot_url": "https://github.com/glic3rinu/passlib/blob/3f6b5c1f683b2b29780deda81a3eea7960c6409f/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py does not establish Android-specific compatibility; optional hashing backends and algorithms may have separate requirements.",
+          "The pinned repository metadata may not reflect current maintenance status; verify algorithm and backend support for the specific application."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "bcrypt",
@@ -3368,7 +3496,27 @@
       "description": "Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine.",
       "example": "bcrypt --help",
       "source": "https://pypi.org/project/bcrypt/",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/pyca/bcrypt/blob/1218b62796709e72121046458c3c1f046a6b1e5d/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "1218b62796709e72121046458c3c1f046a6b1e5d",
+        "source_snapshot_url": "https://github.com/pyca/bcrypt/blob/1218b62796709e72121046458c3c1f046a6b1e5d/pyproject.toml",
+        "declared_python_requirement": ">=3.9; Rust >=1.64.0 and setuptools-rust are declared for building the extension",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned pyproject requires setuptools-rust and declares a Rust extension module; compatible Android wheels or successful native builds are not verified.",
+          "Native extension builds depend on a compatible Rust toolchain and Python ABI; this metadata does not establish Android build success."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ssh-keygen",
@@ -4505,7 +4653,29 @@
       "description": "Discover HTTP parameters during authorized web testing.",
       "example": "arjun --help",
       "source": "https://github.com/s0md3v/Arjun",
-      "caveat": "Requests can be noisy; use approved scope."
+      "caveat": "Requests can be noisy; use approved scope.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/s0md3v/Arjun/blob/d1fb995cb1e064d4e171d83f19f6af79b0a3c5ce/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "d1fb995cb1e064d4e171d83f19f6af79b0a3c5ce",
+        "source_snapshot_url": "https://github.com/s0md3v/Arjun/blob/d1fb995cb1e064d4e171d83f19f6af79b0a3c5ce/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "The explicitly scoped web/API target"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py declares requests; runtime and dependency compatibility on Android remain unverified.",
+          "Parameter discovery sends active HTTP requests; only test endpoints within the authorized scope and follow rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "wafw00f",
@@ -4518,7 +4688,29 @@
       "description": "Identify common web application firewall fingerprints.",
       "example": "wafw00f --help",
       "source": "https://github.com/EnableSecurity/wafw00f",
-      "caveat": "Only assess sites you are authorized to test."
+      "caveat": "Only assess sites you are authorized to test.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/EnableSecurity/wafw00f/blob/69fbe3956bba47a172cf87e40e9037535d32a130/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "69fbe3956bba47a172cf87e40e9037535d32a130",
+        "source_snapshot_url": "https://github.com/EnableSecurity/wafw00f/blob/69fbe3956bba47a172cf87e40e9037535d32a130/pyproject.toml",
+        "declared_python_requirement": ">=3.10",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "The explicitly scoped web endpoint"
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned pyproject declares requests and requests[socks]; this does not verify Android package/wheel availability.",
+          "WAF fingerprinting sends requests to the target; only use on authorized endpoints and respect service rate limits."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kiterunner",
@@ -4614,7 +4806,27 @@
       "description": "Search binaries for ROP gadgets during authorized binary research.",
       "example": "ROPgadget --help",
       "source": "https://github.com/JonathanSalwan/ROPgadget",
-      "caveat": "For binary auditing and controlled labs."
+      "caveat": "For binary auditing and controlled labs.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/JonathanSalwan/ROPgadget/blob/b6e3fe31af46d7e045fef99a3ab19ccbcea5c2f6/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "b6e3fe31af46d7e045fef99a3ab19ccbcea5c2f6",
+        "source_snapshot_url": "https://github.com/JonathanSalwan/ROPgadget/blob/b6e3fe31af46d7e045fef99a3ab19ccbcea5c2f6/setup.py",
+        "declared_python_requirement": "No explicit python_requires minimum is declared in the pinned setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned setup.py requires capstone>=5.0.1; Android wheel/build availability for capstone is not verified.",
+          "Disassembly and gadget discovery depend on supported binary formats and architectures; output is analysis assistance, not proof an exploit is viable."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ropper",
@@ -4627,7 +4839,27 @@
       "description": "Binary gadget search for exploit-development education and auditing.",
       "example": "ropper --help",
       "source": "https://github.com/sashs/Ropper",
-      "caveat": "Binary and architecture support vary."
+      "caveat": "Binary and architecture support vary.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/sashs/Ropper/blob/a2ffccf046db6fa20e0b1e20fe0a67af1d41ea9a/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python requirement and packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "a2ffccf046db6fa20e0b1e20fe0a67af1d41ea9a",
+        "source_snapshot_url": "https://github.com/sashs/Ropper/blob/a2ffccf046db6fa20e0b1e20fe0a67af1d41ea9a/pyproject.toml",
+        "declared_python_requirement": ">=3",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and retain device-validation status as not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The pinned pyproject declares filebytes>=0.10.0 and capstone>=3; current dependency support on Android is not verified.",
+          "Binary parsing and gadget discovery depend on architecture/format support; findings require manual validation."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ghauri",
@@ -5879,5 +6111,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes are pinned to exact upstream revisions; Python packaging reviews are pinned to their reviewed upstream source revisions. Recipe presence does not prove repository availability, installation success, ABI support, runtime functionality, or required privileges."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes are pinned to exact upstream revisions; Python packaging reviews are pinned to exact upstream project revisions. Recipe or packaging metadata does not prove repository availability, installation success, ABI support, or runtime functionality."
 }
