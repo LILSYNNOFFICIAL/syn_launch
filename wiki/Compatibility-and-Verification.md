@@ -27,3 +27,6 @@ Eighty-four Termux recipe-backed entries map to 66 distinct recipes or subpackag
 3. Document architecture, root, hardware, external-service, and known-blocker details only when supported.
 4. Keep the status `source_documented_not_device_verified` until real device evidence exists.
 5. For device validation, record device model/OS, Termux source, architecture, tool/package version, command, exit status, and test limits. Keep a bounded CLI smoke probe distinct from a device-level functional test.
+
+
+The latest pinned recipe reviews cover `xh`, `feroxbuster`, `curlie`, `hping3`, and `arp-scan`. The first three now use Termux `pkg` install paths backed by the main Termux package repository. `hping3` and `arp-scan` are documented against the separate root-packages repository but remain disabled for automated installation by default. All five remain unverified on a physical device.
