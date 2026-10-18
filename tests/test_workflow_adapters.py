@@ -204,7 +204,7 @@ class WorkflowAdapterTests(unittest.TestCase):
         self.assertEqual(connection.request_args[0:2], ("HEAD", "/api/v1"))
         self.assertEqual(connection.timeout, 5)
         self.assertEqual(report["request"]["socket_timeout_seconds"], 5)
-        self.assertFalse(report["request"]["dns_resolution_bounded"])
+        self.assertTrue(report["request"]["dns_resolution_bounded"])
         self.assertEqual(connection.pinned_ip, "93.184.216.34")
         self.assertTrue(connection.closed)
         self.assertIn("strict-transport-security", report["response"]["headers"])
