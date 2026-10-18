@@ -55,10 +55,11 @@ class WikiSyncTests(unittest.TestCase):
             env["SYN_LAUNCH_WIKI_REMOTE"] = str(remote)
             result = subprocess.run(
                 ["bash", str(source_repo / "scripts" / SCRIPT.name)],
-                cwd=source_repo, env=env, check=True, text=True,
+                cwd=source_repo, env=env, check=False, text=True,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             )
 
+            self.assertEqual(result.returncode, 0, msg=f"stdout:\\n{result.stdout}\\nstderr:\\n{result.stderr}")
             self.assertIn("New-Page.md", result.stdout)
             self.assertIn("Dry run only", result.stdout)
             self.assertEqual(git(remote, "rev-parse", "refs/heads/master"), initial_remote_head)
