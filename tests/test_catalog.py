@@ -59,6 +59,17 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(len(declared), 267)
         self.assertEqual(unassessed, {"burp-suite", "wappalyzer"})
 
+    def test_readme_compatibility_summary_matches_current_catalog_evidence(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        declared = [tool for tool in self.tools if tool.get("compatibility")]
+        unassessed = {tool["id"] for tool in self.tools if not tool.get("compatibility")}
+        self.assertIn(f"**{len(declared)} source-backed compatibility declarations**", readme)
+        self.assertEqual(unassessed, {"burp-suite", "wappalyzer"})
+        self.assertIn("Two catalog entries remain unassessed", readme)
+        self.assertIn("DNSGen now has a pinned upstream source revision", readme)
+        self.assertNotIn("**266 source-backed compatibility declarations**", readme)
+        self.assertNotIn("Three catalog entries remain unassessed", readme)
+
     def test_compatibility_declarations_pin_reproducible_source_snapshots(self):
         declared = [tool for tool in self.tools if tool.get("compatibility")]
         self.assertGreaterEqual(len(declared), 266)
