@@ -39,7 +39,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Add scope-bound, dry-run workflow plans for web/API review, mobile-app review, local device/Termux configuration audit, and assessment reporting.
 - [x] Require an explicit target-scope string and operator authorization declaration to emit a plan; validate printable scope length and reject unknown workflow IDs.
 - [x] Include stop conditions and explicit no-network/no-subprocess execution fields in every plan.
-- [x] Add reviewed, read-only adapters for local Termux/device configuration inventory, static APK archive inventory, and local JSON evidence-report generation; none executes catalog tools or makes network requests.
+- [x] Add reviewed adapters for local Termux/device inventory, static APK archive inventory, and local JSON evidence-report generation; these do not make network requests or execute catalog tools.
+- [x] Add a narrowly scoped HTTPS adapter that sends one certificate-verified HEAD request with a five-second timeout, no redirect following, no body read, URL scope validation, and allowlisted response headers.
 - [x] Add adapter regression tests for scope rejection, invalid APKs, archive/resource limits, evidence schema/severity validation, authorization gates, and private report persistence.
 - [ ] Add any remote web/API adapters only after per-tool safety review, explicit per-step confirmation, bounded requests, output limits, stop conditions, and authorized staging tests.
 - [ ] Add signature-aware APK analysis only after a reviewed parser/verifier implementation; current inventory does not verify signatures or decode the binary manifest.
