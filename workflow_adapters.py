@@ -266,7 +266,7 @@ def run_web_api_review(scope: str) -> dict:
         "created_at": datetime.now(timezone.utc).isoformat(),
         "target_host": host,
         "target_path": path,
-        "request": {"method": "HEAD", "timeout_seconds": 5, "redirects_followed": False, "response_body_read": False},
+        "request": {"method": "HEAD", "socket_timeout_seconds": 5, "dns_resolution_bounded": False, "redirects_followed": False, "response_body_read": False},
         "response": None,
         "request_status": "request_failed",
         "execution": {
@@ -277,6 +277,7 @@ def run_web_api_review(scope: str) -> dict:
         },
         "limitations": [
             "This makes exactly one HTTPS HEAD request to the supplied host and path. It is an active network request and requires explicit authorization.",
+            "The five-second timeout applies to socket operations; operating-system DNS resolution is not independently time-bounded and may take longer.",
             "Redirects are not followed and response bodies are not read. A server may handle HEAD differently from GET.",
             "This is not a vulnerability scan, API schema review, authentication test, or security certification.",
             "Only an allowlist of response headers is retained; the report does not independently prove application behavior.",
