@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 245, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 251, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -196,6 +196,12 @@ jobs:
               "lief": ("15777f106f6220046cf26ee99940d1f56751325e", "upstream CMake build metadata (CMakeLists.txt)", "/CMakeLists.txt"),
               "chkrootkit": ("c00b5a40f61cc969e56fa2fe3375741c4164c896", "upstream local-audit runtime documentation (README)", "/README"),
               "assetfinder": ("4e95d8701aae8cff1c27af2626eb22ba110ad583", "upstream Go runtime documentation (README.md)", "/README.md"),
+              "owasp-zap": ("e06ba5ee209e27a9a81ff16e17696d6b59757d3a", "upstream Gradle build metadata (build.gradle.kts)", "/build.gradle.kts"),
+              "hashcat": ("5ec006d303bf3d55bc8a6afe1b67b858682457e7", "upstream native build metadata (Makefile)", "/src/Makefile"),
+              "john-the-ripper": ("5184bc0b8c105f8c5978b112e723d65b2de3e63e", "upstream native utility documentation (README.md)", "/README.md"),
+              "bulk-extractor": ("e86383947ee016c825599887334cacf011736abf", "upstream Autotools build metadata (Makefile.am)", "/Makefile.am"),
+              "sleuth-kit": ("e08bdd2f9b74b319981144c03ee492e9287b9e0f", "upstream Autotools build metadata (Makefile.am)", "/Makefile.am"),
+              "hydra": ("17b52613320257a620ce3b5611b2e8196eb6e7fc", "upstream C/Autotools build metadata (Makefile.am)", "/Makefile.am"),
           }
           for tool_id, (source_revision, evidence_kind, suffix) in expected_native_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
