@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 100, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 118, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -63,6 +63,17 @@ jobs:
           for tool_id in ("hping3", "arp-scan"):
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               assert not tool["catalog_installable"], tool
+          for tool_id in (
+              "gitleaks", "cargo-audit", "govulncheck", "strace", "ltrace", "docker-cli",
+              "kubectl", "rclone", "restic", "rustscan", "jadx", "apktool", "sslscan",
+              "proxychains-ng", "gosec", "rizin", "crunch", "steghide",
+          ):
+              tool = next(item for item in report["tools"] if item["id"] == tool_id)
+              metadata = tool["compatibility_metadata"]
+              assert tool["compatibility_assessment"] == "declared_but_not_device_verified", tool
+              assert metadata["source_revision"] == "e85983636adcf748134c3feb1df27f44e78322e1", tool
+              assert metadata["source_snapshot_url"].endswith("/packages/" + tool_id), tool
+              assert tool["install_kind"] == "pkg" and tool["catalog_installable"], tool
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
