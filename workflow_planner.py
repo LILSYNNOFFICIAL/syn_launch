@@ -5,7 +5,6 @@ plan that an operator can review before any future assessment integration.
 """
 from __future__ import annotations
 
-import re
 from datetime import datetime, timezone
 
 PLAN_SCHEMA = 1
@@ -73,7 +72,6 @@ WORKFLOWS = {
     },
 }
 
-_SCOPE_RE = re.compile(r"[^\\x00-\\x1f\\x7f]{1,500}\\Z")
 
 
 def build_workflow_plan(name: str, target_scope: str, authorized: bool) -> dict:
