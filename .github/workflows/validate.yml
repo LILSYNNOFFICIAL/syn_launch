@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 212, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 217, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -141,8 +141,22 @@ jobs:
               "staticcheck": "6ed650b396b48840c782b8d554eaded1299e42ae",
               "dockle": "35171ccb9b247592269f5c84be69331ef0ad6c19",
           }
-          expected_go.update({"actionlint": "1.25.0"})
-          expected_go_revisions.update({"actionlint": "011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7"})
+          expected_go.update({
+              "actionlint": "1.25.0",
+              "trivy": "1.27.0",
+              "grype": "1.26.8",
+              "syft": "1.26.8",
+              "kube-bench": "1.26.3",
+              "ligolo-ng": "1.25.0",
+          })
+          expected_go_revisions.update({
+              "actionlint": "011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7",
+              "trivy": "9dd3e28d275544dd16463162e99471ac761eb9f0",
+              "grype": "8ea928e9f642c376b888a0ee63cb579f1bf47486",
+              "syft": "a81193226ffdd07b71126dda04e753d6d2e22324",
+              "kube-bench": "e278a5915a982f2756026de6e2f9ca77077ef9f9",
+              "ligolo-ng": "e543732f4be6dc899096ae322ae620bf010bfbfc",
+          })
           for tool_id, go_requirement in expected_go.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
