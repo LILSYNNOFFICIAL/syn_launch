@@ -2073,7 +2073,27 @@
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "bandit --help",
       "source": "https://github.com/PyCQA/bandit",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/PyCQA/bandit/blob/68ebe11ef79263be27ec223184b94a4fc394a622/setup.cfg",
+        "evidence_kind": "upstream Python packaging metadata (setup.cfg)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "68ebe11ef79263be27ec223184b94a4fc394a622",
+        "source_snapshot_url": "https://github.com/PyCQA/bandit/blob/68ebe11ef79263be27ec223184b94a4fc394a622/setup.cfg",
+        "declared_python_requirement": "Classifiers list Python 3.10 through 3.14; no Android-specific support declaration in this file.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream metadata lists Python 3.10 through 3.14 and POSIX/Linux classifiers; neither proves Android/Termux compatibility.",
+          "Optional YAML/TOML, baseline, and SARIF extras introduce additional dependencies that need separate platform checks."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "pip-audit",
@@ -2213,7 +2233,28 @@
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "detect-secrets --help",
       "source": "https://pypi.org/project/detect-secrets/",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/Yelp/detect-secrets/blob/5e141933554a0b74e7341841f318be21e895339c/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "5e141933554a0b74e7341841f318be21e895339c",
+        "source_snapshot_url": "https://github.com/Yelp/detect-secrets/blob/5e141933554a0b74e7341841f318be21e895339c/setup.py",
+        "declared_python_requirement": "No explicit Python-version requirement was found in the inspected setup.py.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream setup.py declares PyYAML and requests; compatible dependency builds/wheels are not verified for Termux.",
+          "Optional pyahocorasick and gibberish-detector extras may have additional platform-specific build requirements.",
+          "The inspected packaging metadata does not establish Android/Termux support or runtime behavior."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "checksec",
@@ -5227,5 +5268,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux recipe declarations pin upstream packaging-tree revisions; selected Python entries pin upstream pyproject metadata and report the declared Python requirement only. Neither evidence type proves Android/Termux support, current package availability, installation success, ABI compatibility, or runtime functionality."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux recipe declarations pin upstream packaging-tree revisions; selected Python entries pin upstream packaging metadata and record only the requirements/classifiers visible in those files. Neither evidence type proves Android/Termux support, current package availability, installation success, ABI compatibility, or runtime functionality."
 }
