@@ -4,6 +4,9 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 
 ## Unreleased
 
+- Added five pinned recipe-backed compatibility reviews for xh, feroxbuster, curlie, hping3, and arp-scan; switched xh, feroxbuster, and curlie to the main Termux package-manager install path while leaving root-repository packet tools non-installable by default.
+- Updated the source-backed compatibility declaration count from 95 to 100 and recorded the remaining unreviewed catalog count as 169.
+
 ### Compatibility evidence
 - Expanded structured, source-linked compatibility declarations to 95 entries: 84 Termux recipe-backed declarations spanning 66 distinct recipe/subpackage directories, using pinned revisions of `termux-packages` and `termux-root-packages`, plus eleven pinned upstream Python packaging metadata reviews for pip-audit, yamllint, dirsearch, Sherlock, Bandit, detect-secrets, email-validator, ssh-audit, Maigret, h8mail, and theHarvester. Source links are pinned and evidence scope is explicit.
 - Added an explicit evidence-scope field, pinned upstream source revisions and snapshot URLs, and CI checks for reproducible compatibility evidence.
