@@ -14,7 +14,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 ## Stage 2: Compatibility metadata
 
 - [x] Maintain 95 source-backed declarations: 82 Termux recipe-backed entries from revision `e85983636adcf748134c3feb1df27f44e78322e1`, two root-packages recipe entries from revision `06591fc024101b04095ec4417d51907512b46e3c`, plus eleven pinned upstream Python packaging-metadata reviews (pip-audit, yamllint, dirsearch, Sherlock, Bandit, detect-secrets, email-validator, ssh-audit, Maigret, h8mail, theHarvester). Each records evidence scope and blockers; none is device verification.
-- [ ] Expand reviewed support declarations across additional tools and document per-tool API/service dependencies where upstream sources establish them.
+- [x] Review and pin upstream Python packaging metadata for 11 additional tools (pip-audit, yamllint, dirsearch, Sherlock, Bandit, detect-secrets, email-validator, ssh-audit, Maigret, h8mail, and theHarvester), recording declared Python requirements and known service/dependency caveats without implying Android support.
+- [ ] Continue reviewing the remaining 174 catalog entries without compatibility declarations; prioritize exact upstream recipe or packaging evidence and keep unknown Android support explicitly unverified.
 - [x] Keep unknown compatibility explicitly unknown; never infer "works" merely because a package exists or an executable is in PATH.
 - [x] Add a report that separates catalog installability, PATH evidence, compatibility assessment, smoke-test evidence, and device-validation evidence.
 - [x] Expand the curated subset using the live upstream Termux repository tree; the schema labels entries `source_documented_not_device_verified`, requires HTTPS evidence URLs, and validates the evidence-scope field.
