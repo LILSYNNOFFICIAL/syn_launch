@@ -342,6 +342,10 @@ def run_web_api_review(scope: str) -> dict:
             "redirect_response_not_followed": 300 <= int(response.status) < 400,
         }
         report["request_status"] = "response_received"
+    except ValueError:
+        # This path is reserved for the post-parse address safety gate; do not leak resolver data.
+        report["request_status"] = "request_rejected"
+        report["error_type"] = "TargetAddressRejected"
     except (OSError, ssl.SSLError, http.client.HTTPException, TimeoutError) as exc:
         report["error_type"] = type(exc).__name__
     finally:
