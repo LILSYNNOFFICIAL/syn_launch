@@ -248,5 +248,11 @@ Inventory an APK you own or are authorized to review, without extracting or exec
 python main.py --workflow-run mobile-app-review --target-scope "$HOME/path/to/your-test.apk" --authorized
 ```
 
-Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. Web/API assessment and report-generation adapters remain plan-only until separately reviewed and implemented.
+Summarize a local JSON evidence file containing a `findings` list. Each finding requires `title`, `severity` (`critical`, `high`, `medium`, `low`, `info`, or `unknown`), `asset`, `evidence`, and `remediation` strings:
+
+```bash
+python main.py --workflow-run assessment-report --target-scope "$HOME/path/to/evidence.json" --authorized
+```
+
+Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. Web/API assessment remains plan-only. The local evidence-report adapter validates structure and summarizes supplied findings; it does not independently verify them.
 
