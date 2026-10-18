@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 142, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 152, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -86,6 +86,31 @@ jobs:
               "subfinder": "1.26.0", "dnsx": "1.26.0", "httpx": "1.26.0",
               "naabu": "1.26.0", "gau": "1.20", "waybackurls": "1.18",
               "katana": "1.26.0", "unfurl": "1.18", "ffuf": "1.26.0", "gobuster": "1.25",
+              "phoneinfoga": "1.20", "nuclei": "1.27.1", "kiterunner": "1.15", "kxss": "1.20",
+              "crlfuzz": "1.14", "interactsh-client": "1.26.0", "tlsx": "1.25.0",
+              "mapcidr": "1.26.0", "uncover": "1.25.0", "asnmap": "1.24.0",
+          }
+          expected_go_revisions = {
+              "subfinder": "7d9038297953f6a953ba3eb009fb859993959d00",
+              "dnsx": "eab63beacfde09ea66b9383229b127f00befe7ce",
+              "httpx": "482ce7bc66584a678fa7fe89c906a9ccafa7bc92",
+              "naabu": "25d4a43927a5d4508a765b33b0b2659349f6d71e",
+              "gau": "4eabace309877abb231def9eeb27b96c07ed3635",
+              "waybackurls": "8d27cf3e3031de01179e8ba9127e968eb01008e9",
+              "katana": "3e650646252e4a763d0fc230aff8bf96a3d86303",
+              "unfurl": "8f10d050f1b0be12e505053da174f3f39e8eed74",
+              "ffuf": "8d65e0373e5f223530174e5694285af849770078",
+              "gobuster": "c77583fbb8824058d74d38240896eff610683c8e",
+              "phoneinfoga": "55807b05b753dab7bc6fe67403ca385668dda179",
+              "nuclei": "6a42a7bf52113b37df273d0df899a28b0bcf459f",
+              "kiterunner": "7d5824cda9a2eef86d8d18b05b713d7e260f34d2",
+              "kxss": "acb2dc76e84077d2e529f6c488269c32c5e2b07a",
+              "crlfuzz": "7a442bb03f3c337f34b1ed7664bae50bde3eb455",
+              "interactsh-client": "a5b78b2f1d990cd18c85cc422f0e651cf204c464",
+              "tlsx": "7f24430c54c473e6b32caf29753562da6ffb4181",
+              "mapcidr": "a43022034a0eb9b87eadefbd69c8eeb6aa0e4567",
+              "uncover": "8275048441329a9ce0622bead7b37826d34e5d7d",
+              "asnmap": "cedef8b116fb2ea228108bfa2eee6ed74ae31ad9",
           }
           for tool_id, go_requirement in expected_go.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
@@ -94,7 +119,7 @@ jobs:
               assert metadata["evidence_kind"] == "upstream Go module metadata (go.mod)", tool
               assert metadata["declared_go_requirement"] == go_requirement, tool
               assert metadata["source_snapshot_url"].endswith("/go.mod"), tool
-              assert metadata["source_revision"], tool
+              assert metadata["source_revision"] == expected_go_revisions[tool_id], tool
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
           assert nmap["compatibility_assessment"] == "declared_but_not_device_verified", nmap
           assert nmap["compatibility_metadata"]["evidence_scope"], nmap
