@@ -1314,7 +1314,7 @@ def main():
         save_private_json(report_path, report)
         report["saved_report"] = str(report_path)
         print(json.dumps(report, indent=2, ensure_ascii=False))
-        return 1 if report.get("request_status") == "request_failed" else 0
+        return 1 if report.get("request_status") in {"request_failed", "request_rejected"} else 0
     if args.profile: print_environment_profile(data); return 0
     if args.compatibility_report: print_compatibility_report(data); return 0
     if args.smoke_test:
