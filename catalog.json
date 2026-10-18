@@ -2662,7 +2662,30 @@
       "description": "Web application security proxy and scanner; desktop/Java environment is normally required.",
       "example": "See the official ZAP installation and automation documentation.",
       "source": "https://www.zaproxy.org/",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/zaproxy/zaproxy/blob/e06ba5ee209e27a9a81ff16e17696d6b59757d3a/build.gradle.kts",
+        "evidence_kind": "upstream Gradle build metadata (build.gradle.kts)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, hardware acceleration, or runtime functionality.",
+        "source_revision": "e06ba5ee209e27a9a81ff16e17696d6b59757d3a",
+        "source_snapshot_url": "https://github.com/zaproxy/zaproxy/blob/e06ba5ee209e27a9a81ff16e17696d6b59757d3a/build.gradle.kts",
+        "declared_build_requirements": [
+          "Gradle Kotlin DSL build",
+          "Java toolchain and subproject build requirements"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Gradle file is part of a multi-project Java application; the exact Java toolchain and distribution requirements must be read from the full build configuration.",
+          "Desktop/browser integration and memory demands may be unsuitable for a mobile device; Android/Termux support is not established.",
+          "Active scans require an explicitly authorized target and can generate substantial traffic; configure scope and scan policy before use."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "burp-suite",
@@ -4010,7 +4033,31 @@
       "description": "Filesystem forensic tools for supported disk images and evidence copies.",
       "example": "fls -h",
       "source": "https://github.com/sleuthkit/sleuthkit",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/sleuthkit/sleuthkit/blob/e08bdd2f9b74b319981144c03ee492e9287b9e0f/Makefile.am",
+        "evidence_kind": "upstream Autotools build metadata (Makefile.am)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, hardware acceleration, or runtime functionality.",
+        "source_revision": "e08bdd2f9b74b319981144c03ee492e9287b9e0f",
+        "source_snapshot_url": "https://github.com/sleuthkit/sleuthkit/blob/e08bdd2f9b74b319981144c03ee492e9287b9e0f/Makefile.am",
+        "declared_build_requirements": [
+          "Autoconf/Automake toolchain",
+          "C/C++ compiler and native libraries",
+          "Optional language bindings and forensic format dependencies"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned build file is part of a large native forensic toolkit; Android/Termux compilation, ABI support, and filesystem access are unverified.",
+          "Some forensic workflows need block-device or image access not available to an unprivileged Termux process.",
+          "Interpret results alongside acquisition details and preserve originals; parser output alone is not a complete forensic conclusion."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "bulk-extractor",
@@ -4023,7 +4070,31 @@
       "description": "Extract structured artifacts from forensic images without relying on filesystem layout.",
       "example": "bulk_extractor -h",
       "source": "https://github.com/simsong/bulk_extractor",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/simsong/bulk_extractor/blob/e86383947ee016c825599887334cacf011736abf/Makefile.am",
+        "evidence_kind": "upstream Autotools build metadata (Makefile.am)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, hardware acceleration, or runtime functionality.",
+        "source_revision": "e86383947ee016c825599887334cacf011736abf",
+        "source_snapshot_url": "https://github.com/simsong/bulk_extractor/blob/e86383947ee016c825599887334cacf011736abf/Makefile.am",
+        "declared_build_requirements": [
+          "Autoconf/Automake toolchain",
+          "C/C++ compiler and native libraries",
+          "Optional GUI and parser dependencies"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Autotools file describes a substantial native forensic application; Android/Termux dependencies and build process are unverified.",
+          "Forensic extraction may generate large volumes of artifacts and require significant temporary storage.",
+          "Results depend on parser support and evidence integrity; analyze authorized copies and preserve chain-of-custody metadata."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "pdfid",
@@ -4281,7 +4352,31 @@
       "description": "Offline password-hash auditing and recovery; compatible GPU/OpenCL support is generally absent on stock Android.",
       "example": "hashcat --help",
       "source": "https://github.com/hashcat/hashcat",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/hashcat/hashcat/blob/5ec006d303bf3d55bc8a6afe1b67b858682457e7/src/Makefile",
+        "evidence_kind": "upstream native build metadata (Makefile)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, hardware acceleration, or runtime functionality.",
+        "source_revision": "5ec006d303bf3d55bc8a6afe1b67b858682457e7",
+        "source_snapshot_url": "https://github.com/hashcat/hashcat/blob/5ec006d303bf3d55bc8a6afe1b67b858682457e7/src/Makefile",
+        "declared_build_requirements": [
+          "C compiler and native build tools",
+          "OpenCL and/or supported accelerator backend for accelerated modes",
+          "Platform-specific shared libraries"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Makefile describes a native password-recovery application with multiple accelerator backends; Android GPU/OpenCL compatibility is not established.",
+          "Performance and available kernels depend on device hardware, driver/runtime, and algorithm support; mobile thermal and battery limits are significant.",
+          "Password auditing must be limited to hashes and systems the operator is authorized to assess."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "john-the-ripper",
@@ -4294,7 +4389,30 @@
       "description": "Offline password-hash auditing for hashes you are authorized to examine.",
       "example": "john --list=formats",
       "source": "https://github.com/openwall/john",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/openwall/john/blob/5184bc0b8c105f8c5978b112e723d65b2de3e63e/README.md",
+        "evidence_kind": "upstream native utility documentation (README.md)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, hardware acceleration, or runtime functionality.",
+        "source_revision": "5184bc0b8c105f8c5978b112e723d65b2de3e63e",
+        "source_snapshot_url": "https://github.com/openwall/john/blob/5184bc0b8c105f8c5978b112e723d65b2de3e63e/README.md",
+        "declared_build_requirements": [
+          "C compiler and native build tools",
+          "Optional platform-specific SIMD/GPU and cryptographic libraries"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README covers multiple build variants; Android/Termux support depends on selected format set and native dependencies.",
+          "Optional SIMD/GPU paths are architecture-specific and not verified on this device.",
+          "Password recovery can consume substantial CPU, memory, and battery; only use authorized password hashes."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "hashid",
@@ -7806,7 +7924,30 @@
       "description": "Network login auditing for controlled password-policy tests; can lock accounts and disrupt services.",
       "example": "hydra -h",
       "source": "https://github.com/vanhauser-thc/thc-hydra",
-      "caveat": "Can lock accounts and disrupt services; manual-only and explicit authorization required."
+      "caveat": "Can lock accounts and disrupt services; manual-only and explicit authorization required.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/vanhauser-thc/thc-hydra/blob/17b52613320257a620ce3b5611b2e8196eb6e7fc/Makefile.am",
+        "evidence_kind": "upstream C/Autotools build metadata (Makefile.am)",
+        "evidence_scope": "Confirms only the build or runtime information in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, hardware acceleration, or runtime functionality.",
+        "source_revision": "17b52613320257a620ce3b5611b2e8196eb6e7fc",
+        "source_snapshot_url": "https://github.com/vanhauser-thc/thc-hydra/blob/17b52613320257a620ce3b5611b2e8196eb6e7fc/Makefile.am",
+        "declared_build_requirements": [
+          "C compiler and Autotools",
+          "Optional protocol libraries enabled by build configuration"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target architecture, toolchain, native dependencies, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Makefile describes a native network login-testing tool; Android/Termux build and protocol-library availability are unverified.",
+          "Login attempts can lock accounts, trigger defenses, or disrupt services; strict rate limits and explicit authorization are required.",
+          "No authentication test should be run against third-party systems or accounts without clear permission."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "cewl",
