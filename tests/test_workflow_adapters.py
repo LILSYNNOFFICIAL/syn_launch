@@ -136,12 +136,14 @@ class WorkflowAdapterTests(unittest.TestCase):
                     ("Location", "https://other.example.test/"),
                 ]
 
+        created = []
         class Connection:
             def __init__(self, host, port, timeout, context):
                 self.host, self.port, self.timeout = host, port, timeout
                 self.context = context
                 self.request_args = None
                 self.closed = False
+                created.append(self)
             def request(self, method, path, headers):
                 self.request_args = (method, path, headers)
             def getresponse(self):
@@ -149,9 +151,9 @@ class WorkflowAdapterTests(unittest.TestCase):
             def close(self):
                 self.closed = True
 
-        with patch("workflow_adapters.http.client.HTTPSConnection", Connection) as factory:
+        with patch("workflow_adapters.http.client.HTTPSConnection", side_effect=Connection):
             report = run_web_api_review("https://staging.example.test/api/v1")
-        connection = factory.return_value
+        connection = created[0]
         self.assertEqual(report["request_status"], "response_received")
         self.assertEqual(report["response"]["status_code"], 200)
         self.assertEqual(connection.request_args[0:2], ("HEAD", "/api/v1"))
