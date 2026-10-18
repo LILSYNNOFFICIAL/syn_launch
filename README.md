@@ -261,7 +261,9 @@ python main.py --workflow-run mobile-app-review --target-scope "$HOME/path/to/yo
 Summarize a local JSON evidence file containing a `findings` list. Each finding requires `title`, `severity` (`critical`, `high`, `medium`, `low`, `info`, or `unknown`), `asset`, `evidence`, and `remediation` strings:
 
 ```bash
-python main.py --workflow-run assessment-report --target-scope "$HOME/path/to/evidence.json" --authorized
+cp examples/assessment-evidence.example.json "$HOME/evidence.json"
+# Edit the copy, replace every placeholder, and redact sensitive data.
+python main.py --workflow-run assessment-report --target-scope "$HOME/evidence.json" --authorized
 ```
 
 Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. The HTTPS adapter performs only a single HEAD request, not a vulnerability scan. The local evidence-report adapter validates structure and summarizes supplied findings; it does not independently verify them.
