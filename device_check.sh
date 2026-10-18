@@ -52,8 +52,8 @@ run_check "Unit and regression tests" "unit-tests.log" env SYN_LAUNCH_HOME="$OUT
 run_check "Runtime check" "check.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --check
 run_check "Detailed diagnostics" "doctor.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --doctor
 run_check "Structured environment profile" "profile.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --profile
-run_check "Compatibility report" "compatibility-report.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --compatibility-report
 run_check "Explicit bounded Python smoke test" "python-smoke-test.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --smoke-test python
+run_check "Compatibility report" "compatibility-report.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --compatibility-report
 
 if "$PYTHON_BIN" - "$OUT" <<'PY' >"$OUT/report-validation.log" 2>&1
 import json
@@ -67,6 +67,10 @@ assert report["report_schema"] == 3, report.get("report_schema")
 assert report["summary"]["catalog_entries"] == 269, report["summary"]
 assert report["summary"]["compatibility_assessed_entries"] >= 82, report["summary"]
 assert report["summary"]["device_verified_entries"] == 0, report["summary"]
+assert report["summary"]["smoke_tested_entries"] >= 1, report["summary"]
+python_tool = next(tool for tool in report["tools"] if tool["id"] == "python")
+assert python_tool["smoke_test"] == "passed", python_tool
+assert python_tool["device_validation"] == "not_run", python_tool
 assert smoke["status"] == "passed", smoke
 assert smoke["tool_id"] == "python", smoke
 print("Report schema, compatibility coverage, and Python smoke evidence validated.")
