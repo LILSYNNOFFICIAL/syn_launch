@@ -1,5 +1,10 @@
 # SYN_LAUNCH
 
+<p align="center">
+  <img src="img/file_00000000f48881fdb4a638a0643452e1.png" alt="SYN_LAUNCH logo" width="420">
+</p>
+
+
 [![Termux](https://img.shields.io/badge/platform-Termux%20%2F%20Android-00BCD4?logo=android&logoColor=white)](https://termux.dev/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
