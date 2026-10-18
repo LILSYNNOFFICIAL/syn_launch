@@ -6060,7 +6060,36 @@
       "description": "Collect Active Directory relationship data for authorized domain audits.",
       "example": "bloodhound-python --help",
       "source": "https://github.com/dirkjanm/BloodHound.py",
-      "caveat": "Collected directory data is sensitive."
+      "caveat": "Collected directory data is sensitive.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/dirkjanm/BloodHound.py/blob/fd3f322e066d66314bfb31d4ae6f497df5872177/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "fd3f322e066d66314bfb31d4ae6f497df5872177",
+        "source_snapshot_url": "https://github.com/dirkjanm/BloodHound.py/blob/fd3f322e066d66314bfb31d4ae6f497df5872177/setup.py",
+        "declared_python_requirement": "No python_requires field is declared; classifiers list Python 3.7 through 3.12.",
+        "declared_dependencies": [
+          "dnspython",
+          "impacket >=0.9.17",
+          "ldap3 >=2.5, excluding 2.5.0, 2.5.2, and 2.6",
+          "pyasn1 >=0.4",
+          "pycryptodome"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized cloud, mobile-app, or directory environment when the tool is used for assessment."
+        ],
+        "known_blockers": [
+          "The pinned setup.py lists Python 3.7 through 3.12 classifiers but does not declare python_requires or Android/Termux support.",
+          "Impacket and cryptographic dependencies may require compatibility/build checks on Android; no target-device test has been run.",
+          "Directory collection requires access to an authorized Active Directory environment and can collect sensitive identity relationships; protect output and credentials."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "enum4linux-ng",
@@ -6520,7 +6549,40 @@
       "description": "Mobile app security testing framework for APK/IPA analysis; resource-heavy for a phone.",
       "example": "See the official MobSF installation documentation.",
       "source": "https://github.com/MobSF/Mobile-Security-Framework-MobSF",
-      "caveat": "Resource-heavy; not treated as a native Termux install."
+      "caveat": "Resource-heavy; not treated as a native Termux install.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/MobSF/Mobile-Security-Framework-MobSF/blob/08872c8454e59f8a6347c35b46852c9929f5eb5e/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "08872c8454e59f8a6347c35b46852c9929f5eb5e",
+        "source_snapshot_url": "https://github.com/MobSF/Mobile-Security-Framework-MobSF/blob/08872c8454e59f8a6347c35b46852c9929f5eb5e/pyproject.toml",
+        "declared_python_requirement": "^3.12",
+        "declared_dependencies": [
+          "django >=3.1.5",
+          "rsa >=4.7",
+          "requests >=2.25.1",
+          "psutil >=5.8.0",
+          "frida >=17.0.0",
+          "frida-tools ^14.3.0",
+          "lief >=0.16.6,<0.18.0",
+          "psycopg2-binary ^2.9.10",
+          "libsast ^3.1.8"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized cloud, mobile-app, or directory environment when the tool is used for assessment."
+        ],
+        "known_blockers": [
+          "Pinned pyproject.toml requires Python ^3.12 and declares many dependencies with native components, external binaries, or platform assumptions; Android/Termux installability is not established.",
+          "MobSF is a full mobile app assessment framework, not a lightweight single-file CLI; server, database, analysis-tool and storage requirements need separate evaluation.",
+          "Dynamic analysis depends on external emulators/devices and instrumentation such as Frida; these capabilities are not verified on this device."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "prowler",
@@ -7035,7 +7097,33 @@
       "description": "Collect metadata from public documents for authorized reconnaissance.",
       "example": "python metagoofil.py --help",
       "source": "https://github.com/opsdisk/metagoofil",
-      "caveat": "Search-provider terms and compatibility change; manual-only."
+      "caveat": "Search-provider terms and compatibility change; manual-only.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/opsdisk/metagoofil/blob/8d50624f1534e63c8bb64ee132d8c2298dba6724/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "8d50624f1534e63c8bb64ee132d8c2298dba6724",
+        "source_snapshot_url": "https://github.com/opsdisk/metagoofil/blob/8d50624f1534e63c8bb64ee132d8c2298dba6724/requirements.txt",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned requirements.txt.",
+        "declared_dependencies": [
+          "google==3.0.0",
+          "requests==2.32.5"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized cloud, mobile-app, or directory environment when the tool is used for assessment."
+        ],
+        "known_blockers": [
+          "The pinned requirements file declares dependencies only; it does not declare Python-version or Android/Termux support.",
+          "The legacy google==3.0.0 dependency may have compatibility or package-selection constraints on modern Python environments; installation has not been tested.",
+          "Public document metadata collection is network activity; respect provider terms, privacy, and engagement scope."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "hydra",
@@ -7740,7 +7828,38 @@
       "description": "AWS cloud security testing framework for authorized assessment and lab exercises.",
       "example": "See upstream installation and usage documentation.",
       "source": "https://github.com/RhinoSecurityLabs/pacu",
-      "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
+      "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/RhinoSecurityLabs/pacu/blob/e597f23ecfb88b82f706c5f0cac9d4577c2af262/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "e597f23ecfb88b82f706c5f0cac9d4577c2af262",
+        "source_snapshot_url": "https://github.com/RhinoSecurityLabs/pacu/blob/e597f23ecfb88b82f706c5f0cac9d4577c2af262/pyproject.toml",
+        "declared_python_requirement": "^3.9",
+        "declared_dependencies": [
+          "awscli ^1.18",
+          "boto3 ^1.16",
+          "botocore >=1.16,<1.32",
+          "requests ^2.25.1",
+          "SQLAlchemy >=1.3,<2.1",
+          "chalice ^1.27.3",
+          "pyyaml ^6.0.1"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized cloud, mobile-app, or directory environment when the tool is used for assessment."
+        ],
+        "known_blockers": [
+          "Pinned pyproject.toml requires Python ^3.9 and pins botocore below 1.32; current AWS SDK dependency resolution may be constrained.",
+          "AWS assessment requires credentials, permissions, and cloud context; native Android compatibility is not implied by the packaging metadata.",
+          "Modules can create, modify, or delete cloud resources; use read-only credentials where possible and only explicitly authorized accounts."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     }
   ],
   "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Pinned upstream source revisions make metadata review reproducible but do not establish Android/Termux support, installability, or runtime functionality."
