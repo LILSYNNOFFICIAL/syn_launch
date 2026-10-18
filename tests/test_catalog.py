@@ -544,12 +544,12 @@ class CatalogTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             try:
                 APP.STATE_DIR = Path(tmp)
-                with patch.object(APP, "installed", return_value=True), \\
+                with patch.object(APP, "installed", return_value=True), \
                      patch.object(APP, "collect_resolved_version", side_effect=[
                          {"resolved_version":"1.2.3","version_evidence":"package_manager_metadata"},
                          {"resolved_version":"1.2.3","version_evidence":"package_manager_metadata"},
-                     ]), \\
-                     patch.object(APP, "run") as run, \\
+                     ]), \
+                     patch.object(APP, "run") as run, \
                      patch.object(APP, "append_lifecycle_event", wraps=APP.append_lifecycle_event) as audit:
                     result = APP.uninstall_one(tool, confirmed=False)
                 self.assertFalse(result)
@@ -570,13 +570,13 @@ class CatalogTests(unittest.TestCase):
             try:
                 APP.STATE_DIR = Path(tmp)
                 command_result = {"command":["cargo","uninstall","sample-crate"],"exit_code":0,"timed_out":False,"launch_error":None}
-                with patch.object(APP, "installed", side_effect=[True, False]), \\
+                with patch.object(APP, "installed", side_effect=[True, False]), \
                      patch.object(APP, "collect_resolved_version", side_effect=[
                          {"resolved_version":"1.2.3","version_evidence":"package_manager_metadata"},
                          {"resolved_version":None,"version_evidence":"not_found"},
-                     ]), \\
-                     patch.object(APP.shutil, "which", return_value="/usr/bin/cargo"), \\
-                     patch.object(APP, "run", return_value=True) as run, \\
+                     ]), \
+                     patch.object(APP.shutil, "which", return_value="/usr/bin/cargo"), \
+                     patch.object(APP, "run", return_value=True) as run, \
                      patch.object(APP, "LAST_COMMAND_RESULT", command_result):
                     result = APP.uninstall_one(tool, confirmed=True)
                 self.assertTrue(result)
@@ -598,8 +598,8 @@ class CatalogTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             try:
                 APP.STATE_DIR = Path(tmp)
-                with patch.object(APP, "installed", return_value=True), \\
-                     patch.object(APP, "collect_resolved_version", return_value={"resolved_version":None,"version_evidence":"not_supported"}), \\
+                with patch.object(APP, "installed", return_value=True), \
+                     patch.object(APP, "collect_resolved_version", return_value={"resolved_version":None,"version_evidence":"not_supported"}), \
                      patch.object(APP, "run") as run:
                     result = APP.uninstall_one(tool, confirmed=True)
                 self.assertFalse(result)
