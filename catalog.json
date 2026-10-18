@@ -5171,7 +5171,28 @@
       "description": "Container engine and CLI; Android kernel and namespace support can prevent normal operation.",
       "example": "podman --help",
       "source": "https://github.com/containers/podman",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go project source metadata reviewed; Android/Termux container-engine runtime unverified",
+        "install_source": "https://github.com/podman-container-tools/podman/blob/8dd1367b23419bec0f4bc37c6c56f87965184375/go.mod",
+        "evidence_kind": "upstream Podman Go module metadata (go.mod)",
+        "evidence_scope": "Confirms the pinned Podman Go module and toolchain directive exist. It does not establish Android/Termux support or the availability of required kernel, namespace, cgroup, storage, networking, and helper components.",
+        "source_revision": "8dd1367b23419bec0f4bc37c6c56f87965184375",
+        "source_snapshot_url": "https://github.com/podman-container-tools/podman/blob/8dd1367b23419bec0f4bc37c6c56f87965184375/go.mod",
+        "architecture_policy": "Go module metadata alone does not establish a successful build for Android/Termux. Podman also depends on OS-level container features and helper components that a mobile userspace may not expose.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Container image registries and optional remote container services depending on configuration."
+        ],
+        "known_blockers": [
+          "The pinned go.mod declares Go 1.25.9; this does not prove the configured Termux toolchain builds the complete project.",
+          "Normal container operation depends on Linux namespaces, cgroups, storage/network helpers, and other host capabilities that may be unavailable or restricted on Android.",
+          "This catalog entry is not installable by default and the source declaration is not a device compatibility result."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kubectl",
@@ -5385,7 +5406,28 @@
       "description": "Rootkit and configuration checks for supported Unix/Linux systems; limited relevance on stock Android.",
       "example": "rkhunter --help",
       "source": "https://github.com/Rootkit-Hunter/rootkit_hunter",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "POSIX shell project source reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/Rootkit-Hunter/rkhunter/blob/016a77924ef4311fa7cac3737b7460452349b6ca/files/rkhunter",
+        "evidence_kind": "upstream Rootkit Hunter shell program",
+        "evidence_scope": "Confirms the pinned upstream rkhunter shell program exists. It does not establish that expected system utilities, filesystem layout, permissions, or rootkit checks are meaningful or functional on Android/Termux.",
+        "source_revision": "016a77924ef4311fa7cac3737b7460452349b6ca",
+        "source_snapshot_url": "https://github.com/Rootkit-Hunter/rkhunter/blob/016a77924ef4311fa7cac3737b7460452349b6ca/files/rkhunter",
+        "architecture_policy": "Shell source is not architecture-specific, but the utility expects POSIX/Linux system commands, filesystem locations, and security properties that differ on Android.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Optional update/mirror endpoints used to retrieve signatures and data files."
+        ],
+        "known_blockers": [
+          "Stock Android does not expose the same filesystem, init, package, and kernel layout as a general-purpose Linux host.",
+          "Rootkit Hunter checks may be incomplete or misleading without the expected host utilities and privileges.",
+          "A source snapshot does not establish that the checks are meaningful on Android or that the device is compromised/clean."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "chkrootkit",
