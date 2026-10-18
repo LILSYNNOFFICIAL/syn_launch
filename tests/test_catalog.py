@@ -199,7 +199,7 @@ class CatalogTests(unittest.TestCase):
         }
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value=sys.executable):
-                record = APP.smoke_test_tool(tool, {"tools": [tool]})
+                record = APP.smoke_test_tool(tool)
                 self.assertEqual(record["status"], "passed")
                 self.assertEqual(record["probe"], "--version")
                 self.assertEqual(record["exit_code"], 0)
