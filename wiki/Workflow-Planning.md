@@ -61,7 +61,7 @@ The target-scope value should identify the exact authorized assets or environmen
 - The authorization flag is only the operator's declaration. It is not verified by the software and does not grant permission.
 - Plans contain stop conditions and state `network_actions_executed: false` and `subprocesses_executed: false`.
 - The planner does not invoke catalog executables, run scans, contact targets, change device state, or install packages.
-- The device adapter reads local runtime/path/storage/permission metadata only. It does not call subprocesses, contact networks, change settings, or alter packages.
+- The device adapter reads local runtime/path/storage/permission metadata and checks for optional PRoot/NetHunter command and rootfs markers only. It does not call subprocesses, contact networks, change settings, or alter packages.
 - The APK adapter hashes the selected file and reads ZIP entry names only. It does not extract, execute, decode the binary manifest, or validate the signature.
 - Web/API review currently performs one HEAD request only. It is not a scanner and must be used only against the exact authorized URL. The evidence-report adapter only validates and summarizes local JSON input; it does not verify the findings.
 - Plans are templates. They do not prove that a check was performed or that a target is secure.
