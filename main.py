@@ -388,6 +388,59 @@ def append_lifecycle_event(event):
         pass
 
 
+def update_one(t, confirmed=False):
+    """Update one managed package with an explicit, auditable package-manager call."""
+    kind, package = t.get("install_kind"), t.get("package")
+    result = {
+        "event_schema": 1, "operation": "update", "tool_id": t.get("id"),
+        "tool_name": t.get("name"), "install_kind": kind, "requested_package": package,
+        "started_at": time.strftime("%Y-%m-%d %H:%M:%S"), "status": "not_started",
+        "path_match_before": installed(t), "version_before": collect_resolved_version(t),
+        "command": None, "exit_code": None, "timed_out": False, "launch_error": None,
+        "path_match_after": None, "version_after": None,
+    }
+    command, label, timeout, env = None, None, 1800, None
+    if kind == "pkg" and isinstance(package, str) and PKG_RE.fullmatch(package) and shutil.which("pkg"):
+        command, label = ["pkg", "upgrade", "-y", package], "Updating Termux package " + package
+    elif kind == "pip" and isinstance(package, str) and PIP_RE.fullmatch(package) and (VENV_DIR / "bin" / "pip").is_file():
+        command = [str(VENV_DIR / "bin" / "pip"), "install", "--upgrade", "--isolated", "--disable-pip-version-check", "--index-url", "https://pypi.org/simple", package]
+        label = "Updating isolated Python package " + package
+    elif kind == "cargo" and isinstance(package, str) and CARGO_RE.fullmatch(package) and shutil.which("cargo"):
+        command, label, timeout = ["cargo", "install", "--locked", "--force", package], "Updating Cargo-installed package " + package, 3600
+    elif kind == "npm" and isinstance(package, str) and NPM_RE.fullmatch(package) and shutil.which("npm"):
+        command = ["npm", "install", "--global", "--registry=https://registry.npmjs.org", "--strict-ssl=true", package]
+        label = "Updating global npm package " + package
+    elif kind == "go" and isinstance(package, str) and GO_RE.fullmatch(package) and shutil.which("go"):
+        command, label, timeout = ["go", "install", package], "Updating Go module " + package, 3600
+        env = {"GOBIN": str(BIN_DIR), "GOPROXY": "https://proxy.golang.org,direct", "GOSUMDB": "sum.golang.org", "GONOSUMDB": "", "GOPRIVATE": "", "GOINSECURE": "", "GOFLAGS": "", "GOTOOLCHAIN": "local"}
+    if not confirmed:
+        say("Update requires explicit confirmation.")
+        result["status"] = "cancelled_not_confirmed"
+    elif command is None:
+        say("Update unavailable: unsupported method, invalid package metadata, or required package manager is missing.")
+        result["status"] = "unsupported_or_unavailable"
+    else:
+        result["command"] = command
+        run(command, label, timeout, env)
+        command_result = dict(LAST_COMMAND_RESULT)
+        result.update({
+            "exit_code": command_result.get("exit_code"),
+            "timed_out": bool(command_result.get("timed_out")),
+            "launch_error": command_result.get("launch_error"),
+            "status": "operation_succeeded" if command_result.get("exit_code") == 0 and not command_result.get("timed_out") else "operation_failed",
+        })
+    result["finished_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    result["path_match_after"] = installed(t)
+    result["version_after"] = collect_resolved_version(t)
+    try:
+        append_lifecycle_event(result)
+        say("Lifecycle audit appended to " + str(STATE_DIR / "lifecycle_audit.jsonl"))
+    except OSError as exc:
+        say("WARNING: could not persist lifecycle audit record: " + str(exc))
+    say("Update result: " + result["status"] + ". Package-manager success does not guarantee compatibility; rollback is not automatic.")
+    return result["status"] == "operation_succeeded"
+
+
 def uninstall_one(t, confirmed=False):
     """Remove one package only through its matching package manager."""
     kind, package = t.get("install_kind"), t.get("package")
@@ -479,8 +532,19 @@ def choose(data,tools=None):
     if not value.isdigit() or int(value)==0: return
     i=int(value)-1
     if i<0 or i>=len(tools): say("Invalid number."); return
-    t=tools[i]; show_tool(t); action=ask("[i]nstall / [u]ninstall / [h]elp / [f]avorite / [b]ack: ").lower()
+    t=tools[i]; show_tool(t); action=ask("[i]nstall / [v]ersion-update / [u]ninstall / [h]elp / [f]avorite / [b]ack: ").lower()
     if action=="i": install_one(t)
+    elif action=="v":
+        kind, package = t.get("install_kind"), t.get("package")
+        if kind not in {"pkg", "pip", "go", "cargo", "npm"} or not isinstance(package, str):
+            say("Automatic update is not supported for this tool; no command was run.")
+            return
+        say("Package manager: " + kind + " | Exact package/module spec: " + package)
+        say("Updates may change behavior or dependencies. SYN_LAUNCH does not guarantee rollback.")
+        if ask("Type UPDATE " + package + " to confirm: ") == "UPDATE " + package:
+            update_one(t, confirmed=True)
+        else:
+            say("Cancelled. No update command was run.")
     elif action=="u":
         kind, package = t.get("install_kind"), t.get("package")
         if kind not in {"pkg", "pip", "cargo", "npm"} or not isinstance(package, str):
@@ -917,7 +981,7 @@ def run_install_preflight(items, mode):
 
 
 def installer(data):
-    choice=menu("Installer",["Attempt all distinct Termux packages","Install or remove one selected tool","Install Python, Go, Rust and Node.js runtimes","Attempt all Python/Go/Cargo/npm tools (large download/build)","Show last install summary","Show recent lifecycle audit"])
+    choice=menu("Installer",["Attempt all distinct Termux packages","Install, update, or remove one selected tool","Install Python, Go, Rust and Node.js runtimes","Attempt all Python/Go/Cargo/npm tools (large download/build)","Show last install summary","Show recent lifecycle audit"])
     if choice=="1":
         packages={}
         for t in data["tools"]:
