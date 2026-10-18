@@ -26,3 +26,4 @@ The separate [GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/wiki) f
 
 - [Workflow Planning](Workflow-Planning.md): scope-bound dry-run plans, authorization declaration, and safety limits.
 - [Optional Linux Environments](Optional-Linux-Environments.md): documented PRoot and NetHunter editions, capabilities, and limitations.
+- [Publishing the GitHub Wiki](Publishing-GitHub-Wiki.md): dry-run-first synchronization from versioned repository docs.
