@@ -6388,7 +6388,31 @@
       "description": "Network protocol analysis and poisoning tool for isolated labs; can intercept credentials and disrupt networks.",
       "example": "python Responder.py --help",
       "source": "https://github.com/lgandx/Responder",
-      "caveat": "Poisoning can intercept credentials or disrupt networks; lab-only."
+      "caveat": "Poisoning can intercept credentials or disrupt networks; lab-only.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/lgandx/Responder/blob/424fbe53d6a61824e3c7685fe5f69668721b821e/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "424fbe53d6a61824e3c7685fe5f69668721b821e",
+        "source_snapshot_url": "https://github.com/lgandx/Responder/blob/424fbe53d6a61824e3c7685fe5f69668721b821e/requirements.txt",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned requirements.txt.",
+        "declared_dependencies": [
+          "aioquic",
+          "netifaces >=0.10.4"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned manifest lists netifaces, a native extension whose Android/Termux build and interface behavior are unverified.",
+          "The tool includes network poisoning and credential-capture features; restrict use to an isolated lab or expressly authorized network.",
+          "Android Wi-Fi interface access, packet handling, and permissions differ from a conventional Linux host."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "frida-tools",
@@ -7177,7 +7201,37 @@
       "description": "Build forensic timelines from supported evidence sources.",
       "example": "log2timeline.py --help",
       "source": "https://github.com/log2timeline/plaso",
-      "caveat": "Dependency-heavy; best suited to a supported Linux workstation."
+      "caveat": "Dependency-heavy; best suited to a supported Linux workstation.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/log2timeline/plaso/blob/76c02d9f3341bbbe4da8c21e944ee1516d069668/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "76c02d9f3341bbbe4da8c21e944ee1516d069668",
+        "source_snapshot_url": "https://github.com/log2timeline/plaso/blob/76c02d9f3341bbbe4da8c21e944ee1516d069668/pyproject.toml",
+        "declared_python_requirement": ">=3.10",
+        "declared_dependencies": [
+          "PyYAML",
+          "XlsxWriter",
+          "dfdatetime",
+          "dfvfs",
+          "dfwinreg",
+          "libbde-python",
+          "libewf-python",
+          "libfsntfs-python"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned pyproject.toml requires Python >=3.10 and declares numerous forensic format bindings and native libraries; Android/Termux installability is unverified.",
+          "The full dependency graph is substantially larger than the representative list in this record and may require system libraries unavailable on Android.",
+          "Timeline results depend on source-image integrity, parser coverage, timezone assumptions, and artifact interpretation."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "volatility-3",
@@ -7582,7 +7636,35 @@
       "description": "GDB enhancement suite for local debugging and exploit-development education.",
       "example": "See official installation and compatibility notes.",
       "source": "https://github.com/pwndbg/pwndbg",
-      "caveat": "GDB/Python integration is desktop-Linux oriented and may not work on Android."
+      "caveat": "GDB/Python integration is desktop-Linux oriented and may not work on Android.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/pwndbg/pwndbg/blob/a211a9dcd5050cd0cd82952047740bf3163472fe/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "a211a9dcd5050cd0cd82952047740bf3163472fe",
+        "source_snapshot_url": "https://github.com/pwndbg/pwndbg/blob/a211a9dcd5050cd0cd82952047740bf3163472fe/pyproject.toml",
+        "declared_python_requirement": ">=3.10, <4",
+        "declared_dependencies": [
+          "capstone6pwndbg==8.0.0",
+          "unicorn >=2.1.4,<3",
+          "pwntools >=4.14.1,<5",
+          "pyelftools >=0.33,<1",
+          "psutil >=7.0.0,<8",
+          "uv >=0.12.0"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned pyproject.toml requires Python >=3.10 and depends on GDB plus native/emulation components; Android/Termux runtime support is not established.",
+          "The package expects a compatible GDB build and debugger integration not guaranteed on Android.",
+          "Native dependency wheels/builds and debugger process access must be verified on the exact target environment."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "angr",
@@ -7595,7 +7677,36 @@
       "description": "Python framework for binary analysis and symbolic execution in research labs.",
       "example": "See the official angr documentation.",
       "source": "https://github.com/angr/angr",
-      "caveat": "Heavy dependencies; prefer a supported Linux environment for complex analyses."
+      "caveat": "Heavy dependencies; prefer a supported Linux environment for complex analyses.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python packaging or dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/angr/angr/blob/ae9f5786fd94410ca400063bf21719aa8b564d3e/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "ae9f5786fd94410ca400063bf21719aa8b564d3e",
+        "source_snapshot_url": "https://github.com/angr/angr/blob/ae9f5786fd94410ca400063bf21719aa8b564d3e/pyproject.toml",
+        "declared_python_requirement": ">=3.12",
+        "declared_dependencies": [
+          "pyvex==10.0.5.dev0",
+          "grpcio-tools >=1.80,<1.85",
+          "protobuf >=6.31.1,<8",
+          "z3-solver==5.1.0.0",
+          "capstone==5.0.9",
+          "cffi >=1.14.0",
+          "setuptools-rust"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned pyproject.toml requires Python >=3.12 and a native build toolchain; current Termux support is not established.",
+          "The build metadata declares Rust extensions and native dependencies including pyvex, z3-solver, capstone, and cffi; Android ABI wheels/builds are unverified.",
+          "Symbolic execution can consume substantial CPU, memory, and storage; results depend on binary architecture, models, and analysis constraints."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "ssh-keyscan",
