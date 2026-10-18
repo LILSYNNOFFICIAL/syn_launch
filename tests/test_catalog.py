@@ -43,11 +43,12 @@ class CatalogTests(unittest.TestCase):
 
     def test_source_backed_compatibility_metadata_is_explicit_and_not_verified(self):
         declared = [tool for tool in self.tools if tool.get("compatibility")]
-        self.assertGreaterEqual(len(declared), 9)
+        self.assertGreaterEqual(len(declared), 70)
         for tool in declared:
             metadata = tool["compatibility"]
             self.assertEqual(metadata["status"], "source_documented_not_device_verified", tool["name"])
             self.assertTrue(metadata["install_source"].startswith("https://"), tool["name"])
+            self.assertTrue(metadata["evidence_scope"], tool["name"])
             self.assertIn("not_device_verified", metadata["status"])
             self.assertIs(type(metadata["root_required"]), bool)
             self.assertIsInstance(metadata["known_blockers"], list)
@@ -63,6 +64,13 @@ class CatalogTests(unittest.TestCase):
         broken = copy.deepcopy(self.data)
         tool = next(t for t in broken["tools"] if t.get("compatibility"))
         del tool["compatibility"]["root_required"]
+        with self.assertRaisesRegex(ValueError, "incomplete compatibility metadata"):
+            APP.validate_catalog(broken)
+
+    def test_catalog_rejects_missing_compatibility_evidence_scope(self):
+        broken = copy.deepcopy(self.data)
+        tool = next(t for t in broken["tools"] if t.get("compatibility"))
+        del tool["compatibility"]["evidence_scope"]
         with self.assertRaisesRegex(ValueError, "incomplete compatibility metadata"):
             APP.validate_catalog(broken)
 
@@ -170,6 +178,38 @@ class CatalogTests(unittest.TestCase):
         self.assertFalse(timed_out)
         self.assertLessEqual(len(output.encode("utf-8")), 1024)
         self.assertEqual(output, "A" * 1024)
+
+    def test_bounded_probe_can_return_exit_code_without_breaking_legacy_callers(self):
+        output, truncated, timed_out, exit_code = APP.bounded_probe(
+            [sys.executable, "-c", "print('probe-ok')"], timeout=5, max_bytes=1024, include_returncode=True
+        )
+        self.assertEqual(output.strip(), "probe-ok")
+        self.assertFalse(truncated)
+        self.assertFalse(timed_out)
+        self.assertEqual(exit_code, 0)
+
+    def test_explicit_smoke_test_records_only_bounded_probe_evidence(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {
+            "id": "python-smoke-test", "name": "Python Smoke Test", "executable": "python",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/python",
+            "caveat": "A version probe is not a feature test."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value=sys.executable):
+                record = APP.smoke_test_tool(tool, {"tools": [tool]})
+                self.assertEqual(record["status"], "passed")
+                self.assertEqual(record["probe"], "--version")
+                self.assertEqual(record["exit_code"], 0)
+                self.assertIn("not a functional test", record["scope"])
+                saved = APP.load_smoke_evidence()
+                self.assertEqual(saved["python-smoke-test"]["status"], "passed")
+                report = APP.compatibility_report({"tools": [tool], "categories": ["Test"]})
+                self.assertEqual(report["tools"][0]["smoke_test"], "passed")
+                self.assertEqual(report["summary"]["smoke_tested_entries"], 1)
+                self.assertEqual(report["tools"][0]["device_validation"], "not_run")
 
     def test_check_cli(self):
         result = subprocess.run([sys.executable, str(ROOT / "main.py"), "--check"], capture_output=True, text=True, timeout=15)
@@ -281,7 +321,7 @@ class CatalogTests(unittest.TestCase):
         }
         with patch.object(APP.shutil, "which", side_effect=lambda command: "/test/fake-tool" if command == "fake-tool" else None):
             report = APP.compatibility_report({"tools": [fake], "categories": ["Test"]})
-        self.assertEqual(report["report_schema"], 2)
+        self.assertEqual(report["report_schema"], 3)
         self.assertEqual(report["summary"]["catalog_entries"], 1)
         self.assertEqual(report["summary"]["catalog_installable_entries"], 0)
         self.assertEqual(report["summary"]["path_match_entries"], 1)
