@@ -2355,7 +2355,33 @@
       "description": "Generate domain permutations to support defensive typosquatting and lookalike-domain review.",
       "example": "urlcrazy --help",
       "source": "https://github.com/urbanadventurer/urlcrazy",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Ruby runtime/dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/urbanadventurer/urlcrazy/blob/78bf6e855d6d83e387ae3b5c8ffc36f241b96f66/Gemfile",
+        "evidence_kind": "upstream Ruby dependency manifest (Gemfile)",
+        "evidence_scope": "Confirms only the runtime or dependency information in the pinned upstream file. It does not establish Android/Termux support, successful installation, native dependency availability, ABI support, or runtime functionality.",
+        "source_revision": "78bf6e855d6d83e387ae3b5c8ffc36f241b96f66",
+        "source_snapshot_url": "https://github.com/urbanadventurer/urlcrazy/blob/78bf6e855d6d83e387ae3b5c8ffc36f241b96f66/Gemfile",
+        "architecture_policy": "No Android/Termux support is claimed by this evidence. Check the target runtime and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Gemfile lists Ruby gems but does not declare a minimum Ruby version or Android/Termux support.",
+          "Async DNS/HTTP behavior and gem native dependencies have not been tested on Android/Termux.",
+          "Typo-squatting/domain permutation generation can create many lookalike domains; results need careful review and do not imply malicious ownership."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_ruby_requirement": "The pinned Gemfile lists dependencies but does not declare a minimum Ruby version.",
+        "declared_dependencies": [
+          "colorize",
+          "async",
+          "async-dns",
+          "async-http"
+        ]
+      }
     },
     {
       "id": "whatweb",
@@ -4623,7 +4649,31 @@
       "description": "Probe TLS/SSL configuration for authorized services using a shell-based test suite.",
       "example": "testssl.sh --help",
       "source": "https://github.com/testssl/testssl.sh",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Shell runtime/dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/testssl/testssl.sh/blob/9bd7e16df96a8e4e36c89f6c55443eceb9e36c71/Readme.md",
+        "evidence_kind": "upstream shell/TLS runtime documentation (Readme.md)",
+        "evidence_scope": "Confirms only the runtime or dependency information in the pinned upstream file. It does not establish Android/Termux support, successful installation, native dependency availability, ABI support, or runtime functionality.",
+        "source_revision": "9bd7e16df96a8e4e36c89f6c55443eceb9e36c71",
+        "source_snapshot_url": "https://github.com/testssl/testssl.sh/blob/9bd7e16df96a8e4e36c89f6c55443eceb9e36c71/Readme.md",
+        "architecture_policy": "No Android/Termux support is claimed by this evidence. Check the target runtime and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README describes a shell-based TLS scanner; Bash/OpenSSL versions and certificate-store behavior on Android/Termux are unverified.",
+          "TLS tests can generate substantial connection volume and may be rate-limited by the target; scope and throttle requests.",
+          "Only test endpoints you are authorized to assess; server configuration findings require contextual interpretation."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_runtime_requirement": "The pinned README identifies Bash and Libre/OpenSSL but does not specify a minimum version.",
+        "declared_dependencies": [
+          "Bash",
+          "OpenSSL or compatible TLS implementation"
+        ]
+      }
     },
     {
       "id": "sslyze",
@@ -7960,7 +8010,38 @@
       "description": "Generate wordlists from authorized website content for password-policy audits.",
       "example": "cewl --help",
       "source": "https://github.com/digininja/CeWL",
-      "caveat": "Use only approved targets."
+      "caveat": "Use only approved targets.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Ruby runtime/dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/digininja/CeWL/blob/ca01aeae1c77bb086ef757611dea6377b8d1168b/Gemfile",
+        "evidence_kind": "upstream Ruby dependency manifest (Gemfile)",
+        "evidence_scope": "Confirms only the runtime or dependency information in the pinned upstream file. It does not establish Android/Termux support, successful installation, native dependency availability, ABI support, or runtime functionality.",
+        "source_revision": "ca01aeae1c77bb086ef757611dea6377b8d1168b",
+        "source_snapshot_url": "https://github.com/digininja/CeWL/blob/ca01aeae1c77bb086ef757611dea6377b8d1168b/Gemfile",
+        "architecture_policy": "No Android/Termux support is claimed by this evidence. Check the target runtime and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Gemfile includes Nokogiri and other gems whose native/runtime behavior on Android/Termux is unverified.",
+          "Wordlist generation from websites can collect personal or sensitive words; only use against authorized sites and respect privacy.",
+          "The dependency manifest does not establish a compatible Ruby version or successful installation."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_ruby_requirement": "The pinned Gemfile lists dependencies but does not declare a minimum Ruby version.",
+        "declared_dependencies": [
+          "mime",
+          "mime-types >=3.3.1",
+          "mini_exiftool",
+          "nokogiri",
+          "rexml",
+          "rubyzip",
+          "spider",
+          "public_suffix",
+          "getoptlong"
+        ]
+      }
     },
     {
       "id": "crunch",
@@ -8286,7 +8367,35 @@
       "description": "Prepare Android APKs for controlled HTTPS inspection in an authorized test lab.",
       "example": "See the project README for supported usage.",
       "source": "https://github.com/niklashigi/apk-mitm",
-      "caveat": "APK modification can invalidate signatures; use only test apps you own or are authorized to assess."
+      "caveat": "APK modification can invalidate signatures; use only test apps you own or are authorized to assess.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Node.js runtime/dependency metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/niklashigi/apk-mitm/blob/5a96363fc9112b97d60fc2bd3799d6bbfd8e4e00/package.json",
+        "evidence_kind": "upstream Node package metadata (package.json)",
+        "evidence_scope": "Confirms only the runtime or dependency information in the pinned upstream file. It does not establish Android/Termux support, successful installation, native dependency availability, ABI support, or runtime functionality.",
+        "source_revision": "5a96363fc9112b97d60fc2bd3799d6bbfd8e4e00",
+        "source_snapshot_url": "https://github.com/niklashigi/apk-mitm/blob/5a96363fc9112b97d60fc2bd3799d6bbfd8e4e00/package.json",
+        "architecture_policy": "No Android/Termux support is claimed by this evidence. Check the target runtime and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned package.json requires Node.js >=14; Android/Termux runtime, Java tooling, and APK archive behavior are not verified.",
+          "The tool modifies APKs to prepare HTTPS inspection; modified packages may no longer match their original signatures and should be treated as test artifacts.",
+          "Only modify APKs you own or are authorized to analyze, and preserve the original file and hash."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_node_requirement": ">=14",
+        "declared_dependencies": [
+          "@tybys/cross-zip",
+          "execa",
+          "globby",
+          "rxjs",
+          "xml-js",
+          "yargs-parser"
+        ]
+      }
     },
     {
       "id": "pwninit",
