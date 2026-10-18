@@ -379,7 +379,7 @@ def append_lifecycle_event(event):
             path.chmod(0o600)
         except OSError:
             pass
-        stream.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\\n")
+        stream.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
         stream.flush()
         os.fsync(stream.fileno())
     try:
