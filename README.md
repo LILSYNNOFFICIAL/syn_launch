@@ -217,7 +217,7 @@ SYN_LAUNCH code is released under the MIT License. Third-party tools retain thei
 
 ## Dry-run assessment workflow plans
 
-SYN_LAUNCH includes scope-bound dry-run plans plus two reviewed, read-only local adapters: a Termux/device configuration inventory and a static APK archive inventory. Remote web/API assessment remains plan-only. No adapter grants permission to test an asset.
+SYN_LAUNCH includes scope-bound dry-run plans, three read-only local adapters (device inventory, APK archive inventory, and evidence-report generation), and a deliberately narrow HTTPS adapter that makes one HEAD request. It is not a general-purpose scanner. No adapter grants permission to test an asset.
 
 List plans:
 
@@ -242,6 +242,14 @@ Run the local device inventory (scope must be exactly `local-device`):
 python main.py --workflow-run device-configuration-audit --target-scope local-device --authorized
 ```
 
+Make one bounded HTTPS HEAD request to an explicitly authorized endpoint. The adapter verifies TLS certificates, has a five-second timeout, does not follow redirects or read the response body, and only retains selected response headers:
+
+```bash
+python main.py --workflow-run web-api-review --target-scope "https://staging.example.test/api/health" --authorized
+```
+
+Replace the example with an endpoint you are explicitly authorized to test. This command sends a real network request.
+
 Inventory an APK you own or are authorized to review, without extracting or executing it:
 
 ```bash
@@ -254,5 +262,5 @@ Summarize a local JSON evidence file containing a `findings` list. Each finding 
 python main.py --workflow-run assessment-report --target-scope "$HOME/path/to/evidence.json" --authorized
 ```
 
-Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. Web/API assessment remains plan-only. The local evidence-report adapter validates structure and summarizes supplied findings; it does not independently verify them.
+Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. The HTTPS adapter performs only a single HEAD request, not a vulnerability scan. The local evidence-report adapter validates structure and summarizes supplied findings; it does not independently verify them.
 
