@@ -48,3 +48,5 @@ Seven more pinned Python packaging/dependency reviews cover SpiderFoot, NetExec,
 
 
 Nine more pinned Python packaging reviews cover Frida Tools, Objection, ApkLeaks, Prowler, ScoutSuite, Kube-Hunter, Volatility 3, Cloudsplaining, and APKiD. These packages include native components or depend on external mobile, cloud, or Kubernetes environments; the metadata review is not a device/runtime test.
+
+Eleven additional pinned reviews cover JWT Tool, Corsy, XSStrike, Commix, tplmap, RouterSploit, Ghauri, MobSF, Pacu, Metagoofil, and BloodHound.py. These source files range from dependency manifests to setup metadata. Several are active web, embedded-device, cloud, or directory assessment tools; packaging evidence does not authorize use or establish Android/Termux functionality.
