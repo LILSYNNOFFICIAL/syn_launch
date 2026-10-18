@@ -768,7 +768,25 @@
       "description": "Network discovery, service identification, and port auditing. Scan only authorized hosts.",
       "example": "nmap -sV 192.0.2.10",
       "source": "https://nmap.org/",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/nmap",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "Raw-packet scan modes and some discovery features may be restricted on unrooted Android; behavior depends on scan type and permissions.",
+          "Use only against explicitly authorized targets."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "netcat",
@@ -2043,7 +2061,24 @@
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "shellcheck --version",
       "source": "https://github.com/koalaman/shellcheck",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/shellcheck",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "ShellCheck analyzes shell source; it does not prove runtime behavior or shell portability across every target environment."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "hadolint",
@@ -2211,7 +2246,25 @@
       "description": "Match files against defensive YARA rules.",
       "example": "yara rules.yar sample.bin",
       "source": "https://github.com/VirusTotal/yara",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/yara",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "YARA rules must be obtained from a trusted source and reviewed before use.",
+          "Scanning results depend on rule quality and can include false positives or false negatives."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "foremost",
@@ -2387,7 +2440,25 @@
       "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "r2 --help",
       "source": "https://github.com/radareorg/radare2",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/radare2",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "Analyze untrusted binaries in an isolated environment; parsing malformed files may expose tool vulnerabilities.",
+          "Architecture support and analysis quality vary by binary format and processor target."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "gdb",
@@ -2508,7 +2579,25 @@
       "description": "Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output.",
       "example": "tesseract scan.png stdout",
       "source": "https://github.com/tesseract-ocr/tesseract",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/tesseract",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "OCR requires compatible traineddata files for the selected language and model.",
+          "Recognition quality depends on image quality, language data, and preprocessing."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "pngcheck",
@@ -3188,7 +3277,27 @@
       "description": "Scan accessible files; signature updates and storage need setup.",
       "example": "clamscan --version",
       "source": "https://github.com/Cisco-Talos/clamav",
-      "caveat": "Package availability differs by Termux repository, architecture, and release."
+      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/clamav",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Signature database update source, if current signatures are required."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Package availability differs by Termux repository, architecture, and release.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "Detection quality depends on signature database freshness and configuration.",
+          "Full filesystem access may be limited by Android app sandboxing and Termux permissions."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "freshclam",
@@ -4648,7 +4757,25 @@
       "description": "Collect SSH host public keys for inventory and known_hosts maintenance.",
       "example": "ssh-keyscan --help",
       "source": "https://github.com/openssh/openssh-portable",
-      "caveat": "Use only on systems where you are authorized to inventory SSH host keys."
+      "caveat": "Use only on systems where you are authorized to inventory SSH host keys.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/master/packages/openssh",
+        "evidence_kind": "upstream Termux package recipe or package subpackage definition",
+        "evidence_scope": "Confirms an upstream Termux packaging recipe or subpackage definition exists in the current repository tree; does not confirm current repository availability, successful installation, ABI support on this device, or runtime functionality.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: Use only on systems where you are authorized to inventory SSH host keys.",
+          "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
+          "Connects to the explicitly named SSH service; use only for systems within the approved scope.",
+          "Collected host keys must be verified through a trusted channel before being treated as authentic."
+        ],
+        "reviewed_on": "2026-10-17"
+      }
     },
     {
       "id": "zizmor",
@@ -4806,5 +4933,6 @@
       "source": "https://github.com/RhinoSecurityLabs/pacu",
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
-  ]
+  ],
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. A recipe URL proves only that upstream packaging metadata was found, not successful installation, ABI compatibility, or functional behavior."
 }
