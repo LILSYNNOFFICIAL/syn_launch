@@ -12,13 +12,13 @@ SYN_LAUNCH reports distinct evidence levels to prevent overclaiming.
 | Smoke test | A specific bounded command ran with recorded outcome | All features work |
 | Device validation | A named tool/version was tested on a named device/OS/architecture | Universal support on other devices |
 
-## Initial source-backed subset
+## Current source-backed subset
 
-Nine core Termux entries have structured metadata with HTTPS links to upstream Termux package recipes: Git, curl, wget, jq, ripgrep, OpenSSH, SQLite, Python, and Node.js. Their status is `source_documented_not_device_verified`. Architecture wording deliberately defers to the user's configured Termux repositories; it does not claim that every ABI is supported.
+Seventy-five catalog entries map to 60 distinct Termux package recipes or subpackage definitions found in the upstream repository tree. This includes core utilities and selected networking, developer, and file-analysis tools. Metadata links to the actual recipe directory where possible (for example, curl uses `libcurl`, and SQLite uses `libsqlite`). The status remains `source_documented_not_device_verified`. Recipe presence does not prove the package is enabled for the current device ABI, installable from the configured repository, or functional.
 
 ## Current report behavior
 
-`python main.py --compatibility-report` reports compatibility metadata separately from smoke-test and device-validation evidence. Unless separately recorded, `smoke_test`, `device_validation`, and `verification` remain `not_run`. The report does not launch cataloged executables.
+`python main.py --compatibility-report` emits report schema 3. The report itself does not launch cataloged executables; it reads previously saved local smoke-test records. To deliberately test one entry, run `python main.py --smoke-test NAME_OR_ID`. The command tries bounded `--version`, `--help`, and `-h` probes, each capped at five seconds and 64 KiB. It stores only the outcome and metadata, not raw command output, in private `~/.syn_launch/smoke_tests.json`. A passing result means a probe produced output and exited with code 0; it does not test the tool's operational features. Device validation remains `not_run`.
 
 ## Adding evidence
 
@@ -26,4 +26,4 @@ Nine core Termux entries have structured metadata with HTTPS links to upstream T
 2. Link to the HTTPS source and state what it establishes.
 3. Document architecture, root, hardware, external-service, and known-blocker details only when supported.
 4. Keep the status `source_documented_not_device_verified` until real device evidence exists.
-5. Record device model/OS, Termux source, architecture, tool/package version, command, exit status, and test limits for a smoke/device test.
+5. For device validation, record device model/OS, Termux source, architecture, tool/package version, command, exit status, and test limits. Keep a bounded CLI smoke probe distinct from a device-level functional test.
