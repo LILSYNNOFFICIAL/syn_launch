@@ -235,9 +235,10 @@ class WorkflowAdapterTests(unittest.TestCase):
         with patch("workflow_adapters.socket.getaddrinfo", return_value=private_answer), patch(
             "workflow_adapters._PinnedHTTPSConnection"
         ) as connection:
-            with self.assertRaisesRegex(ValueError, "non-public IP"):
-                run_web_api_review("https://staging.example.test/")
+            report = run_web_api_review("https://staging.example.test/")
         connection.assert_not_called()
+        self.assertEqual(report["request_status"], "request_rejected")
+        self.assertEqual(report["error_type"], "TargetAddressRejected")
 
     def test_web_api_adapter_reports_bounded_request_failure(self):
         class Connection:
