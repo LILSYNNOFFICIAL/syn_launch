@@ -5,7 +5,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 ## Unreleased
 
 ### Compatibility evidence
-- Expanded structured, source-linked compatibility declarations to 92 entries: 84 Termux recipe-backed declarations spanning 66 distinct recipe/subpackage directories, using pinned revisions of `termux-packages` and `termux-root-packages`, plus eight pinned upstream Python packaging metadata reviews for pip-audit, yamllint, dirsearch, Sherlock, Bandit, detect-secrets, email-validator, and ssh-audit. Source links are pinned and evidence scope is explicit.
+- Expanded structured, source-linked compatibility declarations to 95 entries: 84 Termux recipe-backed declarations spanning 66 distinct recipe/subpackage directories, using pinned revisions of `termux-packages` and `termux-root-packages`, plus eleven pinned upstream Python packaging metadata reviews for pip-audit, yamllint, dirsearch, Sherlock, Bandit, detect-secrets, email-validator, ssh-audit, Maigret, h8mail, and theHarvester. Source links are pinned and evidence scope is explicit.
 - Added an explicit evidence-scope field, pinned upstream source revisions and snapshot URLs, and CI checks for reproducible compatibility evidence.
 - Kept recipe presence, catalog installability, PATH discovery, smoke-test outcome, and device validation as separate evidence states.
 
