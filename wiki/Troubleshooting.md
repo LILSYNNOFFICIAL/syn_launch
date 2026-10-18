@@ -15,6 +15,10 @@ A catalog entry may be manual-only, unavailable in the configured repository, un
 
 A PATH match only means an executable name was discovered. It is not proof that the file belongs to the expected project or that the tool functions. Use explicit Help probing only when you choose it, and treat the result as bounded best-effort evidence.
 
+## Smoke test fails or reports `not_detected`
+
+`--smoke-test` accepts one exact catalog name or ID. It does not install the tool. If the executable is absent from `PATH`, the result is `not_detected`; nonzero help/version exits and timeouts are recorded separately. Check the upstream source and install method before trying again. A passing version/help response is not proof of feature-level operation.
+
 ## Compatibility report says `not_assessed`
 
 That entry has no structured compatibility declaration yet. Do not infer compatibility from category, install method, or PATH status.
@@ -28,6 +32,7 @@ python -m json.tool catalog.json > /dev/null
 python -m unittest discover -s tests -v
 python main.py --check
 python main.py --compatibility-report > compatibility-report.json
+python main.py --smoke-test python
 ```
 
 Inspect the first failing assertion/error and preserve the full output. Review generated reports for private paths and runtime details before sharing.
