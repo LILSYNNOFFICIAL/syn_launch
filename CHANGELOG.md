@@ -26,7 +26,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 - Plans include stop conditions and explicitly record that no network actions or subprocesses were executed.
 - Added CLI integration and regression tests for authorization handling, invalid scopes, and dry-run behavior.
 - Added read-only local device inventory, static APK archive inventory, and local JSON evidence-report adapters. APK inventory does not extract, execute, or verify signatures, and evidence summaries do not independently validate findings.
-- Added a narrowly scoped HTTPS HEAD adapter with TLS certificate verification, strict URL validation, a five-second timeout, no redirects, no response-body reads, and allowlisted headers. It sends one real network request and still requires testing against an authorized staging endpoint.
+- Added a narrowly scoped HTTPS HEAD adapter with TLS certificate verification, strict URL validation, a five-second socket timeout plus a three-second DNS-resolution budget, no redirects, no response-body reads, and allowlisted headers. It sends one real network request and still requires testing against an authorized staging endpoint.
 - Added a sample JSON evidence bundle and regression coverage for the local report workflow.
 
 ### Bounded smoke testing
@@ -39,7 +39,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 
 ### Documentation
 - Updated the README, roadmap, contributor and security guidance, and repository-hosted wiki pages for the expanded metadata and smoke-test workflow.
-- The wiki is versioned under `wiki/` in this repository. It is not the separate GitHub Wiki feature.
+- The separate GitHub Wiki is enabled. The repository `wiki/` folder remains the version-controlled source and requires explicit synchronization to update the published GitHub Wiki.
 
 ### Still requires physical-device verification
 - The previous Android 16 / Termux / ARM64 baseline applies only to its recorded commit.
