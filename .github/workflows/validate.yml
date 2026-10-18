@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 251, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 255, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -202,6 +202,8 @@ jobs:
               "bulk-extractor": ("e86383947ee016c825599887334cacf011736abf", "upstream Autotools build metadata (Makefile.am)", "/Makefile.am"),
               "sleuth-kit": ("e08bdd2f9b74b319981144c03ee492e9287b9e0f", "upstream Autotools build metadata (Makefile.am)", "/Makefile.am"),
               "hydra": ("17b52613320257a620ce3b5611b2e8196eb6e7fc", "upstream C/Autotools build metadata (Makefile.am)", "/Makefile.am"),
+              "apk-mitm": ("5a96363fc9112b97d60fc2bd3799d6bbfd8e4e00", "upstream Node package metadata (package.json)", "/package.json"),
+              "testssl-sh": ("9bd7e16df96a8e4e36c89f6c55443eceb9e36c71", "upstream shell/TLS runtime documentation (Readme.md)", "/Readme.md"),
           }
           for tool_id, (source_revision, evidence_kind, suffix) in expected_native_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
@@ -215,6 +217,8 @@ jobs:
               "wpscan": (">= 3.3", "5d672f66ee512301b654a2d79c9ddf6f8509eeb4", "upstream Ruby gem metadata (gemspec)", "/wpscan.gemspec"),
               "metasploit-framework": (">= 3.2", "b22ce1fbae63e8caeb3a773366a6d3336bd66fb8", "upstream Ruby gem metadata (gemspec)", "/metasploit-framework.gemspec"),
               "whatweb": ("README.md documents a Ruby-based scanner but does not state a minimum Ruby version.", "d279d93042d034f3fd29d5a893d44ccc0595d3f8", "upstream Ruby runtime documentation (README.md)", "/README.md"),
+              "urlcrazy": ("The pinned Gemfile lists dependencies but does not declare a minimum Ruby version.", "78bf6e855d6d83e387ae3b5c8ffc36f241b96f66", "upstream Ruby dependency manifest (Gemfile)", "/Gemfile"),
+              "cewl": ("The pinned Gemfile lists dependencies but does not declare a minimum Ruby version.", "ca01aeae1c77bb086ef757611dea6377b8d1168b", "upstream Ruby dependency manifest (Gemfile)", "/Gemfile"),
           }
           for tool_id, (ruby_requirement, source_revision, evidence_kind, suffix) in expected_ruby.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
