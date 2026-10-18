@@ -52,6 +52,7 @@ run_check "Unit and regression tests" "unit-tests.log" env SYN_LAUNCH_HOME="$OUT
 run_check "Runtime check" "check.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --check
 run_check "Detailed diagnostics" "doctor.log" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --doctor
 run_check "Structured environment profile" "profile.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --profile
+run_check "Read-only local device and optional-environment audit" "device-audit.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --workflow-run device-configuration-audit --target-scope local-device --authorized
 run_check "Explicit bounded Python smoke test" "python-smoke-test.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --smoke-test python
 run_check "Compatibility report" "compatibility-report.json" env SYN_LAUNCH_HOME="$STATE_DIR" "$PYTHON_BIN" main.py --compatibility-report
 
@@ -63,6 +64,11 @@ from pathlib import Path
 out = Path(sys.argv[1])
 report = json.loads((out / "compatibility-report.json").read_text(encoding="utf-8"))
 smoke = json.loads((out / "python-smoke-test.json").read_text(encoding="utf-8"))
+audit = json.loads((out / "device-audit.json").read_text(encoding="utf-8"))
+assert audit["workflow_id"] == "device-configuration-audit", audit
+assert audit["execution"]["network_actions_executed"] is False, audit
+assert audit["execution"]["subprocesses_executed"] is False, audit
+assert "optional_linux_environments" in audit, audit
 assert report["report_schema"] == 3, report.get("report_schema")
 assert report["summary"]["catalog_entries"] == 269, report["summary"]
 assert report["summary"]["compatibility_assessed_entries"] >= 82, report["summary"]
