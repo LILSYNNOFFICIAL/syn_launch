@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 235, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 239, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -184,6 +184,10 @@ jobs:
               "massdns": ("30c380908b4f9afd0931d3d83f85884844831846", "upstream C build metadata (Makefile)", "/Makefile"),
               "lynis": ("9319416fa0726369ab0a48f686155a90363f3f9c", "upstream project runtime documentation (README.md)", "/README.md"),
               "zmap": ("7268b1a2204bc9231efefa27ba7cb2fa56717979", "upstream CMake build metadata (CMakeLists.txt)", "/CMakeLists.txt"),
+              "file": ("4ee5ca8fb938c3168bcededd0ce7c2e03daea485", "upstream native utility documentation (README.md)", "/README.md"),
+              "pngcheck": ("bd33ad6490269df07cac81e5305f4ebf56c2b637", "upstream C build metadata (Makefile)", "/Makefile"),
+              "foremost": ("9b2ccf2a6d924e7a57971af6b92e6a287d28efb1", "upstream C build metadata (Makefile)", "/Makefile"),
+              "stress-ng": ("9beb21e28c727a5e02572ee2031977f23587d7e7", "upstream native utility documentation (README.md)", "/README.md"),
           }
           for tool_id, (source_revision, evidence_kind, suffix) in expected_native_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
