@@ -1,3 +1,4 @@
+import json
 import tempfile
 import unittest
 import zipfile
@@ -7,6 +8,7 @@ from unittest.mock import patch
 from workflow_adapters import (
     run_device_configuration_audit,
     run_mobile_apk_inventory,
+    run_assessment_report,
     run_workflow_adapter,
 )
 
@@ -76,6 +78,50 @@ class WorkflowAdapterTests(unittest.TestCase):
             with patch("workflow_adapters.MAX_APK_ENTRIES", 2):
                 with self.assertRaisesRegex(ValueError, "more than 2 archive entries"):
                     run_mobile_apk_inventory(str(apk))
+
+    def test_assessment_report_validates_and_summarizes_local_evidence(self):
+        payload = {
+            "findings": [
+                {"title": "Missing header", "severity": "medium", "asset": "staging app",
+                 "evidence": "Header absent in reviewed response", "remediation": "Set the header."},
+                {"title": "Informational note", "severity": "info", "asset": "test APK",
+                 "evidence": "Static inventory only", "remediation": "No action required."},
+            ]
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            evidence = Path(tmp) / "evidence.json"
+            evidence.write_text(json.dumps(payload), encoding="utf-8")
+            report = run_assessment_report(str(evidence))
+        self.assertEqual(report["workflow_id"], "assessment-report")
+        self.assertEqual(report["finding_count"], 2)
+        self.assertEqual(report["severity_counts"]["medium"], 1)
+        self.assertEqual(report["severity_counts"]["info"], 1)
+        self.assertFalse(report["execution"]["network_actions_executed"])
+        self.assertFalse(report["execution"]["evidence_file_modified"])
+        self.assertEqual(report["verification"], "input_schema_validated_only")
+
+    def test_assessment_report_rejects_bad_schema_severity_and_missing_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            evidence = Path(tmp) / "bad.json"
+            evidence.write_text(json.dumps({"findings": [
+                {"title": "Bad", "severity": "urgent", "asset": "test",
+                 "evidence": "sample", "remediation": "review"}
+            ]}), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "severity must be one of"):
+                run_assessment_report(str(evidence))
+            evidence.write_text("[]", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "findings list"):
+                run_assessment_report(str(evidence))
+            with self.assertRaisesRegex(ValueError, "does not resolve"):
+                run_assessment_report(str(Path(tmp) / "missing.json"))
+
+    def test_assessment_report_rejects_oversized_evidence_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            evidence = Path(tmp) / "large.json"
+            evidence.write_text("{}", encoding="utf-8")
+            with patch("workflow_adapters.MAX_EVIDENCE_JSON_BYTES", 1):
+                with self.assertRaisesRegex(ValueError, "Evidence JSON must be"):
+                    run_assessment_report(str(evidence))
 
     def test_unapproved_workflows_remain_plan_only(self):
         with self.assertRaisesRegex(ValueError, "No execution adapter is approved"):
