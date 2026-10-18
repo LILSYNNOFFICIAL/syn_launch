@@ -69,6 +69,7 @@ python main.py --smoke-test python
 - [Troubleshooting](wiki/Troubleshooting.md)
 - [Development and contributing](wiki/Development-and-Contributing.md)
 - [Platform roadmap](PLATFORM_ROADMAP.md)
+- [Changelog](CHANGELOG.md)
 
 The catalog now includes source-backed compatibility declarations for **75 catalog entries across 60 distinct Termux package recipes/subpackage definitions**. These links establish that a recipe is present in the upstream repository tree; they do not establish current repository availability, ABI support on a particular phone, successful installation, or runtime functionality. The compatibility report keeps those evidence levels separate.
 
