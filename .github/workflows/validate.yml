@@ -72,3 +72,5 @@ jobs:
         run: python main.py --search Nuclei
       - name: Exercise local diagnostic bundle on CI runner (not Android device validation)
         run: bash device_check.sh
+      - name: Validate local device audit report from diagnostic bundle
+        run: python -c 'import json; r=json.load(open("$HOME/.syn_launch/device-check-" + __import__("glob").glob("/home/runner/.syn_launch/device-check-*")[-1].rsplit("-", 1)[-1] + "/device-audit.json")); assert r["workflow_id"] == "device-configuration-audit" and r["execution"]["network_actions_executed"] is False'
