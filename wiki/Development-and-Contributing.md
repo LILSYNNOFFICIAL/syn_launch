@@ -10,9 +10,10 @@ python -m unittest discover -s tests -v
 python main.py --check
 python main.py --doctor
 python main.py --compatibility-report > compatibility-report.json
+python main.py --smoke-test python
 ```
 
-GitHub Actions runs the repository's automated checks on supported Python versions. CI on a desktop runner does not establish Android/Termux compatibility.
+GitHub Actions runs the repository's automated checks on supported Python versions. CI on a desktop runner does not establish Android/Termux compatibility. CI runs a bounded Python version probe to verify the smoke-test path, but that still is not an Android device test.
 
 ## Catalog contributions
 
