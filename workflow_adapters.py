@@ -5,10 +5,12 @@ No network access, subprocess execution, APK extraction, or package/device mutat
 from __future__ import annotations
 
 import hashlib
+import http.client
 import json
 import os
 import platform
 import shutil
+import ssl
 import stat
 import sys
 import zipfile
@@ -21,6 +23,7 @@ MAX_APK_ENTRIES = 50_000
 MAX_EVIDENCE_JSON_BYTES = 5 * 1024 * 1024
 MAX_FINDINGS = 500
 SEVERITIES = {"critical", "high", "medium", "low", "info", "unknown"}
+WEB_HEADER_ALLOWLIST = {"strict-transport-security", "content-security-policy", "x-content-type-options", "x-frame-options", "referrer-policy", "permissions-policy", "content-type", "cache-control"}
 
 
 def _mode(path: Path) -> dict:
@@ -192,6 +195,85 @@ def run_mobile_apk_inventory(scope: str) -> dict:
 
 
 
+
+def run_web_api_review(scope: str) -> dict:
+    """Perform one bounded HTTPS HEAD request; never follows redirects or reads a body."""
+    from urllib.parse import urlsplit
+
+    if not isinstance(scope, str) or len(scope) > 2048 or any(ord(ch) < 32 or ch.isspace() for ch in scope):
+        raise ValueError("web-api-review scope must be a single HTTPS URL without whitespace or control characters")
+    if "*" in scope or "\\" in scope:
+        raise ValueError("web-api-review does not accept wildcard or backslash URL scopes")
+    try:
+        parts = urlsplit(scope)
+        host = parts.hostname
+        port = parts.port
+    except ValueError as exc:
+        raise ValueError("web-api-review scope is not a valid URL") from exc
+    if parts.scheme.lower() != "https" or not host:
+        raise ValueError("web-api-review requires an explicit HTTPS URL")
+    if parts.username is not None or parts.password is not None:
+        raise ValueError("web-api-review URL must not contain embedded credentials")
+    if parts.query or parts.fragment:
+        raise ValueError("web-api-review URL must not contain a query string or fragment")
+    if port not in (None, 443):
+        raise ValueError("web-api-review only permits the default HTTPS port 443")
+    if any(segment == ".." for segment in parts.path.split("/")):
+        raise ValueError("web-api-review path must not contain parent-directory segments")
+    try:
+        host = host.encode("idna").decode("ascii")
+    except UnicodeError as exc:
+        raise ValueError("web-api-review hostname is invalid") from exc
+    path = parts.path or "/"
+    report = {
+        "adapter_schema": ADAPTER_SCHEMA,
+        "workflow_id": "web-api-review",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "target_host": host,
+        "target_path": path,
+        "request": {"method": "HEAD", "timeout_seconds": 5, "redirects_followed": False, "response_body_read": False},
+        "response": None,
+        "request_status": "request_failed",
+        "execution": {
+            "network_actions_executed": True,
+            "subprocesses_executed": False,
+            "catalog_tools_executed": False,
+            "request_count": 1,
+        },
+        "limitations": [
+            "This makes exactly one HTTPS HEAD request to the supplied host and path. It is an active network request and requires explicit authorization.",
+            "Redirects are not followed and response bodies are not read. A server may handle HEAD differently from GET.",
+            "This is not a vulnerability scan, API schema review, authentication test, or security certification.",
+            "Only an allowlist of response headers is retained; the report does not independently prove application behavior.",
+        ],
+    }
+    connection = None
+    try:
+        connection = http.client.HTTPSConnection(
+            host, port=443, timeout=5, context=ssl.create_default_context()
+        )
+        connection.request("HEAD", path, headers={"User-Agent": "SYN_LAUNCH/1.0"})
+        response = connection.getresponse()
+        headers = {}
+        for name, value in response.getheaders():
+            key = name.lower()
+            if key in WEB_HEADER_ALLOWLIST and key not in headers:
+                headers[key] = value[:512]
+        report["response"] = {
+            "status_code": int(response.status),
+            "reason": str(response.reason or "")[:128],
+            "headers": headers,
+            "redirect_response_not_followed": 300 <= int(response.status) < 400,
+        }
+        report["request_status"] = "response_received"
+    except (OSError, ssl.SSLError, http.client.HTTPException, TimeoutError) as exc:
+        report["error_type"] = type(exc).__name__
+    finally:
+        if connection is not None:
+            connection.close()
+    return report
+
+
 def run_assessment_report(scope: str) -> dict:
     """Validate and summarize a local JSON evidence bundle without contacting targets."""
     candidate = Path(scope).expanduser()
@@ -262,6 +344,8 @@ def run_assessment_report(scope: str) -> dict:
 
 
 def run_workflow_adapter(workflow_id: str, scope: str) -> dict:
+    if workflow_id == "web-api-review":
+        return run_web_api_review(scope)
     if workflow_id == "device-configuration-audit":
         return run_device_configuration_audit(scope)
     if workflow_id == "mobile-app-review":
