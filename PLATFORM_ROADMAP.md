@@ -28,7 +28,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Reconcile explicit Go version requests against resolved metadata with exact-match, mismatch, unresolved, unpinned/not-comparable, and floating-request states; do not infer semantic equivalence.
 - [x] Add bounded metadata-only post-install checks using package-manager records and PATH discovery, with explicit status and no execution of cataloged tool binaries.
 - [x] Add explicitly confirmed single-package uninstall for Termux, isolated pip, Cargo, and global npm, with before/after metadata and private audit records; leave Go/manual/root uninstall unsupported until package ownership can be established safely.
-- [ ] Add package-manager-aware updates with requested/resolved version reconciliation and rollback limits documented.
+- [x] Add explicitly confirmed single-package updates for Termux, isolated pip, Go, Cargo, and global npm with before/after metadata and private audit records; update operations are not automatically reversible and do not claim compatibility.
 - [x] Add advisory dependency/runtime and disk-space preflight checks before bulk installs; missing `pkg` blocks package batches, while other warnings require explicit continuation. Exact package sizes and tool functionality remain unverified.
 
 ## Stage 4: Authorized assessment workflows
