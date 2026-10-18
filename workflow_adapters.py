@@ -7,10 +7,12 @@ from __future__ import annotations
 
 import hashlib
 import http.client
+import ipaddress
 import json
 import os
 import platform
 import shutil
+import socket
 import ssl
 import stat
 import sys
@@ -212,6 +214,23 @@ def run_mobile_apk_inventory(scope: str) -> dict:
 
 
 
+class _PinnedHTTPSConnection(http.client.HTTPSConnection):
+    """HTTPS connection pinned to a previously validated public IP address."""
+
+    def __init__(self, host: str, pinned_ip: str, timeout: float, context: ssl.SSLContext):
+        super().__init__(host, port=443, timeout=timeout, context=context)
+        self._pinned_ip = pinned_ip
+
+    def connect(self) -> None:
+        # Avoid a second DNS lookup after validation, which could enable DNS rebinding.
+        raw = socket.create_connection((self._pinned_ip, self.port), self.timeout, self.source_address)
+        try:
+            self.sock = self._context.wrap_socket(raw, server_hostname=self.host)
+        except BaseException:
+            raw.close()
+            raise
+
+
 def run_web_api_review(scope: str) -> dict:
     """Perform one bounded HTTPS HEAD request; never follows redirects or reads a body."""
     from urllib.parse import urlsplit
@@ -265,8 +284,24 @@ def run_web_api_review(scope: str) -> dict:
     }
     connection = None
     try:
-        connection = http.client.HTTPSConnection(
-            host, port=443, timeout=5, context=ssl.create_default_context()
+        addresses = socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
+        resolved = []
+        for address in addresses:
+            ip_text = address[4][0].split("%", 1)[0]
+            try:
+                parsed_ip = ipaddress.ip_address(ip_text)
+            except ValueError:
+                continue
+            if not parsed_ip.is_global:
+                raise ValueError("web-api-review refuses hostnames that resolve to non-public IP addresses")
+            if ip_text not in resolved:
+                resolved.append(ip_text)
+        if not resolved:
+            raise OSError("hostname did not resolve to a public IP address")
+        # Prefer IPv4 for broader mobile-network compatibility; TLS still validates the hostname.
+        pinned_ip = next((item for item in resolved if ipaddress.ip_address(item).version == 4), resolved[0])
+        connection = _PinnedHTTPSConnection(
+            host, pinned_ip=pinned_ip, timeout=5, context=ssl.create_default_context()
         )
         connection.request("HEAD", path, headers={"User-Agent": "SYN_LAUNCH/1.0"})
         response = connection.getresponse()
