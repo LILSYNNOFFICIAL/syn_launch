@@ -46,7 +46,9 @@ python main.py --workflow-run mobile-app-review --target-scope "$HOME/path/to/yo
 Validate and summarize an evidence JSON file without contacting the listed assets:
 
 ```bash
-python main.py --workflow-run assessment-report --target-scope "$HOME/path/to/evidence.json" --authorized
+cp examples/assessment-evidence.example.json "$HOME/evidence.json"
+# Edit the copy, replace placeholders, and redact sensitive data.
+python main.py --workflow-run assessment-report --target-scope "$HOME/evidence.json" --authorized
 ```
 
 The JSON root must contain a `findings` array. Each finding requires non-empty `title`, `severity`, `asset`, `evidence`, and `remediation` strings. The file is limited to 5 MiB and 500 findings. Never include live credentials or session tokens.
