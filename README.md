@@ -79,7 +79,7 @@ python main.py --smoke-test python
 - [Platform roadmap](PLATFORM_ROADMAP.md)
 - [Changelog](CHANGELOG.md)
 
-The catalog now includes source-backed compatibility declarations for **84 catalog entries across 66 distinct Termux package recipes/subpackage definitions**. These links establish that a recipe is present in the upstream repository tree; they do not establish current repository availability, ABI support on a particular phone, successful installation, or runtime functionality. The latest expansion adds source-backed declarations for Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, OpenSSH keyscan, MTR, and tcpdump. MTR and tcpdump recipes are under the upstream root-packages tree, so repository configuration and device privileges need separate verification. The compatibility report keeps those evidence levels separate.
+The catalog now includes source-backed compatibility declarations for **84 catalog entries across 66 distinct Termux package recipes/subpackage definitions**. Each declaration includes a pinned upstream repository revision and snapshot URL. This makes the source evidence reproducible, but does not establish current repository availability, ABI support on a particular phone, successful installation, or runtime functionality. The latest expansion adds source-backed declarations for Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, OpenSSH keyscan, MTR, and tcpdump. MTR and tcpdump recipes are under the upstream root-packages tree, so repository configuration and device privileges need separate verification. The compatibility report keeps those evidence levels separate.
 
 ## Personal catalog and favorites
 
