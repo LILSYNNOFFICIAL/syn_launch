@@ -1,0 +1,11 @@
+{
+  "findings": [
+    {
+      "title": "Example only: review a response security header",
+      "severity": "info",
+      "asset": "https://staging.example.test/",
+      "evidence": "PLACEHOLDER: replace with a concise, redacted observation from an authorized review.",
+      "remediation": "Review the intended security policy and document the appropriate remediation."
+    }
+  ]
+}
