@@ -217,7 +217,7 @@ SYN_LAUNCH code is released under the MIT License. Third-party tools retain thei
 
 ## Dry-run assessment workflow plans
 
-SYN_LAUNCH includes a scope-bound workflow planner for review preparation. It does **not** launch scans, execute catalog tools, or generate permission to test an asset.
+SYN_LAUNCH includes scope-bound dry-run plans plus two reviewed, read-only local adapters: a Termux/device configuration inventory and a static APK archive inventory. Remote web/API assessment remains plan-only. No adapter grants permission to test an asset.
 
 List plans:
 
@@ -235,3 +235,18 @@ python main.py --workflow-plan assessment-report --target-scope "approved engage
 ```
 
 The `--authorized` flag is an operator declaration only. SYN_LAUNCH does not verify legal authority. Plans include explicit scope, stop conditions, and a declaration that no network actions or subprocesses were executed. See [Workflow Planning](wiki/Workflow-Planning.md) for details.
+
+Run the local device inventory (scope must be exactly `local-device`):
+
+```bash
+python main.py --workflow-run device-configuration-audit --target-scope local-device --authorized
+```
+
+Inventory an APK you own or are authorized to review, without extracting or executing it:
+
+```bash
+python main.py --workflow-run mobile-app-review --target-scope "$HOME/path/to/your-test.apk" --authorized
+```
+
+Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. Web/API assessment and report-generation adapters remain plan-only until separately reviewed and implemented.
+
