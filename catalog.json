@@ -2586,7 +2586,36 @@
       "description": "Inspect and test JSON Web Tokens in a controlled lab or authorized application.",
       "example": "python jwt_tool.py --help",
       "source": "https://github.com/ticarpi/jwt_tool",
-      "caveat": "Never paste production tokens into public services."
+      "caveat": "Never paste production tokens into public services.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/ticarpi/jwt_tool/blob/3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b",
+        "source_snapshot_url": "https://github.com/ticarpi/jwt_tool/blob/3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b/requirements.txt",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned requirements.txt.",
+        "declared_dependencies": [
+          "termcolor",
+          "cprint",
+          "pycryptodomex",
+          "requests",
+          "ratelimit"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized test application or lab target when the tool performs active assessment."
+        ],
+        "known_blockers": [
+          "The pinned requirements.txt lists dependencies but does not declare Python-version support or compatible Android wheels.",
+          "Asymmetric JWT operations depend on PyCryptodome components; native/build support on Android is not verified.",
+          "Testing tokens against a live service is active behavior and must be limited to an authorized application."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "corsy",
@@ -2599,7 +2628,32 @@
       "description": "Check CORS configuration for common security misconfigurations.",
       "example": "python corsy.py -h",
       "source": "https://github.com/s0md3v/Corsy",
-      "caveat": "Only test approved origins and endpoints."
+      "caveat": "Only test approved origins and endpoints.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/s0md3v/Corsy/blob/2985ae24da524ba6905d36bfbadca7fe71a9f199/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "2985ae24da524ba6905d36bfbadca7fe71a9f199",
+        "source_snapshot_url": "https://github.com/s0md3v/Corsy/blob/2985ae24da524ba6905d36bfbadca7fe71a9f199/requirements.txt",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned requirements.txt.",
+        "declared_dependencies": [
+          "requests"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized test application or lab target when the tool performs active assessment."
+        ],
+        "known_blockers": [
+          "The pinned dependency manifest does not declare a Python-version range or Android support.",
+          "HTTP behavior and response parsing depend on the target and network environment; no Termux runtime test is available.",
+          "Requests to a target are active network activity and require explicit authorization."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "xsstrike",
@@ -2612,7 +2666,34 @@
       "description": "XSS detection and context analysis for authorized web testing.",
       "example": "python xsstrike.py --help",
       "source": "https://github.com/s0md3v/XSStrike",
-      "caveat": "Active probes can trigger application behavior."
+      "caveat": "Active probes can trigger application behavior.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/s0md3v/XSStrike/blob/ab27955d367432f944d8f29897e09c15356e76f7/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "ab27955d367432f944d8f29897e09c15356e76f7",
+        "source_snapshot_url": "https://github.com/s0md3v/XSStrike/blob/ab27955d367432f944d8f29897e09c15356e76f7/requirements.txt",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned requirements.txt.",
+        "declared_dependencies": [
+          "tld",
+          "fuzzywuzzy",
+          "requests"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized test application or lab target when the tool performs active assessment."
+        ],
+        "known_blockers": [
+          "The pinned dependency manifest does not declare a Python-version range or Android support.",
+          "Fuzzy matching performance and dependency behavior have not been tested on Android/Termux.",
+          "Its probes can send active web requests; use only against explicitly authorized targets."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "commix",
@@ -2625,7 +2706,30 @@
       "description": "Command-injection testing framework for controlled authorized assessments.",
       "example": "python commix.py --help",
       "source": "https://github.com/commixproject/commix",
-      "caveat": "Potentially executes commands on vulnerable targets; lab or written authorization only."
+      "caveat": "Potentially executes commands on vulnerable targets; lab or written authorization only.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/commixproject/commix/blob/289ff2285ee25410e8f150f4ddf124a8e2ab2a7e/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "289ff2285ee25410e8f150f4ddf124a8e2ab2a7e",
+        "source_snapshot_url": "https://github.com/commixproject/commix/blob/289ff2285ee25410e8f150f4ddf124a8e2ab2a7e/setup.py",
+        "declared_python_requirement": ">=3.7",
+        "declared_dependencies": [],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized test application or lab target when the tool performs active assessment."
+        ],
+        "known_blockers": [
+          "The pinned setup.py declares Python >=3.7 but does not establish Android/Termux compatibility.",
+          "The project uses OS command-injection test logic; only use in a controlled lab or on expressly authorized applications.",
+          "No device-specific runtime or target-behavior validation has been performed."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "tplmap",
@@ -2638,7 +2742,38 @@
       "description": "Server-side template injection testing for authorized applications.",
       "example": "python tplmap.py --help",
       "source": "https://github.com/epinna/tplmap",
-      "caveat": "Potentially intrusive; use labs or approved scope."
+      "caveat": "Potentially intrusive; use labs or approved scope.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/epinna/tplmap/blob/616b0e527f62dd0930e6346ede6bef79e9bcf717/requirements.txt",
+        "evidence_kind": "upstream Python dependency manifest (requirements.txt)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "616b0e527f62dd0930e6346ede6bef79e9bcf717",
+        "source_snapshot_url": "https://github.com/epinna/tplmap/blob/616b0e527f62dd0930e6346ede6bef79e9bcf717/requirements.txt",
+        "declared_python_requirement": "No explicit Python version requirement is declared in the pinned requirements.txt.",
+        "declared_dependencies": [
+          "PyYAML==5.1.2",
+          "certifi==2018.10.15",
+          "chardet==3.0.4",
+          "idna==2.8",
+          "requests==2.22.0",
+          "urllib3==1.24.1",
+          "wsgiref==0.1.2"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized test application or lab target when the tool performs active assessment."
+        ],
+        "known_blockers": [
+          "The pinned dependency manifest contains old version pins, including PyYAML 5.1.2 and requests 2.22.0, which may conflict with modern Python or security maintenance requirements.",
+          "The manifest does not declare Python-version or Android/Termux support.",
+          "Template-injection tests can actively interact with a server and must be confined to authorized applications."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "semgrep",
@@ -5306,7 +5441,35 @@
       "description": "Router and embedded-device security assessment framework.",
       "example": "python rsf.py --help",
       "source": "https://github.com/threat9/routersploit",
-      "caveat": "Use only against devices you own or are authorized to test."
+      "caveat": "Use only against devices you own or are authorized to test.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/threat9/routersploit/blob/723b574c36ae202857e3f93e4f3c2ab9a1638ed4/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "723b574c36ae202857e3f93e4f3c2ab9a1638ed4",
+        "source_snapshot_url": "https://github.com/threat9/routersploit/blob/723b574c36ae202857e3f93e4f3c2ab9a1638ed4/setup.py",
+        "declared_python_requirement": ">=3.9",
+        "declared_dependencies": [
+          "requests",
+          "paramiko",
+          "pysnmp",
+          "pycryptodome"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Authorized embedded-device lab target and network access, depending on the selected module."
+        ],
+        "known_blockers": [
+          "The pinned setup.py declares Python >=3.9; native dependency builds and Android/Termux compatibility are unverified.",
+          "Embedded-device workflows may require network access, compatible device services, and features unavailable on stock Android.",
+          "Exploit modules can change device state; use only in a controlled lab or on explicitly authorized devices."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "pwntools",
@@ -5420,7 +5583,36 @@
       "description": "SQL injection verification for authorized applications.",
       "example": "ghauri --help",
       "source": "https://github.com/r0oth3x49/ghauri",
-      "caveat": "Active probes can affect databases; use a lab or approved target."
+      "caveat": "Active probes can affect databases; use a lab or approved target.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python dependency or packaging metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/r0oth3x49/ghauri/blob/18e367781caca5f9783a242f34aa90164edc902a/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the Python requirement or dependencies declared in the pinned upstream source file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "18e367781caca5f9783a242f34aa90164edc902a",
+        "source_snapshot_url": "https://github.com/r0oth3x49/ghauri/blob/18e367781caca5f9783a242f34aa90164edc902a/setup.py",
+        "declared_python_requirement": ">=3.6",
+        "declared_dependencies": [
+          "tldextract",
+          "colorama",
+          "requests",
+          "chardet",
+          "ua_generator"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "An explicitly authorized test application or lab target when the tool performs active assessment."
+        ],
+        "known_blockers": [
+          "The pinned setup.py declares Python >=3.6 but does not establish compatibility with current Python builds or Android/Termux.",
+          "Dependency availability and install behavior on Android have not been tested.",
+          "SQL-injection testing can issue active requests and alter data in some configurations; use only on explicitly authorized test systems."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "kxss",
@@ -7551,5 +7743,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes, Python packaging/dependency metadata, and Go module metadata are pinned to exact upstream revisions. Source metadata does not prove repository availability, installation success, ABI support, or runtime functionality."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Pinned upstream source revisions make metadata review reproducible but do not establish Android/Termux support, installability, or runtime functionality."
 }
