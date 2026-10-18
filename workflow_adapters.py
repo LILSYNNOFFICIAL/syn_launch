@@ -123,6 +123,8 @@ def run_mobile_apk_inventory(scope: str) -> dict:
             dex = []
             native_abis = set()
             signature_files = []
+            signature_file_count = 0
+            dex_count = 0
             bad_member = None
             for item in entries:
                 name = item.filename
@@ -130,6 +132,7 @@ def run_mobile_apk_inventory(scope: str) -> dict:
                     manifest_present = True
                 if (name == "classes.dex" or
                     (name.startswith("classes") and name.endswith(".dex") and name[7:-4].isdigit())):
+                    dex_count += 1
                     if len(dex) < 100:
                         dex.append(name)
                 parts = name.split("/")
@@ -137,9 +140,10 @@ def run_mobile_apk_inventory(scope: str) -> dict:
                     if len(native_abis) < 100:
                         native_abis.add(parts[1])
                 if (name.startswith("META-INF/") and
-                    name.upper().endswith((".RSA", ".DSA", ".EC", ".SF", "MANIFEST.MF")) and
-                    len(signature_files) < 100):
-                    signature_files.append(name)
+                    name.upper().endswith((".RSA", ".DSA", ".EC", ".SF", "MANIFEST.MF"))):
+                    signature_file_count += 1
+                    if len(signature_files) < 100:
+                        signature_files.append(name)
                 if bad_member is None and item.flag_bits & 0x1:
                     bad_member = name
     except (OSError, zipfile.BadZipFile, zipfile.LargeZipFile) as exc:
@@ -159,9 +163,12 @@ def run_mobile_apk_inventory(scope: str) -> dict:
             "entry_count": len(names),
             "android_manifest_present": manifest_present,
             "dex_files": dex,
+            "dex_file_count": dex_count,
+            "dex_file_names_truncated": dex_count > 100,
             "native_library_abis": native_abis,
             "signature_related_file_names": signature_files,
-            "signature_related_names_truncated": len(signature_files) == 100,
+            "signature_related_name_count": signature_file_count,
+            "signature_related_names_truncated": signature_file_count > 100,
             "encrypted_member_name": bad_member,
         },
         "execution": {
