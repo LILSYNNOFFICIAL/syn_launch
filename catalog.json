@@ -1802,7 +1802,28 @@
       "description": "Attack-surface mapping and asset discovery for authorized domains.",
       "example": "amass -h",
       "source": "https://github.com/owasp-amass/amass",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go module metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/owasp-amass/amass/blob/79299dce87b0085db0f2f4ef3e9c52cccb49f514/go.mod",
+        "evidence_kind": "upstream Go module metadata (go.mod)",
+        "evidence_scope": "Confirms only the language/runtime or dependency information in the pinned upstream file. It does not establish Android/Termux support, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "79299dce87b0085db0f2f4ef3e9c52cccb49f514",
+        "source_snapshot_url": "https://github.com/owasp-amass/amass/blob/79299dce87b0085db0f2f4ef3e9c52cccb49f514/go.mod",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned go.mod requires Go 1.26.0 and a large dependency graph; the target Termux toolchain, build resources, and native dependencies are unverified.",
+          "Amass workflows can query external providers and services; API credentials, privacy, and provider terms need separate review.",
+          "Active enumeration must remain scoped to authorized domains; source metadata is not permission to scan."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_go_requirement": "1.26.0",
+        "declared_dependencies": []
+      }
     },
     {
       "id": "assetfinder",
@@ -1815,7 +1836,29 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "assetfinder --help",
       "source": "https://pkg.go.dev/github.com/tomnomnom/assetfinder",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Go-based tool documented; pinned README does not declare a Go toolchain version or Android/Termux support",
+        "install_source": "https://github.com/tomnomnom/assetfinder/blob/4e95d8701aae8cff1c27af2626eb22ba110ad583/README.md",
+        "evidence_kind": "upstream Go runtime documentation (README.md)",
+        "evidence_scope": "Confirms only the language/runtime or dependency information in the pinned upstream file. It does not establish Android/Termux support, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "4e95d8701aae8cff1c27af2626eb22ba110ad583",
+        "source_snapshot_url": "https://github.com/tomnomnom/assetfinder/blob/4e95d8701aae8cff1c27af2626eb22ba110ad583/README.md",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the target toolchain and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README documents Go installation but the repository root has no go.mod at this revision, so an exact Go version requirement is not established by this evidence.",
+          "The README lists third-party sources that may require API keys and have provider-specific rate limits.",
+          "Subdomain collection should be limited to domains within explicit authorization; public-source results can be incomplete or stale."
+        ],
+        "reviewed_on": "2026-10-18",
+        "declared_build_requirements": [
+          "Go toolchain and module/source installation route described in README"
+        ]
+      }
     },
     {
       "id": "dnsx",
