@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Publish versioned wiki/ Markdown pages to the separate GitHub Wiki git repository.
 # Safe by default: inspect the diff only. Pass --push to commit and push.
-MODE="${1:-}"
+MODE="\${1:-}"
 if [[ "$MODE" != "" && "$MODE" != "--push" ]]; then
   echo "Usage: $0 [--push]" >&2
   exit 2
@@ -11,7 +11,7 @@ fi
 
 ROOT="$(git rev-parse --show-toplevel)"
 SOURCE="$ROOT/wiki"
-REMOTE="${SYN_LAUNCH_WIKI_REMOTE:-https://github.com/LILSYNNOFFICIAL/syn_launch.wiki.git}"
+REMOTE="\${SYN_LAUNCH_WIKI_REMOTE:-https://github.com/LILSYNNOFFICIAL/syn_launch.wiki.git}"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
@@ -32,29 +32,28 @@ repo = "https://github.com/LILSYNNOFFICIAL/syn_launch"
 
 for page in sorted(source.glob("*.md")):
     target_name = "Home.md" if page.name == "README.md" else page.name
-    text = page.read_text(encoding="utf-8")
+    content = page.read_text(encoding="utf-8")
 
-    # GitHub Wiki uses page slugs for internal links. Keep links to repository
-    # documents and assets as stable absolute URLs.
-    def replace_link(match):
+    def rewrite_link(match):
         label, url = match.group(1), match.group(2)
         if url.startswith("../"):
-            path = url[3:]
-            return f"]({repo}/blob/main/{path})"
-        if url.startswith("wiki/"):
-            return f"]({url[5:].removesuffix('.md')})"
-        if url.endswith(".md") and not url.startswith(("http://", "https://")):
-            return f"]({url[:-3]})"
-        return match.group(0)
+            url = f"{repo}/blob/main/{url[3:]}"
+        elif url.startswith("wiki/"):
+            url = url[5:]
+            if url.endswith(".md"):
+                url = url[:-3]
+        elif url.endswith(".md") and not url.startswith(("http://", "https://")):
+            url = url[:-3]
+        return f"[{label}]({url})"
 
-    text = re.sub(r"\]\(([^)]+)\)", lambda m: replace_link(re.match(r"(.*)", m.group(0)) and type("M", (), {"group": lambda self, n: (m.group(0)[2:m.group(0).find("](")] if n == 1 else m.group(0)[m.group(0).find("](")+2:-1)})()) , text)
-    text = text.replace(
+    content = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", rewrite_link, content)
+    content = content.replace(
         'src="../img/file_00000000f48881fdb4a638a0643452e1.png"',
         'src="https://raw.githubusercontent.com/LILSYNNOFFICIAL/syn_launch/main/img/file_00000000f48881fdb4a638a0643452e1.png"',
     )
-    (destination / target_name).write_text(text, encoding="utf-8")
+    (destination / target_name).write_text(content, encoding="utf-8")
 
-print("Synced local Markdown into the temporary wiki checkout. Existing wiki-only pages are preserved.")
+print("Synced repository Markdown into the temporary wiki checkout. Wiki-only pages are preserved.")
 PY
 
 cd "$TMP/wiki"
