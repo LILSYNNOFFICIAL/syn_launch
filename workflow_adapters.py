@@ -61,6 +61,13 @@ def run_device_configuration_audit(scope: str) -> dict:
             str(apt_dir / "sources.list"),
             str(apt_dir / "sources.list.d"),
         ]
+    runtime_commands = {
+        name: shutil.which(name) is not None
+        for name in ("python", "python3", "pkg", "dpkg-query", "git", "proot", "proot-distro", "nethunter", "nh")
+    }
+    proot_rootfs = Path(prefix) / "var" / "lib" / "proot-distro" / "installed-rootfs" if prefix else None
+    home_rootfs_markers = [home / "kali-arm64", home / "kali-fs"]
+    nethunter_launcher = runtime_commands["nethunter"] or runtime_commands["nh"]
     return {
         "adapter_schema": ADAPTER_SCHEMA,
         "workflow_id": "device-configuration-audit",
@@ -73,9 +80,14 @@ def run_device_configuration_audit(scope: str) -> dict:
             "termux_detected": termux_marker,
             "termux_prefix_configured": bool(prefix),
         },
-        "available_runtime_commands": {
-            name: shutil.which(name) is not None
-            for name in ("python", "python3", "pkg", "dpkg-query", "git")
+        "available_runtime_commands": runtime_commands,
+        "optional_linux_environments": {
+            "proot_available": runtime_commands["proot"],
+            "proot_distro_available": runtime_commands["proot-distro"],
+            "installed_proot_rootfs_directory_present": bool(proot_rootfs and proot_rootfs.is_dir()),
+            "nethunter_launcher_available": nethunter_launcher,
+            "nethunter_rootfs_marker_present": any(path.exists() for path in home_rootfs_markers),
+            "interpretation": "Presence indicators only. No container was entered, no root privileges were tested, and no kernel capabilities were checked.",
         },
         "storage": {
             "home_free_bytes": free_bytes,
