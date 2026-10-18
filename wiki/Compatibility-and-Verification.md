@@ -36,3 +36,6 @@ Additional pinned main-repository recipe reviews now cover Gitleaks, cargo-audit
 
 
 Three additional pinned root-repository recipe reviews cover `iw`, Aircrack-ng, and TShark. These remain non-installable by default: `iw` and Aircrack-ng depend on wireless driver/firmware and privilege capabilities, while TShark packet capture depends on interface access and permissions. Recipe presence is not evidence that these capabilities work on stock Android.
+
+
+Ten Go module metadata reviews have been added for subfinder, dnsx, httpx, naabu, gau, waybackurls, katana, unfurl, ffuf, and gobuster. Each records the pinned `go.mod` revision and declared Go version. The catalog's `@latest` install selectors remain unpinned, and module metadata does not prove that the current Termux toolchain or dependencies build on the device.
