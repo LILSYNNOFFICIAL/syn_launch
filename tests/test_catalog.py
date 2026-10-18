@@ -53,6 +53,24 @@ class CatalogTests(unittest.TestCase):
             self.assertIs(type(metadata["root_required"]), bool)
             self.assertIsInstance(metadata["known_blockers"], list)
 
+    def test_compatibility_declarations_pin_reproducible_source_snapshots(self):
+        declared = [tool for tool in self.tools if tool.get("compatibility")]
+        self.assertGreaterEqual(len(declared), 88)
+        for tool in declared:
+            with self.subTest(tool=tool["id"]):
+                metadata = tool["compatibility"]
+                revision = metadata.get("source_revision")
+                snapshot = metadata.get("source_snapshot_url")
+                self.assertRegex(revision or "", r"^[0-9a-f]{40}$")
+                self.assertTrue(snapshot.startswith("https://github.com/"))
+                self.assertIn(revision, snapshot)
+                self.assertTrue(metadata.get("evidence_scope"))
+        for tool_id in ("pip-audit", "yamllint", "dirsearch", "sherlock"):
+            tool = next(item for item in self.tools if item["id"] == tool_id)
+            metadata = tool["compatibility"]
+            self.assertEqual(metadata["evidence_kind"], "upstream Python packaging metadata (pyproject.toml)")
+            self.assertTrue(metadata["declared_python_requirement"])
+
     def test_catalog_rejects_invalid_compatibility_evidence(self):
         broken = copy.deepcopy(self.data)
         tool = next(t for t in broken["tools"] if t.get("compatibility"))
