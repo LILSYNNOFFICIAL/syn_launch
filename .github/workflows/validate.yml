@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 217, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 221, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -233,6 +233,12 @@ jobs:
               "metagoofil": "8d50624f1534e63c8bb64ee132d8c2298dba6724",
               "bloodhound-python-collector": "fd3f322e066d66314bfb31d4ae6f497df5872177",
           })
+          expected_python_revisions.update({
+              "responder": "424fbe53d6a61824e3c7685fe5f69668721b821e",
+              "pwndbg": "a211a9dcd5050cd0cd82952047740bf3163472fe",
+              "angr": "ae9f5786fd94410ca400063bf21719aa8b564d3e",
+              "plaso-log2timeline": "76c02d9f3341bbbe4da8c21e944ee1516d069668",
+          })
           for tool_id, expected_revision in expected_python_revisions.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               assert tool["compatibility_metadata"]["source_revision"] == expected_revision, tool
@@ -250,6 +256,12 @@ jobs:
               "pacu": "upstream Python packaging metadata (pyproject.toml)",
               "metagoofil": "upstream Python dependency manifest (requirements.txt)",
               "bloodhound-python-collector": "upstream Python packaging metadata (setup.py)",
+          })
+          expected_metadata.update({
+              "responder": "upstream Python dependency manifest (requirements.txt)",
+              "pwndbg": "upstream Python packaging metadata (pyproject.toml)",
+              "angr": "upstream Python packaging metadata (pyproject.toml)",
+              "plaso-log2timeline": "upstream Python packaging metadata (pyproject.toml)",
           })
           for tool_id, evidence_kind in expected_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
