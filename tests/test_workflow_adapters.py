@@ -103,6 +103,13 @@ class WorkflowAdapterTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "more than 2 archive entries"):
                     run_mobile_apk_inventory(str(apk))
 
+    def test_documented_example_evidence_bundle_is_valid(self):
+        example = Path(__file__).resolve().parents[1] / "examples" / "assessment-evidence.example.json"
+        report = run_assessment_report(str(example))
+        self.assertEqual(report["finding_count"], 1)
+        self.assertEqual(report["severity_counts"]["info"], 1)
+        self.assertIn("PLACEHOLDER", report["findings"][0]["evidence"])
+
     def test_assessment_report_validates_and_summarizes_local_evidence(self):
         payload = {
             "findings": [
