@@ -78,7 +78,7 @@ def validate_catalog(data):
             if not isinstance(compatibility, dict):
                 raise ValueError(f"invalid compatibility metadata: {t['name']}")
             required_compatibility = ("status", "platform", "install_source", "evidence_kind",
-                                      "architecture_policy", "root_required", "hardware_requirements",
+                                      "evidence_scope", "architecture_policy", "root_required", "hardware_requirements",
                                       "external_services", "known_blockers", "reviewed_on")
             if any(field not in compatibility for field in required_compatibility):
                 raise ValueError(f"incomplete compatibility metadata: {t['name']}")
@@ -90,7 +90,7 @@ def validate_catalog(data):
                 values = compatibility.get(field)
                 if not isinstance(values, list) or any(not isinstance(value, str) or not value.strip() or len(value) > 1000 for value in values):
                     raise ValueError(f"invalid compatibility list {field}: {t['name']}")
-            for field in ("status", "platform", "evidence_kind", "architecture_policy", "reviewed_on"):
+            for field in ("status", "platform", "evidence_kind", "evidence_scope", "architecture_policy", "reviewed_on"):
                 value = compatibility.get(field)
                 if not isinstance(value, str) or not value.strip() or len(value) > 500:
                     raise ValueError(f"invalid compatibility field {field}: {t['name']}")
@@ -252,18 +252,20 @@ def run(command, label, timeout=900, env=None):
         say(f"Could not run command: {exc}")
         return False
 
-def bounded_probe(command, timeout=5, max_bytes=65536):
-    """Run an explicit help/version probe with a time and retained-output cap."""
+def bounded_probe(command, timeout=5, max_bytes=65536, include_returncode=False):
+    """Run an explicit help/version probe with time/output caps; optionally return its exit code."""
+    empty = ("", False, False, None) if include_returncode else ("", False, False)
     if not isinstance(command, (list, tuple)) or not command or not all(isinstance(x, str) and x for x in command):
-        return "", False, False
+        return empty
     proc = None
     output = bytearray()
     truncated = False
+    returncode = None
     try:
         proc = subprocess.Popen(list(command), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT, start_new_session=(os.name == "posix"))
         if proc.stdout is None:
-            return "", False, False
+            return empty
         deadline = time.monotonic() + timeout
         with selectors.DefaultSelector() as selector:
             selector.register(proc.stdout, selectors.EVENT_READ)
@@ -281,8 +283,9 @@ def bounded_probe(command, timeout=5, max_bytes=65536):
                         output.extend(chunk[:room])
                     if len(chunk) > room:
                         truncated = True
-        proc.wait(timeout=max(0.1, deadline - time.monotonic()))
-        return output.decode("utf-8", errors="replace"), truncated, False
+        returncode = proc.wait(timeout=max(0.1, deadline - time.monotonic()))
+        result = (output.decode("utf-8", errors="replace"), truncated, False, returncode)
+        return result if include_returncode else result[:3]
     except subprocess.TimeoutExpired:
         try:
             if proc and proc.poll() is None:
@@ -290,9 +293,11 @@ def bounded_probe(command, timeout=5, max_bytes=65536):
                 proc.wait(timeout=2)
         except (OSError, subprocess.TimeoutExpired):
             pass
-        return output.decode("utf-8", errors="replace"), truncated, True
+        result = (output.decode("utf-8", errors="replace"), truncated, True, None)
+        return result if include_returncode else result[:3]
     except OSError:
-        return output.decode("utf-8", errors="replace"), truncated, False
+        result = (output.decode("utf-8", errors="replace"), truncated, False, None)
+        return result if include_returncode else result[:3]
     finally:
         if proc and proc.stdout and not proc.stdout.closed:
             proc.stdout.close()
@@ -1102,15 +1107,72 @@ def environment_profile(data):
     }
 
 
+def smoke_evidence_path():
+    return STATE_DIR / "smoke_tests.json"
+
+
+def load_smoke_evidence():
+    """Load private, locally recorded bounded-probe evidence without treating it as device certification."""
+    try:
+        value = json.loads(smoke_evidence_path().read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(value, dict):
+        return {}
+    return {key: item for key, item in value.items()
+            if isinstance(key, str) and isinstance(item, dict)
+            and item.get("status") in {"passed", "output_observed_nonzero", "timed_out", "no_response", "not_detected"}}
+
+
+def smoke_test_tool(tool, data):
+    """Run only bounded --version/--help probes for one explicitly selected catalog entry."""
+    executable = tool.get("executable", "")
+    path = shutil.which(executable) if re.fullmatch(r"[A-Za-z0-9_.+-]{1,128}", executable) else None
+    record = {
+        "tool_id": tool["id"], "tool_name": tool["name"],
+        "status": "not_detected", "path": path, "probe": None, "exit_code": None,
+        "output_observed": False, "output_bytes": 0, "output_truncated": False,
+        "timed_out": False, "tested_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "scope": "Bounded help/version response only; not a functional test of tool features or device compatibility."
+    }
+    if path:
+        for flag in ("--version", "--help", "-h"):
+            output, truncated, timed_out, returncode = bounded_probe(
+                [path, flag], timeout=5, max_bytes=65536, include_returncode=True
+            )
+            record.update({
+                "probe": flag, "exit_code": returncode,
+                "output_observed": bool(output.strip()), "output_bytes": len(output.encode("utf-8")),
+                "output_truncated": truncated, "timed_out": timed_out
+            })
+            if output.strip() and returncode == 0 and not timed_out:
+                record["status"] = "passed"
+                break
+            if output.strip():
+                record["status"] = "output_observed_nonzero"
+            elif timed_out:
+                record["status"] = "timed_out"
+        else:
+            if record["status"] not in {"output_observed_nonzero", "timed_out"}:
+                record["status"] = "no_response"
+    evidence = load_smoke_evidence()
+    evidence[tool["id"]] = record
+    save_private_json(smoke_evidence_path(), evidence)
+    return record
+
+
 def compatibility_report(data):
-    """Separate catalog claims, PATH evidence, compatibility metadata, and actual verification."""
+    """Separate catalog claims, PATH evidence, source metadata, and recorded bounded smoke tests."""
     profile = environment_profile(data)
+    saved_evidence = load_smoke_evidence()
     tools = []
     for tool in data["tools"]:
         executable = tool.get("executable", "")
         path = shutil.which(executable) if re.fullmatch(r"[A-Za-z0-9_.+-]{1,128}", executable) else None
         compatibility = tool.get("compatibility")
         compatibility_is_declared = isinstance(compatibility, dict) and bool(compatibility)
+        smoke = saved_evidence.get(tool["id"], {})
+        smoke_status = smoke.get("status", "not_run")
         tools.append({
             "id": tool["id"],
             "name": tool["name"],
@@ -1124,12 +1186,13 @@ def compatibility_report(data):
             "compatibility_assessment": "declared_but_not_device_verified" if compatibility_is_declared else "not_assessed",
             "compatibility_metadata": compatibility if compatibility_is_declared else None,
             "verification": "not_run",
-            "smoke_test": "not_run",
+            "smoke_test": smoke_status,
+            "smoke_test_evidence": smoke or None,
             "device_validation": "not_run",
             "caveat": tool["caveat"],
         })
     return {
-        "report_schema": 2,
+        "report_schema": 3,
         "application": "SYN_LAUNCH",
         "device_profile": profile,
         "summary": {
@@ -1140,13 +1203,15 @@ def compatibility_report(data):
             "unique_path_match_executables": len({tool["executable"] for tool in tools if tool["path"]}),
             "compatibility_assessed_entries": sum(1 for tool in tools if tool["compatibility_assessment"] == "declared_but_not_device_verified"),
             "smoke_tested_entries": sum(1 for tool in tools if tool["smoke_test"] == "passed"),
+            "smoke_test_attempted_entries": sum(1 for tool in tools if tool["smoke_test"] not in {"not_run", "not_detected"}),
             "device_verified_entries": sum(1 for tool in tools if tool["device_validation"] == "verified"),
             "verified_tools": 0,
             "tools_executed_by_report": False,
-            "note": "Installability is catalog metadata; PATH presence is discovery only. Compatibility declarations, if present, are not device verification. Smoke tests and device validation remain not_run unless separately recorded as evidence.",
+            "note": "Catalog installability and PATH presence are discovery/metadata only. Smoke tests run only when a specific tool is explicitly selected and only probe bounded --version/--help output. Such probes do not validate tool features or device compatibility; device validation remains not_run unless separately recorded.",
         },
         "tools": tools,
     }
+
 
 def print_environment_profile(data):
     print(json.dumps(environment_profile(data), indent=2, sort_keys=True))
@@ -1180,7 +1245,8 @@ def main():
     parser.add_argument("--check",action="store_true",help="validate catalog and print concise environment status")
     parser.add_argument("--doctor",action="store_true",help="show detailed platform, architecture, runtime, and storage diagnostics")
     parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
-    parser.add_argument("--compatibility-report",action="store_true",help="print JSON catalog status; PATH matches are explicitly unverified")
+    parser.add_argument("--compatibility-report",action="store_true",help="print JSON catalog status and separately recorded bounded smoke-test evidence")
+    parser.add_argument("--smoke-test",metavar="NAME_OR_ID",help="run bounded --version/--help probes for one explicitly selected tool")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
@@ -1191,6 +1257,13 @@ def main():
         print("Catalog validation failed:",exc,file=sys.stderr); return 2
     if args.profile: print_environment_profile(data); return 0
     if args.compatibility_report: print_compatibility_report(data); return 0
+    if args.smoke_test:
+        matches=[t for t in data["tools"] if t["name"].lower()==args.smoke_test.lower() or t["id"].lower()==args.smoke_test.lower()]
+        if not matches:
+            print("Tool not found. Use --search to find its exact name or ID.", file=sys.stderr); return 1
+        record=smoke_test_tool(matches[0], data)
+        print(json.dumps(record, indent=2, ensure_ascii=False))
+        return 0 if record["status"] == "passed" else 1
     if args.check: health(data); return 0
     if args.doctor: health(data, detailed=True); return 0
     if args.list: show_list(data["tools"]); return 0
