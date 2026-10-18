@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 224, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 228, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -242,6 +242,12 @@ jobs:
               "angr": "ae9f5786fd94410ca400063bf21719aa8b564d3e",
               "plaso-log2timeline": "76c02d9f3341bbbe4da8c21e944ee1516d069668",
           })
+          expected_python_revisions.update({
+              "recon-ng": "32b08fe7b6993ca1f2d8f76ba8f5d23c7f34a11d",
+              "sqlmap": "9a1660aa120c526f68b637e5f232137722353522",
+              "peepdf": "c74dc65c0ac7e506bae4f2582a2435ec50741f40",
+              "smuggler": "2be871e6151ce85167a277fab21c74c851d8b20b",
+          })
           for tool_id, expected_revision in expected_python_revisions.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               assert tool["compatibility_metadata"]["source_revision"] == expected_revision, tool
@@ -265,6 +271,12 @@ jobs:
               "pwndbg": "upstream Python packaging metadata (pyproject.toml)",
               "angr": "upstream Python packaging metadata (pyproject.toml)",
               "plaso-log2timeline": "upstream Python packaging metadata (pyproject.toml)",
+          })
+          expected_metadata.update({
+              "recon-ng": "upstream Python dependency manifest (REQUIREMENTS)",
+              "sqlmap": "upstream project runtime documentation (README.md)",
+              "peepdf": "upstream project documentation (README.md)",
+              "smuggler": "upstream project runtime documentation (README.md)",
           })
           for tool_id, evidence_kind in expected_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
