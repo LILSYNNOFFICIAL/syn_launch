@@ -1,4 +1,5 @@
 import json
+import os
 import tempfile
 import unittest
 import zipfile
@@ -23,6 +24,28 @@ class WorkflowAdapterTests(unittest.TestCase):
         self.assertFalse(report["execution"]["subprocesses_executed"])
         self.assertFalse(report["execution"]["catalog_tools_executed"])
         self.assertFalse(report["execution"]["packages_changed"])
+
+    def test_device_audit_detects_optional_environment_markers_without_entering_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "home"
+            prefix = Path(tmp) / "prefix"
+            home.mkdir()
+            rootfs = prefix / "var" / "lib" / "proot-distro" / "installed-rootfs"
+            rootfs.mkdir(parents=True)
+            (home / "kali-arm64").mkdir()
+            with patch.dict(os.environ, {"HOME": str(home), "PREFIX": str(prefix), "SYN_LAUNCH_HOME": str(home / ".syn_launch")}):
+                with patch("workflow_adapters.shutil.which", side_effect=lambda name: {
+                    "proot": "/bin/proot", "proot-distro": "/bin/proot-distro", "nethunter": "/bin/nethunter"
+                }.get(name)):
+                    report = run_device_configuration_audit("local-device")
+        optional = report["optional_linux_environments"]
+        self.assertTrue(optional["proot_available"])
+        self.assertTrue(optional["proot_distro_available"])
+        self.assertTrue(optional["installed_proot_rootfs_directory_present"])
+        self.assertTrue(optional["nethunter_launcher_available"])
+        self.assertTrue(optional["nethunter_rootfs_marker_present"])
+        self.assertIn("Presence indicators only", optional["interpretation"])
+        self.assertFalse(report["execution"]["network_actions_executed"])
 
     def test_device_audit_rejects_remote_or_ambiguous_scope(self):
         for scope in ("localhost", "https://example.test", "", "local-device; other-host"):
