@@ -2398,13 +2398,31 @@
       "name": "Gitleaks",
       "category": "Audit, SAST & Supply Chain",
       "executable": "gitleaks",
-      "install_kind": "go",
-      "package": "github.com/gitleaks/gitleaks/v8@latest",
+      "install_kind": "pkg",
+      "package": "gitleaks",
       "installable": true,
       "description": "Detect secrets accidentally committed to repositories.",
       "example": "gitleaks version",
-      "source": "https://github.com/gitleaks/gitleaks",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gitleaks",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Secret detection results depend on the scanned content and rule set; this does not guarantee all secrets are found."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gitleaks"
+      }
     },
     {
       "id": "trufflehog",
@@ -2594,26 +2612,62 @@
       "name": "cargo-audit",
       "category": "Audit, SAST & Supply Chain",
       "executable": "cargo-audit",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "cargo-audit",
+      "installable": true,
       "description": "Check Rust dependency lockfiles against RustSec advisories.",
       "example": "cargo audit --help",
-      "source": "https://github.com/RustSec/cargo-audit",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/cargo-audit",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires a Rust project lockfile; advisory data and dependency resolution affect results."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/cargo-audit"
+      }
     },
     {
       "id": "govulncheck",
       "name": "govulncheck",
       "category": "Audit, SAST & Supply Chain",
       "executable": "govulncheck",
-      "install_kind": "go",
-      "package": "golang.org/x/vuln/cmd/govulncheck@latest",
+      "install_kind": "pkg",
+      "package": "govulncheck",
       "installable": true,
       "description": "Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting.",
       "example": "govulncheck --help",
-      "source": "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/govulncheck",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires a Go project or binary context; vulnerability database access and Go module metadata affect results."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/govulncheck"
+      }
     },
     {
       "id": "osv-scanner",
@@ -2968,26 +3022,62 @@
       "name": "strace",
       "category": "Forensics & File Analysis",
       "executable": "strace",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "strace",
+      "installable": true,
       "description": "Trace system calls for debugging programs where Android ptrace restrictions allow it.",
       "example": "strace -V",
-      "source": "https://github.com/strace/strace",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/strace",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Android kernel and app sandbox restrictions can block tracing other processes even when the package installs."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/strace"
+      }
     },
     {
       "id": "ltrace",
       "name": "ltrace",
       "category": "Forensics & File Analysis",
       "executable": "ltrace",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "ltrace",
+      "installable": true,
       "description": "Trace dynamic library calls where supported by the platform and binary.",
       "example": "ltrace --help",
-      "source": "https://github.com/dkogan/ltrace",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/ltrace",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Tracing is limited to compatible dynamically linked programs and may be restricted by Android kernel and app sandbox policies."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/ltrace"
+      }
     },
     {
       "id": "sleuth-kit",
@@ -3640,13 +3730,31 @@
       "name": "Docker CLI",
       "category": "Cloud, Containers & Misc",
       "executable": "docker",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "docker-cli",
+      "installable": true,
       "description": "Docker client for connecting to a reachable Docker Engine; the daemon is not provided by stock Termux.",
       "example": "docker --help",
-      "source": "https://github.com/docker/cli",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/docker-cli",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "The CLI does not itself provide a working Docker daemon; container runtime access and host privileges are separate requirements."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/docker-cli"
+      }
     },
     {
       "id": "podman",
@@ -3666,13 +3774,31 @@
       "name": "kubectl",
       "category": "Cloud, Containers & Misc",
       "executable": "kubectl",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "kubectl",
+      "installable": true,
       "description": "Kubernetes CLI for clusters you administer or are authorized to assess.",
       "example": "kubectl version --client",
-      "source": "https://github.com/kubernetes/kubectl",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/kubectl",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires a reachable Kubernetes cluster and valid credentials/configuration for cluster operations."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/kubectl"
+      }
     },
     {
       "id": "terraform",
@@ -3705,26 +3831,62 @@
       "name": "rclone",
       "category": "Cloud, Containers & Misc",
       "executable": "rclone",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "rclone",
+      "installable": true,
       "description": "Manage file transfers and backups across supported storage providers.",
       "example": "rclone version",
-      "source": "https://github.com/rclone/rclone",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rclone",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Remote use requires a separately configured backend and credentials; protect configuration and tokens."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rclone"
+      }
     },
     {
       "id": "restic",
       "name": "restic",
       "category": "Cloud, Containers & Misc",
       "executable": "restic",
-      "install_kind": "go",
-      "package": "github.com/restic/restic/cmd/restic@latest",
+      "install_kind": "pkg",
+      "package": "restic",
       "installable": true,
       "description": "Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access.",
       "example": "restic --help",
-      "source": "https://github.com/restic/restic",
-      "caveat": "Requires Go; upstream module/build compatibility must be checked for the selected release."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/restic",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Useful operation requires a configured repository and credentials; protect repository passwords and backup keys."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/restic"
+      }
     },
     {
       "id": "age-plugin-yubikey",
@@ -4331,13 +4493,31 @@
       "name": "RustScan",
       "category": "Advanced Pentest & Exploit Research",
       "executable": "rustscan",
-      "install_kind": "cargo",
+      "install_kind": "pkg",
       "package": "rustscan",
       "installable": true,
       "description": "Fast port scanner with optional Nmap handoff.",
       "example": "rustscan --help",
-      "source": "https://github.com/bee-san/RustScan",
-      "caveat": "Only scan authorized ranges; native compilation may fail on Android."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rustscan",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Active port scanning can generate traffic; use only against explicitly authorized targets and follow the configured rate limits."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rustscan"
+      }
     },
     {
       "id": "metasploit-framework",
@@ -4799,26 +4979,62 @@
       "name": "JADX",
       "category": "Mobile App Security",
       "executable": "jadx",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "jadx",
+      "installable": true,
       "description": "Decompile Android DEX/APK bytecode for analysis.",
       "example": "jadx --help",
-      "source": "https://github.com/skylot/jadx",
-      "caveat": "Java runtime and GUI components may limit stock Termux support."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/jadx",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires the OpenJDK runtime declared by the Termux recipe; decompilation is not proof of source equivalence or application safety."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/jadx"
+      }
     },
     {
       "id": "apktool",
       "name": "Apktool",
       "category": "Mobile App Security",
       "executable": "apktool",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "apktool",
+      "installable": true,
       "description": "Decode Android resources and smali for app auditing.",
       "example": "apktool --help",
-      "source": "https://github.com/iBotPeaches/Apktool",
-      "caveat": "Manual Java setup and Android build tools may be required."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/apktool",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires Java and recipe dependencies; rebuilding or signing APKs is a separate workflow and is not performed by this catalog declaration."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/apktool"
+      }
     },
     {
       "id": "mobsf",
@@ -4929,13 +5145,31 @@
       "name": "SSLScan",
       "category": "Network & TLS Assessment",
       "executable": "sslscan",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "sslscan",
+      "installable": true,
       "description": "Probe TLS protocol and cipher configuration for authorized hosts.",
       "example": "sslscan --help",
-      "source": "https://github.com/rbsec/sslscan",
-      "caveat": "Native compilation and TLS library compatibility may be required."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/sslscan",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Performs active TLS connections; use only against explicitly authorized targets and account for rate limits."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/sslscan"
+      }
     },
     {
       "id": "zmap",
@@ -4968,13 +5202,31 @@
       "name": "ProxyChains-NG",
       "category": "Network & TLS Assessment",
       "executable": "proxychains4",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "proxychains-ng",
+      "installable": true,
       "description": "Route compatible applications through configured proxy chains; does not guarantee anonymity.",
       "example": "proxychains4 --help",
-      "source": "https://github.com/rofl0r/proxychains-ng",
-      "caveat": "Does not guarantee anonymity or authorization; manual-only."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/proxychains-ng",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires a valid proxy configuration and compatible dynamic linking; it does not transparently proxy every application or protocol."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/proxychains-ng"
+      }
     },
     {
       "id": "chisel",
@@ -5007,26 +5259,62 @@
       "name": "Gosec",
       "category": "Developer & Supply Chain Security",
       "executable": "gosec",
-      "install_kind": "go",
-      "package": "github.com/securego/gosec/v2/cmd/gosec@latest",
+      "install_kind": "pkg",
+      "package": "gosec",
       "installable": true,
       "description": "Static security analysis for Go source code.",
       "example": "gosec -help",
-      "source": "https://github.com/securego/gosec",
-      "caveat": "Run on source code you are authorized to review."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gosec",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Requires Go source/module context; static analysis may have false positives and cannot prove the absence of vulnerabilities."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gosec"
+      }
     },
     {
       "id": "rizin",
       "name": "Rizin",
       "category": "Forensics & Reverse Engineering",
       "executable": "rizin",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "rizin",
+      "installable": true,
       "description": "Reverse-engineering framework for binary inspection.",
       "example": "rizin -h",
-      "source": "https://github.com/rizinorg/rizin",
-      "caveat": "Native build and architecture plugin support vary on Android."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rizin",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Binary format support, architecture-specific analysis, and advanced plugins vary; analyze only files you are authorized to inspect."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rizin"
+      }
     },
     {
       "id": "yara-x",
@@ -5111,13 +5399,31 @@
       "name": "Crunch",
       "category": "Password & Authentication Auditing",
       "executable": "crunch",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "crunch",
+      "installable": true,
       "description": "Generate custom test wordlists for offline password-auditing labs.",
       "example": "crunch --help",
-      "source": "https://github.com/jim3ma/crunch",
-      "caveat": "Large wordlists can consume substantial storage and compute."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/crunch",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Output size can grow rapidly and exhaust device storage; set strict length/character bounds and output limits."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/crunch"
+      }
     },
     {
       "id": "hakrawler",
@@ -5453,13 +5759,31 @@
       "name": "steghide",
       "category": "Forensics & Reverse Engineering",
       "executable": "steghide",
-      "install_kind": "manual",
-      "package": null,
-      "installable": false,
+      "install_kind": "pkg",
+      "package": "steghide",
+      "installable": true,
       "description": "Inspect and work with supported steganography formats during forensic analysis.",
       "example": "See upstream command-line documentation.",
-      "source": "https://github.com/StegHigh/steghide",
-      "caveat": "Upstream repository/package availability and Android build support are unverified; use lawful sample files."
+      "source": "https://github.com/termux/termux-packages",
+      "caveat": "Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Termux on Android",
+        "install_source": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/steghide",
+        "evidence_kind": "upstream Termux package recipe",
+        "evidence_scope": "Confirms the named package recipe directory exists in the pinned termux-packages revision e85983636adcf748134c3feb1df27f44e78322e1; it does not establish current configured-repository availability, installation success, ABI support, or runtime functionality on this device.",
+        "architecture_policy": "Use only architectures currently supported by the configured Termux repositories. Recipe presence alone does not establish support for this device ABI.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "Catalog caveat: package availability differs by Termux repository, architecture, and release.",
+          "Support depends on file format and media characteristics; use only with files you are authorized to modify or inspect."
+        ],
+        "reviewed_on": "2026-10-18",
+        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/steghide"
+      }
     },
     {
       "id": "rusthound-ce",
@@ -5488,5 +5812,5 @@
       "caveat": "Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization."
     }
   ],
-  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes are pinned to exact upstream revisions; Python metadata reviews are pinned to their reviewed upstream source revisions. Recipe presence does not prove repository availability, installation success, ABI support, or runtime functionality."
+  "compatibility_metadata_note": "Compatibility declarations are source-backed and not device verification. Termux and Termux root-packages recipes are pinned to exact upstream revisions; Python packaging reviews are pinned to their reviewed upstream source revisions. Recipe presence does not prove repository availability, installation success, ABI support, runtime functionality, or required privileges."
 }
