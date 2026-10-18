@@ -168,8 +168,8 @@ class WorkflowAdapterTests(unittest.TestCase):
 
         created = []
         class Connection:
-            def __init__(self, host, port, timeout, context):
-                self.host, self.port, self.timeout = host, port, timeout
+            def __init__(self, host, pinned_ip, timeout, context):
+                self.host, self.pinned_ip, self.timeout = host, pinned_ip, timeout
                 self.context = context
                 self.request_args = None
                 self.closed = False
@@ -181,13 +181,17 @@ class WorkflowAdapterTests(unittest.TestCase):
             def close(self):
                 self.closed = True
 
-        with patch("workflow_adapters.http.client.HTTPSConnection", side_effect=Connection):
+        dns_answer = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        with patch("workflow_adapters.socket.getaddrinfo", return_value=dns_answer), patch(
+            "workflow_adapters._PinnedHTTPSConnection", side_effect=Connection
+        ):
             report = run_web_api_review("https://staging.example.test/api/v1")
         connection = created[0]
         self.assertEqual(report["request_status"], "response_received")
         self.assertEqual(report["response"]["status_code"], 200)
         self.assertEqual(connection.request_args[0:2], ("HEAD", "/api/v1"))
         self.assertEqual(connection.timeout, 5)
+        self.assertEqual(connection.pinned_ip, "93.184.216.34")
         self.assertTrue(connection.closed)
         self.assertIn("strict-transport-security", report["response"]["headers"])
         self.assertNotIn("set-cookie", report["response"]["headers"])
@@ -210,6 +214,15 @@ class WorkflowAdapterTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     run_web_api_review(scope)
 
+    def test_web_api_adapter_rejects_dns_resolution_to_private_addresses(self):
+        private_answer = [(2, 1, 6, "", ("127.0.0.1", 443))]
+        with patch("workflow_adapters.socket.getaddrinfo", return_value=private_answer), patch(
+            "workflow_adapters._PinnedHTTPSConnection"
+        ) as connection:
+            with self.assertRaisesRegex(ValueError, "non-public IP"):
+                run_web_api_review("https://staging.example.test/")
+        connection.assert_not_called()
+
     def test_web_api_adapter_reports_bounded_request_failure(self):
         class Connection:
             def __init__(self, *args, **kwargs):
@@ -219,7 +232,10 @@ class WorkflowAdapterTests(unittest.TestCase):
             def close(self):
                 self.closed = True
 
-        with patch("workflow_adapters.http.client.HTTPSConnection", Connection):
+        dns_answer = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        with patch("workflow_adapters.socket.getaddrinfo", return_value=dns_answer), patch(
+            "workflow_adapters._PinnedHTTPSConnection", Connection
+        ):
             report = run_web_api_review("https://staging.example.test/")
         self.assertEqual(report["request_status"], "request_failed")
         self.assertEqual(report["error_type"], "TimeoutError")
