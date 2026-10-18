@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 152, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 162, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -89,6 +89,10 @@ jobs:
               "phoneinfoga": "1.20", "nuclei": "1.27.1", "kiterunner": "1.15", "kxss": "1.20",
               "crlfuzz": "1.14", "interactsh-client": "1.26.0", "tlsx": "1.25.0",
               "mapcidr": "1.26.0", "uncover": "1.25.0", "asnmap": "1.24.0",
+              "anew": "1.18", "qsreplace": "1.18", "hakrawler": "1.16",
+              "chisel": "1.25.0; toolchain go1.27.0", "alterx": "1.25.0",
+              "shuffledns": "1.24.0", "puredns": "1.15", "gowitness": "1.26.0",
+              "kubeaudit": "1.22.1", "kube-linter": "1.26.4",
           }
           expected_go_revisions = {
               "subfinder": "7d9038297953f6a953ba3eb009fb859993959d00",
@@ -111,6 +115,16 @@ jobs:
               "mapcidr": "a43022034a0eb9b87eadefbd69c8eeb6aa0e4567",
               "uncover": "8275048441329a9ce0622bead7b37826d34e5d7d",
               "asnmap": "cedef8b116fb2ea228108bfa2eee6ed74ae31ad9",
+              "anew": "d67d68db0d56469fdea7505c5a9209c0a465effa",
+              "qsreplace": "320475befaf66d986400aa8c3ed9b43e0b6b5a02",
+              "hakrawler": "52a16fe61bd18b8f431b9d66058cba12e96e4451",
+              "chisel": "5ee6c74d60d96a75afb18bc866eb19327170aeed",
+              "alterx": "3322e4f82614302860c544ee5c014a02081bd2ea",
+              "shuffledns": "bc31821c9b3a06a13fc50e65481fec68e1b01ad2",
+              "puredns": "46bd4c963ec2b28c5241c03c161bdc41bb93fdc0",
+              "gowitness": "601c84367aaf26eae7d1b5181b70633cb662cf66",
+              "kubeaudit": "92c3147139a73eab8f6c9cbf9a1ee4d9c4196bd8",
+              "kube-linter": "ead88f5c9d49e600a58eae2c7121deef82e378f7",
           }
           for tool_id, go_requirement in expected_go.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
