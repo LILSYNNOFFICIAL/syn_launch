@@ -3230,7 +3230,30 @@
       "description": "Audit Unix/Linux system configuration; Android's restricted environment limits coverage.",
       "example": "lynis --help",
       "source": "https://github.com/CISOfy/lynis",
-      "caveat": "Catalog entry only until a verified Termux-compatible install path is available."
+      "caveat": "Catalog entry only until a verified Termux-compatible install path is available.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/CISOfy/lynis/blob/9319416fa0726369ab0a48f686155a90363f3f9c/README.md",
+        "evidence_kind": "upstream project runtime documentation (README.md)",
+        "evidence_scope": "Confirms only the build or runtime information present in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "9319416fa0726369ab0a48f686155a90363f3f9c",
+        "source_snapshot_url": "https://github.com/CISOfy/lynis/blob/9319416fa0726369ab0a48f686155a90363f3f9c/README.md",
+        "declared_build_requirements": [
+          "Unix shell environment",
+          "Host utilities required by individual audit tests"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the exact target architecture, native dependencies, privileges, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned README describes a UNIX host audit tool; Android/Termux is not a standard supported host and many checks may be inapplicable or unavailable.",
+          "A full audit often needs elevated permissions and host configuration visibility that Termux does not provide.",
+          "Audit recommendations are host- and version-specific; missing checks on Android must not be interpreted as a clean security result."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "shellcheck",
@@ -6113,7 +6136,31 @@
       "description": "High-performance DNS stub resolver for scoped enumeration.",
       "example": "massdns --help",
       "source": "https://github.com/blechschmidt/massdns",
-      "caveat": "Native build and resolver setup are required; no Termux recipe verified."
+      "caveat": "Native build and resolver setup are required; no Termux recipe verified.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/blechschmidt/massdns/blob/30c380908b4f9afd0931d3d83f85884844831846/Makefile",
+        "evidence_kind": "upstream C build metadata (Makefile)",
+        "evidence_scope": "Confirms only the build or runtime information present in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "30c380908b4f9afd0931d3d83f85884844831846",
+        "source_snapshot_url": "https://github.com/blechschmidt/massdns/blob/30c380908b4f9afd0931d3d83f85884844831846/Makefile",
+        "declared_build_requirements": [
+          "C11-compatible compiler",
+          "Make",
+          "Linux-specific epoll/sysinfo flags in the default target"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the exact target architecture, native dependencies, privileges, and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned Makefile uses a C11 compiler and Linux-specific flags in its default target; Android/Termux build behavior is unverified and the `nolinux` target has not been tested.",
+          "High-rate DNS querying can overload resolvers or networks; use explicit scope, conservative rate limits, and authorized domains.",
+          "A successful build does not establish DNS resolver compatibility or operational correctness on the target device."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "nuclei-templates",
@@ -7056,7 +7103,31 @@
       "description": "Internet-scale network measurement scanner for tightly scoped audits.",
       "example": "zmap --help",
       "source": "https://github.com/zmap/zmap",
-      "caveat": "High-impact scanner; no broad public scanning without explicit authorization."
+      "caveat": "High-impact scanner; no broad public scanning without explicit authorization.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Upstream native build/runtime metadata reviewed; Android/Termux build and runtime unverified",
+        "install_source": "https://github.com/zmap/zmap/blob/7268b1a2204bc9231efefa27ba7cb2fa56717979/CMakeLists.txt",
+        "evidence_kind": "upstream CMake build metadata (CMakeLists.txt)",
+        "evidence_scope": "Confirms only the build or runtime information present in the pinned upstream file. It does not establish Android/Termux support, successful compilation, installation, ABI support, privileges, or runtime functionality.",
+        "source_revision": "7268b1a2204bc9231efefa27ba7cb2fa56717979",
+        "source_snapshot_url": "https://github.com/zmap/zmap/blob/7268b1a2204bc9231efefa27ba7cb2fa56717979/CMakeLists.txt",
+        "declared_build_requirements": [
+          "CMake 3.5.0 or newer",
+          "C compiler and system libraries selected by build configuration",
+          "Optional PF_RING/netmap integrations are platform-specific"
+        ],
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check the exact target architecture, native dependencies, privileges, and keep device-validation status not_run until tested.",
+        "root_required": true,
+        "hardware_requirements": [],
+        "external_services": [],
+        "known_blockers": [
+          "The pinned CMake file configures a native C networking application with optional platform-specific packet I/O integrations; Android/Termux build and runtime are unverified.",
+          "High-speed network measurement can disrupt networks and generate large traffic volumes; use only tightly scoped, authorized targets.",
+          "Raw-packet permissions and supported network interfaces are device/kernel dependent; source build metadata does not establish Android support."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "tshark",
