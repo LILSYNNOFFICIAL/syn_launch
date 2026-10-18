@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 243, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 245, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -149,6 +149,7 @@ jobs:
               "kube-bench": "1.26.3",
               "ligolo-ng": "1.25.0",
               "terraform": "1.26.8",
+              "amass": "1.26.0",
           })
           expected_go_revisions.update({
               "actionlint": "011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7",
@@ -158,6 +159,7 @@ jobs:
               "kube-bench": "e278a5915a982f2756026de6e2f9ca77077ef9f9",
               "ligolo-ng": "e543732f4be6dc899096ae322ae620bf010bfbfc",
               "terraform": "44fcc1316e98d4a03cc348c05e6d5ba8e36bf51c",
+              "amass": "79299dce87b0085db0f2f4ef3e9c52cccb49f514",
           })
           for tool_id, go_requirement in expected_go.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
@@ -193,6 +195,7 @@ jobs:
               "hadolint": ("8ae25c05945f030b1ad520f1802e4143e7d0055d", "upstream Haskell package metadata (hadolint.cabal)", "/hadolint.cabal"),
               "lief": ("15777f106f6220046cf26ee99940d1f56751325e", "upstream CMake build metadata (CMakeLists.txt)", "/CMakeLists.txt"),
               "chkrootkit": ("c00b5a40f61cc969e56fa2fe3375741c4164c896", "upstream local-audit runtime documentation (README)", "/README"),
+              "assetfinder": ("4e95d8701aae8cff1c27af2626eb22ba110ad583", "upstream Go runtime documentation (README.md)", "/README.md"),
           }
           for tool_id, (source_revision, evidence_kind, suffix) in expected_native_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
