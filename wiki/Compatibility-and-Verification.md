@@ -18,7 +18,7 @@ Seventy-five catalog entries map to 60 distinct Termux package recipes or subpac
 
 ## Current report behavior
 
-`python main.py --compatibility-report` emits report schema 3. The report itself does not launch cataloged executables; it reads previously saved local smoke-test records. To deliberately test one entry, run `python main.py --smoke-test NAME_OR_ID`. The command tries bounded `--version`, `--help`, and `-h` probes, each capped at five seconds and 64 KiB. It stores only the outcome and metadata, not raw command output, in private `~/.syn_launch/smoke_tests.json`. A passing result means a probe produced output and exited with code 0; it does not test the tool's operational features. Device validation remains `not_run`.
+`python main.py --compatibility-report` emits report schema 3. The report itself does not launch cataloged executables; it reads previously saved local smoke-test records. To deliberately test one entry, run `python main.py --smoke-test NAME_OR_ID`. The command tries bounded `--version`, `--help`, and `-h` probes, each capped at five seconds and 64 KiB. It stores only the outcome and metadata, not raw command output, in private `~/.syn_launch/smoke_tests.json`. A passing result means a probe produced output and exited with code 0; it does not test the tool's operational features. The report marks a record `stale_evidence` if the executable path or lightweight file identity changes since the probe. Device validation remains `not_run`.
 
 ## Adding evidence
 
