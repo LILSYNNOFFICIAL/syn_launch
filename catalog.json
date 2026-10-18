@@ -1481,7 +1481,30 @@
       "description": "Collect public-source domain, email, and host metadata for scoped reconnaissance.",
       "example": "theHarvester -h",
       "source": "https://github.com/laramies/theHarvester",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/laramies/theHarvester/blob/49a38f8d33c32336bbf6a111ea723ea223116265/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "49a38f8d33c32336bbf6a111ea723ea223116265",
+        "source_snapshot_url": "https://github.com/laramies/theHarvester/blob/49a38f8d33c32336bbf6a111ea723ea223116265/pyproject.toml",
+        "declared_python_requirement": ">=3.14 (upstream metadata)",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Third-party search providers and APIs selected by the operator; API keys/rate limits may apply."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream metadata declares Python >=3.14, but this does not establish Android/Termux compatibility.",
+          "Large and changing dependency sets may require platform-specific wheels or native builds.",
+          "Search-provider availability, API keys, terms, and rate limits vary; only use approved scopes."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "sherlock",
@@ -1530,7 +1553,30 @@
       "description": "Username OSINT across supported websites.",
       "example": "maigret --help",
       "source": "https://github.com/soxoj/maigret",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/soxoj/maigret/blob/eaf820666d15bfd545129f3223e2261c27191e74/pyproject.toml",
+        "evidence_kind": "upstream Python packaging metadata (pyproject.toml)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "eaf820666d15bfd545129f3223e2261c27191e74",
+        "source_snapshot_url": "https://github.com/soxoj/maigret/blob/eaf820666d15bfd545129f3223e2261c27191e74/pyproject.toml",
+        "declared_python_requirement": "^3.10 (upstream classifiers include Python 3.10 through 3.14)",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Third-party websites queried during an operator-selected username search."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "Upstream metadata declares Python ^3.10 and classifiers through Python 3.14, but does not establish Android/Termux support.",
+          "Dependency builds/wheels and storage/resource use must be validated on the target device.",
+          "Username searches contact third-party websites; follow their terms, rate limits, and privacy expectations."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "spiderfoot",
@@ -1751,7 +1797,30 @@
       "description": "Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope.",
       "example": "h8mail --help",
       "source": "https://github.com/khast3x/h8mail",
-      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels."
+      "caveat": "Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+      "compatibility": {
+        "status": "source_documented_not_device_verified",
+        "platform": "Python package metadata reviewed; Android/Termux runtime unverified",
+        "install_source": "https://github.com/khast3x/h8mail/blob/ee31c8ff6d148580047ae5048fea2234decb5932/setup.py",
+        "evidence_kind": "upstream Python packaging metadata (setup.py)",
+        "evidence_scope": "Confirms only the upstream Python packaging metadata in the pinned project file. It does not establish Android/Termux support, compatible wheels, successful installation, ABI support, or runtime functionality.",
+        "source_revision": "ee31c8ff6d148580047ae5048fea2234decb5932",
+        "source_snapshot_url": "https://github.com/khast3x/h8mail/blob/ee31c8ff6d148580047ae5048fea2234decb5932/setup.py",
+        "declared_python_requirement": "Classifiers in the pinned setup.py list Python 3.6 and 3.7 only; no current Python >=3.10 support claim found.",
+        "architecture_policy": "No Android/Termux ABI support is claimed by this evidence. Check dependencies on the target device and keep device-validation status not_run until tested.",
+        "root_required": false,
+        "hardware_requirements": [],
+        "external_services": [
+          "Third-party breach-data sources and optional API services, depending on configuration."
+        ],
+        "known_blockers": [
+          "Catalog caveat: Python package installation can fail if upstream dependencies lack Android-compatible wheels.",
+          "The inspected setup.py classifiers list Python 3.6 and 3.7 only; compatibility with modern Python and Android/Termux is not established.",
+          "Dependencies and any configured API services require separate review before use.",
+          "Handle any breach-related results as sensitive and use only data sources you are authorized to query."
+        ],
+        "reviewed_on": "2026-10-18"
+      }
     },
     {
       "id": "email-validator",
