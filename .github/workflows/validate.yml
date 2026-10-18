@@ -24,6 +24,8 @@ jobs:
         run: bash -n install.sh
       - name: Validate local device-check script syntax
         run: bash -n device_check.sh
+      - name: Validate GitHub Wiki sync helper syntax
+        run: bash -n scripts/sync_github_wiki.sh
       - name: Validate catalog JSON
         run: python -m json.tool catalog.json > /dev/null
       - name: Validate catalog and security checks
