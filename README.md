@@ -37,6 +37,14 @@ python main.py
 
 Rich is optional; without it the app uses a plain-text interface.
 
+To collect a private, read-only diagnostic bundle on an Android/Termux device after pulling the latest code, run:
+
+```bash
+bash device_check.sh
+```
+
+The script runs syntax checks, the unit suite, environment diagnostics, a compatibility report, and a bounded Python help/version probe. It does not install packages, contact targets, or execute the catalog's security tools. It does not mark device validation as passed; inspect the output bundle before sharing it.
+
 ## Command-line modes
 
 ~~~bash
