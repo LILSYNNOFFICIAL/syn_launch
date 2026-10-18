@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 198, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 205, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           for tool_id, source_repo, source_revision in (
@@ -190,9 +190,27 @@ jobs:
               "cloudsplaining": "f2ed0ba2ddf6457143203d46971c91ba236b6597",
               "apkid": "5cb6b2572a2fe1580d7dd2fd807ada5fb6377a12",
           })
+          expected_python_revisions.update({
+              "jwt-tool": "3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b",
+              "corsy": "2985ae24da524ba6905d36bfbadca7fe71a9f199",
+              "xsstrike": "ab27955d367432f944d8f29897e09c15356e76f7",
+              "commix": "289ff2285ee25410e8f150f4ddf124a8e2ab2a7e",
+              "tplmap": "616b0e527f62dd0930e6346ede6bef79e9bcf717",
+              "routersploit": "723b574c36ae202857e3f93e4f3c2ab9a1638ed4",
+              "ghauri": "18e367781caca5f9783a242f34aa90164edc902a",
+          })
           for tool_id, expected_revision in expected_python_revisions.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               assert tool["compatibility_metadata"]["source_revision"] == expected_revision, tool
+          expected_metadata.update({
+              "jwt-tool": "upstream Python dependency manifest (requirements.txt)",
+              "corsy": "upstream Python dependency manifest (requirements.txt)",
+              "xsstrike": "upstream Python dependency manifest (requirements.txt)",
+              "commix": "upstream Python packaging metadata (setup.py)",
+              "tplmap": "upstream Python dependency manifest (requirements.txt)",
+              "routersploit": "upstream Python packaging metadata (setup.py)",
+              "ghauri": "upstream Python packaging metadata (setup.py)",
+          })
           for tool_id, evidence_kind in expected_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
