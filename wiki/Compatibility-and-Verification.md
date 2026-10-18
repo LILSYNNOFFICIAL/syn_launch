@@ -42,6 +42,8 @@ Forty-six Go module metadata reviews have been added for subfinder, dnsx, httpx,
 
 Three native build/runtime reviews cover massdns (C11/Make), Lynis (Unix shell audit), and ZMap (CMake/native networking). These source files do not establish Android support, raw-packet permissions, or successful native builds.
 
+Four Ruby runtime reviews cover Evil-WinRM, WPScan, Metasploit Framework, and WhatWeb. WPScan declares Ruby >=3.3 and Metasploit Framework >=3.2; Evil-WinRM declares >=2.3; WhatWeb's README does not specify a minimum. Native gem dependencies, WinRM access, packet capture, and scanner behavior remain unverified on Android/Termux.
+
 Five Rust package/workspace reviews cover Zizmor, YARA-X, age-plugin-yubikey, pwninit, and RustHound-CE. Their pinned Cargo manifests document Rust 1.97.0, 1.95.0, 1.70, no explicit minimum, and 1.85 respectively. YubiKey hardware access, native dependencies, and directory-network capabilities are not verified on Android/Termux.
 
 
