@@ -198,7 +198,7 @@ class WorkflowAdapterTests(unittest.TestCase):
 
     def test_unapproved_workflows_remain_plan_only(self):
         with self.assertRaisesRegex(ValueError, "No execution adapter is approved"):
-            run_workflow_adapter("web-api-review", "https://staging.example.test")
+            run_workflow_adapter("unknown-external-workflow", "https://staging.example.test")
 
 
 if __name__ == "__main__":
