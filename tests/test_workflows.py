@@ -99,14 +99,14 @@ class WorkflowPlannerTests(unittest.TestCase):
                  "--workflow-run", "assessment-report", "--target-scope", str(evidence), "--authorized"],
                 env=env, capture_output=True, text=True, timeout=10,
             )
-        self.assertEqual(result.returncode, 0, result.stderr)
-        report = json.loads(result.stdout)
-        report_path = Path(report["saved_report"])
-        self.assertTrue(report_path.is_file())
-        self.assertEqual(report["finding_count"], 1)
-        self.assertEqual(report["severity_counts"]["low"], 1)
-        self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
-        self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            report_path = Path(report["saved_report"])
+            self.assertTrue(report_path.is_file())
+            self.assertEqual(report["finding_count"], 1)
+            self.assertEqual(report["severity_counts"]["low"], 1)
+            self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
 
     def test_cli_rejects_workflow_without_approved_adapter(self):
         with tempfile.TemporaryDirectory() as tmp:
