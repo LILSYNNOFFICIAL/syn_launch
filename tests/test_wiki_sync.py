@@ -34,7 +34,11 @@ class WikiSyncTests(unittest.TestCase):
         shutil.copy2(SCRIPT, self.source_repo / "scripts" / SCRIPT.name)
         wiki_source = self.source_repo / "wiki"
         wiki_source.mkdir()
-        (wiki_source / "README.md").write_text("# Home\n", encoding="utf-8")
+        (wiki_source / "README.md").write_text(
+            '# Home\n\n[Next](New-Page.md)\n[Guide](wiki/Optional-Linux-Environments.md)\n'
+            '[Source](../README.md)\n<img src="../img/file_00000000f48881fdb4a638a0643452e1.png">\n',
+            encoding="utf-8",
+        )
         (wiki_source / "New-Page.md").write_text("# Newly added page\n", encoding="utf-8")
         git(self.source_repo, "add", ".")
         git(self.source_repo, "commit", "-qm", "fixture source")
@@ -82,7 +86,14 @@ class WikiSyncTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, msg=f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}")
         self.assertIn("Published wiki pages pushed successfully.", result.stdout)
         checkout = self.verify_checkout()
-        self.assertEqual((checkout / "Home.md").read_text(encoding="utf-8"), "# Home\n")
+        home = (checkout / "Home.md").read_text(encoding="utf-8")
+        self.assertIn("[Next](New-Page)", home)
+        self.assertIn("[Guide](Optional-Linux-Environments)", home)
+        self.assertIn("[Source](https://github.com/LILSYNNOFFICIAL/syn_launch/blob/main/README.md)", home)
+        self.assertIn(
+            'src="https://raw.githubusercontent.com/LILSYNNOFFICIAL/syn_launch/main/img/file_00000000f48881fdb4a638a0643452e1.png"',
+            home,
+        )
         self.assertEqual((checkout / "New-Page.md").read_text(encoding="utf-8"), "# Newly added page\n")
         self.assertEqual((checkout / "Custom-Page.md").read_text(encoding="utf-8"), "# Wiki-only page\n")
         self.assertNotEqual(git(self.remote, "rev-parse", "refs/heads/master"), self.initial_remote_head)
