@@ -9,7 +9,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 - Added an explicit evidence-scope field, pinned upstream source revisions and snapshot URLs, and CI checks for reproducible compatibility evidence.
 - Kept recipe presence, catalog installability, PATH discovery, smoke-test outcome, and device validation as separate evidence states.
 
-- Added `bash device_check.sh` to gather a private, read-only local diagnostic bundle; CI exercises the script but does not substitute for Android/Termux testing.
+- Added `bash device_check.sh` to gather a private, read-only local diagnostic bundle including optional PRoot/NetHunter presence markers; CI exercises the script but does not substitute for Android/Termux testing.
 
 ### Authorized workflow planning
 - Added dry-run JSON plans for web/API review, mobile-app review, local device/Termux configuration audit, and assessment reporting.
