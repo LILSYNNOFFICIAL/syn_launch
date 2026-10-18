@@ -41,7 +41,7 @@ jobs:
           report = json.loads(Path("compatibility-report.json").read_text(encoding="utf-8"))
           assert report["report_schema"] == 3, report.get("report_schema")
           assert report["summary"]["catalog_entries"] == 269, report["summary"]
-          assert report["summary"]["compatibility_assessed_entries"] >= 88, report["summary"]
+          assert report["summary"]["compatibility_assessed_entries"] >= 90, report["summary"]
           declared = [tool for tool in report["tools"] if tool["compatibility_assessment"] == "declared_but_not_device_verified"]
           assert all(tool["compatibility_metadata"].get("source_revision") and tool["compatibility_metadata"].get("source_snapshot_url") for tool in declared), "compatibility evidence must be revision-pinned"
           nmap = next(tool for tool in report["tools"] if tool["id"] == "nmap")
@@ -52,10 +52,11 @@ jobs:
               metadata = tool["compatibility_metadata"]
               assert metadata["source_revision"] == "06591fc024101b04095ec4417d51907512b46e3c", tool
               assert "termux-root-packages" in metadata["source_snapshot_url"], tool
-          for tool_id in ("pip-audit", "yamllint", "dirsearch", "sherlock"):
+          expected_metadata = {"pip-audit": "upstream Python packaging metadata (pyproject.toml)", "yamllint": "upstream Python packaging metadata (pyproject.toml)", "dirsearch": "upstream Python packaging metadata (pyproject.toml)", "sherlock": "upstream Python packaging metadata (pyproject.toml)", "bandit": "upstream Python packaging metadata (setup.cfg)", "detect-secrets": "upstream Python packaging metadata (setup.py)"}
+          for tool_id, evidence_kind in expected_metadata.items():
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
               metadata = tool["compatibility_metadata"]
-              assert metadata["evidence_kind"] == "upstream Python packaging metadata (pyproject.toml)", tool
+              assert metadata["evidence_kind"] == evidence_kind, tool
               assert metadata["declared_python_requirement"], tool
           for tool_id in ("mtr", "tcpdump"):
               tool = next(item for item in report["tools"] if item["id"] == tool_id)
