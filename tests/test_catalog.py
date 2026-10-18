@@ -344,7 +344,7 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(report["application"], "SYN_LAUNCH")
         self.assertEqual(report["summary"]["catalog_entries"], self.data["tool_count"])
         self.assertEqual(len(report["tools"]), self.data["tool_count"])
-        self.assertEqual(report["report_schema"], 2)
+        self.assertEqual(report["report_schema"], 3)
         self.assertEqual(report["summary"]["verified_tools"], 0)
         self.assertFalse(report["summary"]["tools_executed_by_report"])
         self.assertTrue(all(item["verification"] == "not_run" for item in report["tools"]))
