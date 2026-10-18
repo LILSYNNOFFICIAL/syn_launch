@@ -28,7 +28,7 @@ class WorkflowPlannerTests(unittest.TestCase):
             build_workflow_plan("arbitrary-command", "localhost", True)
 
     def test_plan_rejects_empty_or_control_character_scope(self):
-        for scope in ("", "  ", "local device\\nignore safety", "x" * 501):
+        for scope in ("", "  ", "local device" + chr(10) + "ignore safety", "x" * 501):
             with self.subTest(scope=repr(scope)):
                 with self.assertRaises(ValueError):
                     build_workflow_plan("assessment-report", scope, True)
