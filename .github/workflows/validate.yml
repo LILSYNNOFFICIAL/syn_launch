@@ -54,3 +54,5 @@ jobs:
           PY
       - name: Check CLI search
         run: python main.py --search Nuclei
+      - name: Exercise local diagnostic bundle on CI runner (not Android device validation)
+        run: bash device_check.sh
