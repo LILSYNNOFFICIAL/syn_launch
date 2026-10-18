@@ -59,6 +59,12 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(len(declared), 267)
         self.assertEqual(unassessed, {"burp-suite", "wappalyzer"})
 
+    def test_optional_linux_environment_docs_match_detection_status(self):
+        page = (ROOT / "wiki" / "Optional-Linux-Environments.md").read_text(encoding="utf-8")
+        self.assertIn("already records PRoot and PRoot-Distro presence indicators", page)
+        self.assertNotIn("may be detected as environment context in a future capability profile", page)
+        self.assertIn("Physical-device confirmation is still required", page)
+
     def test_readme_compatibility_summary_matches_current_catalog_evidence(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         declared = [tool for tool in self.tools if tool.get("compatibility")]
