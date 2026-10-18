@@ -2,6 +2,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 from workflow_adapters import (
     run_device_configuration_audit,
@@ -56,6 +57,25 @@ class WorkflowAdapterTests(unittest.TestCase):
                 run_mobile_apk_inventory(str(bad_apk))
             with self.assertRaisesRegex(ValueError, "does not resolve"):
                 run_mobile_apk_inventory(str(Path(tmp) / "missing.apk"))
+
+    def test_mobile_adapter_rejects_oversized_apk_before_hashing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk = Path(tmp) / "oversized.apk"
+            apk.write_bytes(b"x" * 11)
+            with patch("workflow_adapters.MAX_APK_BYTES", 10):
+                with self.assertRaisesRegex(ValueError, "APK size must be"):
+                    run_mobile_apk_inventory(str(apk))
+
+    def test_mobile_adapter_rejects_excessive_archive_entries(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk = Path(tmp) / "many-entries.apk"
+            with zipfile.ZipFile(apk, "w") as archive:
+                archive.writestr("one", b"1")
+                archive.writestr("two", b"2")
+                archive.writestr("three", b"3")
+            with patch("workflow_adapters.MAX_APK_ENTRIES", 2):
+                with self.assertRaisesRegex(ValueError, "more than 2 archive entries"):
+                    run_mobile_apk_inventory(str(apk))
 
     def test_unapproved_workflows_remain_plan_only(self):
         with self.assertRaisesRegex(ValueError, "No execution adapter is approved"):
