@@ -52,7 +52,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Review upstream PRoot-Distro capabilities and limitations; document that simulated root is not host root and kernel-dependent features remain unavailable: [PRoot-Distro](https://github.com/termux/proot-distro).
 - [x] Review official Kali NetHunter editions and requirements; document Rootless, Lite, and full NetHunter as distinct capability profiles: [NetHunter overview](https://www.kali.org/docs/nethunter/) and [Rootless guide](https://www.kali.org/docs/nethunter/nethunter-rootless/).
 - [x] Document hardware, kernel, root, and ABI caveats without implying a userspace image grants kernel features or Android host root.
-- [ ] Implement optional environment detection and inventory after device evidence is available; do not automatically install, reset, or flash an environment.
+- [x] Add read-only presence indicators for PRoot, PRoot-Distro, and NetHunter launchers/rootfs markers to the local audit; do not enter containers or infer privileges.
+- [ ] Validate those indicators on the physical Android/Termux device and document its actual environment. No environment is installed, reset, or flashed automatically.
 
 ## Release gates
 
