@@ -4,7 +4,7 @@ Notable user-facing changes to SYN_LAUNCH are recorded here. This file tracks re
 
 ## Unreleased
 
-- Added seven revision-pinned Python compatibility reviews for JWT Tool, Corsy, XSStrike, Commix, tplmap, RouterSploit, and Ghauri. Packaging metadata is evidence only, not Android/Termux support.
+- Added eleven revision-pinned Python compatibility reviews for JWT Tool, Corsy, XSStrike, Commix, tplmap, RouterSploit, Ghauri, MobSF, Pacu, Metagoofil, and BloodHound.py. Packaging metadata is evidence only, not Android/Termux support.
 
 - Added 23 pinned recipe-backed compatibility reviews across two expansions: xh, feroxbuster, curlie, hping3, arp-scan, Gitleaks, cargo-audit, govulncheck, strace, ltrace, Docker CLI, kubectl, rclone, restic, RustScan, JADX, Apktool, SSLScan, ProxyChains-NG, gosec, Rizin, Crunch, and steghide. Updated catalog install paths where the main Termux package recipes exist; root-repository packet/wireless tools remain non-installable by default.
 - Increased the source-backed compatibility declaration count from 95 to 121 and reduced the remaining unreviewed catalog entries from 174 to 148.
