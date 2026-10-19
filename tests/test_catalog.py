@@ -384,6 +384,8 @@ class CatalogTests(unittest.TestCase):
             "npm": "npm-offline-package-metadata",
             "make": "make-local-target",
             "ssh": "ssh-config-expansion-no-connect",
+            "ps": "ps-current-process",
+            "lsof": "lsof-current-process-open-file",
         }
         # npm can block for several seconds on hosted runner shims even with
         # offline mode; its adapter is exercised on the actual Termux device.

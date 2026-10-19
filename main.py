@@ -1404,6 +1404,15 @@ def functional_check_tool(tool):
                     require(b"hostname syn-launch.invalid" in out and b"port 22" in out,
                             "SSH config expansion did not produce expected host settings")
                     check_id = "ssh-config-expansion-no-connect"
+                elif executable == "ps":
+                    out = invoke([path, "-p", str(os.getpid()), "-o", "pid=,args="])
+                    require(str(os.getpid()).encode() in out, "ps did not list the current SYN_LAUNCH process")
+                    check_id = "ps-current-process"
+                elif executable == "lsof":
+                    with source.open("rb"):
+                        out = invoke([path, "-w", "-p", str(os.getpid())])
+                    require(str(source).encode() in out, "lsof did not list its open temporary source file")
+                    check_id = "lsof-current-process-open-file"
                 elif executable in {"clang", "readelf", "strings", "objdump"}:
                     compiler = shutil.which("clang")
                     if not compiler:
