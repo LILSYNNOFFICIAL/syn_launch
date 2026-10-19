@@ -1138,7 +1138,7 @@ def load_smoke_evidence():
 
 
 def smoke_test_tool(tool):
-    """Run only bounded --version/--help probes for one explicitly selected catalog entry."""
+    """Run bounded tool-specific help/version probes for one explicitly selected catalog entry."""
     executable = tool.get("executable", "")
     path = shutil.which(executable) if re.fullmatch(r"[A-Za-z0-9_.+-]{1,128}", executable) else None
     record = {
@@ -1151,8 +1151,12 @@ def smoke_test_tool(tool):
     }
     if path:
         attempts = []
-        # OpenSSH's ssh client uses uppercase -V; it does not support --version.
-        probe_flags = ("-V", "--help", "-h") if executable == "ssh" else ("--version", "--help", "-h")
+        # Keep probe arguments tool-specific where standard flags differ.
+        probe_flags = {
+            "ssh": ("-V", "--help", "-h"),
+            "ssh-keygen": ("--help", "-h", "--version"),
+            "ssh-keyscan": ("-h", "--help", "--version"),
+        }.get(executable, ("--version", "--help", "-h"))
         for flag in probe_flags:
             output, truncated, timed_out, returncode = bounded_probe(
                 [path, flag], timeout=5, max_bytes=65536, include_returncode=True
@@ -1162,8 +1166,14 @@ def smoke_test_tool(tool):
                 "output_bytes": len(output.encode("utf-8")), "output_truncated": truncated,
                 "timed_out": timed_out
             }
+            expected_usage_exit = (
+                executable in {"ssh-keygen", "ssh-keyscan"}
+                and returncode == 1
+                and bool(re.search(r"\busage:", output, re.IGNORECASE))
+            )
+            attempt["expected_usage_exit"] = expected_usage_exit
             attempts.append(attempt)
-            if output.strip() and returncode == 0 and not timed_out:
+            if output.strip() and (returncode == 0 or expected_usage_exit) and not timed_out:
                 record.update(attempt)
                 record["status"] = "passed"
                 break
@@ -1232,7 +1242,7 @@ def compatibility_report(data):
             "device_verified_entries": sum(1 for tool in tools if tool["device_validation"] == "verified"),
             "verified_tools": 0,
             "tools_executed_by_report": False,
-            "note": "Catalog installability and PATH presence are discovery/metadata only. Smoke tests run only when a specific tool is explicitly selected and only probe bounded --version/--help output. Such probes do not validate tool features or device compatibility; device validation remains not_run unless separately recorded.",
+            "note": "Catalog installability and PATH presence are discovery/metadata only. Smoke tests run only when a specific tool is explicitly selected and only perform bounded tool-specific help/version probes. Such probes do not validate tool features or device compatibility; device validation remains not_run unless separately recorded.",
         },
         "tools": tools,
     }
@@ -1271,7 +1281,7 @@ def main():
     parser.add_argument("--doctor",action="store_true",help="show detailed platform, architecture, runtime, and storage diagnostics")
     parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
     parser.add_argument("--compatibility-report",action="store_true",help="print JSON catalog status and separately recorded bounded smoke-test evidence")
-    parser.add_argument("--smoke-test",metavar="NAME_OR_ID",help="run bounded --version/--help probes for one explicitly selected tool")
+    parser.add_argument("--smoke-test",metavar="NAME_OR_ID",help="run bounded tool-specific help/version probes for one explicitly selected tool")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
@@ -1359,3 +1369,5 @@ def main():
     return 0
 
 if __name__=="__main__": raise SystemExit(main())
+
+[executed on device: localhost (d2cc1207-90f0-4617-b081-86736c11e33d)]
