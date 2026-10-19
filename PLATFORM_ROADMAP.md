@@ -10,6 +10,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Add regression tests for architecture normalization and the CLI profile.
 - [x] Run a baseline smoke test on one physical Android 16 / Termux / ARM64 device with Python 3.14.6 (commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e`); the test does not validate individual cataloged tools.
 - [x] Run `bash device_check.sh` on the physical Android 16 / Termux / ARM64 device after the latest validator and report changes (2026-10-19); inspect the private evidence bundle. All 12 diagnostic checks passed, including unit tests and report invariants. This does not validate individual cataloged tools.
+- [x] Re-run `python main.py --doctor`, `python main.py --profile`, and the full unit suite on the physical Android 16 / Termux / ARM64 device (2026-10-19); both CLI reports identify Android 16, ARM64, and Termux, and all 122 tests pass. Runtime presence and PATH matches remain inventory evidence, not per-tool compatibility verification.
 - [ ] Complete human-reviewed per-tool/device compatibility validation; validate 32-bit/other supported architectures separately.
 
 ## Stage 2: Compatibility metadata
