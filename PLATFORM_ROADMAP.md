@@ -9,7 +9,8 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Explain that container/proot UID 0 is not proof of Android host root.
 - [x] Add regression tests for architecture normalization and the CLI profile.
 - [x] Run a baseline smoke test on one physical Android 16 / Termux / ARM64 device with Python 3.14.6 (commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e`); the test does not validate individual cataloged tools.
-- [ ] Run `bash device_check.sh` on the physical Android/Termux device, inspect the private evidence bundle, then perform human-reviewed device validation; validate 32-bit/other supported architectures separately.
+- [x] Run `bash device_check.sh` on the physical Android 16 / Termux / ARM64 device after the latest validator and report changes (2026-10-19); inspect the private evidence bundle. All 12 diagnostic checks passed, including unit tests and report invariants. This does not validate individual cataloged tools.
+- [ ] Complete human-reviewed per-tool/device compatibility validation; validate 32-bit/other supported architectures separately.
 
 ## Stage 2: Compatibility metadata
 
@@ -79,4 +80,5 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Add an explicit single-tool bounded `--smoke-test NAME_OR_ID` mode, privately persist probe outcomes, and expose saved evidence in report schema 3 without changing device-validation status.
 - [x] Add CI coverage for the bounded Python runtime smoke test and schema-3 compatibility report.
 - [x] Re-run the full test suite and CLI/report checks after the documentation, workflow, and smoke-evidence changes; GitHub Actions passed on Python 3.10, 3.12, and 3.14, including the bounded smoke test and schema-3 report assertions.
-- [ ] Repeat physical-device checks after the compatibility validator and smoke-test/report changes. CI on a desktop runner cannot substitute for Android/Termux evidence.
+- [x] Repeat physical-device diagnostic checks after the compatibility validator and smoke-test/report changes (2026-10-19); the private diagnostic bundle reports 12/12 checks passed. CI on a desktop runner cannot substitute for Android/Termux evidence.
+- [ ] Complete human-reviewed compatibility validation for individual cataloged tools and separately validate other supported architectures.
