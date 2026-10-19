@@ -1151,7 +1151,9 @@ def smoke_test_tool(tool):
     }
     if path:
         attempts = []
-        for flag in ("--version", "--help", "-h"):
+        # OpenSSH's ssh client uses uppercase -V; it does not support --version.
+        probe_flags = ("-V", "--help", "-h") if executable == "ssh" else ("--version", "--help", "-h")
+        for flag in probe_flags:
             output, truncated, timed_out, returncode = bounded_probe(
                 [path, flag], timeout=5, max_bytes=65536, include_returncode=True
             )
