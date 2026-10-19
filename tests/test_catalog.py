@@ -47,7 +47,7 @@ class CatalogTests(unittest.TestCase):
     def test_local_markdown_links_resolve(self):
         """Catch broken relative links and images in README and wiki source pages."""
         markdown_files = [ROOT / "README.md", *ROOT.glob("wiki/**/*.md"), *ROOT.glob("docs/**/*.md")]
-        link_pattern = re.compile(r"!?[[^]]*](([^)]+))")
+        link_pattern = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
         checked = 0
         for markdown_file in markdown_files:
             if not markdown_file.is_file():
