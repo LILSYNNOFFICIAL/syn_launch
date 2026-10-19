@@ -276,6 +276,26 @@ class CatalogTests(unittest.TestCase):
                 self.assertEqual(report["summary"]["smoke_tested_entries"], 1)
                 self.assertEqual(report["tools"][0]["device_validation"], "not_run")
 
+    def test_openssh_smoke_test_uses_supported_version_flag(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {
+            "id": "openssh-smoke-test", "name": "OpenSSH", "executable": "ssh",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/openssh",
+            "caveat": "A version probe is not a feature test."
+        }
+        def probe(command, **kwargs):
+            if command[-1] == "-V":
+                return ("OpenSSH_test_version\n", False, False, 0)
+            return ("", False, False, 1)
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value="/usr/bin/ssh"), patch.object(APP, "bounded_probe", side_effect=probe) as mocked:
+                record = APP.smoke_test_tool(tool)
+        self.assertEqual(record["status"], "passed")
+        self.assertEqual(record["probe"], "-V")
+        self.assertEqual(mocked.call_args_list[0].args[0][-1], "-V")
+
     def test_compatibility_report_marks_replaced_binary_evidence_stale(self):
         import tempfile
         from unittest.mock import patch
