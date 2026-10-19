@@ -343,6 +343,14 @@ class CatalogTests(unittest.TestCase):
                 timeout_seconds=3, output_limit=65536,
             )
 
+    def test_bounded_local_command_streams_large_stdin_without_deadlock(self):
+        payload = b"x" * (1024 * 1024)
+        output = APP.run_bounded_local_command(
+            [sys.executable, "-c", "import sys; print(len(sys.stdin.buffer.read()))"],
+            input_bytes=payload, timeout_seconds=3, output_limit=65536,
+        )
+        self.assertEqual(output.strip(), str(len(payload)).encode("ascii"))
+
     def test_bounded_local_command_kills_timed_out_process(self):
         import time
         started = time.monotonic()
