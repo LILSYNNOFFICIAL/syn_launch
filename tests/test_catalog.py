@@ -421,6 +421,33 @@ class CatalogTests(unittest.TestCase):
                         self.assertFalse(record["network_actions_executed"])
                         self.assertFalse(record["package_changes"])
 
+    def test_npm_functional_check_isolates_cache_config_and_logs(self):
+        from unittest.mock import patch
+        tool = {
+            "id": "npm-isolation-test", "name": "npm isolation test", "executable": "npm",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/npm",
+            "caveat": "Must not write to user npm configuration or cache."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), \
+                 patch.object(APP.shutil, "which", return_value="/mock/npm"), \
+                 patch.object(APP, "run_bounded_local_command", return_value=b'"syn-launch-local-probe"\n') as invoke:
+                record = APP.functional_check_tool(tool)
+        self.assertEqual(record["status"], "passed", record)
+        env = invoke.call_args.kwargs["env"]
+        cache = Path(env["npm_config_cache"])
+        self.assertTrue(cache.parent.name.startswith("syn-launch-functional-"))
+        self.assertEqual(env["npm_config_logs"], "false")
+        user_config = Path(env["npm_config_userconfig"])
+        global_config = Path(env["npm_config_globalconfig"])
+        self.assertNotEqual(user_config, global_config)
+        self.assertEqual(user_config.parent, cache.parent)
+        self.assertEqual(global_config.parent, cache.parent)
+        allowed = {"npm_config_cache", "npm_config_logs", "npm_config_userconfig", "npm_config_globalconfig",
+                   "npm_config_update_notifier", "npm_config_fund", "npm_config_audit", "npm_config_progress"}
+        self.assertFalse(any(key.lower().startswith("npm_config_") and key.lower() not in allowed for key in env))
+
     def test_functional_check_does_not_execute_unsupported_tools(self):
         from unittest.mock import patch
         tool = {

@@ -1391,7 +1391,25 @@ def functional_check_tool(tool):
                     check_id = "curl-local-file-roundtrip"
                 elif executable == "npm":
                     (root / "package.json").write_text('{"name":"syn-launch-local-probe","version":"1.0.0"}\n', encoding="utf-8")
-                    out = invoke([path, "--offline", "--prefix", str(root), "pkg", "get", "name"])
+                    # Keep npm's cache and logging inside this temporary directory and
+                    # ignore user/global npm configuration so the probe leaves no home-cache artifacts.
+                    npm_user_config = root / ".npmrc-user"
+                    npm_global_config = root / ".npmrc-global"
+                    npm_user_config.touch()
+                    npm_global_config.touch()
+                    npm_env = {key: value for key, value in os.environ.items()
+                               if not key.lower().startswith("npm_config_")}
+                    npm_env.update({
+                        "npm_config_cache": str(root / ".npm-cache"),
+                        "npm_config_logs": "false",
+                        "npm_config_userconfig": str(npm_user_config),
+                        "npm_config_globalconfig": str(npm_global_config),
+                        "npm_config_update_notifier": "false",
+                        "npm_config_fund": "false",
+                        "npm_config_audit": "false",
+                        "npm_config_progress": "false",
+                    })
+                    out = invoke([path, "--offline", "--prefix", str(root), "pkg", "get", "name"], env=npm_env)
                     require(out.decode("utf-8").strip().strip("\"") == "syn-launch-local-probe", "npm did not read the temporary package metadata")
                     check_id = "npm-offline-package-metadata"
                 elif executable == "make":
