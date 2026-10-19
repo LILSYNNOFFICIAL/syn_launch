@@ -1369,5 +1369,3 @@ def main():
     return 0
 
 if __name__=="__main__": raise SystemExit(main())
-
-[executed on device: localhost (d2cc1207-90f0-4617-b081-86736c11e33d)]
