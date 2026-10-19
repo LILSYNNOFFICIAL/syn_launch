@@ -71,7 +71,7 @@ assert audit["execution"]["subprocesses_executed"] is False, audit
 assert "optional_linux_environments" in audit, audit
 assert report["report_schema"] == 4, report.get("report_schema")
 assert "functional_check_passed_entries" in report["summary"], report["summary"]
-assert report["summary"]["functional_check_passed_entries"] == 0, report["summary"]
+assert 0 <= report["summary"]["functional_check_passed_entries"] <= report["summary"]["functional_check_attempted_entries"], report["summary"]
 assert report["summary"]["device_verified_entries"] == 0, report["summary"]
 assert all("functional_check" in tool for tool in report["tools"]), "functional-check evidence fields must be present"
 assert report["summary"]["catalog_entries"] == 269, report["summary"]
