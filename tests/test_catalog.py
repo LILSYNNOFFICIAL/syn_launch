@@ -336,6 +336,67 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(record["status"], "output_observed_nonzero")
         self.assertFalse(record["attempts"][0]["expected_usage_exit"])
 
+    def test_functional_check_records_separate_local_only_evidence(self):
+        from unittest.mock import patch
+        tool = {
+            "id": "python-functional-test", "name": "Python Functional Test", "executable": "python",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/python",
+            "caveat": "A functional check is scoped evidence, not full compatibility certification."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value=sys.executable):
+                record = APP.functional_check_tool(tool)
+                self.assertEqual(record["status"], "passed")
+                self.assertEqual(record["check_id"], "python-json-and-sha256")
+                self.assertFalse(record["network_actions_executed"])
+                self.assertFalse(record["package_changes"])
+                saved = APP.load_functional_evidence()
+                self.assertEqual(saved["python-functional-test"]["status"], "passed")
+                report = APP.compatibility_report({"tools": [tool], "categories": ["Test"]})
+                self.assertEqual(report["tools"][0]["functional_check"], "passed")
+                self.assertEqual(report["summary"]["functional_check_passed_entries"], 1)
+                self.assertEqual(report["tools"][0]["device_validation"], "not_run")
+                self.assertEqual(report["tools"][0]["smoke_test"], "not_run")
+
+    def test_functional_check_does_not_execute_unsupported_tools(self):
+        from unittest.mock import patch
+        tool = {
+            "id": "unsupported-functional-test", "name": "Unsupported Test", "executable": "unknown-tool",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/unknown",
+            "caveat": "No functional adapter."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value="/bin/true"):
+                record = APP.functional_check_tool(tool)
+                self.assertEqual(record["status"], "unsupported")
+                self.assertIsNone(record["check_id"])
+                self.assertIn("no command was run", record["detail"])
+
+    def test_compatibility_report_marks_replaced_functional_evidence_stale(self):
+        from unittest.mock import patch
+        fake = {
+            "id": "stale-functional-tool", "name": "Stale Functional Tool", "category": "Test",
+            "executable": "stale-functional-tool", "install_kind": "manual", "package": None,
+            "caveat": "Test-only entry."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)):
+                APP.save_private_json(APP.functional_evidence_path(), {
+                    "stale-functional-tool": {
+                        "tool_id": "stale-functional-tool", "status": "passed",
+                        "path": "/old/path/stale-functional-tool", "check_id": "test-only",
+                        "binary_identity": {"size_bytes": 1, "mtime_ns": 1}
+                    }
+                })
+                with patch.object(APP.shutil, "which", return_value="/new/path/stale-functional-tool"), patch.object(
+                    APP, "executable_identity", return_value={"size_bytes": 2, "mtime_ns": 2}
+                ):
+                    report = APP.compatibility_report({"tools": [fake], "categories": ["Test"]})
+                self.assertEqual(report["tools"][0]["functional_check"], "stale_evidence")
+                self.assertEqual(report["summary"]["functional_check_passed_entries"], 0)
+
     def test_compatibility_report_marks_replaced_binary_evidence_stale(self):
         import tempfile
         from unittest.mock import patch
@@ -470,7 +531,7 @@ class CatalogTests(unittest.TestCase):
         }
         with patch.object(APP.shutil, "which", side_effect=lambda command: "/test/fake-tool" if command == "fake-tool" else None):
             report = APP.compatibility_report({"tools": [fake], "categories": ["Test"]})
-        self.assertEqual(report["report_schema"], 3)
+        self.assertEqual(report["report_schema"], 4)
         self.assertEqual(report["summary"]["catalog_entries"], 1)
         self.assertEqual(report["summary"]["catalog_installable_entries"], 0)
         self.assertEqual(report["summary"]["path_match_entries"], 1)
@@ -499,7 +560,7 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(report["application"], "SYN_LAUNCH")
         self.assertEqual(report["summary"]["catalog_entries"], self.data["tool_count"])
         self.assertEqual(len(report["tools"]), self.data["tool_count"])
-        self.assertEqual(report["report_schema"], 3)
+        self.assertEqual(report["report_schema"], 4)
         self.assertEqual(report["summary"]["verified_tools"], 0)
         self.assertFalse(report["summary"]["tools_executed_by_report"])
         self.assertTrue(all(item["verification"] == "not_run" for item in report["tools"]))

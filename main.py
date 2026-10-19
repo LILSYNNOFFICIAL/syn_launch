@@ -1193,10 +1193,223 @@ def smoke_test_tool(tool):
     return record
 
 
+
+def functional_evidence_path():
+    return STATE_DIR / "functional_checks.json"
+
+
+def load_functional_evidence():
+    """Load functional-check results separately from bounded help/version probes."""
+    try:
+        value = json.loads(functional_evidence_path().read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(value, dict):
+        return {}
+    allowed = {"passed", "failed", "not_detected", "unsupported"}
+    return {key: item for key, item in value.items()
+            if isinstance(key, str) and isinstance(item, dict) and item.get("status") in allowed}
+
+
+def functional_check_tool(tool):
+    """Run one allowlisted local-only functional check with bounded temporary state."""
+    executable = tool.get("executable", "")
+    path = shutil.which(executable) if EXECUTABLE_RE.fullmatch(executable) else None
+    record = {
+        "tool_id": tool["id"], "tool_name": tool["name"], "executable": executable,
+        "path": path, "binary_identity": executable_identity(path), "status": "not_detected",
+        "check_id": None, "tested_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "scope": "One allowlisted local functional check using temporary files only; not full compatibility or security certification.",
+        "network_actions_executed": False, "package_changes": False,
+    }
+    if not path:
+        record["status"] = "not_detected"
+        record["detail"] = "Executable not found on PATH."
+    else:
+        def invoke(args, *, input_bytes=None, env=None):
+            # Enforce the combined output cap while the child is running, not
+            # after capture_output could already have buffered unbounded output.
+            proc = subprocess.Popen(args, stdin=subprocess.PIPE if input_bytes is not None else subprocess.DEVNULL,
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            selector = selectors.DefaultSelector()
+            stdout_fd, stderr_fd = proc.stdout.fileno(), proc.stderr.fileno()
+            streams = {stdout_fd: bytearray(), stderr_fd: bytearray()}
+            for fd in streams:
+                os.set_blocking(fd, False)
+                selector.register(fd, selectors.EVENT_READ, "read")
+            sent = 0
+            if input_bytes is not None:
+                os.set_blocking(proc.stdin.fileno(), False)
+                selector.register(proc.stdin.fileno(), selectors.EVENT_WRITE, "write")
+            deadline = time.monotonic() + 5
+            total = 0
+            try:
+                while selector.get_map():
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise subprocess.TimeoutExpired(args, 5)
+                    for key, _ in selector.select(min(remaining, 0.1)):
+                        if key.data == "write":
+                            try:
+                                sent += os.write(key.fd, input_bytes[sent:sent + 8192])
+                            except BrokenPipeError:
+                                sent = len(input_bytes)
+                            if sent >= len(input_bytes):
+                                selector.unregister(key.fd)
+                                proc.stdin.close()
+                        else:
+                            chunk = os.read(key.fd, 8192)
+                            if not chunk:
+                                selector.unregister(key.fd)
+                                continue
+                            total += len(chunk)
+                            if total > 65536:
+                                raise RuntimeError("combined stdout/stderr exceeded 64 KiB output cap")
+                            streams[key.fd].extend(chunk)
+                returncode = proc.wait(timeout=max(0.05, deadline - time.monotonic()))
+            except (subprocess.TimeoutExpired, RuntimeError):
+                proc.kill()
+                proc.wait()
+                raise
+            finally:
+                selector.close()
+                for stream in (proc.stdin, proc.stdout, proc.stderr):
+                    if stream is not None:
+                        stream.close()
+            if returncode != 0:
+                raise subprocess.CalledProcessError(returncode, args, output=bytes(streams[stdout_fd]), stderr=bytes(streams[stderr_fd]))
+            return bytes(streams[stdout_fd])
+        import tempfile, hashlib, zipfile
+        from pathlib import Path as LocalPath
+
+        def require(condition, message):
+            if not condition:
+                raise AssertionError(message)
+        try:
+            with tempfile.TemporaryDirectory(prefix="syn-launch-functional-") as tmp:
+                root = LocalPath(tmp)
+                source = root / "sample.txt"
+                source.write_bytes(b"SYN_LAUNCH functional check\nsecond line\n")
+                raw = source.read_bytes()
+                if executable == "jq":
+                    out = invoke([path, "-e", "-n", '{ok:true,items:2} | .ok == true and .items == 2'])
+                    require(out.strip() == b"true", "jq predicate did not return true")
+                    check_id = "jq-json-assertion"
+                elif executable == "rsync":
+                    target = root / "copy.txt"
+                    invoke([path, "-a", str(source), str(target)])
+                    require(target.read_bytes() == raw, "rsync copy differs from source")
+                    check_id = "rsync-local-copy"
+                elif executable == "sqlite3":
+                    db = root / "check.db"
+                    out = invoke([path, str(db), "CREATE TABLE checks(value TEXT); INSERT INTO checks VALUES('PASS'); SELECT value FROM checks;"])
+                    require(out.strip() == b"PASS", "SQLite round trip returned unexpected output")
+                    check_id = "sqlite-local-table-roundtrip"
+                elif executable == "node":
+                    out = invoke([path, "-e", 'const x={ok:true,n:2}; if(JSON.parse(JSON.stringify(x)).ok!==true || x.n!==2) process.exit(1); process.stdout.write("PASS")'])
+                    require(out == b"PASS", "Node JSON round trip did not pass")
+                    check_id = "node-json-roundtrip"
+                elif executable == "ssh-keygen":
+                    key = root / "ephemeral_ed25519"
+                    invoke([path, "-q", "-t", "ed25519", "-N", "", "-f", str(key)])
+                    fingerprint = invoke([path, "-lf", str(key) + ".pub"])
+                    derived = invoke([path, "-y", "-f", str(key)]).strip()
+                    stored = (root / "ephemeral_ed25519.pub").read_bytes().strip()
+                    require(derived == stored and b"ED25519" in fingerprint, "SSH public-key derivation or fingerprint check failed")
+                    check_id = "ssh-keygen-ephemeral-ed25519-roundtrip"
+                elif executable == "base64":
+                    encoded = invoke([path], input_bytes=raw)
+                    decoded = invoke([path, "-d"], input_bytes=encoded)
+                    require(decoded == raw, "base64 round trip differs from source")
+                    check_id = "base64-roundtrip"
+                elif executable == "sha256sum":
+                    out = invoke([path], input_bytes=b"abc\n").split()[0]
+                    require(out.decode("ascii") == hashlib.sha256(b"abc\n").hexdigest(), "sha256sum digest mismatch")
+                    check_id = "sha256sum-known-digest"
+                elif executable == "gzip":
+                    compressed = invoke([path, "-c", str(source)])
+                    out = invoke([path, "-dc"], input_bytes=compressed)
+                    require(out == raw, "archive/compression round trip differs from source")
+                    check_id = "gzip-roundtrip"
+                elif executable == "tar":
+                    archive = root / "check.tar.gz"
+                    invoke([path, "-czf", str(archive), "-C", str(root), "sample.txt"])
+                    out = invoke([path, "-xOzf", str(archive), "sample.txt"])
+                    require(out == raw, "archive round trip differs from source")
+                    check_id = "tar-roundtrip"
+                elif executable == "unzip":
+                    archive = root / "check.zip"
+                    with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zf:
+                        zf.write(source, "sample.txt")
+                    out = invoke([path, "-p", str(archive), "sample.txt"])
+                    require(out == raw, "archive round trip differs from source")
+                    check_id = "unzip-roundtrip"
+                elif executable == "hexdump":
+                    out = invoke([path, "-C", str(source)])
+                    require(b"SYN_LAUNCH" in out and b"00000000" in out, "hexdump output did not contain expected content")
+                    check_id = "hexdump-known-content"
+                elif executable == "openssl":
+                    out = invoke([path, "dgst", "-sha256"], input_bytes=b"abc\n")
+                    require(hashlib.sha256(b"abc\n").hexdigest().encode() in out, "OpenSSL digest mismatch")
+                    check_id = "openssl-known-digest"
+                elif executable == "git":
+                    repo = root / "repo"
+                    repo.mkdir()
+                    git_env = os.environ.copy()
+                    git_env.update({"GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull,
+                                    "GIT_ATTR_NOSYSTEM": "1", "HOME": str(root)})
+                    invoke([path, "-C", str(repo), "-c", "core.hooksPath=/dev/null", "init", "-q"], env=git_env)
+                    (repo / "sample.txt").write_bytes(raw)
+                    invoke([path, "-C", str(repo), "-c", "core.hooksPath=/dev/null", "-c", "user.name=SYN_LAUNCH test", "-c", "user.email=test@example.invalid", "add", "sample.txt"], env=git_env)
+                    invoke([path, "-C", str(repo), "-c", "core.hooksPath=/dev/null", "-c", "user.name=SYN_LAUNCH test", "-c", "user.email=test@example.invalid", "commit", "-qm", "functional test"], env=git_env)
+                    out = invoke([path, "-C", str(repo), "-c", "core.hooksPath=/dev/null", "status", "--porcelain"], env=git_env)
+                    require(not out.strip(), "temporary Git repository has uncommitted changes")
+                    check_id = "git-local-repository-roundtrip"
+                elif executable == "python":
+                    out = invoke([path, "-c", 'import json,hashlib\nx={"ok":True}\nif json.loads(json.dumps(x))["ok"] is not True:\n raise SystemExit(1)\nprint(hashlib.sha256(b"abc").hexdigest())'])
+                    require(out.strip() == hashlib.sha256(b"abc").hexdigest().encode(), "Python JSON/SHA-256 check failed")
+                    check_id = "python-json-and-sha256"
+                elif executable in {"clang", "readelf", "strings", "objdump"}:
+                    compiler = shutil.which("clang")
+                    if not compiler:
+                        raise RuntimeError("clang dependency is not available; check was not run")
+                    cfile, binary = root / "probe.c", root / "probe"
+                    cfile.write_text('#include <stdio.h>\nint main(void){puts("SYN_LAUNCH_PASS");return 0;}\n', encoding="utf-8")
+                    invoke([compiler, "-Wall", "-Wextra", "-Werror", str(cfile), "-o", str(binary)])
+                    if executable == "clang":
+                        out = invoke([str(binary)])
+                        require(out.strip() == b"SYN_LAUNCH_PASS", "compiled program returned unexpected output")
+                        check_id = "clang-compile-and-run"
+                    elif executable == "readelf":
+                        out = invoke([path, "-h", str(binary)])
+                        require(b"ELF Header" in out and b"Machine:" in out, "readelf output lacks expected ELF header fields")
+                        check_id = "readelf-elf-header"
+                    elif executable == "strings":
+                        out = invoke([path, str(binary)])
+                        require(b"SYN_LAUNCH_PASS" in out, "strings did not find embedded test literal")
+                        check_id = "strings-known-literal"
+                    else:
+                        out = invoke([path, "-f", str(binary)])
+                        require(b"file format" in out and b"architecture:" in out, "objdump output lacks expected metadata")
+                        check_id = "objdump-binary-metadata"
+                else:
+                    record.update(status="unsupported", check_id=None,
+                                  detail="No reviewed local-only functional adapter exists for this executable; no command was run.")
+                    check_id = None
+                if check_id:
+                    record.update(status="passed", check_id=check_id, detail="Specific bounded local functional assertion passed.")
+        except (AssertionError, OSError, subprocess.SubprocessError, RuntimeError, ValueError) as exc:
+            record.update(status="failed", detail=(str(exc) or type(exc).__name__)[:500])
+    evidence = load_functional_evidence()
+    evidence[tool["id"]] = record
+    save_private_json(functional_evidence_path(), evidence)
+    return record
+
 def compatibility_report(data):
     """Separate catalog claims, PATH evidence, source metadata, and recorded bounded smoke tests."""
     profile = environment_profile(data)
     saved_evidence = load_smoke_evidence()
+    functional_evidence = load_functional_evidence()
     tools = []
     for tool in data["tools"]:
         executable = tool.get("executable", "")
@@ -1205,9 +1418,13 @@ def compatibility_report(data):
         compatibility_is_declared = isinstance(compatibility, dict) and bool(compatibility)
         smoke = saved_evidence.get(tool["id"], {})
         smoke_status = smoke.get("status", "not_run")
+        functional = functional_evidence.get(tool["id"], {})
+        functional_status = functional.get("status", "not_run")
         current_identity = executable_identity(path)
         if smoke and (smoke.get("path") != path or smoke.get("binary_identity") != current_identity):
             smoke_status = "stale_evidence"
+        if functional and (functional.get("path") != path or functional.get("binary_identity") != current_identity):
+            functional_status = "stale_evidence"
         tools.append({
             "id": tool["id"],
             "name": tool["name"],
@@ -1223,11 +1440,13 @@ def compatibility_report(data):
             "verification": "not_run",
             "smoke_test": smoke_status,
             "smoke_test_evidence": ({**smoke, "report_status": smoke_status} if smoke else None),
+            "functional_check": functional_status,
+            "functional_check_evidence": ({**functional, "report_status": functional_status} if functional else None),
             "device_validation": "not_run",
             "caveat": tool["caveat"],
         })
     return {
-        "report_schema": 3,
+        "report_schema": 4,
         "application": "SYN_LAUNCH",
         "device_profile": profile,
         "summary": {
@@ -1239,10 +1458,12 @@ def compatibility_report(data):
             "compatibility_assessed_entries": sum(1 for tool in tools if tool["compatibility_assessment"] == "declared_but_not_device_verified"),
             "smoke_tested_entries": sum(1 for tool in tools if tool["smoke_test"] == "passed"),
             "smoke_test_attempted_entries": sum(1 for tool in tools if tool["smoke_test"] in {"passed", "output_observed_nonzero", "timed_out", "no_response"}),
+            "functional_check_passed_entries": sum(1 for tool in tools if tool["functional_check"] == "passed"),
+            "functional_check_attempted_entries": sum(1 for tool in tools if tool["functional_check"] in {"passed", "failed"}),
             "device_verified_entries": sum(1 for tool in tools if tool["device_validation"] == "verified"),
             "verified_tools": 0,
             "tools_executed_by_report": False,
-            "note": "Catalog installability and PATH presence are discovery/metadata only. Smoke tests run only when a specific tool is explicitly selected and only perform bounded tool-specific help/version probes. Such probes do not validate tool features or device compatibility; device validation remains not_run unless separately recorded.",
+            "note": "Catalog installability and PATH presence are discovery/metadata only. Smoke tests and functional checks run only when a specific tool is explicitly selected. Functional checks cover only their named local assertion; neither evidence type certifies full tool functionality or device compatibility. Device validation remains not_run unless separately recorded.",
         },
         "tools": tools,
     }
@@ -1282,6 +1503,7 @@ def main():
     parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
     parser.add_argument("--compatibility-report",action="store_true",help="print JSON catalog status and separately recorded bounded smoke-test evidence")
     parser.add_argument("--smoke-test",metavar="NAME_OR_ID",help="run bounded tool-specific help/version probes for one explicitly selected tool")
+    parser.add_argument("--functional-check",metavar="NAME_OR_ID",help="run one allowlisted local-only functional check for an explicitly selected tool")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
@@ -1334,6 +1556,13 @@ def main():
         if not matches:
             print("Tool not found. Use --search to find its exact name or ID.", file=sys.stderr); return 1
         record=smoke_test_tool(matches[0])
+        print(json.dumps(record, indent=2, ensure_ascii=False))
+        return 0 if record["status"] == "passed" else 1
+    if args.functional_check:
+        matches=[t for t in data["tools"] if t["name"].lower()==args.functional_check.lower() or t["id"].lower()==args.functional_check.lower()]
+        if not matches:
+            print("Tool not found. Use --search to find its exact name or ID.", file=sys.stderr); return 1
+        record=functional_check_tool(matches[0])
         print(json.dumps(record, indent=2, ensure_ascii=False))
         return 0 if record["status"] == "passed" else 1
     if args.check: health(data); return 0
