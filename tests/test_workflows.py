@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import zipfile
 
 from workflow_planner import PLAN_SCHEMA, WORKFLOWS, build_workflow_plan
 
@@ -105,6 +106,33 @@ class WorkflowPlannerTests(unittest.TestCase):
             self.assertTrue(report_path.is_file())
             self.assertEqual(report["finding_count"], 1)
             self.assertEqual(report["severity_counts"]["low"], 1)
+            self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
+
+    def test_cli_generates_private_static_apk_inventory_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk = Path(tmp) / "sample.apk"
+            with zipfile.ZipFile(apk, "w") as archive:
+                archive.writestr("AndroidManifest.xml", b"manifest-placeholder")
+                archive.writestr("classes.dex", b"dex-placeholder")
+                archive.writestr("lib/arm64-v8a/libsample.so", b"native-placeholder")
+            state = Path(tmp) / "state"
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = str(state)
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "main.py"),
+                 "--workflow-run", "mobile-app-review", "--target-scope", str(apk), "--authorized"],
+                env=env, capture_output=True, text=True, timeout=10,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            report_path = Path(report["saved_report"])
+            self.assertTrue(report_path.is_file())
+            self.assertEqual(report["workflow_id"], "mobile-app-review")
+            self.assertEqual(report["verification"], "static_archive_inventory_only")
+            self.assertTrue(report["archive"]["android_manifest_present"])
+            self.assertFalse(report["execution"]["apk_extracted"])
+            self.assertFalse(report["execution"]["apk_executed"])
             self.assertEqual(report_path.stat().st_mode & 0o777, 0o600)
             self.assertEqual(report_path.parent.stat().st_mode & 0o777, 0o700)
 
