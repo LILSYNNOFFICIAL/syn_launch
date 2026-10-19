@@ -2,6 +2,7 @@ import copy
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import tempfile
 import sys
@@ -42,6 +43,30 @@ class CatalogTests(unittest.TestCase):
     def test_sources_are_https(self):
         for t in self.tools:
             self.assertTrue(t["source"].startswith("https://"), t["name"])
+
+    def test_local_markdown_links_resolve(self):
+        """Catch broken relative links and images in README and wiki source pages."""
+        markdown_files = [ROOT / "README.md", *ROOT.glob("wiki/**/*.md"), *ROOT.glob("docs/**/*.md")]
+        link_pattern = re.compile(r"!?[[^]]*](([^)]+))")
+        checked = 0
+        for markdown_file in markdown_files:
+            if not markdown_file.is_file():
+                continue
+            content = markdown_file.read_text(encoding="utf-8")
+            for raw_target in link_pattern.findall(content):
+                target = raw_target.strip().split()[0].strip("<>")
+                if not target or target.startswith(("https://", "http://", "mailto:", "#", "data:")):
+                    continue
+                relative_path = target.split("#", 1)[0].split("?", 1)[0]
+                if not relative_path:
+                    continue
+                checked += 1
+                resolved = (markdown_file.parent / relative_path).resolve()
+                self.assertTrue(
+                    resolved.exists(),
+                    f"{markdown_file.relative_to(ROOT)} has broken local link/image: {raw_target}",
+                )
+        self.assertGreater(checked, 0, "Expected to check at least one local Markdown link")
 
     def test_source_backed_compatibility_metadata_is_explicit_and_not_verified(self):
         declared = [tool for tool in self.tools if tool.get("compatibility")]
