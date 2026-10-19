@@ -336,6 +336,23 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(record["status"], "output_observed_nonzero")
         self.assertFalse(record["attempts"][0]["expected_usage_exit"])
 
+    def test_bounded_local_command_enforces_combined_output_cap(self):
+        with self.assertRaisesRegex(RuntimeError, "combined stdout/stderr exceeded"):
+            APP.run_bounded_local_command(
+                [sys.executable, "-c", "import os; os.write(1, b'x' * 70000)"],
+                timeout_seconds=3, output_limit=65536,
+            )
+
+    def test_bounded_local_command_kills_timed_out_process(self):
+        import time
+        started = time.monotonic()
+        with self.assertRaises(subprocess.TimeoutExpired):
+            APP.run_bounded_local_command(
+                [sys.executable, "-c", "import time; time.sleep(5)"],
+                timeout_seconds=0.2, output_limit=65536,
+            )
+        self.assertLess(time.monotonic() - started, 2.0)
+
     def test_functional_check_records_separate_local_only_evidence(self):
         from unittest.mock import patch
         tool = {
@@ -358,6 +375,37 @@ class CatalogTests(unittest.TestCase):
                 self.assertEqual(report["summary"]["functional_check_passed_entries"], 1)
                 self.assertEqual(report["tools"][0]["device_validation"], "not_run")
                 self.assertEqual(report["tools"][0]["smoke_test"], "not_run")
+
+    def test_functional_check_local_only_adapters_for_available_tools(self):
+        import shutil
+        from unittest.mock import patch
+        candidates = {
+            "curl": "curl-local-file-roundtrip",
+            "npm": "npm-offline-package-metadata",
+            "make": "make-local-target",
+            "ssh": "ssh-config-expansion-no-connect",
+        }
+        available = {executable: shutil.which(executable) for executable in candidates}
+        available = {executable: path for executable, path in available.items() if path}
+        if not available:
+            self.skipTest("No optional local-only adapter executable is installed")
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)):
+                for executable, expected_check in candidates.items():
+                    if executable not in available:
+                        continue
+                    with self.subTest(executable=executable):
+                        tool = {
+                            "id": "functional-" + executable, "name": executable,
+                            "executable": executable, "category": "Test", "install_kind": "manual",
+                            "package": None, "installable": False, "description": "Test-only",
+                            "source": "https://example.org/test", "caveat": "Local-only test."
+                        }
+                        record = APP.functional_check_tool(tool)
+                        self.assertEqual(record["status"], "passed", record)
+                        self.assertEqual(record["check_id"], expected_check)
+                        self.assertFalse(record["network_actions_executed"])
+                        self.assertFalse(record["package_changes"])
 
     def test_functional_check_does_not_execute_unsupported_tools(self):
         from unittest.mock import patch

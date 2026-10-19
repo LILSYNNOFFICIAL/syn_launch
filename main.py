@@ -1211,6 +1211,72 @@ def load_functional_evidence():
             if isinstance(key, str) and isinstance(item, dict) and item.get("status") in allowed}
 
 
+def run_bounded_local_command(args, *, input_bytes=None, env=None, timeout_seconds=5, output_limit=65536):
+    """Run a fixed argv locally, enforcing time and combined-output bounds during execution."""
+    proc = subprocess.Popen(
+        args,
+        stdin=subprocess.PIPE if input_bytes is not None else subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=env,
+        start_new_session=(os.name == "posix"),
+    )
+    selector = selectors.DefaultSelector()
+    stdout_fd, stderr_fd = proc.stdout.fileno(), proc.stderr.fileno()
+    streams = {stdout_fd: bytearray(), stderr_fd: bytearray()}
+    for fd in streams:
+        os.set_blocking(fd, False)
+        selector.register(fd, selectors.EVENT_READ, "read")
+    sent = 0
+    if input_bytes is not None:
+        os.set_blocking(proc.stdin.fileno(), False)
+        selector.register(proc.stdin.fileno(), selectors.EVENT_WRITE, "write")
+    deadline = time.monotonic() + timeout_seconds
+    total = 0
+    try:
+        while selector.get_map():
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise subprocess.TimeoutExpired(args, timeout_seconds)
+            for key, _ in selector.select(min(remaining, 0.1)):
+                if key.data == "write":
+                    try:
+                        sent += os.write(key.fd, input_bytes[sent:sent + 8192])
+                    except BrokenPipeError:
+                        sent = len(input_bytes)
+                    if sent >= len(input_bytes):
+                        selector.unregister(key.fd)
+                        proc.stdin.close()
+                else:
+                    chunk = os.read(key.fd, 8192)
+                    if not chunk:
+                        selector.unregister(key.fd)
+                        continue
+                    total += len(chunk)
+                    if total > output_limit:
+                        raise RuntimeError(f"combined stdout/stderr exceeded {output_limit} byte output cap")
+                    streams[key.fd].extend(chunk)
+        returncode = proc.wait(timeout=max(0.05, deadline - time.monotonic()))
+    except (subprocess.TimeoutExpired, RuntimeError):
+        try:
+            if os.name == "posix":
+                os.killpg(proc.pid, signal.SIGKILL)
+            else:
+                proc.kill()
+        except OSError:
+            pass
+        proc.wait()
+        raise
+    finally:
+        selector.close()
+        for stream in (proc.stdin, proc.stdout, proc.stderr):
+            if stream is not None:
+                stream.close()
+    if returncode != 0:
+        raise subprocess.CalledProcessError(returncode, args, output=bytes(streams[stdout_fd]), stderr=bytes(streams[stderr_fd]))
+    return bytes(streams[stdout_fd])
+
+
 def functional_check_tool(tool):
     """Run one allowlisted local-only functional check with bounded temporary state."""
     executable = tool.get("executable", "")
@@ -1227,65 +1293,8 @@ def functional_check_tool(tool):
         record["detail"] = "Executable not found on PATH."
     else:
         def invoke(args, *, input_bytes=None, env=None):
-            # Enforce the combined output cap while the child is running, not
-            # after capture_output could already have buffered unbounded output.
-            proc = subprocess.Popen(args, stdin=subprocess.PIPE if input_bytes is not None else subprocess.DEVNULL,
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
-                                    start_new_session=(os.name == "posix"))
-            selector = selectors.DefaultSelector()
-            stdout_fd, stderr_fd = proc.stdout.fileno(), proc.stderr.fileno()
-            streams = {stdout_fd: bytearray(), stderr_fd: bytearray()}
-            for fd in streams:
-                os.set_blocking(fd, False)
-                selector.register(fd, selectors.EVENT_READ, "read")
-            sent = 0
-            if input_bytes is not None:
-                os.set_blocking(proc.stdin.fileno(), False)
-                selector.register(proc.stdin.fileno(), selectors.EVENT_WRITE, "write")
-            deadline = time.monotonic() + 5
-            total = 0
-            try:
-                while selector.get_map():
-                    remaining = deadline - time.monotonic()
-                    if remaining <= 0:
-                        raise subprocess.TimeoutExpired(args, 5)
-                    for key, _ in selector.select(min(remaining, 0.1)):
-                        if key.data == "write":
-                            try:
-                                sent += os.write(key.fd, input_bytes[sent:sent + 8192])
-                            except BrokenPipeError:
-                                sent = len(input_bytes)
-                            if sent >= len(input_bytes):
-                                selector.unregister(key.fd)
-                                proc.stdin.close()
-                        else:
-                            chunk = os.read(key.fd, 8192)
-                            if not chunk:
-                                selector.unregister(key.fd)
-                                continue
-                            total += len(chunk)
-                            if total > 65536:
-                                raise RuntimeError("combined stdout/stderr exceeded 64 KiB output cap")
-                            streams[key.fd].extend(chunk)
-                returncode = proc.wait(timeout=max(0.05, deadline - time.monotonic()))
-            except (subprocess.TimeoutExpired, RuntimeError):
-                try:
-                    if os.name == "posix":
-                        os.killpg(proc.pid, signal.SIGKILL)
-                    else:
-                        proc.kill()
-                except OSError:
-                    pass
-                proc.wait()
-                raise
-            finally:
-                selector.close()
-                for stream in (proc.stdin, proc.stdout, proc.stderr):
-                    if stream is not None:
-                        stream.close()
-            if returncode != 0:
-                raise subprocess.CalledProcessError(returncode, args, output=bytes(streams[stdout_fd]), stderr=bytes(streams[stderr_fd]))
-            return bytes(streams[stdout_fd])
+            return run_bounded_local_command(args, input_bytes=input_bytes, env=env,
+                                             timeout_seconds=5, output_limit=65536)
         import tempfile, hashlib, zipfile
         from pathlib import Path as LocalPath
 
@@ -1376,6 +1385,26 @@ def functional_check_tool(tool):
                     out = invoke([path, "-c", 'import json,hashlib\nx={"ok":True}\nif json.loads(json.dumps(x))["ok"] is not True:\n raise SystemExit(1)\nprint(hashlib.sha256(b"abc").hexdigest())'])
                     require(out.strip() == hashlib.sha256(b"abc").hexdigest().encode(), "Python JSON/SHA-256 check failed")
                     check_id = "python-json-and-sha256"
+                elif executable == "curl":
+                    out = invoke([path, "--fail", "--silent", "--show-error", "--max-time", "5", source.as_uri()])
+                    require(out == raw, "curl local file transfer differs from source")
+                    check_id = "curl-local-file-roundtrip"
+                elif executable == "npm":
+                    (root / "package.json").write_text('{"name":"syn-launch-local-probe","version":"1.0.0"}\n', encoding="utf-8")
+                    out = invoke([path, "--offline", "--userconfig", os.devnull, "--globalconfig", os.devnull,
+                                  "--prefix", str(root), "pkg", "get", "name"])
+                    require(out.decode("utf-8").strip().strip("\"") == "syn-launch-local-probe", "npm did not read the temporary package metadata")
+                    check_id = "npm-offline-package-metadata"
+                elif executable == "make":
+                    (root / "Makefile").write_text("all:\n\t@printf 'SYN_LAUNCH_MAKE_PASS\\n'\n", encoding="utf-8")
+                    out = invoke([path, "-s", "-C", str(root)])
+                    require(out.strip() == b"SYN_LAUNCH_MAKE_PASS", "make did not execute the temporary local target")
+                    check_id = "make-local-target"
+                elif executable == "ssh":
+                    out = invoke([path, "-G", "-F", os.devnull, "syn-launch.invalid"])
+                    require(b"hostname syn-launch.invalid" in out and b"port 22" in out,
+                            "SSH config expansion did not produce expected host settings")
+                    check_id = "ssh-config-expansion-no-connect"
                 elif executable in {"clang", "readelf", "strings", "objdump"}:
                     compiler = shutil.which("clang")
                     if not compiler:
