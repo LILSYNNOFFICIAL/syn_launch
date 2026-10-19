@@ -1391,8 +1391,7 @@ def functional_check_tool(tool):
                     check_id = "curl-local-file-roundtrip"
                 elif executable == "npm":
                     (root / "package.json").write_text('{"name":"syn-launch-local-probe","version":"1.0.0"}\n', encoding="utf-8")
-                    out = invoke([path, "--offline", "--userconfig", os.devnull, "--globalconfig", os.devnull,
-                                  "--prefix", str(root), "pkg", "get", "name"])
+                    out = invoke([path, "--offline", "--prefix", str(root), "pkg", "get", "name"])
                     require(out.decode("utf-8").strip().strip("\"") == "syn-launch-local-probe", "npm did not read the temporary package metadata")
                     check_id = "npm-offline-package-metadata"
                 elif executable == "make":
