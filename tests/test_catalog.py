@@ -385,6 +385,10 @@ class CatalogTests(unittest.TestCase):
             "make": "make-local-target",
             "ssh": "ssh-config-expansion-no-connect",
         }
+        # npm can block for several seconds on hosted runner shims even with
+        # offline mode; its adapter is exercised on the actual Termux device.
+        if os.environ.get("CI"):
+            candidates.pop("npm", None)
         available = {executable: shutil.which(executable) for executable in candidates}
         available = {executable: path for executable, path in available.items() if path}
         if not available:
