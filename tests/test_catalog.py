@@ -339,7 +339,7 @@ class CatalogTests(unittest.TestCase):
     def test_bounded_local_command_enforces_combined_output_cap(self):
         with self.assertRaisesRegex(RuntimeError, "combined stdout/stderr exceeded"):
             APP.run_bounded_local_command(
-                [sys.executable, "-c", "import os; os.write(1, b'x' * 70000)"],
+                [sys.executable, "-c", "import os; os.write(1, b'x' * 40000); os.write(2, b'y' * 30000)"],
                 timeout_seconds=3, output_limit=65536,
             )
 
