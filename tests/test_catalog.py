@@ -296,6 +296,44 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(record["probe"], "-V")
         self.assertEqual(mocked.call_args_list[0].args[0][-1], "-V")
 
+    def test_ssh_key_tools_accept_expected_usage_exit(self):
+        import tempfile
+        from unittest.mock import patch
+        for executable, expected_flag in (("ssh-keygen", "--help"), ("ssh-keyscan", "-h")):
+            with self.subTest(executable=executable):
+                tool = {
+                    "id": executable + "-smoke-test", "name": executable, "executable": executable,
+                    "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+                    "description": "Test-only", "source": "https://example.org/openssh",
+                    "caveat": "A usage probe is not a feature test."
+                }
+                def probe(command, **kwargs):
+                    if command[-1] == expected_flag:
+                        return ("usage: " + executable + " [options]\n", False, False, 1)
+                    return ("", False, False, 1)
+                with tempfile.TemporaryDirectory() as tmp:
+                    with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value="/usr/bin/" + executable), patch.object(APP, "bounded_probe", side_effect=probe) as mocked:
+                        record = APP.smoke_test_tool(tool)
+                self.assertEqual(record["status"], "passed")
+                self.assertEqual(record["probe"], expected_flag)
+                self.assertTrue(record["expected_usage_exit"])
+                self.assertEqual(mocked.call_args_list[0].args[0][-1], expected_flag)
+
+    def test_non_usage_error_does_not_pass_expected_usage_probe(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {
+            "id": "ssh-keygen-error-test", "name": "ssh-keygen", "executable": "ssh-keygen",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/openssh",
+            "caveat": "A bounded probe is not a feature test."
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value="/usr/bin/ssh-keygen"), patch.object(APP, "bounded_probe", return_value=("unsupported option\n", False, False, 1)):
+                record = APP.smoke_test_tool(tool)
+        self.assertEqual(record["status"], "output_observed_nonzero")
+        self.assertFalse(record["attempts"][0]["expected_usage_exit"])
+
     def test_compatibility_report_marks_replaced_binary_evidence_stale(self):
         import tempfile
         from unittest.mock import patch
@@ -946,3 +984,5 @@ class CatalogTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+[executed on device: localhost (d2cc1207-90f0-4617-b081-86736c11e33d)]
