@@ -1230,7 +1230,8 @@ def functional_check_tool(tool):
             # Enforce the combined output cap while the child is running, not
             # after capture_output could already have buffered unbounded output.
             proc = subprocess.Popen(args, stdin=subprocess.PIPE if input_bytes is not None else subprocess.DEVNULL,
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
+                                    start_new_session=(os.name == "posix"))
             selector = selectors.DefaultSelector()
             stdout_fd, stderr_fd = proc.stdout.fileno(), proc.stderr.fileno()
             streams = {stdout_fd: bytearray(), stderr_fd: bytearray()}
@@ -1268,7 +1269,13 @@ def functional_check_tool(tool):
                             streams[key.fd].extend(chunk)
                 returncode = proc.wait(timeout=max(0.05, deadline - time.monotonic()))
             except (subprocess.TimeoutExpired, RuntimeError):
-                proc.kill()
+                try:
+                    if os.name == "posix":
+                        os.killpg(proc.pid, signal.SIGKILL)
+                    else:
+                        proc.kill()
+                except OSError:
+                    pass
                 proc.wait()
                 raise
             finally:
