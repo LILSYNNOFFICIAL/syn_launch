@@ -1,7 +1,9 @@
 import copy
 import importlib.util
 import json
+import os
 import subprocess
+import tempfile
 import sys
 import unittest
 from pathlib import Path
@@ -482,10 +484,16 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(report["tools"][0]["verification"], "not_run")
 
     def test_compatibility_report_cli_outputs_json_for_entire_catalog(self):
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "main.py"), "--compatibility-report"],
-            capture_output=True, text=True, timeout=15
-        )
+        # The report intentionally includes saved smoke-test evidence. Give this
+        # assertion an empty private state directory so it is deterministic on
+        # developer devices that already have real smoke-test records.
+        with tempfile.TemporaryDirectory(prefix="syn-launch-report-test-") as state_dir:
+            env = os.environ.copy()
+            env["SYN_LAUNCH_HOME"] = state_dir
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "main.py"), "--compatibility-report"],
+                capture_output=True, text=True, timeout=15, env=env
+            )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         report = json.loads(result.stdout)
         self.assertEqual(report["application"], "SYN_LAUNCH")
