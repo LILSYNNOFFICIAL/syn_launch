@@ -277,10 +277,15 @@ def run_web_api_review(scope: str) -> dict:
         raise ValueError("web-api-review URL must not contain a query string or fragment")
     if port not in (None, 443):
         raise ValueError("web-api-review only permits the default HTTPS port 443")
-    # Decode before checking segments so percent-encoded dot segments cannot bypass validation.
-    decoded_path = unquote(parts.path)
-    if any(segment == ".." for segment in decoded_path.split("/")):
-        raise ValueError("web-api-review path must not contain parent-directory segments")
+    # Decode repeatedly: a proxy/server may decode a path more than once.
+    decoded_path = parts.path
+    while True:
+        if any(segment == ".." for segment in decoded_path.split("/")):
+            raise ValueError("web-api-review path must not contain parent-directory segments")
+        next_path = unquote(decoded_path)
+        if next_path == decoded_path:
+            break
+        decoded_path = next_path
     try:
         host = host.encode("idna").decode("ascii")
     except UnicodeError as exc:
