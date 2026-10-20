@@ -63,7 +63,7 @@ This document tracks the staged evolution from a Termux catalog/installer into a
 - [x] Review official Kali NetHunter editions and requirements; document Rootless, Lite, and full NetHunter as distinct capability profiles: [NetHunter overview](https://www.kali.org/docs/nethunter/) and [Rootless guide](https://www.kali.org/docs/nethunter/nethunter-rootless/).
 - [x] Document hardware, kernel, root, and ABI caveats without implying a userspace image grants kernel features or Android host root.
 - [x] Add read-only presence indicators for PRoot, PRoot-Distro, and NetHunter launchers/rootfs markers to the local audit; do not enter containers or infer privileges.
-- [ ] Validate those indicators on the physical Android/Termux device and document its actual environment. No environment is installed, reset, or flashed automatically.
+- [x] Validate those indicators on the physical Android 16 / Termux / ARM64 device (2026-10-20): Android reports `aarch64`, Python 3.14.8, `proot` is present, and PRoot-Distro/NetHunter launchers and rootfs markers are absent. The read-only adapter saved a private report; it did not enter a container, test host-root privileges or kernel features, contact the network, or change packages/settings.
 
 ## Release gates
 
