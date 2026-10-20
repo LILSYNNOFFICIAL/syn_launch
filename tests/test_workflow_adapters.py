@@ -224,6 +224,9 @@ class WorkflowAdapterTests(unittest.TestCase):
             "https://staging.example.test:8443/",
             "https://*.example.test/",
             "https://staging.example.test/a/../admin",
+            "https://staging.example.test/a/%2e%2e/admin",
+            "https://staging.example.test/a/%2E%2E/admin",
+            "https://staging.example.test/a%2f..%2fadmin",
         )
         for scope in invalid:
             with self.subTest(scope=scope):

@@ -257,7 +257,7 @@ def _resolve_addresses_with_timeout(host: str, timeout_seconds: float = 3.0) -> 
 
 def run_web_api_review(scope: str) -> dict:
     """Perform one bounded HTTPS HEAD request; never follows redirects or reads a body."""
-    from urllib.parse import urlsplit
+    from urllib.parse import unquote, urlsplit
 
     if not isinstance(scope, str) or len(scope) > 2048 or any(ord(ch) < 32 or ch.isspace() for ch in scope):
         raise ValueError("web-api-review scope must be a single HTTPS URL without whitespace or control characters")
@@ -277,7 +277,9 @@ def run_web_api_review(scope: str) -> dict:
         raise ValueError("web-api-review URL must not contain a query string or fragment")
     if port not in (None, 443):
         raise ValueError("web-api-review only permits the default HTTPS port 443")
-    if any(segment == ".." for segment in parts.path.split("/")):
+    # Decode before checking segments so percent-encoded dot segments cannot bypass validation.
+    decoded_path = unquote(parts.path)
+    if any(segment == ".." for segment in decoded_path.split("/")):
         raise ValueError("web-api-review path must not contain parent-directory segments")
     try:
         host = host.encode("idna").decode("ascii")
