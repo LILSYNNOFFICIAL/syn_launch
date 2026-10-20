@@ -221,6 +221,8 @@ class WorkflowAdapterTests(unittest.TestCase):
             "http://staging.example.test/",
             "https://user:pass@staging.example.test/",
             "https://staging.example.test/?token=x",
+            "https://staging.example.test/path?",
+            "https://staging.example.test/path#",
             "https://staging.example.test:8443/",
             "https://*.example.test/",
             "https://staging.example.test/a/../admin",
