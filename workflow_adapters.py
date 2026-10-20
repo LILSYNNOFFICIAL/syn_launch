@@ -273,7 +273,8 @@ def run_web_api_review(scope: str) -> dict:
         raise ValueError("web-api-review requires an explicit HTTPS URL")
     if parts.username is not None or parts.password is not None:
         raise ValueError("web-api-review URL must not contain embedded credentials")
-    if parts.query or parts.fragment:
+    # Reject literal delimiters even when their parsed values are empty ("?" or "#").
+    if "?" in scope or "#" in scope:
         raise ValueError("web-api-review URL must not contain a query string or fragment")
     if port not in (None, 443):
         raise ValueError("web-api-review only permits the default HTTPS port 443")
