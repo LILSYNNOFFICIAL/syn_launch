@@ -162,6 +162,23 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("pkg upgrade php", guide)
         self.assertIn("SYN_LAUNCH is implemented in Python", guide)
 
+    def test_catalog_rejects_malformed_php_security_advisory_metadata(self):
+        broken = copy.deepcopy(self.data)
+        php = next(tool for tool in broken["tools"] if tool["id"] == "php")
+        php["security_advisory"]["severity"] = "urgent"
+        with self.assertRaisesRegex(ValueError, "security advisory severity"):
+            APP.validate_catalog(broken)
+        broken = copy.deepcopy(self.data)
+        php = next(tool for tool in broken["tools"] if tool["id"] == "php")
+        php["security_advisory"]["upstream_advisory"] = "http://example.test/advisory"
+        with self.assertRaisesRegex(ValueError, "valid HTTPS URL"):
+            APP.validate_catalog(broken)
+        broken = copy.deepcopy(self.data)
+        php = next(tool for tool in broken["tools"] if tool["id"] == "php")
+        php["security_advisory"]["fixed_versions"]["8.5"] = "8.5.x"
+        with self.assertRaisesRegex(ValueError, "fixed versions"):
+            APP.validate_catalog(broken)
+
     def test_php_security_version_assessment_handles_fixed_and_vulnerable_versions(self):
         advisory = next(tool for tool in self.tools if tool["id"] == "php")["security_advisory"]
         assess = APP.assess_php_security_version
