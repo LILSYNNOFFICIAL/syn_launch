@@ -18,7 +18,7 @@
 |---|---|---|
 | Burp Suite native Termux assessment | **Not assessed; limitation documented** | PortSwigger's published desktop OS list does not include Android/Termux. Keep manual-only and `installable: false`. [Official requirements](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements). |
 | Wappalyzer native Termux assessment | **Not assessed; limitation documented** | Public npm package is deprecated; HTTP Archive is a fork of the last open-source version. Do not imply current official CLI or Termux support. [npm package](https://www.npmjs.com/package/wappalyzer), [HTTP Archive fork](https://github.com/HTTPArchive/wappalyzer). |
-| External HTTPS staging adapter | **Blocked / not run** | The adapter requires a user-provided URL for a system they own or are explicitly authorized to test. No authorized staging endpoint was supplied in this review. Follow [Compatibility and verification](Compatibility-and-Verification.md). |
+| External HTTPS staging adapter | **Response received; redirect destination unverified** | On 2026-10-22, one authorized HTTPS `HEAD` to `https://meepsheep.com/` returned `307 Temporary Redirect`. Redirects are not followed and `Location` is not retained, so the final destination is not verified. See [Compatibility and verification](Compatibility-and-Verification.md). |
 | Local regression suite after this documentation update | **Needs fresh verification** | Run `python -m unittest discover -s tests -v`, `python main.py --check`, `python -m json.tool catalog.json > /dev/null`, and `bash device_check.sh` in Termux. Review logs before sharing. |
 | CI for the resulting commit | **Not confirmed by this review** | Check the Actions page and commit status for the latest commit; do not infer CI success from earlier revisions. |
 | Release publication | **Conditional** | A release may accurately describe the above limitations, but must not claim external staging validation or universal tool compatibility. |
@@ -29,12 +29,12 @@
 - [ ] Run the unit/regression suite and catalog validation on the exact candidate revision.
 - [ ] Run `bash device_check.sh` in Termux and review the private evidence bundle.
 - [ ] Confirm GitHub Actions results for the exact candidate commit.
-- [ ] If external HTTPS staging validation is a release requirement, obtain the authorized endpoint, run the bounded one-request check, and record the result. Otherwise explicitly ship with that validation marked not run.
+- [x] Run the bounded one-request HTTPS check against the authorized `https://meepsheep.com/` scope; response received (`307 Temporary Redirect`). [ ] Verify the redirect destination separately within the authorized scope if required; this adapter does not follow redirects or retain `Location`.
 - [ ] Review README, category guides, changelog, license, and upstream notices for consistency.
 - [ ] Publish only claims supported by the recorded evidence.
 
 ## Release language
 
-Recommended wording: “SYN_LAUNCH is a Termux-first Android tool catalog with source-backed installation evidence for selected entries and bounded local diagnostics. Catalog presence and source declarations do not guarantee installation or runtime compatibility. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution. External HTTPS staging validation has not been run unless a specific authorized test report is attached.”
+Recommended wording: “SYN_LAUNCH is a Termux-first Android tool catalog with source-backed installation evidence for selected entries and bounded local diagnostics. Catalog presence and source declarations do not guarantee installation or runtime compatibility. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution. A bounded HTTPS HEAD check against `https://meepsheep.com/` received a 307 redirect; the redirect destination and full application behavior were not validated.”
 
 Do not describe the project as fully device-verified or every catalog entry as working.
