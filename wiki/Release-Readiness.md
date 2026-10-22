@@ -10,7 +10,7 @@
 - The Termux checkout was synchronized with `origin/main` before this documentation update; the final candidate commit is recorded by GitHub after publication.
 - The catalog contains 269 entries across 19 categories.
 - The README and compatibility guide document that 267 entries have source-backed declarations; Burp Suite and Wappalyzer remain unassessed for native Termux execution.
-- Existing diagnostics deliberately do not execute every catalog tool. On 2026-10-22, the device had 35 catalog executable matches on PATH, 31 bounded smoke probes passed, and 24 reviewed local-only functional checks passed. Four potentially side-effecting or network-oriented executables were skipped for smoke probing. These are limited checks, not full device certification; catalog-wide device validation remains `not_run`.
+- Existing diagnostics deliberately do not execute every catalog tool. On 2026-10-22, the device had 36 catalog executable matches on PATH, 32 bounded smoke probes passed, and 24 reviewed local-only functional checks passed through the built-in evidence reporter. Four potentially side-effecting or network-oriented executables were skipped for generic smoke probing. One additional package, ripgrep 15.2.0, was installed after a dry-run confirmed one new package and zero upgrades; its smoke probe and local temporary-file search assertion passed. These are limited checks, not full device certification; catalog-wide device validation remains `not_run`.
 
 ## Final-gap outcomes
 
@@ -33,6 +33,6 @@
 
 ## Release language
 
-Recommended wording: “SYN_LAUNCH is a Termux-first Android tool catalog with source-backed installation evidence for selected entries and bounded local diagnostics. On one Android 16 / Termux ARM64 device, 31 bounded smoke probes and 24 local functional assertions passed for available tools; this does not establish full tool compatibility or certify all 269 catalog entries. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution. A bounded HTTPS HEAD check against the owner-authorized `https://meepsheep.com/` scope followed a same-host redirect and received `200 OK`; this was not a vulnerability scan.”
+Recommended wording: “SYN_LAUNCH is a Termux-first Android tool catalog with source-backed installation evidence for selected entries and bounded local diagnostics. On one Android 16 / Termux ARM64 device, 32 bounded smoke probes and 24 built-in local functional assertions passed, plus one separate ripgrep local-search assertion; this does not establish full tool compatibility or certify all 269 catalog entries. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution. A bounded HTTPS HEAD check against the owner-authorized `https://meepsheep.com/` scope followed a same-host redirect and received `200 OK`; this was not a vulnerability scan.”
 
 Do not describe the project as fully device-verified or every catalog entry as working.
