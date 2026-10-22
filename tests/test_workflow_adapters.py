@@ -216,6 +216,79 @@ class WorkflowAdapterTests(unittest.TestCase):
         self.assertEqual(report["request"]["dns_timeout_seconds"], 3)
         self.assertEqual(report["execution"]["request_count"], 1)
 
+    def test_web_api_adapter_follows_bounded_same_host_redirects(self):
+        class Response:
+            def __init__(self, status, location=None):
+                self.status = status
+                self.reason = "Redirect" if status == 307 else "OK"
+                self.location = location
+            def getheaders(self):
+                return [("Location", self.location)] if self.location else [("Content-Type", "text/html")]
+
+        created = []
+        responses = [Response(307, "/final"), Response(200)]
+        class Connection:
+            def __init__(self, host, pinned_ip, timeout, context):
+                self.host, self.pinned_ip, self.timeout = host, pinned_ip, timeout
+                self.closed = False
+                self.request_args = None
+                self.response = responses[len(created)]
+                created.append(self)
+            def request(self, method, path, headers):
+                self.request_args = (method, path, headers)
+            def getresponse(self):
+                return self.response
+            def close(self):
+                self.closed = True
+
+        dns_answer = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        with patch("workflow_adapters.socket.getaddrinfo", return_value=dns_answer), patch(
+            "workflow_adapters._PinnedHTTPSConnection", side_effect=Connection
+        ):
+            report = run_web_api_review("https://staging.example.test/start")
+
+        self.assertEqual(report["request_status"], "response_received")
+        self.assertEqual(report["execution"]["request_count"], 2)
+        self.assertEqual([item.request_args[1] for item in created], ["/start", "/final"])
+        self.assertTrue(all(item.closed for item in created))
+        self.assertEqual(report["redirect_chain"][0]["redirect_target"],
+                         {"host": "staging.example.test", "path": "/final"})
+        self.assertTrue(report["redirect_chain"][0]["redirect_followed"])
+        self.assertEqual(report["response"]["status_code"], 200)
+        self.assertTrue(report["request"]["redirects_followed"])
+        self.assertFalse(report["response"]["redirect_response_not_followed"])
+
+    def test_web_api_adapter_records_but_does_not_follow_cross_host_redirect(self):
+        class Response:
+            status = 307
+            reason = "Temporary Redirect"
+            def getheaders(self):
+                return [("Location", "https://other.example.test/destination?secret=must-not-be-stored")]
+
+        class Connection:
+            def __init__(self, *args, **kwargs):
+                self.closed = False
+            def request(self, *args, **kwargs):
+                pass
+            def getresponse(self):
+                return Response()
+            def close(self):
+                self.closed = True
+
+        dns_answer = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        with patch("workflow_adapters.socket.getaddrinfo", return_value=dns_answer), patch(
+            "workflow_adapters._PinnedHTTPSConnection", Connection
+        ) as connection:
+            report = run_web_api_review("https://staging.example.test/")
+
+        connection.assert_called_once()
+        self.assertEqual(report["request_status"], "redirect_blocked_out_of_scope")
+        self.assertEqual(report["execution"]["request_count"], 1)
+        self.assertEqual(report["redirect_chain"][0]["redirect_target"],
+                         {"host": "other.example.test", "path": "/destination"})
+        self.assertNotIn("secret", json.dumps(report))
+        self.assertTrue(report["response"]["redirect_response_not_followed"])
+
     def test_web_api_adapter_rejects_unsafe_or_ambiguous_url_scope(self):
         invalid = (
             "http://staging.example.test/",
