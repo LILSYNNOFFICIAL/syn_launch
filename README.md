@@ -142,14 +142,14 @@ Each guide describes what every cataloged tool is used for, provides a starting 
 - [Wireless & Android Environment](wiki/Using-wireless-and-android-environment.md) — 10 tools
 - [Cloud, Containers & Misc](wiki/Using-cloud-containers-and-misc.md) — 26 tools
 - [Advanced Pentest & Exploit Research](wiki/Using-advanced-pentest-and-exploit-research.md) — 26 tools
-- [Web & API Assessment](wiki/Using-web-and-api-assessment.md) — 1 tools
+- [Web & API Assessment](wiki/Using-web-and-api-assessment.md) — 1 tool
 - [Active Directory & Windows](wiki/Using-active-directory-and-windows.md) — 12 tools
 - [Mobile App Security](wiki/Using-mobile-app-security.md) — 10 tools
 - [Cloud & Container Security](wiki/Using-cloud-and-container-security.md) — 12 tools
 - [Network & TLS Assessment](wiki/Using-network-and-tls-assessment.md) — 8 tools
 - [Developer & Supply Chain Security](wiki/Using-developer-and-supply-chain-security.md) — 5 tools
 - [Forensics & Reverse Engineering](wiki/Using-forensics-and-reverse-engineering.md) — 7 tools
-- [Privacy & Metadata](wiki/Using-privacy-and-metadata.md) — 1 tools
+- [Privacy & Metadata](wiki/Using-privacy-and-metadata.md) — 1 tool
 - [Password & Authentication Auditing](wiki/Using-password-and-authentication-auditing.md) — 3 tools
 
 ## Complete tool catalog
