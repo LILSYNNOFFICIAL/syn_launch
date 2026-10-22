@@ -784,7 +784,7 @@ def collect_resolved_version(tool):
 
 
 
-PHP_VERSION_PATTERN = re.compile(r"^(?:[0-9]+:)?([0-9]+)\\.([0-9]+)\\.([0-9]+)(?:[-+~].*)?$")
+PHP_VERSION_PATTERN = re.compile(r"^(?:[0-9]+:)?([0-9]+)\.([0-9]+)\.([0-9]+)(?:[-+~].*)?$")
 
 
 def assess_php_security_version(version_result, advisory):
@@ -825,7 +825,7 @@ def assess_php_security_version(version_result, advisory):
     report["parsed_version"] = {"major": major, "minor": minor, "patch": patch}
     report["branch_fixed_version"] = fixed_version
     if isinstance(fixed_version, str):
-        fixed_match = re.fullmatch(r"([0-9]+)\\.([0-9]+)\\.([0-9]+)", fixed_version)
+        fixed_match = re.fullmatch(r"([0-9]+)\.([0-9]+)\.([0-9]+)", fixed_version)
         if not fixed_match:
             report["status"] = "advisory_metadata_invalid"
             return report
