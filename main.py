@@ -104,6 +104,38 @@ def validate_catalog(data):
                 valid_evidence = False
             if not valid_evidence:
                 raise ValueError(f"compatibility evidence must be a valid HTTPS URL: {t['name']}")
+        security_advisory = t.get("security_advisory")
+        if security_advisory is not None:
+            if not isinstance(security_advisory, dict):
+                raise ValueError(f"invalid security advisory metadata: {t['name']}")
+            if security_advisory.get("severity") not in {"critical", "high", "medium", "low"}:
+                raise ValueError(f"invalid security advisory severity: {t['name']}")
+            if not isinstance(security_advisory.get("published_on"), str) or not re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", security_advisory["published_on"]):
+                raise ValueError(f"invalid security advisory date: {t['name']}")
+            cves = security_advisory.get("cves")
+            if not isinstance(cves, list) or not cves or any(not isinstance(cve, str) or not re.fullmatch(r"CVE-\\d{4}-\\d{4,}", cve) for cve in cves):
+                raise ValueError(f"invalid security advisory CVE list: {t['name']}")
+            fixed_versions = security_advisory.get("fixed_versions")
+            if not isinstance(fixed_versions, dict) or not fixed_versions or any(
+                not isinstance(branch, str) or not re.fullmatch(r"\\d+\\.\\d+", branch)
+                or not isinstance(version, str) or not re.fullmatch(r"\\d+\\.\\d+\\.\\d+", version)
+                for branch, version in fixed_versions.items()
+            ):
+                raise ValueError(f"invalid security advisory fixed versions: {t['name']}")
+            try:
+                advisory_url = urlsplit(security_advisory.get("upstream_advisory", ""))
+                valid_advisory_url = advisory_url.scheme == "https" and bool(advisory_url.hostname) and not advisory_url.username and not advisory_url.password and not any(ch.isspace() for ch in security_advisory["upstream_advisory"])
+                _ = advisory_url.port
+            except (ValueError, TypeError):
+                valid_advisory_url = False
+            if not valid_advisory_url:
+                raise ValueError(f"security advisory must be a valid HTTPS URL: {t['name']}")
+            recipe_revision = security_advisory.get("termux_recipe_revision")
+            if recipe_revision is not None and (not isinstance(recipe_revision, str) or not re.fullmatch(r"[0-9a-f]{40}", recipe_revision)):
+                raise ValueError(f"invalid security advisory source revision: {t['name']}")
+            note = security_advisory.get("note")
+            if note is not None and (not isinstance(note, str) or not note.strip() or len(note) > 1000):
+                raise ValueError(f"invalid security advisory note: {t['name']}")
         expected=t["install_kind"] in {"pkg","pip","go","cargo","npm"}
         if type(t.get("installable")) is not bool or t.get("installable") != expected: raise ValueError(f"installable flag mismatch: {t['name']}")
         if expected:
