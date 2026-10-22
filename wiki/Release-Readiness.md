@@ -28,7 +28,7 @@
 - [ ] Confirm the final `main` commit and clean working tree.
 - [x] Run the 135-test unit/regression suite, catalog JSON validation, and diff check on the current code revision.
 - [x] Run `bash device_check.sh` in Termux; all 12 checks passed. Private evidence bundle: `~/.syn_launch/device-check-20261022-041737/`.
-- [ ] Confirm GitHub Actions results for the exact final documentation commit.
+- [x] GitHub Actions passed for commit `366e584d0c1d8d5c4bdddb8c121346812211375f`: [Validate SYN_LAUNCH](https://github.com/LILSYNNOFFICIAL/syn_launch/actions/runs/39770273910) and [Sync repository docs to GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/actions/runs/39770273898). Any subsequent commit requires its own fresh CI check.
 - [x] Run the bounded HTTPS HEAD check against the authorized `https://meepsheep.com/` scope; the same-host redirect chain returned `307` then `200 OK` in two requests.
 
 ## Release language
