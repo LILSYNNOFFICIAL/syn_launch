@@ -111,7 +111,7 @@ Install paths describe what SYN_LAUNCH may attempt; they are not guarantees that
 
 SYN_LAUNCH deliberately distinguishes catalog metadata from evidence that a tool actually runs. Source-backed declarations describe the specific upstream recipe, package manifest, or source snapshot reviewed; they do not prove Android compatibility, current package availability, successful installation, ABI support, or runtime functionality.
 
-The latest catalog review records **267 source-backed compatibility declarations** and **2 entries still marked not assessed**: Burp Suite and Wappalyzer. Their status is intentionally not presented as verified. DNSGen has a pinned upstream source snapshot, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
+The latest catalog review records **267 source-backed compatibility declarations**. Two catalog entries remain unassessed: Burp Suite and Wappalyzer. Their status is intentionally not presented as verified. DNSGen now has a pinned upstream source revision, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
 
 Some entries require root, particular kernel capabilities, wireless hardware, companion applications, credentials, external services, or a separate Linux environment. Entries with those constraints are marked accordingly where known. Please read each tool's notes before attempting installation or use.
 
