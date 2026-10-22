@@ -783,6 +783,74 @@ def collect_resolved_version(tool):
     return result
 
 
+
+PHP_VERSION_PATTERN = re.compile(r"^(?:[0-9]+:)?([0-9]+)\\.([0-9]+)\\.([0-9]+)(?:[-+~].*)?$")
+
+
+def assess_php_security_version(version_result, advisory):
+    """Assess package-manager version metadata against a pinned PHP security advisory."""
+    version = version_result.get("resolved_version")
+    evidence = version_result.get("version_evidence", "unknown")
+    fixed = advisory.get("fixed_versions", {}) if isinstance(advisory, dict) else {}
+    report = {
+        "advisory_date": advisory.get("published_on") if isinstance(advisory, dict) else None,
+        "severity": advisory.get("severity", "unknown") if isinstance(advisory, dict) else "unknown",
+        "cves": advisory.get("cves", []) if isinstance(advisory, dict) else [],
+        "installed_package_version": version,
+        "version_evidence": evidence,
+        "fixed_versions": fixed,
+        "status": "unknown",
+        "checks": {
+            "network_requests_made": False,
+            "php_executable_run": False,
+            "package_changed": False,
+            "web_runtime_verified": False,
+        },
+        "limitations": [
+            "This checks Termux dpkg package metadata only; it does not execute PHP or change packages.",
+            "The CLI PHP package may differ from the runtime used by PHP-FPM, Apache, CGI, containers, or another web server.",
+            "A vendor may backport fixes to an older version string; verify the vendor advisory before treating an older version as vulnerable or fixed.",
+        ],
+    }
+    if not version:
+        report["status"] = "not_installed" if evidence == "not_found" else "version_unavailable"
+        return report
+    match = PHP_VERSION_PATTERN.fullmatch(version.strip())
+    if not match:
+        report["status"] = "version_unparseable"
+        return report
+    major, minor, patch = (int(part) for part in match.groups())
+    branch = f"{major}.{minor}"
+    fixed_version = fixed.get(branch)
+    report["parsed_version"] = {"major": major, "minor": minor, "patch": patch}
+    report["branch_fixed_version"] = fixed_version
+    if isinstance(fixed_version, str):
+        fixed_match = re.fullmatch(r"([0-9]+)\\.([0-9]+)\\.([0-9]+)", fixed_version)
+        if not fixed_match:
+            report["status"] = "advisory_metadata_invalid"
+            return report
+        fixed_parts = tuple(int(part) for part in fixed_match.groups())
+        report["status"] = "fixed_release_or_newer" if (major, minor, patch) >= fixed_parts else "update_required"
+    elif major == 8 and minor < 2:
+        report["status"] = "vendor_backport_or_upgrade_required"
+    else:
+        report["status"] = "release_line_not_assessed"
+    return report
+
+
+def php_security_report(data):
+    php_tool = next((tool for tool in data.get("tools", []) if tool.get("id") == "php"), None)
+    if not php_tool:
+        return {"status": "catalog_entry_missing", "checks": {"network_requests_made": False, "package_changed": False}}
+    advisory = php_tool.get("security_advisory", {})
+    version_result = collect_resolved_version(php_tool)
+    report = assess_php_security_version(version_result, advisory)
+    report["tool_id"] = "php"
+    report["source"] = "local Termux package-manager metadata"
+    report["advisory_url"] = advisory.get("upstream_advisory")
+    return report
+
+
 def progress(items,worker,label,confirmed=False):
     if not items: say("No items to install."); return
     good=0; failed=[]; results=[]
@@ -1564,6 +1632,7 @@ def main():
     parser.add_argument("--doctor",action="store_true",help="show detailed platform, architecture, runtime, and storage diagnostics")
     parser.add_argument("--profile",action="store_true",help="print machine-readable JSON device/runtime profile")
     parser.add_argument("--compatibility-report",action="store_true",help="print JSON catalog status and separately recorded bounded smoke-test evidence")
+    parser.add_argument("--php-security-check",action="store_true",help="check installed Termux PHP package metadata against the pinned 2026-10-21 critical security advisory; read-only")
     parser.add_argument("--smoke-test",metavar="NAME_OR_ID",help="run bounded tool-specific help/version probes for one explicitly selected tool")
     parser.add_argument("--functional-check",metavar="NAME_OR_ID",help="run one allowlisted local-only functional check for an explicitly selected tool")
     parser.add_argument("--list",action="store_true",help="list catalog entries")
@@ -1611,6 +1680,14 @@ def main():
         report["saved_report"] = str(report_path)
         print(json.dumps(report, indent=2, ensure_ascii=False))
         return 1 if report.get("request_status") in {"request_failed", "request_rejected"} else 0
+    if args.php_security_check:
+        report = php_security_report(data)
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        if report["status"] in {"fixed_release_or_newer", "not_installed"}:
+            return 0
+        if report["status"] in {"update_required", "vendor_backport_or_upgrade_required", "release_line_not_assessed", "catalog_entry_missing"}:
+            return 1
+        return 2
     if args.profile: print_environment_profile(data); return 0
     if args.compatibility_report: print_compatibility_report(data); return 0
     if args.smoke_test:
