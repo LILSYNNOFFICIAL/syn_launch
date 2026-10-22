@@ -145,6 +145,22 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("Android", metadata["platform"])
         self.assertFalse(metadata["root_required"])
 
+    def test_php_catalog_carries_current_critical_security_advisory(self):
+        php = next(tool for tool in self.tools if tool["id"] == "php")
+        advisory = php.get("security_advisory", {})
+        self.assertEqual(advisory.get("severity"), "critical")
+        self.assertEqual(advisory.get("cves"), ["CVE-2026-109618", "CVE-2026-109619"])
+        self.assertEqual(advisory.get("fixed_versions"), {
+            "8.5": "8.5.12", "8.4": "8.4.27", "8.3": "8.3.36", "8.2": "8.2.35"
+        })
+        metadata = php["compatibility"]
+        self.assertEqual(metadata["source_revision"], "c2bb85d3f26d52ba4a4a159d14214a8ace706235")
+        self.assertIn(metadata["source_revision"], metadata["source_snapshot_url"])
+        self.assertIn("critical", php["caveat"].lower())
+        guide = (ROOT / "wiki" / "PHP-Security-Update-2026-10-21.md").read_text(encoding="utf-8")
+        self.assertIn("pkg upgrade php", guide)
+        self.assertIn("SYN_LAUNCH is implemented in Python", guide)
+
     def test_catalog_rejects_invalid_compatibility_evidence(self):
         broken = copy.deepcopy(self.data)
         tool = next(t for t in broken["tools"] if t.get("compatibility"))
