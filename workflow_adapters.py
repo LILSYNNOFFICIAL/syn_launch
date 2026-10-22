@@ -273,7 +273,8 @@ def run_web_api_review(scope: str) -> dict:
         except ValueError as exc:
             raise ValueError("web-api-review URL is not valid") from exc
         if parts.scheme.lower() != "https" or not host_value:
-            raise ValueError("web-api-review requires HTTPS redirect targets")
+            message = "web-api-review requires an explicit HTTPS URL" if expected_host is None else "web-api-review requires HTTPS redirect targets"
+            raise ValueError(message)
         if parts.username is not None or parts.password is not None:
             raise ValueError("web-api-review does not permit credentials in URLs")
         if "?" in candidate or "#" in candidate or parts.query or parts.fragment:
