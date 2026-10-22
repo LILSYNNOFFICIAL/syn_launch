@@ -1,6 +1,6 @@
 # Workflow Planning
 
-SYN_LAUNCH creates reviewable JSON plans, supports three read-only local adapters, and provides one bounded HTTPS HEAD request adapter. It is not a general-purpose assessment engine.
+SYN_LAUNCH creates reviewable JSON plans, supports read-only local adapters, and provides a bounded HTTPS HEAD review adapter. It is not a general-purpose assessment engine.
 
 ## Available plans
 
@@ -29,13 +29,13 @@ Run a local Termux/device configuration inventory. The scope must be exactly `lo
 python main.py --workflow-run device-configuration-audit --target-scope local-device --authorized
 ```
 
-Make one HTTPS HEAD request to an explicitly authorized URL:
+Perform a bounded HTTPS HEAD review against an explicitly authorized URL:
 
 ```bash
 python main.py --workflow-run web-api-review --target-scope "https://staging.example.test/api/health" --authorized
 ```
 
-This performs a real network request. It permits only HTTPS on port 443, rejects embedded credentials, query strings, fragments, wildcards, and parent-directory path segments, uses certificate-verified TLS with a three-second DNS-resolution budget and a five-second socket timeout, does not follow redirects, and does not read the response body. Only an allowlist of response headers is retained. This is not a vulnerability scan.
+This performs real network requests. It permits only HTTPS on port 443, rejects embedded credentials, query strings, fragments, wildcards, and parent-directory path segments, uses certificate-verified TLS with a three-second DNS-resolution budget and a five-second socket timeout, and never reads response bodies. It follows at most three redirects, only when the redirect stays on the exact same hostname over HTTPS; cross-host and unsafe redirect targets are recorded in sanitized form and not followed. Only an allowlist of response headers is retained. This is not a vulnerability scan.
 
 Inventory an APK archive without extracting or executing it:
 
@@ -65,10 +65,12 @@ The target-scope value should identify the exact authorized assets or environmen
 - The planner does not invoke catalog executables, run scans, contact targets, change device state, or install packages.
 - The device adapter reads local runtime/path/storage/permission metadata and checks for optional PRoot/NetHunter command and rootfs markers only. It does not call subprocesses, contact networks, change settings, or alter packages.
 - The APK adapter hashes the selected file and reads ZIP entry names only. It does not extract, execute, decode the binary manifest, or validate the signature.
-- Web/API review currently performs one HEAD request only. It is not a scanner and must be used only against the exact authorized URL. The evidence-report adapter only validates and summarizes local JSON input; it does not verify the findings.
+- Web/API review performs a bounded HEAD request and may follow up to three safe same-host HTTPS redirects. It is not a scanner and must be used only against the exact authorized URL. The evidence-report adapter only validates and summarizes local JSON input; it does not verify the findings.
 - Plans are templates. They do not prove that a check was performed or that a target is secure.
 - Future command adapters must receive a separate safety review, scope enforcement, bounded execution, and tests before they can run anything.
 
 ## Errors
 
 The command exits with status 2 if the workflow is unknown, scope is missing or invalid, or the authorization declaration is absent. Use `--workflow-list` to retrieve the exact workflow IDs.
+
+[executed on device: localhost (d2cc1207-90f0-4617-b081-86736c11e33d)]
