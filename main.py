@@ -110,15 +110,15 @@ def validate_catalog(data):
                 raise ValueError(f"invalid security advisory metadata: {t['name']}")
             if security_advisory.get("severity") not in {"critical", "high", "medium", "low"}:
                 raise ValueError(f"invalid security advisory severity: {t['name']}")
-            if not isinstance(security_advisory.get("published_on"), str) or not re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", security_advisory["published_on"]):
+            if not isinstance(security_advisory.get("published_on"), str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", security_advisory["published_on"]):
                 raise ValueError(f"invalid security advisory date: {t['name']}")
             cves = security_advisory.get("cves")
-            if not isinstance(cves, list) or not cves or any(not isinstance(cve, str) or not re.fullmatch(r"CVE-\\d{4}-\\d{4,}", cve) for cve in cves):
+            if not isinstance(cves, list) or not cves or any(not isinstance(cve, str) or not re.fullmatch(r"CVE-\d{4}-\d{4,}", cve) for cve in cves):
                 raise ValueError(f"invalid security advisory CVE list: {t['name']}")
             fixed_versions = security_advisory.get("fixed_versions")
             if not isinstance(fixed_versions, dict) or not fixed_versions or any(
-                not isinstance(branch, str) or not re.fullmatch(r"\\d+\\.\\d+", branch)
-                or not isinstance(version, str) or not re.fullmatch(r"\\d+\\.\\d+\\.\\d+", version)
+                not isinstance(branch, str) or not re.fullmatch(r"\d+\.\d+", branch)
+                or not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", version)
                 for branch, version in fixed_versions.items()
             ):
                 raise ValueError(f"invalid security advisory fixed versions: {t['name']}")
