@@ -4,53 +4,72 @@
   <img src="img/file_00000000f48881fdb4a638a0643452e1.png" alt="SYN_LAUNCH logo" width="420">
 </p>
 
+<p align="center">
+  <strong>Hear the tools. Understand the limits. Test responsibly.</strong><br>
+  A mobile-first security and developer-tool catalog for Termux on Android.
+</p>
 
-[![Termux](https://img.shields.io/badge/platform-Termux%20%2F%20Android-00BCD4?logo=android&logoColor=white)](https://termux.dev/)
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Catalog](https://img.shields.io/badge/catalog-269%2B%20entries-brightgreen)](catalog.json)
-[![Use](https://img.shields.io/badge/use-authorized%20testing-orange)](#responsible-use)
+<p align="center">
+  <a href="https://termux.dev/"><img src="https://img.shields.io/badge/platform-Termux%20%2F%20Android-00BCD4?logo=android&logoColor=white" alt="Termux / Android"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10+"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT license"></a>
+  <a href="catalog.json"><img src="https://img.shields.io/badge/catalog-269%20tools-brightgreen" alt="269 catalog entries"></a>
+</p>
 
-**A mobile-first security platform foundation for Termux: searchable tool catalog, installer, and device/runtime diagnostics.**
+SYN_LAUNCH organizes security, networking, privacy, forensics, cloud, and developer tools into searchable categories. For each entry, it shows the tool's purpose, upstream project or source, installation approach, example command, and relevant caveats.
 
-SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, and example command. Local version/help probes are available only after you explicitly choose Help. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
+The app is designed to help you explore and manage tools—not to imply that every tool will work on every Android device. Catalog presence is not proof of installation, compatibility, successful execution, or authorization to use a tool against a target.
 
-> **Security notice (2026-10-21):** PHP released fixes for two critical remote-code-execution vulnerabilities. PHP is an optional catalog package, not SYN_LAUNCH's runtime. If you use PHP, see the [fixed versions and update instructions](wiki/PHP-Security-Update-2026-10-21.md) and verify the PHP version used by any web-serving service.
+## Contents
 
-**Important:** cataloged does not mean installed, compatible, or verified on every phone. Termux is not desktop Linux. Android permissions, kernel features, CPU architecture, package repositories, Python wheels, native libraries, external adapters, and root access all affect compatibility. PATH detection is discovery only. SYN_LAUNCH reports compatibility as unknown/not assessed until there is explicit metadata or evidence, and it does not claim a tool works merely because its executable name appears in PATH.
+- [Quick start](#quick-start)
+- [Run diagnostics](#run-diagnostics)
+- [Command-line options](#command-line-options)
+- [How to read the catalog](#how-to-read-the-catalog)
+- [Complete tool catalog](#complete-tool-catalog)
+- [Personal catalog and favorites](#personal-catalog-and-favorites)
+- [Security and responsible use](#security-and-responsible-use)
+- [Documentation](#documentation)
+- [Development and testing](#development-and-testing)
+- [Contributing and license](#contributing-and-license)
 
 ## Quick start
 
-Install Termux from a maintained source such as [F-Droid](https://f-droid.org/packages/com.termux/) or the [official Termux GitHub](https://github.com/termux/termux-app). Do not mix Termux apps/plugins from incompatible signing sources.
+Install Termux from a maintained source, such as [F-Droid](https://f-droid.org/packages/com.termux/) or the [official Termux app repository](https://github.com/termux/termux-app). Avoid mixing Termux apps and plugins signed by incompatible sources.
 
-~~~bash
+Run these commands in Termux:
+
+```bash
 pkg update -y
 pkg install -y git python
 git clone https://github.com/LILSYNNOFFICIAL/syn_launch.git
 cd syn_launch
 bash install.sh
-~~~
-
-Start the app:
-
-~~~bash
 python main.py
-~~~
+```
 
-Rich is optional; without it the app uses a plain-text interface.
+The optional Rich dependency provides a richer terminal interface. Without it, SYN_LAUNCH falls back to plain text.
 
-To collect a private, read-only diagnostic bundle on an Android/Termux device after pulling the latest code, run:
+## Run diagnostics
+
+To run the project's local diagnostic script after updating your checkout:
 
 ```bash
 bash device_check.sh
 ```
 
-The script runs syntax checks, the unit suite, environment diagnostics, a compatibility report, and a bounded Python help/version probe. It does not install packages, contact targets, or execute the catalog's security tools. It does not mark device validation as passed; inspect the output bundle before sharing it.
+The script performs syntax checks, runs the test suite, gathers environment diagnostics, generates a compatibility report, and performs a bounded Python help/version probe. It does **not** install packages, contact assessment targets, or execute the catalog's security tools.
 
-## Command-line modes
+The output is intended for local review. Diagnostic output can contain device and environment details, so review it and redact sensitive information before sharing.
 
-~~~bash
+## Command-line options
+
+Examples:
+
+```bash
 python main.py --check
+python main.py --doctor
+python main.py --profile
 python main.py --list
 python main.py --search nuclei
 python main.py --category "Mobile App Security"
@@ -59,221 +78,465 @@ python main.py --compatibility-report > compatibility-report.json
 python main.py --smoke-test python
 python main.py --functional-check jq
 python main.py --php-security-check
-~~~
+```
 
-- `--check` validates the catalog and reports a concise runtime summary.
-- `--doctor` reports architecture, Android/Termux signals, process UID, free storage, available runtimes, and catalog install-method counts.
-- `--profile` prints a machine-readable JSON runtime profile. Detection signals do not certify individual tools as compatible.
-- `--php-security-check` reads the installed Termux `php` package version from `dpkg-query` and compares it with the pinned 21 October 2026 PHP critical-security advisory. It makes no network requests, does not execute PHP, and does not update packages. It cannot verify a separate PHP-FPM/Apache/container runtime; use the [PHP security update guide](wiki/PHP-Security-Update-2026-10-21.md).
-- `--compatibility-report` prints report schema 4 JSON for every catalog entry, separating declared installability, PATH detection, compatibility metadata, smoke-test evidence, functional-check evidence, and device-validation evidence. Missing compatibility metadata is reported as `not_assessed`. The report itself never executes cataloged tools; it reads previously saved evidence. Use `--smoke-test NAME_OR_ID` for bounded help/version probes or `--functional-check NAME_OR_ID` for one explicitly selected, allowlisted local-only functional check. Functional checks use temporary files, fixed argument arrays, short timeouts, and a combined stdout/stderr output cap enforced while each child runs. The reviewed adapters cover local JSON, copy, SQLite, archive, hashing, SSH-key, compiler/binary, Git, curl `file://`, offline npm metadata, make, SSH config expansion, and current-process/file-descriptor inspection (`ps` and `lsof`). Unsupported executables are not run and return a nonzero CLI exit status so automation cannot mistake an unexecuted check for a pass. Network/probing tools (`wget`, `ping`, `telnet`, `ssh-keyscan`), interactive tools (`nano`, `less`, `watch`), device-state-changing tools (`termux-wake-lock`), app-launching tools (`termux-open`), and environment-reporting tools (`termux-info`, `ifconfig`) intentionally have no functional adapter. Results are stored separately in `~/.syn_launch/functional_checks.json`, and stale results are marked if the executable path or file identity changes. A passing check verifies only its named assertion, not full tool functionality, security, or device compatibility. Device validation remains `not_run`; a PATH match is discovery only.
-- Bulk installer actions run a preflight that checks free storage, selected package/module counts, and required package-manager/runtime commands before attempting installation. Low or unknown storage and missing runtimes are disclosed; warnings require an explicit `CONTINUE`. This is advisory, does not estimate exact download sizes, and does not verify tool functionality. The latest report is saved privately to `~/.syn_launch/last_preflight.json`. Install summaries also capture the most recent installer subprocess command, label, exit code, timeout/launch failure, timestamps, and bounded-output metadata when a subprocess actually ran. A missing exit code is expected for pre-existing PATH matches or validation failures that never launched a subprocess. Each batch record preserves the requested catalog package and any explicitly pinned Go module version. After each operation attempt, whether it returned success or failure, SYN_LAUNCH queries installed metadata using `dpkg-query` for Termux packages and the isolated environment's Python `importlib.metadata` API for Python packages, emitting only the version string. A resolved version is recorded only when the package manager returns version metadata; query failures, missing packages, and unsupported package managers remain explicit, and this metadata is not a functional test. Go module versions are read from bounded `go version -m` build metadata without launching the tool; Cargo versions come from Cargo's local install metadata, and npm versions come from the installed package's `package.json`. Cargo metadata reads are capped at 2 MiB, npm package metadata at 1 MiB, and the npm global-root query at 4 KiB. Ambiguous Cargo versions are left unresolved. Batch summaries include a bounded metadata-only post-install status that never executes the cataloged tool; `verification` remains `not_run`. The selected-tool menu supports explicitly confirmed updates for Termux packages, isolated Python packages, Go modules, Cargo crates, and global npm packages, plus uninstall for Termux packages, isolated Python packages, Cargo crates, and global npm packages. Go/manual/root uninstall remains unsupported until package ownership can be established safely. Each attempt writes a private JSONL lifecycle audit record with before/after metadata and subprocess evidence. Updates are not automatically reversible, may alter dependencies, and a successful package-manager exit is not a functional test.
-- `--list` lists the catalog and current PATH-based status.
-- `--search` searches tool names, categories, and descriptions.
-- `--category` lists tools from a category.
-- `--tool` displays a tool's metadata without executing the local binary. In the interactive menu, choose Help to request bounded help/version probing.
+- **`--check`** validates the catalog and prints a concise runtime summary.
+- **`--doctor`** reports device architecture, Android/Termux signals, process UID, storage, available runtimes, and catalog install-method counts.
+- **`--profile`** emits a machine-readable runtime profile. Runtime detection does not verify individual tools.
+- **`--list`, `--search`, and `--category`** help browse the catalog.
+- **`--tool`** displays metadata for one tool. Browsing does not execute the tool.
+- **`--smoke-test`** performs a bounded help/version probe for one explicitly selected entry.
+- **`--functional-check`** runs one explicitly selected, allowlisted local-only check. Unsupported tools are not run.
+- **`--compatibility-report`** emits JSON that separates installation metadata, PATH discovery, compatibility declarations, smoke-test evidence, functional-check evidence, and device validation.
+- **`--php-security-check`** checks the installed Termux PHP package version against the project's pinned advisory data. It makes no network requests, does not execute PHP, and does not update packages. See the [PHP security update guide](wiki/PHP-Security-Update-2026-10-21.md).
 
-## Documentation and project wiki
+The diagnostic and functional-check systems use bounded execution, temporary files where applicable, and limited captured output. A successful package-manager command or a PATH match is not a functional test. Device-level verification remains separate from source and packaging evidence.
+
+## How to read the catalog
+
+The catalog contains **269 entries across 19 categories**. Each tool name below links to the source URL recorded in `catalog.json`. Where available, a second link points to the package recipe or pinned evidence used by SYN_LAUNCH to document its installation path or source review.
+
+Install paths describe what SYN_LAUNCH may attempt; they are not guarantees that installation will succeed.
+
+| Label | Meaning |
+|---|---|
+| **Termux package** | SYN_LAUNCH can attempt to install the declared package through Termux's package manager. Availability depends on repositories, package revision, Android version, and CPU architecture. |
+| **Python package** | The catalog declares a Python package, generally installed into SYN_LAUNCH's isolated virtual environment. Native dependencies may not support Android. |
+| **Go module** | The catalog declares a Go installation path. Builds can fail due to Android/architecture constraints or upstream changes. |
+| **Cargo crate** | The catalog declares a Rust/Cargo install path. Compilation and native dependencies can be limiting on Android. |
+| **npm package** | The catalog declares an npm package install path. Runtime and dependency compatibility are not guaranteed. |
+| **Manual / Root/manual** | No automatic installation is declared. The tool may require a desktop/Linux environment, root access, hardware, permissions, or additional setup. |
+
+### Compatibility and evidence
+
+SYN_LAUNCH deliberately distinguishes catalog metadata from evidence that a tool actually runs. Source-backed declarations describe the specific upstream recipe, package manifest, or source snapshot reviewed; they do not prove Android compatibility, current package availability, successful installation, ABI support, or runtime functionality.
+
+The latest catalog review records **267 source-backed compatibility declarations** and **2 entries still marked not assessed**: Burp Suite and Wappalyzer. Their status is intentionally not presented as verified. DNSGen has a pinned upstream source snapshot, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
+
+Some entries require root, particular kernel capabilities, wireless hardware, companion applications, credentials, external services, or a separate Linux environment. Entries with those constraints are marked accordingly where known. Please read each tool's notes before attempting installation or use.
+
+## Complete tool catalog
+
+The lists below include every catalog entry and group each tool under its configured category. Tool descriptions are kept brief for scanning; open an entry in SYN_LAUNCH or follow its source link for more detail.
+
+### Termux Core
+
+25 tools in this category.
+
+- [Clang](https://github.com/termux/termux-packages) — C/C++ compiler toolchain for native builds where Android dependencies permit. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/libllvm). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [curl](https://github.com/termux/termux-packages) — HTTP client for API testing, response headers, TLS troubleshooting, and downloads. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/libcurl). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [fd](https://github.com/termux/termux-packages) — Fast file finder with sensible defaults and filtering. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/fd). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [file](https://github.com/termux/termux-packages) — Identify file types from file signatures and content. **Install path:** Termux package · [packaging/evidence](https://github.com/file/file/blob/4ee5ca8fb938c3168bcededd0ce7c2e03daea485/README.md). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [fzf](https://github.com/termux/termux-packages) — Interactive fuzzy finder for files, history, and command output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/fzf). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [git](https://github.com/termux/termux-packages) — Distributed version control for source code, change history, and repository collaboration. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/git). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Go](https://github.com/termux/termux-packages) — Go compiler and module toolchain for supported upstream command-line tools. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/golang). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [jq](https://github.com/termux/termux-packages) — Parse, filter, and transform JSON from APIs, logs, and command-line pipelines. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/jq). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [less](https://github.com/termux/termux-packages) — Page through long command output and text files. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/less). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Make](https://github.com/termux/termux-packages) — Terminal, programming, file, and package-management utility for Termux workflows. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/make). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [nano](https://github.com/termux/termux-packages) — Simple terminal text editor for configuration and notes. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/nano). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Node.js](https://github.com/termux/termux-packages) — JavaScript runtime and npm ecosystem for developer and security tools. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/nodejs). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [openssh](https://github.com/termux/termux-packages) — SSH client and key-management tools for authorized remote administration. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/openssh). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Perl](https://github.com/termux/termux-packages) — Perl runtime used by many classic command-line and security utilities. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/perl). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [PHP](https://github.com/termux/termux-packages) — PHP runtime for application testing and local development. Critical security update (2026-10-21): upgrade promptly; see the PHP security advisory in the project wiki. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/php). _Note:_ CRITICAL SECURITY UPDATE 2026-10-21: CVE-2026-109618 and CVE-2026-109619 allow unauthenticated remote code execution in affected PHP web-serving installations. Fixed upstream releases: 8.5.12, 8.4.27, 8.3.36, 8.2.35. Termux's upstream recipe now targets 8.5.12, but installed repository metadata may lag; refresh packages, update PHP, then verify with php -v. See wiki/PHP-Security-Update-2026-10-21.md.
+- [Python](https://github.com/termux/termux-packages) — Python runtime for scripts and Python-based security utilities. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/python). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [ripgrep](https://github.com/termux/termux-packages) — Fast recursive text search for source code, logs, and forensic notes. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/ripgrep). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [rsync](https://github.com/termux/termux-packages) — Synchronize files and preserve metadata between local or remote paths. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/rsync). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Ruby](https://github.com/termux/termux-packages) — Ruby runtime for scripts and tools that depend on Ruby gems. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/ruby). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Rust](https://github.com/termux/termux-packages) — Rust compiler and Cargo package manager for native command-line utilities. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/rust). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [sqlite3](https://github.com/termux/termux-packages) — Inspect and query SQLite databases from the terminal. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/libsqlite). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [tmux](https://github.com/termux/termux-packages) — Terminal multiplexer for persistent sessions and split panes. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/tmux). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [tree](https://github.com/termux/termux-packages) — Display directory structures as readable trees. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/tree). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [vim](https://github.com/termux/termux-packages) — Modal terminal text editor for code and configuration. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/vim). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [wget](https://github.com/termux/termux-packages) — Command-line file downloader with support for common HTTP and FTP workflows. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/wget). _Note:_ Package availability differs by Termux repository, architecture, and release.
+
+### Network & DNS
+
+23 tools in this category.
+
+- [arp-scan](https://github.com/royhills/arp-scan) — Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test. **Install path:** Root/manual · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/arp-scan). _Note:_ Root or special kernel/network capabilities required; not expected to work on stock Android.
+- [DNS utils](https://github.com/termux/termux-packages) — DNS query utilities including dig and nslookup for name-resolution troubleshooting. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/dnsutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [hping3](https://github.com/antirez/hping) — Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test. **Install path:** Manual · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/hping3). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [HTTPie](https://github.com/termux/termux-packages) — Human-friendly HTTP client for API requests and response inspection. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/httpie). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [inetutils](https://github.com/termux/termux-packages) — Network utilities including tools such as telnet and ftp clients. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/inetutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [iperf3](https://github.com/termux/termux-packages) — Measure network throughput between endpoints you control. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/iperf3). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [iproute2](https://github.com/termux/termux-packages) — Modern IP address, link, and route inspection utilities. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/iproute2). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [mitmproxy](https://pypi.org/project/mitmproxy/) — Interactive HTTP(S) proxy for debugging your own apps and test traffic. **Install path:** Python package · [packaging/evidence](https://github.com/mitmproxy/mitmproxy/blob/77355977e5ea540b51ed029a40ed1dc2f1c2ba7b/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [MTR](https://github.com/termux/termux-packages) — Combine route tracing and repeated latency/loss measurements. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/mtr). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Ncat](https://github.com/termux/termux-packages) — Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/nmap). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [net-tools](https://github.com/termux/termux-packages) — Legacy network utilities such as ifconfig and netstat. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/net-tools). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Netcat](https://github.com/termux/termux-packages) — Network diagnostics or protocol utility for inspecting connectivity, DNS, routes, or traffic. Use only on networks you own or are authorized to test. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/netcat-openbsd). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Nmap](https://nmap.org/) — Network discovery, service identification, and port auditing. Scan only authorized hosts. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/nmap). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [OpenSSL](https://github.com/termux/termux-packages) — TLS client, certificate inspection, and cryptographic command-line utilities. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/openssl). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [ping](https://github.com/termux/termux-packages) — Check reachability and latency where Android permissions permit ICMP. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/inetutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [socat](https://github.com/termux/termux-packages) — Bidirectional data relay for authorized networking and troubleshooting. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/socat). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [tcpdump](https://github.com/termux/termux-packages) — Capture and inspect packets when device permissions and kernel support allow it. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/tcpdump). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Termux API](https://github.com/termux/termux-packages) — Android integration commands require the Termux:API companion app. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-api). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Termux services](https://github.com/termux/termux-packages) — Manage supported Termux background services using runit. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-services). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Termux wake lock](https://github.com/termux/termux-packages) — Keep the device awake during a user-requested long-running Termux task. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-tools). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Traceroute](https://github.com/termux/termux-packages) — Inspect network paths and hop behavior toward a destination. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/traceroute). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Whois](https://github.com/termux/termux-packages) — Query domain and IP registration records from supported registry services. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/whois). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [xh](https://github.com/termux/termux-packages) — Fast HTTP client inspired by HTTPie, useful for API troubleshooting. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/xh). _Note:_ Termux package recipe is documented at a pinned upstream revision; actual repository availability and device runtime remain unverified.
+
+### OSINT & Recon
+
+25 tools in this category.
+
+- [Amass](https://github.com/owasp-amass/amass) — Attack-surface mapping and asset discovery for authorized domains. **Install path:** Manual · [packaging/evidence](https://github.com/owasp-amass/amass/blob/79299dce87b0085db0f2f4ef3e9c52cccb49f514/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [anew](https://github.com/tomnomnom/anew) — Append unique lines to files for repeatable recon pipelines. **Install path:** Go module · [packaging/evidence](https://github.com/tomnomnom/anew/blob/d67d68db0d56469fdea7505c5a9209c0a465effa/go.mod). _Note:_ Review pipeline inputs before writing results to persistent files.
+- [assetfinder](https://pkg.go.dev/github.com/tomnomnom/assetfinder) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/tomnomnom/assetfinder/blob/4e95d8701aae8cff1c27af2626eb22ba110ad583/README.md). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [dnstwist](https://github.com/elceef/dnstwist) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Python package · [packaging/evidence](https://github.com/elceef/dnstwist/blob/341395377f40761fe4152f43fd18eea757b6069a/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [dnsx](https://pkg.go.dev/github.com/projectdiscovery/dnsx/cmd/dnsx) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/dnsx/blob/eab63beacfde09ea66b9383229b127f00befe7ce/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [email-validator](https://pypi.org/project/email-validator/) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Python package · [packaging/evidence](https://github.com/JoshData/python-email-validator/blob/4f3293942e624a7630083c66930127102433ccb1/setup.cfg). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [gau](https://pkg.go.dev/github.com/lc/gau/v2/cmd/gau) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/lc/gau/blob/4eabace309877abb231def9eeb27b96c07ed3635/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [gauplus](https://pkg.go.dev/github.com/bp0lr/gauplus) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/bp0lr/gauplus/blob/15a2900b88092da32ba45860e76527985421ec8e/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [h8mail](https://github.com/khast3x/h8mail) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Python package · [packaging/evidence](https://github.com/khast3x/h8mail/blob/ee31c8ff6d148580047ae5048fea2234decb5932/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [holehe](https://pypi.org/project/holehe/) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Python package · [packaging/evidence](https://github.com/megadose/holehe/blob/14da70f588538936b20d238783c5e28a0772a2b3/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [httpx](https://pkg.go.dev/github.com/projectdiscovery/httpx/cmd/httpx) — ProjectDiscovery's Go HTTP probe for scoped web assets, not Python httpx. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/httpx/blob/482ce7bc66584a678fa7fe89c906a9ccafa7bc92/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [katana](https://pkg.go.dev/github.com/projectdiscovery/katana/cmd/katana) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/katana/blob/3e650646252e4a763d0fc230aff8bf96a3d86303/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [Maigret](https://github.com/soxoj/maigret) — Username OSINT across supported websites. **Install path:** Python package · [packaging/evidence](https://github.com/soxoj/maigret/blob/eaf820666d15bfd545129f3223e2261c27191e74/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [naabu](https://pkg.go.dev/github.com/projectdiscovery/naabu/v2/cmd/naabu) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/naabu/blob/25d4a43927a5d4508a765b33b0b2659349f6d71e/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [OSRFramework](https://github.com/i3visio/osrframework) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Python package · [packaging/evidence](https://github.com/osinter-project/osrframework/blob/82f9e4637a9ef3cdabe85b31f42bce9a5a880e1e/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [PhoneInfoga](https://github.com/sundowndev/phoneinfoga) — Phone-number format and public metadata OSINT; it does not reveal live GPS location. **Install path:** Go module · [packaging/evidence](https://github.com/sundowndev/phoneinfoga/blob/55807b05b753dab7bc6fe67403ca385668dda179/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [PureDNS](https://github.com/d3mondev/puredns) — Resolve and validate large candidate domain lists for scoped reconnaissance. **Install path:** Go module · [packaging/evidence](https://github.com/d3mondev/puredns/blob/46bd4c963ec2b28c5241c03c161bdc41bb93fdc0/go.mod). _Note:_ Large resolver workloads can burden DNS infrastructure; use approved resolvers and conservative rates.
+- [recon-ng](https://github.com/lanmaster53/recon-ng) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Python package · [packaging/evidence](https://github.com/lanmaster53/recon-ng/blob/32b08fe7b6993ca1f2d8f76ba8f5d23c7f34a11d/REQUIREMENTS). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Sherlock](https://github.com/sherlock-project/sherlock) — Search supported public websites for a username's public profiles. **Install path:** Python package · [packaging/evidence](https://github.com/sherlock-project/sherlock/blob/e40a45ec2a074b90703b3b4b842c8a3adbd6ada3/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [SpiderFoot](https://github.com/smicallef/spiderfoot) — Automated OSINT collection and correlation; resource-intensive on some Android devices. **Install path:** Python package · [packaging/evidence](https://github.com/smicallef/spiderfoot/blob/0f815a203afebf05c98b605dba5cf0475a0ee5fd/requirements.txt). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [subfinder](https://pkg.go.dev/github.com/projectdiscovery/subfinder/v2/cmd/subfinder) — Passive subdomain discovery for domains in your authorized scope. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/subfinder/blob/7d9038297953f6a953ba3eb009fb859993959d00/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [theHarvester](https://github.com/laramies/theHarvester) — Collect public-source domain, email, and host metadata for scoped reconnaissance. **Install path:** Python package · [packaging/evidence](https://github.com/laramies/theHarvester/blob/49a38f8d33c32336bbf6a111ea723ea223116265/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [unfurl](https://pkg.go.dev/github.com/tomnomnom/unfurl) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/tomnomnom/unfurl/blob/8f10d050f1b0be12e505053da174f3f39e8eed74/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [urlcrazy](https://github.com/urbanadventurer/urlcrazy) — Generate domain permutations to support defensive typosquatting and lookalike-domain review. **Install path:** Manual · [packaging/evidence](https://github.com/urbanadventurer/urlcrazy/blob/78bf6e855d6d83e387ae3b5c8ffc36f241b96f66/Gemfile). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [waybackurls](https://pkg.go.dev/github.com/tomnomnom/waybackurls) — Reconnaissance utility for collecting public-source identity or asset metadata. Respect provider terms, privacy, and engagement scope. **Install path:** Go module · [packaging/evidence](https://github.com/tomnomnom/waybackurls/blob/8d27cf3e3031de01179e8ba9127e968eb01008e9/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+
+### Web App Testing
+
+22 tools in this category.
+
+- [Burp Suite](https://portswigger.net/burp) — Web application testing proxy from PortSwigger; desktop Java support is normally required. **Install path:** Manual. _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Commix](https://github.com/commixproject/commix) — Command-injection testing framework for controlled authorized assessments. **Install path:** Manual · [packaging/evidence](https://github.com/commixproject/commix/blob/289ff2285ee25410e8f150f4ddf124a8e2ab2a7e/setup.py). _Note:_ Potentially executes commands on vulnerable targets; lab or written authorization only.
+- [Corsy](https://github.com/s0md3v/Corsy) — Check CORS configuration for common security misconfigurations. **Install path:** Manual · [packaging/evidence](https://github.com/s0md3v/Corsy/blob/2985ae24da524ba6905d36bfbadca7fe71a9f199/requirements.txt). _Note:_ Only test approved origins and endpoints.
+- [curlie](https://github.com/termux/termux-packages) — Web application assessment utility for authorized testing. Review request behavior and rate limits before active use. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/curlie). _Note:_ Termux package recipe is documented at a pinned upstream revision; actual repository availability and device runtime remain unverified.
+- [dirsearch](https://github.com/maurosoria/dirsearch) — Web application assessment utility for authorized testing. Review request behavior and rate limits before active use. **Install path:** Python package · [packaging/evidence](https://github.com/maurosoria/dirsearch/blob/b45e01bb891457d6846e6af0a3755e032f937d78/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Feroxbuster](https://github.com/termux/termux-packages) — Recursive content discovery for authorized web assessments. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/feroxbuster). _Note:_ Termux package recipe is documented at a pinned upstream revision; actual repository availability and device runtime remain unverified.
+- [ffuf](https://github.com/ffuf/ffuf) — Fast web fuzzer for authorized content and parameter discovery. **Install path:** Go module · [packaging/evidence](https://github.com/ffuf/ffuf/blob/8d65e0373e5f223530174e5694285af849770078/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [Gobuster](https://github.com/OJ/gobuster) — Web application assessment utility for authorized testing. Review request behavior and rate limits before active use. **Install path:** Go module · [packaging/evidence](https://github.com/OJ/gobuster/blob/c77583fbb8824058d74d38240896eff610683c8e/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [gowitness](https://github.com/sensepost/gowitness) — Capture website screenshots for visual review of authorized web assets. **Install path:** Go module · [packaging/evidence](https://github.com/sensepost/gowitness/blob/601c84367aaf26eae7d1b5181b70633cb662cf66/go.mod). _Note:_ Browser dependencies and architecture support may be limited on Android; screenshots can contain sensitive data.
+- [hakrawler](https://github.com/hakluke/hakrawler) — Crawl links from authorized web applications. **Install path:** Go module · [packaging/evidence](https://github.com/hakluke/hakrawler/blob/52a16fe61bd18b8f431b9d66058cba12e96e4451/go.mod). _Note:_ Crawling creates requests; limit it to approved hosts.
+- [JWT Tool](https://github.com/ticarpi/jwt_tool) — Inspect and test JSON Web Tokens in a controlled lab or authorized application. **Install path:** Manual · [packaging/evidence](https://github.com/ticarpi/jwt_tool/blob/3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b/requirements.txt). _Note:_ Never paste production tokens into public services.
+- [Nikto](https://github.com/sullo/nikto) — Web server misconfiguration and known-file checks for authorized targets. **Install path:** Manual · [packaging/evidence](https://github.com/sullo/nikto/blob/312645d873478a77986627ab1fc8cffe595e85d4/program/nikto.pl). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [OWASP ZAP](https://www.zaproxy.org/) — Web application security proxy and scanner; desktop/Java environment is normally required. **Install path:** Manual · [packaging/evidence](https://github.com/zaproxy/zaproxy/blob/e06ba5ee209e27a9a81ff16e17696d6b59757d3a/build.gradle.kts). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [qsreplace](https://github.com/tomnomnom/qsreplace) — Replace query-string values in URL lists for controlled testing workflows. **Install path:** Go module · [packaging/evidence](https://github.com/tomnomnom/qsreplace/blob/320475befaf66d986400aa8c3ed9b43e0b6b5a02/go.mod). _Note:_ Use only with URL lists collected within your authorized scope.
+- [Smuggler](https://github.com/defparam/smuggler) — Check for potential HTTP request-smuggling conditions in controlled environments. **Install path:** Manual · [packaging/evidence](https://github.com/defparam/smuggler/blob/2be871e6151ce85167a277fab21c74c851d8b20b/README.md). _Note:_ Potentially disruptive protocol tests; use a staging target and written approval.
+- [sqlmap](https://github.com/sqlmapproject/sqlmap) — Automate SQL injection testing only on explicitly authorized targets. **Install path:** Termux package · [packaging/evidence](https://github.com/sqlmapproject/sqlmap/blob/9a1660aa120c526f68b637e5f232137722353522/README.md). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [tplmap](https://github.com/epinna/tplmap) — Server-side template injection testing for authorized applications. **Install path:** Manual · [packaging/evidence](https://github.com/epinna/tplmap/blob/616b0e527f62dd0930e6346ede6bef79e9bcf717/requirements.txt). _Note:_ Potentially intrusive; use labs or approved scope.
+- [Wapiti](https://github.com/wapiti-scanner/wapiti) — Web application assessment utility for authorized testing. Review request behavior and rate limits before active use. **Install path:** Python package · [packaging/evidence](https://github.com/wapiti-scanner/wapiti/blob/1e816981319a974f250caab219c0eb19c028e990/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Wappalyzer](https://github.com/wappalyzer/wappalyzer) — Identify web technologies and frameworks from supported page signals. **Install path:** Manual. _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Wfuzz](https://github.com/xmendez/wfuzz) — Web application assessment utility for authorized testing. Review request behavior and rate limits before active use. **Install path:** Python package · [packaging/evidence](https://github.com/xmendez/wfuzz/blob/2263cd0932fef333118cd197656f709141bab615/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [WhatWeb](https://github.com/urbanadventurer/WhatWeb) — Web application assessment utility for authorized testing. Review request behavior and rate limits before active use. **Install path:** Termux package · [packaging/evidence](https://github.com/urbanadventurer/WhatWeb/blob/d279d93042d034f3fd29d5a893d44ccc0595d3f8/README.md). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [XSStrike](https://github.com/s0md3v/XSStrike) — XSS detection and context analysis for authorized web testing. **Install path:** Manual · [packaging/evidence](https://github.com/s0md3v/XSStrike/blob/ab27955d367432f944d8f29897e09c15356e76f7/requirements.txt). _Note:_ Active probes can trigger application behavior.
+
+### Audit, SAST & Supply Chain
+
+20 tools in this category.
+
+- [Bandit](https://github.com/PyCQA/bandit) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/PyCQA/bandit/blob/68ebe11ef79263be27ec223184b94a4fc394a622/setup.cfg). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [cargo-audit](https://github.com/termux/termux-packages) — Check Rust dependency lockfiles against RustSec advisories. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/cargo-audit). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [Checkov](https://github.com/bridgecrewio/checkov) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/bridgecrewio/checkov/blob/7a6782e3d81e19f1bdd9213129f3138767691f5f/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [checksec](https://github.com/slimm609/checksec.sh) — Inspect binary security properties such as PIE, NX, canaries, and RELRO. **Install path:** Manual · [packaging/evidence](https://github.com/slimm609/checksec/blob/0ee6a029b99be2f7d664b0b08881cfc7a83e5122/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [detect-secrets](https://pypi.org/project/detect-secrets/) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/Yelp/detect-secrets/blob/5e141933554a0b74e7341841f318be21e895339c/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Gitleaks](https://github.com/termux/termux-packages) — Detect secrets accidentally committed to repositories. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gitleaks). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [govulncheck](https://github.com/termux/termux-packages) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/govulncheck). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [Grype](https://github.com/anchore/grype) — Scan container images and filesystems for known package vulnerabilities. **Install path:** Manual · [packaging/evidence](https://github.com/anchore/grype/blob/8ea928e9f642c376b888a0ee63cb579f1bf47486/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Hadolint](https://github.com/hadolint/hadolint) — Lint Dockerfiles for common errors and best practices. **Install path:** Manual · [packaging/evidence](https://github.com/hadolint/hadolint/blob/8ae25c05945f030b1ad520f1802e4143e7d0055d/hadolint.cabal). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Lynis](https://github.com/CISOfy/lynis) — Audit Unix/Linux system configuration; Android's restricted environment limits coverage. **Install path:** Manual · [packaging/evidence](https://github.com/CISOfy/lynis/blob/9319416fa0726369ab0a48f686155a90363f3f9c/README.md). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [npm audit](https://github.com/termux/termux-packages) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/nodejs). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [OSV-Scanner](https://pkg.go.dev/github.com/google/osv-scanner/v2/cmd/osv-scanner) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Go module · [packaging/evidence](https://github.com/google/osv-scanner/blob/f455353546889009663c1f8b640d5880a01c889a/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [pip-audit](https://github.com/pypa/pip-audit) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/pypa/pip-audit/blob/828e77a4d4aa6bee8d315681db6928771d951a7c/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Safety](https://pypi.org/project/safety/) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/pyupio/safety/blob/997602736a20c6f4d9fec8c2a5d479624b9ddb9a/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Semgrep](https://github.com/semgrep/semgrep) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/semgrep/semgrep/blob/51602ad27f09ef9342a5620601de5ef8f572fbc6/cli/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [ShellCheck](https://github.com/koalaman/shellcheck) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/shellcheck). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Syft](https://github.com/anchore/syft) — Generate software bills of materials from supported images and directories. **Install path:** Manual · [packaging/evidence](https://github.com/anchore/syft/blob/a81193226ffdd07b71126dda04e753d6d2e22324/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Trivy](https://github.com/aquasecurity/trivy) — Scan container images, filesystems, repositories, and supported infrastructure artifacts for risks. **Install path:** Manual · [packaging/evidence](https://github.com/aquasecurity/trivy/blob/9dd3e28d275544dd16463162e99471ac761eb9f0/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [TruffleHog](https://pkg.go.dev/github.com/trufflesecurity/trufflehog/v3) — Search repositories and supported sources for exposed secrets. **Install path:** Go module · [packaging/evidence](https://github.com/trufflesecurity/trufflehog/blob/048de9ff07098d943136cd5231a0e93fbb3ea443/go.mod). _Note:_ Requires Go; upstream module/build compatibility must be checked for the selected release.
+- [yamllint](https://github.com/adrienverge/yamllint) — Security auditing or static-analysis utility for code, dependencies, infrastructure, or exposed secrets. Triage findings before acting. **Install path:** Python package · [packaging/evidence](https://github.com/adrienverge/yamllint/blob/96246fb0d5fba8c8cba48747342de3351ea64bea/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+
+### Forensics & File Analysis
+
+21 tools in this category.
+
+- [Binwalk](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/binwalk). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [bulk_extractor](https://github.com/simsong/bulk_extractor) — Extract structured artifacts from forensic images without relying on filesystem layout. **Install path:** Manual · [packaging/evidence](https://github.com/simsong/bulk_extractor/blob/e86383947ee016c825599887334cacf011736abf/Makefile.am). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [ExifTool](https://github.com/termux/termux-packages) — Read and inspect metadata in images, documents, and media files. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/exiftool). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [ffprobe](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/ffmpeg). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Foremost](https://github.com/korczis/foremost) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/korczis/foremost/blob/9b2ccf2a6d924e7a57971af6b92e6a287d28efb1/Makefile). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [GDB](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/gdb). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [hexdump](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/util-linux). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [ltrace](https://github.com/termux/termux-packages) — Trace dynamic library calls where supported by the platform and binary. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/ltrace). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [MediaInfo](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/mediainfo). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [objdump](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/binutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [pdfid](https://github.com/DidierStevens/DidierStevensSuite) — Inspect PDF token counts to triage potentially suspicious documents. **Install path:** Manual · [packaging/evidence](https://github.com/DidierStevens/DidierStevensSuite/blob/7d625d0b05c4638b981a2a2cc9a8481d7b73e56d/pdfid.py). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [peepdf](https://github.com/jesparza/peepdf) — Analyze PDF structure for suspicious objects and scripts. **Install path:** Manual · [packaging/evidence](https://github.com/jesparza/peepdf/blob/c74dc65c0ac7e506bae4f2582a2435ec50741f40/README.md). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [pngcheck](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/Makefile). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [radare2](https://github.com/radareorg/radare2) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/radare2). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [readelf](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/binutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Sleuth Kit](https://github.com/sleuthkit/sleuthkit) — Filesystem forensic tools for supported disk images and evidence copies. **Install path:** Manual · [packaging/evidence](https://github.com/sleuthkit/sleuthkit/blob/e08bdd2f9b74b319981144c03ee492e9287b9e0f/Makefile.am). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [strace](https://github.com/termux/termux-packages) — Trace system calls for debugging programs where Android ptrace restrictions allow it. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/strace). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [strings](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/binutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/tesseract). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [xxd](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/vim). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [YARA](https://github.com/VirusTotal/yara) — Match files against defensive YARA rules. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/yara). _Note:_ Package availability differs by Termux repository, architecture, and release.
+
+### Cryptography & Password Hygiene
+
+12 tools in this category.
+
+- [age](https://github.com/termux/termux-packages) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/age). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [age-keygen](https://github.com/termux/termux-packages) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/age). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [bcrypt](https://pypi.org/project/bcrypt/) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Python package · [packaging/evidence](https://github.com/pyca/bcrypt/blob/1218b62796709e72121046458c3c1f046a6b1e5d/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [Certbot](https://github.com/certbot/certbot) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Python package · [packaging/evidence](https://github.com/certbot/certbot/blob/990a59a814c8d4c53cc896f3c376c1c14e6c099c/certbot/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [GnuPG](https://github.com/termux/termux-packages) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/gnupg). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Hashcat](https://github.com/hashcat/hashcat) — Offline password-hash auditing and recovery; compatible GPU/OpenCL support is generally absent on stock Android. **Install path:** Manual · [packaging/evidence](https://github.com/hashcat/hashcat/blob/5ec006d303bf3d55bc8a6afe1b67b858682457e7/src/Makefile). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [hashid](https://pypi.org/project/hashid/) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Python package · [packaging/evidence](https://github.com/psypanda/hashID/blob/7e8473a823060e56d4b6090a98591e252bd9505e/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [John the Ripper](https://github.com/openwall/john) — Offline password-hash auditing for hashes you are authorized to examine. **Install path:** Manual · [packaging/evidence](https://github.com/openwall/john/blob/5184bc0b8c105f8c5978b112e723d65b2de3e63e/README.md). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Passlib](https://pypi.org/project/passlib/) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Python package · [packaging/evidence](https://github.com/glic3rinu/passlib/blob/3f6b5c1f683b2b29780deda81a3eea7960c6409f/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [ssh-keygen](https://github.com/termux/termux-packages) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/openssh). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [SSLyze](https://github.com/nabla-c0d3/sslyze) — Cryptography or password-auditing utility. Only use keys and hashes you own or are authorized to examine. **Install path:** Python package · [packaging/evidence](https://github.com/nabla-c0d3/sslyze/blob/3bd5094dec1dfbaac1a03957c35ba5e487f5b890/setup.py). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [testssl.sh](https://github.com/testssl/testssl.sh) — Probe TLS/SSL configuration for authorized services using a shell-based test suite. **Install path:** Manual · [packaging/evidence](https://github.com/testssl/testssl.sh/blob/9bd7e16df96a8e4e36c89f6c55443eceb9e36c71/Readme.md). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+
+### Wireless & Android Environment
+
+10 tools in this category.
+
+- [Aircrack-ng](https://github.com/aircrack-ng/aircrack-ng) — Wireless security auditing suite requiring compatible adapters, drivers, and often root access. **Install path:** Manual · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/aircrack-ng). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [BlueZ tools](https://github.com/bluez/bluez) — Bluetooth command-line utilities; Android's Bluetooth stack may not expose BlueZ interfaces. **Install path:** Manual · [packaging/evidence](https://github.com/bluez/bluez/tree/fa6ba55020dee3c3183041c854c347b4582448be/tools). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [iw](https://wireless.wiki.kernel.org/en/users/documentation/iw) — Linux wireless configuration utility; stock Android may not expose the required wireless interfaces. **Install path:** Manual · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/iw). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Kismet](https://github.com/kismetwireless/kismet) — Wireless network detector and packet capture framework requiring supported hardware and permissions. **Install path:** Manual · [packaging/evidence](https://github.com/kismetwireless/kismet/blob/de2b100dcdb34e86eb1b3c1d559aac154ad315d9/README.md). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Termux clipboard](https://github.com/termux/termux-packages) — Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-api). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Termux location](https://github.com/termux/termux-packages) — Requests Android location with permission and user consent. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-api). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Termux Wi-Fi info](https://github.com/termux/termux-packages) — Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-api). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Termux Wi-Fi scan](https://github.com/termux/termux-packages) — Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-api). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [termux-info](https://github.com/termux/termux-packages) — Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-tools). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [termux-open](https://github.com/termux/termux-packages) — Wireless or Android integration utility with kernel, permission, companion-app, or adapter dependencies. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/termux-tools). _Note:_ Package availability differs by Termux repository, architecture, and release.
+
+### Cloud, Containers & Misc
+
+26 tools in this category.
+
+- [age-plugin-yubikey](https://github.com/str4d/age-plugin-yubikey) — Use supported YubiKey PIV keys with age encryption; requires compatible hardware. **Install path:** Manual · [packaging/evidence](https://github.com/str4d/age-plugin-yubikey/blob/cafbc75fbd309e6f7ab62749052f98a91a89764e/Cargo.toml). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [Ansible](https://github.com/ansible/ansible) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Python package · [packaging/evidence](https://github.com/ansible/ansible/blob/f7319e09448e13fa2bc407a1afcd8990f47040fb/pyproject.toml). _Note:_ Python package installation can fail if upstream dependencies lack Android-compatible wheels.
+- [base64](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/coreutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [chkrootkit](https://github.com/Magentron/chkrootkit) — Rootkit checks for supported Unix/Linux hosts; not a reliable stock-Android integrity check. **Install path:** Manual · [packaging/evidence](https://github.com/Magentron/chkrootkit/blob/c00b5a40f61cc969e56fa2fe3375741c4164c896/README). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [ClamAV](https://github.com/Cisco-Talos/clamav) — Scan accessible files; signature updates and storage need setup. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/clamav). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Docker CLI](https://github.com/termux/termux-packages) — Docker client for connecting to a reachable Docker Engine; the daemon is not provided by stock Termux. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/docker-cli). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [FreshClam](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/clamav). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [GNU Parallel](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/parallel). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [gzip](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/gzip). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [htop](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/htop). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [kubectl](https://github.com/termux/termux-packages) — Kubernetes CLI for clusters you administer or are authorized to assess. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/kubectl). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [lsof](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/lsof). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Podman](https://github.com/containers/podman) — Container engine and CLI; Android kernel and namespace support can prevent normal operation. **Install path:** Manual · [packaging/evidence](https://github.com/podman-container-tools/podman/blob/8dd1367b23419bec0f4bc37c6c56f87965184375/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [ps](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/procps). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [rclone](https://github.com/termux/termux-packages) — Manage file transfers and backups across supported storage providers. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rclone). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [restic](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/restic). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [rkhunter](https://github.com/Rootkit-Hunter/rootkit_hunter) — Rootkit and configuration checks for supported Unix/Linux systems; limited relevance on stock Android. **Install path:** Manual · [packaging/evidence](https://github.com/Rootkit-Hunter/rkhunter/blob/016a77924ef4311fa7cac3737b7460452349b6ca/files/rkhunter). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [sha256sum](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/coreutils). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [stress-ng](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/ColinIanKing/stress-ng/blob/9beb21e28c727a5e02572ee2031977f23587d7e7/README.md). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [tar](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/tar). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [Terraform](https://github.com/hashicorp/terraform) — Infrastructure-as-code workflow for cloud resources you control. **Install path:** Manual · [packaging/evidence](https://github.com/hashicorp/terraform/blob/44fcc1316e98d4a03cc348c05e6d5ba8e36bf51c/go.mod). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
+- [unzip](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/unzip). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [watch](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/procps). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [xmlstarlet](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/xmlstarlet). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [yq](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/yq). _Note:_ Package availability differs by Termux repository, architecture, and release.
+- [zip](https://github.com/termux/termux-packages) — Cloud, container, system administration, or developer utility. Protect credentials and use least-privilege access. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/zip). _Note:_ Package availability differs by Termux repository, architecture, and release.
+
+### Advanced Pentest & Exploit Research
+
+26 tools in this category.
+
+- [Alterx](https://github.com/projectdiscovery/alterx) — Generate candidate subdomain names from patterns. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/alterx/blob/3322e4f82614302860c544ee5c014a02081bd2ea/go.mod). _Note:_ Check generated names only within authorized scope.
+- [Arjun](https://github.com/s0md3v/Arjun) — Discover HTTP parameters during authorized web testing. **Install path:** Python package · [packaging/evidence](https://github.com/s0md3v/Arjun/blob/d1fb995cb1e064d4e171d83f19f6af79b0a3c5ce/setup.py). _Note:_ Requests can be noisy; use approved scope.
+- [ASNMap](https://github.com/projectdiscovery/asnmap) — Map ASN and organization metadata to public network ranges. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/asnmap/blob/cedef8b116fb2ea228108bfa2eee6ed74ae31ad9/go.mod). _Note:_ Public metadata does not authorize scanning discovered ranges.
+- [CRLFuzz](https://github.com/dwisiswant0/crlfuzz) — Check CRLF injection indicators in authorized web tests. **Install path:** Go module · [packaging/evidence](https://github.com/dwisiswant0/crlfuzz/blob/7a442bb03f3c337f34b1ed7664bae50bde3eb455/go.mod). _Note:_ Active requests; stay within approved scope.
+- [Dalfox](https://github.com/hahwul/dalfox) — XSS parameter analysis for authorized web assessments. **Install path:** Go module · [packaging/evidence](https://github.com/hahwul/dalfox/blob/79f618b264bd49290b968c19f3d1f0e9cce05125/README.md). _Note:_ Active probes may trigger application behavior.
+- [DNSGen](https://github.com/AlephNullSK/dnsgen) — Generate domain-name permutations for defensive asset discovery. **Install path:** Python package · [packaging/evidence](https://github.com/AlephNullSK/dnsgen/tree/7c98e7ecda2f626d49c47be9c98b234a2e4db5b7). _Note:_ Use only with domains in scope.
+- [Ghauri](https://github.com/r0oth3x49/ghauri) — SQL injection verification for authorized applications. **Install path:** Python package · [packaging/evidence](https://github.com/r0oth3x49/ghauri/blob/18e367781caca5f9783a242f34aa90164edc902a/setup.py). _Note:_ Active probes can affect databases; use a lab or approved target.
+- [Interactsh Client](https://github.com/projectdiscovery/interactsh) — Out-of-band interaction testing for authorized assessments. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/interactsh/blob/a5b78b2f1d990cd18c85cc422f0e651cf204c464/go.mod). _Note:_ Callbacks contact external infrastructure; understand data flows.
+- [Kiterunner](https://github.com/assetnote/kiterunner) — API route discovery using wordlists and request patterns. **Install path:** Go module · [packaging/evidence](https://github.com/assetnote/kiterunner/blob/7d5824cda9a2eef86d8d18b05b713d7e260f34d2/go.mod). _Note:_ Can generate substantial traffic; use scoped wordlists.
+- [KXSS](https://github.com/Emoe/kxss) — Find potentially reflective parameters in URLs for XSS triage. **Install path:** Go module · [packaging/evidence](https://github.com/Emoe/kxss/blob/acb2dc76e84077d2e529f6c488269c32c5e2b07a/go.mod). _Note:_ Validate findings manually; require target authorization.
+- [MapCIDR](https://github.com/projectdiscovery/mapcidr) — CIDR parsing and range transformation for scope management. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/mapcidr/blob/a43022034a0eb9b87eadefbd69c8eeb6aa0e4567/go.mod). _Note:_ Use only to prepare authorized address ranges.
+- [MassDNS](https://github.com/blechschmidt/massdns) — High-performance DNS stub resolver for scoped enumeration. **Install path:** Manual · [packaging/evidence](https://github.com/blechschmidt/massdns/blob/30c380908b4f9afd0931d3d83f85884844831846/Makefile). _Note:_ Native build and resolver setup are required; no Termux recipe verified.
+- [Metasploit Framework](https://github.com/rapid7/metasploit-framework) — Penetration-testing framework for controlled labs and authorized engagements. **Install path:** Manual · [packaging/evidence](https://github.com/rapid7/metasploit-framework/blob/b22ce1fbae63e8caeb3a773366a6d3336bd66fb8/metasploit-framework.gemspec). _Note:_ Large framework; stock Termux support is not verified.
+- [Nuclei](https://github.com/projectdiscovery/nuclei) — Template-driven vulnerability checks for scoped, authorized targets. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/nuclei/blob/6a42a7bf52113b37df273d0df899a28b0bcf459f/go.mod). _Note:_ Review templates and rate limits; active scanning only within written scope.
+- [Nuclei Templates](https://github.com/projectdiscovery/nuclei-templates) — Nuclei's maintained template collection; templates are executable test logic, not passive data. **Install path:** Manual · [packaging/evidence](https://github.com/projectdiscovery/nuclei-templates/blob/17f5725dc10ced09f464dd2d255c19957aad51e7/README.md). _Note:_ Review template contents and provenance before running.
+- [pwndbg](https://github.com/pwndbg/pwndbg) — GDB enhancement suite for local debugging and exploit-development education. **Install path:** Manual · [packaging/evidence](https://github.com/pwndbg/pwndbg/blob/a211a9dcd5050cd0cd82952047740bf3163472fe/pyproject.toml). _Note:_ GDB/Python integration is desktop-Linux oriented and may not work on Android.
+- [pwninit](https://github.com/io12/pwninit) — Prepare local binary-exploitation challenge environments and libc/loader files. **Install path:** Manual · [packaging/evidence](https://github.com/io12/pwninit/blob/0c123dd79c2ebfc1dca68aeec0dc2b840c066c32/Cargo.toml). _Note:_ For CTFs and binaries you are authorized to analyze; native dependencies vary.
+- [pwntools](https://github.com/Gallopsled/pwntools) — Python framework for exploit-development education and CTF labs. **Install path:** Python package · [packaging/evidence](https://github.com/Gallopsled/pwntools/blob/99a4fe5596bcba851537fdbe821ceb5fb80c4de1/pyproject.toml). _Note:_ Native dependencies and architecture support vary on Android.
+- [ROPGadget](https://github.com/JonathanSalwan/ROPgadget) — Search binaries for ROP gadgets during authorized binary research. **Install path:** Python package · [packaging/evidence](https://github.com/JonathanSalwan/ROPgadget/blob/b6e3fe31af46d7e045fef99a3ab19ccbcea5c2f6/setup.py). _Note:_ For binary auditing and controlled labs.
+- [Ropper](https://github.com/sashs/Ropper) — Binary gadget search for exploit-development education and auditing. **Install path:** Python package · [packaging/evidence](https://github.com/sashs/Ropper/blob/a2ffccf046db6fa20e0b1e20fe0a67af1d41ea9a/pyproject.toml). _Note:_ Binary and architecture support vary.
+- [RouterSploit](https://github.com/threat9/routersploit) — Router and embedded-device security assessment framework. **Install path:** Manual · [packaging/evidence](https://github.com/threat9/routersploit/blob/723b574c36ae202857e3f93e4f3c2ab9a1638ed4/setup.py). _Note:_ Use only against devices you own or are authorized to test.
+- [RustScan](https://github.com/termux/termux-packages) — Fast port scanner with optional Nmap handoff. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rustscan). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [Shuffledns](https://github.com/projectdiscovery/shuffledns) — MassDNS-based subdomain resolution workflow. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/shuffledns/blob/bc31821c9b3a06a13fc50e65481fec68e1b01ad2/go.mod). _Note:_ Resolver configuration and high DNS volume may be involved.
+- [Tlsx](https://github.com/projectdiscovery/tlsx) — TLS certificate and protocol metadata probing. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/tlsx/blob/7f24430c54c473e6b32caf29753562da6ffb4181/go.mod). _Note:_ Use against approved hosts.
+- [Uncover](https://github.com/projectdiscovery/uncover) — Query supported public search engines for exposed asset metadata. **Install path:** Go module · [packaging/evidence](https://github.com/projectdiscovery/uncover/blob/8275048441329a9ce0622bead7b37826d34e5d7d/go.mod). _Note:_ Provider terms, API keys, and rate limits apply.
+- [WAFW00F](https://github.com/EnableSecurity/wafw00f) — Identify common web application firewall fingerprints. **Install path:** Python package · [packaging/evidence](https://github.com/EnableSecurity/wafw00f/blob/69fbe3956bba47a172cf87e40e9037535d32a130/pyproject.toml). _Note:_ Only assess sites you are authorized to test.
+
+### Web & API Assessment
+
+1 tools in this category.
+
+- [WPScan](https://github.com/wpscanteam/wpscan) — WordPress security scanner and vulnerability enumeration. **Install path:** Manual · [packaging/evidence](https://github.com/wpscanteam/wpscan/blob/5d672f66ee512301b654a2d79c9ddf6f8509eeb4/wpscan.gemspec). _Note:_ Some features require an API token; respect rate limits.
+
+### Active Directory & Windows
+
+12 tools in this category.
+
+- [BloodHound Python Collector](https://github.com/dirkjanm/BloodHound.py) — Collect Active Directory relationship data for authorized domain audits. **Install path:** Python package · [packaging/evidence](https://github.com/dirkjanm/BloodHound.py/blob/fd3f322e066d66314bfb31d4ae6f497df5872177/setup.py). _Note:_ Collected directory data is sensitive.
+- [BloodyAD](https://github.com/CravateRouge/bloodyAD) — Active Directory administration and security testing utility; some operations modify directory state. **Install path:** Python package · [packaging/evidence](https://github.com/CravateRouge/bloodyAD/blob/48df0a8ee5bd0bad66fca21a2088449b48dc4ed0/pyproject.toml). _Note:_ Some operations modify directory state; review each action.
+- [Certipy](https://github.com/ly4k/Certipy) — Audit Active Directory Certificate Services in authorized domains. **Install path:** Python package · [packaging/evidence](https://github.com/ly4k/Certipy/blob/3ae34426c58d266a1979ff9607514c3d7fe1aa21/pyproject.toml). _Note:_ Certificate abuse paths are sensitive; restrict use to approved domains.
+- [Coercer](https://github.com/p0dalirius/Coercer) — Assess Windows authentication coercion exposure in controlled environments. **Install path:** Python package · [packaging/evidence](https://github.com/p0dalirius/Coercer/blob/6024441c708e330582ffc8e4eccc80b931807194/pyproject.toml). _Note:_ Can trigger authentication traffic; explicit authorization required.
+- [enum4linux-ng](https://github.com/cddmp/enum4linux-ng) — SMB and Windows domain enumeration for authorized assessments. **Install path:** Python package · [packaging/evidence](https://github.com/cddmp/enum4linux-ng/blob/288826fd9ee89b61d846e59f17b77bae4fb671ee/setup.py). _Note:_ Enumeration may disclose directory information.
+- [Evil-WinRM](https://github.com/Hackplayers/evil-winrm) — WinRM client for authorized Windows lab assessments. **Install path:** Manual · [packaging/evidence](https://github.com/Hackplayers/evil-winrm/blob/64d8e0f962d239643c4efadacce9f716bd5cb775/evil-winrm.gemspec). _Note:_ Credentialed remote shell access; manual-only.
+- [Impacket](https://github.com/fortra/impacket) — Python protocol toolkit for network protocol testing and Windows domain labs. **Install path:** Python package · [packaging/evidence](https://github.com/fortra/impacket/blob/75938fcb0145b476250940d740f71394676288cb/setup.py). _Note:_ Credentialed actions are sensitive; use approved lab accounts.
+- [Kerbrute](https://github.com/ropnop/kerbrute) — Kerberos user enumeration and testing for controlled AD labs. **Install path:** Go module · [packaging/evidence](https://github.com/ropnop/kerbrute/blob/9cfb81e4fab8037acb44c678773ca3f93bc2b39c/go.mod). _Note:_ May trigger account lockouts; password spraying requires explicit approval.
+- [LDAPDomainDump](https://github.com/dirkjanm/ldapdomaindump) — Export LDAP directory information for authorized domain auditing. **Install path:** Python package · [packaging/evidence](https://github.com/dirkjanm/ldapdomaindump/blob/d559463eb29857f2660bf3867bfb9f8610d1ddb1/setup.py). _Note:_ Treat output as confidential.
+- [NetExec](https://github.com/Pennyw0rth/NetExec) — Network service assessment toolkit for authorized internal testing. **Install path:** Python package · [packaging/evidence](https://github.com/Pennyw0rth/NetExec/blob/0615464f7aed3daa64a3ebe414d1fd7dc830db0b/pyproject.toml). _Note:_ Credentialed checks can affect systems; stay within approved scope.
+- [Responder](https://github.com/lgandx/Responder) — Network protocol analysis and poisoning tool for isolated labs; can intercept credentials and disrupt networks. **Install path:** Manual · [packaging/evidence](https://github.com/lgandx/Responder/blob/424fbe53d6a61824e3c7685fe5f69668721b821e/requirements.txt). _Note:_ Poisoning can intercept credentials or disrupt networks; lab-only.
+- [RustHound-CE](https://github.com/g0h4n/RustHound-CE) — Collect Active Directory relationship data for authorized BloodHound assessments. **Install path:** Manual · [packaging/evidence](https://github.com/g0h4n/RustHound-CE/blob/bb9e7522106726b85f9bf5f7ca2d598f9dc87ce8/Cargo.toml). _Note:_ Directory collection accesses sensitive identity data; obtain explicit scope and protect output files.
+
+### Mobile App Security
+
+10 tools in this category.
+
+- [Androguard](https://github.com/androguard/androguard) — Static analysis toolkit for Android APK and DEX files. **Install path:** Python package · [packaging/evidence](https://github.com/androguard/androguard/blob/3ea3da38e74b4d74579463d0688ab513786c4750/pyproject.toml). _Note:_ Large dependency tree; Android compatibility varies.
+- [apk-mitm](https://github.com/niklashigi/apk-mitm) — Prepare Android APKs for controlled HTTPS inspection in an authorized test lab. **Install path:** Manual · [packaging/evidence](https://github.com/niklashigi/apk-mitm/blob/5a96363fc9112b97d60fc2bd3799d6bbfd8e4e00/package.json). _Note:_ APK modification can invalidate signatures; use only test apps you own or are authorized to assess.
+- [APKiD](https://github.com/rednaga/APKiD) — Identify packers, obfuscators and compiler fingerprints in Android APKs. **Install path:** Python package · [packaging/evidence](https://github.com/rednaga/APKiD/blob/5cb6b2572a2fe1580d7dd2fd807ada5fb6377a12/setup.py). _Note:_ Analyze APKs you own or are authorized to examine; Python/native dependency compatibility varies.
+- [ApkLeaks](https://github.com/dwisiswant0/apkleaks) — Search Android APKs for embedded endpoints and secrets during defensive review. **Install path:** Python package · [packaging/evidence](https://github.com/dwisiswant0/apkleaks/blob/dd5271a3f3302732f7ad9f5c36e9704fff49193f/pyproject.toml). _Note:_ Review results locally; never use discovered secrets to access accounts.
+- [Apktool](https://github.com/termux/termux-packages) — Decode Android resources and smali for app auditing. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/apktool). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [Frida Tools](https://github.com/frida/frida-tools) — Dynamic instrumentation CLI for authorized mobile app testing. **Install path:** Python package · [packaging/evidence](https://github.com/frida/frida-tools/blob/6a83bcf71155ad9daf2a604ada339e611df39fa2/setup.py). _Note:_ Device-side frida-server, ABI compatibility, and app privileges are separate requirements.
+- [JADX](https://github.com/termux/termux-packages) — Decompile Android DEX/APK bytecode for analysis. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/jadx). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [MobSF](https://github.com/MobSF/Mobile-Security-Framework-MobSF) — Mobile app security testing framework for APK/IPA analysis; resource-heavy for a phone. **Install path:** Manual · [packaging/evidence](https://github.com/MobSF/Mobile-Security-Framework-MobSF/blob/08872c8454e59f8a6347c35b46852c9929f5eb5e/pyproject.toml). _Note:_ Resource-heavy; not treated as a native Termux install.
+- [Objection](https://github.com/sensepost/objection) — Runtime mobile app inspection built on Frida. **Install path:** Python package · [packaging/evidence](https://github.com/sensepost/objection/blob/35c4e2c9e68a0354b21db4833252e0c4acd5bd28/pyproject.toml). _Note:_ Requires a compatible Frida setup and authorized app/device.
+- [Quark Engine](https://github.com/quark-engine/quark-engine) — Rule-based Android malware behavior analysis and APK triage. **Install path:** Python package · [packaging/evidence](https://github.com/ev-flow/quark-engine/blob/7accc95f104c6f30b8f64908ca022c30059121fd/setup.py). _Note:_ Use for defensive analysis of files you may inspect.
+
+### Cloud & Container Security
+
+12 tools in this category.
+
+- [CloudFox](https://github.com/BishopFox/cloudfox) — Cloud asset and permission enumeration for authorized security reviews. **Install path:** Go module · [packaging/evidence](https://github.com/BishopFox/cloudfox/blob/d44899f21302269fc5e7743c662edafe15c7575c/go.mod). _Note:_ Cloud credentials and reports are sensitive.
+- [Cloudsplaining](https://github.com/salesforce/cloudsplaining) — Identify risky AWS IAM permissions from IAM policy data for defensive cloud reviews. **Install path:** Python package · [packaging/evidence](https://github.com/salesforce/cloudsplaining/blob/f2ed0ba2ddf6457143203d46971c91ba236b6597/pyproject.toml). _Note:_ Handle policy exports as sensitive data; findings need review against actual role usage.
+- [Dockle](https://github.com/goodwithtech/dockle) — Check container images for common security and configuration best-practice issues. **Install path:** Go module · [packaging/evidence](https://github.com/goodwithtech/dockle/blob/35171ccb9b247592269f5c84be69331ef0ad6c19/go.mod). _Note:_ Image support and native dependencies vary; scan only images you are permitted to inspect.
+- [Kube-Bench](https://github.com/aquasecurity/kube-bench) — Check Kubernetes configuration against CIS benchmarks. **Install path:** Manual · [packaging/evidence](https://github.com/aquasecurity/kube-bench/blob/e278a5915a982f2756026de6e2f9ca77077ef9f9/go.mod). _Note:_ Usually requires host/cluster context unavailable on stock Android.
+- [Kube-Hunter](https://github.com/aquasecurity/kube-hunter) — Kubernetes security assessment for authorized clusters. **Install path:** Python package · [packaging/evidence](https://github.com/aquasecurity/kube-hunter/blob/bc47f08e88ea2a5fb059bf3b8a8edb1aefb4c6cc/setup.py). _Note:_ Active probes can affect services; confirm scope.
+- [kube-linter](https://github.com/stackrox/kube-linter) — Lint Kubernetes YAML and Helm charts for security and production-readiness issues. **Install path:** Go module · [packaging/evidence](https://github.com/stackrox/kube-linter/blob/ead88f5c9d49e600a58eae2c7121deef82e378f7/go.mod). _Note:_ Static checks do not replace cluster configuration review; Go builds may be resource-intensive.
+- [KubeAudit](https://github.com/Shopify/kubeaudit) — Audit Kubernetes workload configuration for common security issues. **Install path:** Go module · [packaging/evidence](https://github.com/Shopify/kubeaudit/blob/92c3147139a73eab8f6c9cbf9a1ee4d9c4196bd8/go.mod). _Note:_ Requires manifests or authorized cluster access.
+- [Kubeletctl](https://github.com/cyberark/kubeletctl) — Cloud/container security audit utility. Use authorized credentials, least privilege, and approved scope. **Install path:** Go module · [packaging/evidence](https://github.com/cyberark/kubeletctl/blob/2ea775d00d600db5ae9556739056f009bbd5286f/go.mod). _Note:_ Only target clusters you administer or are authorized to assess.
+- [Pacu](https://github.com/RhinoSecurityLabs/pacu) — AWS cloud security testing framework for authorized assessment and lab exercises. **Install path:** Manual · [packaging/evidence](https://github.com/RhinoSecurityLabs/pacu/blob/e597f23ecfb88b82f706c5f0cac9d4577c2af262/pyproject.toml). _Note:_ Contains high-impact cloud testing modules; use a dedicated lab account and explicit written authorization.
+- [Prowler](https://github.com/prowler-cloud/prowler) — Cloud security posture assessment for supported cloud providers. **Install path:** Python package · [packaging/evidence](https://github.com/prowler-cloud/prowler/blob/f45173997b8331e6cba3deac78bc2e1043b9281d/pyproject.toml). _Note:_ Use authorized cloud credentials and least-privilege roles.
+- [ScoutSuite](https://github.com/nccgroup/ScoutSuite) — Multi-cloud security auditing and configuration review. **Install path:** Python package · [packaging/evidence](https://github.com/nccgroup/ScoutSuite/blob/7909f2fc6186063e5c9e7ddef8c4d7d1072c8f3d/setup.py). _Note:_ Cloud credentials and reports are sensitive.
+- [Terrascan](https://github.com/tenable/terrascan) — Static analysis for infrastructure-as-code security and compliance issues. **Install path:** Go module · [packaging/evidence](https://github.com/tenable/terrascan/blob/dafb3e0ad72812fbecfc36d33e8bd4347f12b114/go.mod). _Note:_ Policy coverage and Android build compatibility vary.
+
+### Network & TLS Assessment
+
+8 tools in this category.
+
+- [Chisel](https://github.com/jpillora/chisel) — TCP/UDP tunnel for authorized lab connectivity and troubleshooting. **Install path:** Go module · [packaging/evidence](https://github.com/jpillora/chisel/blob/5ee6c74d60d96a75afb18bc866eb19327170aeed/go.mod). _Note:_ Tunneling can bypass network controls; network-owner approval required.
+- [Ligolo-ng](https://github.com/nicocha30/ligolo-ng) — Tunneling framework used in authorized network assessment labs. **Install path:** Manual · [packaging/evidence](https://github.com/nicocha30/ligolo-ng/blob/e543732f4be6dc899096ae322ae620bf010bfbfc/go.mod). _Note:_ Advanced routing and privileges may be required; manual-only.
+- [OpenSSH keyscan](https://github.com/openssh/openssh-portable) — Collect SSH host public keys for inventory and known_hosts maintenance. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/openssh). _Note:_ Use only on systems where you are authorized to inventory SSH host keys.
+- [ProxyChains-NG](https://github.com/termux/termux-packages) — Route compatible applications through configured proxy chains; does not guarantee anonymity. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/proxychains-ng). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [ssh-audit](https://github.com/jtesta/ssh-audit) — Audit SSH server/client configuration and algorithm support. **Install path:** Python package · [packaging/evidence](https://github.com/jtesta/ssh-audit/blob/1df77bfbb664ec435cd662b938c1080012df3354/setup.cfg). _Note:_ Audit only SSH services you own or have permission to assess.
+- [SSLScan](https://github.com/termux/termux-packages) — Probe TLS protocol and cipher configuration for authorized hosts. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/sslscan). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [TShark](https://www.wireshark.org/docs/man-pages/tshark.html) — Command-line packet analysis utility. **Install path:** Manual · [packaging/evidence](https://github.com/termux/termux-root-packages/tree/06591fc024101b04095ec4417d51907512b46e3c/packages/tshark). _Note:_ Capture permissions and Android kernel support vary.
+- [ZMap](https://github.com/zmap/zmap) — Internet-scale network measurement scanner for tightly scoped audits. **Install path:** Manual · [packaging/evidence](https://github.com/zmap/zmap/blob/7268b1a2204bc9231efefa27ba7cb2fa56717979/CMakeLists.txt). _Note:_ High-impact scanner; no broad public scanning without explicit authorization.
+
+### Developer & Supply Chain Security
+
+5 tools in this category.
+
+- [actionlint](https://github.com/rhysd/actionlint) — Lint GitHub Actions workflow files for syntax and common mistakes. **Install path:** Manual · [packaging/evidence](https://github.com/rhysd/actionlint/blob/011a6d15e749bb3f2d771eed9c7aa0e7e3e10ee7/go.mod). _Note:_ Manual-only until Termux package/build compatibility is verified.
+- [Cosign](https://github.com/sigstore/cosign) — Verify and sign software artifacts using Sigstore-supported workflows. **Install path:** Go module · [packaging/evidence](https://github.com/sigstore/cosign/blob/cfeaa4a435c9d42cf724b3e1aac20c1cc09c4be7/go.mod). _Note:_ Understand identity and trust policy before accepting artifact signatures.
+- [Gosec](https://github.com/termux/termux-packages) — Static security analysis for Go source code. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/gosec). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [staticcheck](https://staticcheck.dev/) — Static analysis and diagnostics for Go code, including bug-prone and inefficient patterns. **Install path:** Go module · [packaging/evidence](https://github.com/dominikh/go-tools/blob/6ed650b396b48840c782b8d554eaded1299e42ae/go.mod). _Note:_ Analyze the intended module and review diagnostics; toolchain compatibility may vary.
+- [zizmor](https://github.com/zizmorcore/zizmor) — Static analysis for GitHub Actions workflow security issues. **Install path:** Manual · [packaging/evidence](https://github.com/zizmorcore/zizmor/blob/ea0f7ac34e131fe9491e946e81b3d8fbee2b5171/Cargo.toml). _Note:_ Prebuilt binary availability and native builds vary by Android architecture.
+
+### Forensics & Reverse Engineering
+
+7 tools in this category.
+
+- [angr](https://github.com/angr/angr) — Python framework for binary analysis and symbolic execution in research labs. **Install path:** Manual · [packaging/evidence](https://github.com/angr/angr/blob/ae9f5786fd94410ca400063bf21719aa8b564d3e/pyproject.toml). _Note:_ Heavy dependencies; prefer a supported Linux environment for complex analyses.
+- [LIEF](https://github.com/lief-project/LIEF) — Parse and inspect executable formats including ELF, PE, and Mach-O. **Install path:** Manual · [packaging/evidence](https://github.com/lief-project/LIEF/blob/15777f106f6220046cf26ee99940d1f56751325e/CMakeLists.txt). _Note:_ Native dependency and wheel support on Android is unverified.
+- [Plaso/log2timeline](https://github.com/log2timeline/plaso) — Build forensic timelines from supported evidence sources. **Install path:** Manual · [packaging/evidence](https://github.com/log2timeline/plaso/blob/76c02d9f3341bbbe4da8c21e944ee1516d069668/pyproject.toml). _Note:_ Dependency-heavy; best suited to a supported Linux workstation.
+- [Rizin](https://github.com/termux/termux-packages) — Reverse-engineering framework for binary inspection. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/rizin). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [steghide](https://github.com/termux/termux-packages) — Inspect and work with supported steganography formats during forensic analysis. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/steghide). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [Volatility 3](https://github.com/volatilityfoundation/volatility3) — Memory-forensics framework for supported memory images. **Install path:** Python package · [packaging/evidence](https://github.com/volatilityfoundation/volatility3/blob/77ff0b1932d77527f850c8ced01d85805ea7bf97/pyproject.toml). _Note:_ Use legally obtained images and compatible symbols/plugins.
+- [YARA-X](https://github.com/VirusTotal/yara-x) — Modern YARA-compatible pattern-matching engine for defensive triage. **Install path:** Manual · [packaging/evidence](https://github.com/VirusTotal/yara-x/blob/649cd3bb08e1c4ecc1524cc016c7aa27a75d2193/Cargo.toml). _Note:_ Separate project from classic YARA; Termux recipe not verified.
+
+### Privacy & Metadata
+
+1 tools in this category.
+
+- [Metagoofil](https://github.com/opsdisk/metagoofil) — Collect metadata from public documents for authorized reconnaissance. **Install path:** Manual · [packaging/evidence](https://github.com/opsdisk/metagoofil/blob/8d50624f1534e63c8bb64ee132d8c2298dba6724/requirements.txt). _Note:_ Search-provider terms and compatibility change; manual-only.
+
+### Password & Authentication Auditing
+
+3 tools in this category.
+
+- [CeWL](https://github.com/digininja/CeWL) — Generate wordlists from authorized website content for password-policy audits. **Install path:** Manual · [packaging/evidence](https://github.com/digininja/CeWL/blob/ca01aeae1c77bb086ef757611dea6377b8d1168b/Gemfile). _Note:_ Use only approved targets.
+- [Crunch](https://github.com/termux/termux-packages) — Generate custom test wordlists for offline password-auditing labs. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/crunch). _Note:_ Pinned upstream Termux recipe is documented; actual repository availability and device runtime remain unverified.
+- [Hydra](https://github.com/vanhauser-thc/thc-hydra) — Network login auditing for controlled password-policy tests; can lock accounts and disrupt services. **Install path:** Manual · [packaging/evidence](https://github.com/vanhauser-thc/thc-hydra/blob/17b52613320257a620ce3b5611b2e8196eb6e7fc/Makefile.am). _Note:_ Can lock accounts and disrupt services; manual-only and explicit authorization required.
+
+## Personal catalog and favorites
+
+Use **Custom tools / favorites** in the main menu to add personal entries, browse or remove them, and favorite frequently used tools.
+
+Personal entries are stored separately in `~/.syn_launch/custom_tools.json`; favorites are stored in `~/.syn_launch/favorites.json`. These files remain local to your device and are not committed to the repository. Adding a custom entry saves metadata only—it does not install the tool. Removing an entry does not uninstall its software.
+
+## Installation behavior
+
+SYN_LAUNCH supports individual installs and explicitly confirmed batch operations for cataloged package types. Bulk operations run a preflight that reports storage, selected package/module counts, and required package-manager/runtime commands. The preflight is advisory and does not predict exact download sizes or verify tool functionality.
+
+Python packages are installed in an isolated environment under `~/.syn_launch/venv`; Go binaries are placed under `~/.local/bin`. Some tools are manual-only, and some package-manager or build commands can fail on Android. A successful install command is not evidence that a tool is functional.
+
+Install and update operations can change dependencies and are not automatically reversible. Review the selected packages and prompts before confirming an operation. SYN_LAUNCH does not silently root the device or launch scans automatically.
+
+## Security and responsible use
+
+Use SYN_LAUNCH only on devices, systems, networks, and applications you own or are explicitly authorized to assess. Follow applicable laws, organizational rules, and each tool's own terms.
+
+The project uses argument arrays rather than shell command strings for installer operations, validates catalog metadata, uses isolated Python installs, pins official package sources where supported, and bounds subprocess output. Browsing a catalog entry does not execute its binary; help/version probes require explicit selection.
+
+Network and assessment tools can have real effects when you choose to run them. The project's local diagnostics do not automatically execute those tools or contact assessment targets. Review the command and scope before any manual use.
+
+## Documentation
 
 - [Project wiki home](wiki/README.md)
-- [GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/wiki) (published wiki)
+- [Published GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/wiki)
 - [Installation and first run](wiki/Installation.md)
 - [Compatibility and verification model](wiki/Compatibility-and-Verification.md)
 - [Catalog and tool lifecycle](wiki/Catalog-and-Tool-Lifecycle.md)
 - [Security and responsible use](wiki/Security-and-Responsible-Use.md)
-- [Critical PHP security update (2026-10-21)](wiki/PHP-Security-Update-2026-10-21.md)
 - [Troubleshooting](wiki/Troubleshooting.md)
-- [Development and contributing](wiki/Development-and-Contributing.md)
 - [Workflow planning and bounded adapters](wiki/Workflow-Planning.md)
-- [Optional Linux Environments](wiki/Optional-Linux-Environments.md)
+- [Optional Linux environments](wiki/Optional-Linux-Environments.md)
+- [Critical PHP security update guide](wiki/PHP-Security-Update-2026-10-21.md)
+- [Development and contributing](wiki/Development-and-Contributing.md)
 - [GitHub Wiki publishing guide](wiki/Publishing-GitHub-Wiki.md)
 - [Platform roadmap](PLATFORM_ROADMAP.md)
 - [Changelog](CHANGELOG.md)
+- [Contributing guidelines](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
 
-The catalog now includes **267 source-backed compatibility declarations**: 110 recipe-backed entries across 92 distinct recipe/subpackage directories (103 from `termux-packages`, seven from the separate `termux-root-packages` repository), 67 pinned upstream Python packaging/dependency/runtime-documentation reviews, and forty-eight pinned upstream Go module reviews for pip-audit, yamllint, dirsearch, Sherlock, Bandit, detect-secrets, email-validator, ssh-audit, Maigret, h8mail, and theHarvester, plus holehe, dnstwist, Wapiti, Wfuzz, WAFW00F, Arjun, hashID, Passlib, bcrypt, ROPGadget, Ropper, mitmproxy, Semgrep, Safety, Checkov, Certbot, SSLyze, Ansible, pwntools, Impacket, Androguard, SpiderFoot, NetExec, Certipy, LDAPDomainDump, enum4linux-ng, Coercer, BloodyAD, Frida Tools, Objection, ApkLeaks, Prowler, ScoutSuite, Kube-Hunter, Volatility 3, Cloudsplaining, and APKiD, JWT Tool, Corsy, XSStrike, Commix, tplmap, RouterSploit, Ghauri, MobSF, Pacu, Metagoofil, and BloodHound.py, Responder, pwndbg, angr, Plaso/log2timeline, recon-ng, sqlmap, peepdf, and Smuggler. Go module reviews also cover Actionlint, Trivy, Grype, Syft, kube-bench, Ligolo-ng, and Terraform, Amass, with Zizmor, YARA-X, age-plugin-yubikey, pwninit, and RustHound-CE tracked as Rust package/workspace metadata. Nineteen other native/runtime reviews cover massdns, Lynis, ZMap, file, pngcheck, Foremost, stress-ng, Hadolint, LIEF, chkrootkit, and assetfinder, OWASP ZAP, Hashcat, John the Ripper, bulk_extractor, Sleuth Kit, Hydra, apk-mitm, and testssl.sh; six Ruby runtime reviews cover Evil-WinRM, WPScan, Metasploit Framework, WhatWeb, urlcrazy, and CeWL. The eleven new Python reviews pin dependency manifests or setup.py metadata; the Go/Rust reviews pin toolchain metadata. All retain explicit Android/Termux limitations. Go module reviews now cover subfinder, dnsx, httpx, naabu, gau, waybackurls, katana, unfurl, ffuf, gobuster, PhoneInfoga, Nuclei, Kiterunner, KXSS, CRLFuzz, Interactsh, Tlsx, MapCIDR, Uncover, ASNMap, anew, qsreplace, hakrawler, Chisel, Alterx, Shuffledns, PureDNS, gowitness, kubeaudit, kube-linter, gauplus, TruffleHog, OSV-Scanner, Kerbrute, CloudFox, kubeletctl, Cosign, Terrascan, staticcheck, and Dockle; their current catalog install commands use `@latest`, so installed versions can differ from the pinned evidence snapshot. Every declaration includes a pinned source revision and snapshot URL. Recipe or packaging metadata is not proof of Android/Termux support, current repository availability, ABI support on a particular phone, successful installation, or runtime functionality. Eleven additional pinned upstream source reviews cover OSRFramework, Nikto, checksec, PDFiD, Kismet, BlueZ tools, Dalfox, Nuclei templates, Quark Engine, Podman, and Rootkit Hunter. Two catalog entries remain unassessed because a sufficiently immutable, directly relevant source snapshot has not yet been established: Burp Suite (vendor documentation is versioned by product release but does not provide an immutable source tree) and Wappalyzer (the current product is closed source and public forks are not the current official product). DNSGen now has a pinned upstream source revision, with PyPI-artifact equivalence and Android/Termux runtime behavior explicitly unverified. This is intentionally more honest than treating generic web pages, unrelated repositories, or unsupported platform assumptions as verified evidence. The latest expansions also document xh, feroxbuster, curlie, hping3, arp-scan, Gitleaks, cargo-audit, govulncheck, strace, ltrace, Docker CLI, kubectl, rclone, restic, RustScan, JADX, Apktool, SSLScan, ProxyChains-NG, gosec, Rizin, Crunch, and steghide, plus `iw`, Aircrack-ng, and TShark from the separate root-packages repository. The latter three remain disabled for automatic installation because wireless/packet-capture capabilities and repository configuration must be checked separately. xh, feroxbuster, and curlie now use the Termux `pkg` install path; hping3 and arp-scan remain disabled for automatic installation because their recipes live in the separate root-packages repository and have privilege/network constraints. Other recent declarations include Nmap, ShellCheck, YARA, radare2, Tesseract OCR, ClamAV, OpenSSH keyscan, MTR, and tcpdump. MTR and tcpdump use pinned recipes from the separate `termux-root-packages` repository, so repository configuration and device privileges need separate verification. The compatibility report keeps those evidence levels separate.
+## Development and testing
 
-## Personal catalog and favorites
+To run the test suite from the repository root:
 
-Use **Custom tools / favorites** in the main menu to add a tool entry without editing the project files, browse or remove your custom entries, and favorite frequently used tools. Personal entries are stored separately in `~/.syn_launch/custom_tools.json`; favorites are stored in `~/.syn_launch/favorites.json`. These files are user-local and are not committed to the GitHub repository. Custom entries go through the same ID, HTTPS-source, install-method, and package syntax checks as the built-in catalog. Adding an entry saves metadata only; it does not install the tool. Removing an entry does not uninstall its software.
-
-## What's included
-
-**269 catalog entries across 19 categories.** Coverage includes:
-
-- **Termux Core**
-- **Network & DNS**
-- **OSINT & Recon**
-- **Web App Testing**
-- **Audit, SAST & Supply Chain**
-- **Forensics & File Analysis**
-- **Cryptography & Password Hygiene**
-- **Wireless & Android Environment**
-- **Cloud, Containers & Misc**
-- **Advanced Pentest & Exploit Research**
-- **Web & API Assessment**
-- **Active Directory & Windows**
-- **Mobile App Security**
-- **Cloud & Container Security**
-- **Network & TLS Assessment**
-- **Developer & Supply Chain Security**
-- **Forensics & Reverse Engineering**
-- **Privacy & Metadata**
-- **Password & Authentication Auditing**
-
-Advanced entries include Nuclei, Dalfox, Ghauri, RustScan, Kiterunner, ffuf, Gobuster, Subfinder, dnsx, Katana, Naabu, Uncover, PureDNS, gau, gospider, Hakrawler, Gitleaks, OSV-Scanner, Checkov, Bandit, pip-audit, Syft, Grype, Cosign, Terrascan, Semgrep, Trivy, mitmproxy, SSLyze, testssl.sh, YARA, capa, Apktool, APKiD, JADX, angr, pwndbg, RustHound-CE, Cloudsplaining, kube-linter, Dockle, staticcheck, gowitness, steghide, and Pacu. Some entries are intentionally manual-only where a reliable Termux install path is not established.
-
-Some high-impact or desktop-focused projects such as Metasploit, Responder, Hydra, Hashcat, masscan, JADX, and MobSF are explicitly marked manual-only or compatibility-limited. SYN_LAUNCH does not silently root the phone or claim these work on stock Android.
-
-## Installation behavior
-
-The Installer menu provides:
-
-1. **Termux packages:** attempts each distinct package name in the catalog using `pkg`. Some package names may not exist for your repository or architecture.
-2. **One tool:** installs one selected tool using its declared method.
-3. **Toolchain prerequisites:** attempts Python, Go, Rust, and Node.js runtime packages where cataloged.
-4. **Python/Go/Cargo/npm batch:** opt-in attempt of all declared third-party installs. This can consume substantial bandwidth/storage, compile for a long time, and fail when upstream dependencies are incompatible with Android.
-5. **Last install summary:** shows operation outcomes, before/after PATH matches, and explicit unverified status for the last batch.
-
-Each bulk action requires an explicit confirmation. Individual third-party installs require typing `INSTALL`. Manual/root entries do not pretend to install automatically.
-
-| Status | Meaning |
-|---|---|
-| PATH MATCH (UNVERIFIED) | An executable with the expected name is present in PATH. This is not proof that the intended tool is installed correctly or functions. |
-| TERMUX PKG | The installer can attempt the named Termux package. |
-| PYTHON/PIP | Installs into an isolated virtual environment under `~/.syn_launch/venv`. |
-| GO BUILD | Uses `go install` and places generated binaries in `~/.local/bin`. |
-| CARGO BUILD | Uses `cargo install --locked`; native compilation may fail on Android. |
-| NPM PACKAGE | Uses the configured npm package name if a catalog entry uses this method. |
-| MANUAL | No verified automatic Termux install path is provided. |
-| ROOT/HW | Requires root, kernel permissions, special hardware, or another environment constraint. |
-
-The progress bar counts completed operations, not downloaded bytes or verified tools. Batch summaries now retain one result per entry, including whether the operation returned success, whether an executable-name PATH match existed before/after, and `verification: not_run`. A successful package-manager/build command is not a functional self-test. Command output is capped at 10 MiB per subprocess to limit log growth; remaining output is drained without being retained. Output is logged under `~/.syn_launch/logs/`; log files are restricted to the current user where Android filesystem permissions allow it. The app does not store target lists or run scans automatically.
-
-## Security and supply-chain safeguards
-
-- Uses argument arrays rather than shell command strings for package installation.
-- Validates package/module syntax inside the catalog itself, not just at install time.
-- Removes environment-based package-source overrides before installer subprocesses. Python installs use pip isolated mode and the official PyPI index; Go installs use the official Go proxy/checksum database; npm installs pin the official registry and require TLS verification.
-- Duplicate display names are rejected to keep catalog selection unambiguous.
-- The bootstrap verifies the official HTTPS Git origin, requires a clean checkout on `main`, disables Git hooks during repository operations, and installs Python dependencies through isolated pip against the official PyPI index.
-- Validates upstream links as HTTPS URLs with a hostname and rejects embedded URL credentials.
-- Validates executable names, boolean install flags, and metadata lengths before a catalog entry is accepted.
-- Browsing a tool no longer executes its local binary. Version/help probing occurs only after the user explicitly chooses Help.
-- Caps displayed and logged installer output at 10 MiB, and caps explicit help/version probe output at 64 KiB, while continuing to drain process pipes. This reduces log-flood and memory/disk-exhaustion risk.
-- Validates catalog IDs, install methods, HTTPS source links, and package/module syntax before use.
-- Uses an isolated Python virtual environment instead of installing Python security packages into Termux's system Python.
-- Installs Go binaries into a dedicated user bin directory.
-- Applies timeouts to subprocess operations and terminates timed-out process groups where supported.
-- Stores install logs and summaries with restrictive file permissions where supported.
-- Requires explicit confirmation for third-party package/build installation.
-- Does not request root, execute a scan on startup, or automatically act on a discovered target.
-- Does not treat a PATH match as proof that a tool works. Local help/version probing is best-effort and bounded by time/output limits.
-
-**Supply-chain note:** Python, Go, Cargo, npm, and Termux package managers execute third-party code or build scripts. Confirm the package name, maintainer, and project source before installing. This repository links upstream projects but does not independently audit every release. For high-assurance use, review and pin versions/commits before installing in a sensitive environment.
-
-## Responsible use
-
-Use reconnaissance, scanners, fuzzers, proxies, password-auditing tools, and exploitation frameworks only on systems, apps, accounts, and networks you own or have explicit written permission to assess. Confirm target scope, rate limits, test windows, and stop conditions. Avoid actions that disrupt services or expose real user data.
-
-Some tools can trigger account lockouts, execute commands on vulnerable systems, change cloud/directory state, or capture sensitive traffic. They are labeled with specific caveats. Protect reports, logs, tokens, hashes, and collected directory data. PhoneInfoga and similar services **do not reveal live GPS location merely from a phone number**.
-
-## Platform roadmap
-
-See [PLATFORM_ROADMAP.md](PLATFORM_ROADMAP.md) for the staged plan covering compatibility metadata, verified tool lifecycle, authorized assessment workflows, and optional Linux environments.
-
-## Physical-device validation snapshot
-
-On 2026-10-17, a temporary checkout of commit `e81f9e58eba5b71e8aa8b18f6b6ac0cdce6a0f5e` was exercised on a physical Android 16 / Termux / ARM64 device using Python 3.14.6. The then-current suite passed 28 tests. The CLI started and exited, the complete catalog rendered, search/category/tool detail paths worked, malformed category/tool inputs failed cleanly, and JSON/shell/Python syntax checks passed. The catalog contained 269 entries in 19 categories; 31 entries matched executable names in PATH.
-
-This is a **baseline device result for that exact commit**, not a claim that every listed tool works and not a validation of later commits. The 31 matches were discovery-only. No security tools were installed or run as part of this smoke test. Re-run the device checks after code changes:
-
-~~~bash
-cd ~/syn_launch
-git pull --ff-only
-python main.py --check
-python main.py --doctor
-python main.py --profile
-python main.py --compatibility-report > compatibility-report.json
-python main.py --smoke-test python
+```bash
 python -m unittest discover -s tests -v
-~~~
-
-Review the JSON report locally before sharing it because it includes local executable paths and runtime details.
-
-## Development and verification
-
-Run these checks locally:
-
-~~~bash
-python -m py_compile main.py
-bash -n install.sh
-python -m unittest discover -s tests -v
-python main.py --check
-~~~
-
-GitHub Actions runs Python syntax, bootstrap-shell, JSON, catalog-integrity, CLI, bootstrap-security and regression checks on pushes and pull requests across Python 3.10, 3.12, and 3.14. CI success on Ubuntu does not prove that a package installs or runs on Android/Termux. Real device testing is still required for Termux compatibility.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for catalog requirements, package-safety rules, testing, and upstream attribution. Report security issues privately using GitHub's security reporting feature when available; see [SECURITY.md](SECURITY.md).
-
-## Credits and licenses
-
-SYN_LAUNCH is a launcher/catalog, not the author of the listed tools. The catalog links each entry to a project or documentation source where known. Each upstream project retains its own license, trademark, API terms, and attribution requirements. Verify license and distribution conditions before bundling or redistributing any third-party software.
-
-## License
-
-SYN_LAUNCH code is released under the MIT License. Third-party tools retain their own licenses and terms.
-
-
-## Dry-run assessment workflow plans
-
-SYN_LAUNCH includes scope-bound dry-run plans, three read-only local adapters (device inventory, APK archive inventory, and evidence-report generation), and a deliberately narrow HTTPS adapter that makes one HEAD request. It is not a general-purpose scanner. No adapter grants permission to test an asset.
-
-List plans:
-
-```bash
-python main.py --workflow-list
+git diff --check
 ```
 
-Emit a JSON plan only after declaring the target scope and confirming authorization:
+Before proposing changes, review the existing documentation and compatibility model. Keep source references specific, document uncertainty rather than inferring support, and do not describe a tool as device-verified without direct evidence.
 
-```bash
-python main.py --workflow-plan web-api-review --target-scope "https://staging.example.test/api" --authorized
-python main.py --workflow-plan mobile-app-review --target-scope "owner-provided APK and isolated test device" --authorized
-python main.py --workflow-plan device-configuration-audit --target-scope "my own Android device and Termux environment" --authorized
-python main.py --workflow-plan assessment-report --target-scope "approved engagement evidence set" --authorized
-```
+## Contributing and license
 
-The `--authorized` flag is an operator declaration only. SYN_LAUNCH does not verify legal authority. Plans include explicit scope, stop conditions, and a declaration that no network actions or subprocesses were executed. See [Workflow Planning](wiki/Workflow-Planning.md) for details.
+Contributions that improve catalog accuracy, documentation, tests, and platform evidence are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change.
 
-Run the local device inventory (scope must be exactly `local-device`):
-
-```bash
-python main.py --workflow-run device-configuration-audit --target-scope local-device --authorized
-```
-
-The report also checks for PRoot, PRoot-Distro, and NetHunter command/rootfs markers. These are presence indicators only. It does not enter containers or establish host root or kernel capabilities.
-
-Make one bounded HTTPS HEAD request to an explicitly authorized endpoint. The adapter verifies TLS certificates, uses a three-second DNS-resolution budget and a five-second socket timeout, does not follow redirects or read the response body, and only retains selected response headers:
-
-```bash
-python main.py --workflow-run web-api-review --target-scope "https://staging.example.test/api/health" --authorized
-```
-
-Replace the example with an endpoint you are explicitly authorized to test. This command sends a real network request.
-
-Inventory an APK you own or are authorized to review, without extracting or executing it:
-
-```bash
-python main.py --workflow-run mobile-app-review --target-scope "$HOME/path/to/your-test.apk" --authorized
-```
-
-Summarize a local JSON evidence file containing a `findings` list. Each finding requires `title`, `severity` (`critical`, `high`, `medium`, `low`, `info`, or `unknown`), `asset`, `evidence`, and `remediation` strings:
-
-```bash
-cp examples/assessment-evidence.example.json "$HOME/evidence.json"
-# Edit the copy, replace every placeholder, and redact sensitive data.
-python main.py --workflow-run assessment-report --target-scope "$HOME/evidence.json" --authorized
-```
-
-Reports are saved with owner-only permissions under `~/.syn_launch/workflow-runs/`. APK inventory reports include the file hash and archive metadata, not the full local path. The HTTPS adapter performs only a single HEAD request, not a vulnerability scan. The local evidence-report adapter validates structure and summarizes supplied findings; it does not independently verify them.
+SYN_LAUNCH is released under the [MIT License](LICENSE). Each cataloged upstream project retains its own license and terms; consult the linked upstream project before using or redistributing it.
