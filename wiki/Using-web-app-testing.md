@@ -31,7 +31,9 @@ This is the catalog's example command, not a guarantee that it will work unchang
 
 **Upstream project / source:** [Open source](https://portswigger.net/burp)
 
-**Important note:** Catalog entry only until a verified Termux-compatible install path is available.
+**Assessment status:** Not assessed for native Termux execution. PortSwigger's published desktop system requirements list Windows, Linux (Intel/ARM 64-bit), and macOS; Android/Termux is not listed as a supported operating system. Keep this as a reference-only manual entry; do not claim native Termux compatibility.
+
+**Evidence:** [Official Burp Suite system requirements](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements) and [PortSwigger Burp Suite](https://portswigger.net/burp).
 
 ---
 
@@ -431,7 +433,9 @@ This is the catalog's example command, not a guarantee that it will work unchang
 
 **Upstream project / source:** [Open source](https://github.com/wappalyzer/wappalyzer)
 
-**Important note:** Catalog entry only until a verified Termux-compatible install path is available.
+**Assessment status:** Not assessed for native Termux execution. The public npm `wappalyzer` package is deprecated and says it is no longer maintained. [HTTP Archive's repository](https://github.com/HTTPArchive/wappalyzer) is a fork of the last open-source version; it is not evidence of current official CLI support or successful Termux execution. Keep this as a reference-only manual entry.
+
+**Evidence:** [Deprecated npm package](https://www.npmjs.com/package/wappalyzer), [HTTP Archive fork](https://github.com/HTTPArchive/wappalyzer), and [current Wappalyzer API](https://www.wappalyzer.com/api/).
 
 ---
 
