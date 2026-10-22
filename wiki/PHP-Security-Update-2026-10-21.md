@@ -29,6 +29,14 @@ pkg upgrade php
 php -v
 ```
 
+SYN_LAUNCH also has a read-only package-metadata check:
+
+```bash
+python main.py --php-security-check
+```
+
+It returns a JSON status and nonzero exit code when an update or manual review is needed. It does not make network requests, execute PHP, or update packages, and it cannot prove that a web server uses the same PHP installation.
+
 Check that the reported version is fixed for its branch. If the package manager says no update is available but your installed version is below the fixed release, refresh repository metadata and check the configured Termux repository/mirror before relying on the runtime. Do not assume that a successful package-manager command alone proves the version changed.
 
 For PHP running as a web server or service elsewhere, use the operating system/vendor's patched package and restart every PHP worker/service as directed by that vendor. Check the PHP version used by the actual service, not only the interactive CLI: CLI PHP and the web-serving PHP runtime can be different installations.
