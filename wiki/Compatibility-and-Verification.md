@@ -20,6 +20,27 @@ The catalog now has 267 source-backed declarations. One hundred ten recipe-backe
 
 `python main.py --compatibility-report` emits report schema 4. The report itself does not launch cataloged executables; it reads previously saved evidence. `python main.py --smoke-test NAME_OR_ID` performs bounded tool-specific help/version probes, each capped at five seconds and 64 KiB. It stores outcome and metadata in private `~/.syn_launch/smoke_tests.json`; a passing probe is not a feature test. `python main.py --functional-check NAME_OR_ID` runs one explicitly selected, reviewed local-only adapter when available. These adapters use fixed argument arrays, temporary directories, five-second per-command timeouts, and a combined 64 KiB stdout/stderr cap enforced while the child runs. Checks include local JSON/copy/database/archive/hash/compiler/Git operations, curl against a `file://` URL, offline npm package metadata, a temporary make target, SSH configuration expansion without connecting, and scoped `ps`/`lsof` inspection of the current process and a temporary file. No network requests or package/device-setting changes are made by these adapters. Unsupported executables are not run and return a nonzero CLI exit status so automation cannot mistake an unexecuted check for a pass. Network/probing tools (`wget`, `ping`, `telnet`, `ssh-keyscan`), interactive tools (`nano`, `less`, `watch`), device-state-changing tools (`termux-wake-lock`), app-launching tools (`termux-open`), and environment-reporting tools (`termux-info`, `ifconfig`) intentionally have no functional adapter. Functional results are stored separately in `~/.syn_launch/functional_checks.json`; a result becomes `stale_evidence` when its executable path or lightweight file identity changes. A pass means only the specific named assertion passed, not full tool compatibility, security, or complete feature verification. Device validation remains `not_run`.
 
+## Outstanding manual-entry assessments
+
+Two entries are intentionally reference-only and remain unassessed for native Termux execution:
+
+- **Burp Suite:** PortSwigger's published desktop system requirements list Windows, Linux (Intel/ARM 64-bit), and macOS, but do not list Android/Termux. No native Termux installation path or runtime evidence is recorded. See the [official system requirements](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements).
+- **Wappalyzer:** the public [npm package](https://www.npmjs.com/package/wappalyzer) is deprecated and says it is no longer maintained. The [HTTP Archive repository](https://github.com/HTTPArchive/wappalyzer) is a fork of the last open-source version; that does not establish current official CLI support or Termux execution. See also the [current Wappalyzer API](https://www.wappalyzer.com/api/).
+
+These entries remain `installable: false` and manual-only. Do not add source-backed compatibility declarations merely because a project or archived source exists. Reassess only if an authoritative, current install path and evidence for the claimed environment become available.
+
+## External HTTPS adapter validation
+
+The `web-api-review` adapter performs exactly one HTTPS `HEAD` request to the explicitly supplied URL; it does not follow redirects or read a response body. It requires an explicit operator authorization flag and rejects credentials, query strings, fragments, non-default ports, parent-directory path segments, and hostnames resolving to non-public IP addresses. This is an active network request, not a local-only diagnostic.
+
+After an authorized staging URL is supplied, run this from the repository root in Termux, replacing the placeholder with a URL you own or have explicit written permission to test:
+
+```bash
+python main.py --workflow-run web-api-review --target-scope "https://YOUR-AUTHORIZED-STAGING-HOST/" --authorized
+```
+
+Do not run the placeholder literally. Save the report privately, inspect its status code and allowlisted response headers, and record the exact URL, time, and outcome in the release evidence. A response proves only that this bounded request received a response; it does not prove application security or full API functionality. Until an authorized staging URL is available and the command has been run, external staging validation is **blocked / not run**, not passed.
+
 ## Adding evidence
 
 1. Prefer the project's official install documentation or the exact package recipe.
