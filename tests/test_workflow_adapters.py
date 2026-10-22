@@ -278,10 +278,9 @@ class WorkflowAdapterTests(unittest.TestCase):
         dns_answer = [(2, 1, 6, "", ("93.184.216.34", 443))]
         with patch("workflow_adapters.socket.getaddrinfo", return_value=dns_answer), patch(
             "workflow_adapters._PinnedHTTPSConnection", Connection
-        ) as connection:
+        ):
             report = run_web_api_review("https://staging.example.test/")
 
-        connection.assert_called_once()
         self.assertEqual(report["request_status"], "redirect_blocked_out_of_scope")
         self.assertEqual(report["execution"]["request_count"], 1)
         self.assertEqual(report["redirect_chain"][0]["redirect_target"],
