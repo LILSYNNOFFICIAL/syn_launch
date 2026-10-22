@@ -298,7 +298,7 @@ The lists below include every catalog entry and group each tool under its config
 
 ### Forensics & File Analysis
 
-21 tools in this category.
+21 tool in this category.
 
 - [Binwalk](https://github.com/termux/termux-packages) — Forensic or file-analysis utility. Work on copies of authorized evidence and protect sensitive output. **Install path:** Termux package · [packaging/evidence](https://github.com/termux/termux-packages/tree/master/packages/binwalk). _Note:_ Package availability differs by Termux repository, architecture, and release.
 - [bulk_extractor](https://github.com/simsong/bulk_extractor) — Extract structured artifacts from forensic images without relying on filesystem layout. **Install path:** Manual · [packaging/evidence](https://github.com/simsong/bulk_extractor/blob/e86383947ee016c825599887334cacf011736abf/Makefile.am). _Note:_ Catalog entry only until a verified Termux-compatible install path is available.
@@ -418,7 +418,7 @@ The lists below include every catalog entry and group each tool under its config
 
 ### Web & API Assessment
 
-1 tools in this category.
+1 tool in this category.
 
 - [WPScan](https://github.com/wpscanteam/wpscan) — WordPress security scanner and vulnerability enumeration. **Install path:** Manual · [packaging/evidence](https://github.com/wpscanteam/wpscan/blob/5d672f66ee512301b654a2d79c9ddf6f8509eeb4/wpscan.gemspec). _Note:_ Some features require an API token; respect rate limits.
 
@@ -508,7 +508,7 @@ The lists below include every catalog entry and group each tool under its config
 
 ### Privacy & Metadata
 
-1 tools in this category.
+1 tool in this category.
 
 - [Metagoofil](https://github.com/opsdisk/metagoofil) — Collect metadata from public documents for authorized reconnaissance. **Install path:** Manual · [packaging/evidence](https://github.com/opsdisk/metagoofil/blob/8d50624f1534e63c8bb64ee132d8c2298dba6724/requirements.txt). _Note:_ Search-provider terms and compatibility change; manual-only.
 
