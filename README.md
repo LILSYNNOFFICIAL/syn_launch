@@ -15,7 +15,9 @@
 
 SYN_LAUNCH groups security and developer tools into numbered menus. Select a tool to see its purpose, installation method, compatibility caveats, upstream source, and example command. Local version/help probes are available only after you explicitly choose Help. The installer can attempt supported Termux packages and opt-in Python, Go, and Cargo installs.
 
-> **Important:** cataloged does not mean installed, compatible, or verified on every phone. Termux is not desktop Linux. Android permissions, kernel features, CPU architecture, package repositories, Python wheels, native libraries, external adapters, and root access all affect compatibility. PATH detection is discovery only. SYN_LAUNCH reports compatibility as unknown/not assessed until there is explicit metadata or evidence, and it does not claim a tool works merely because its executable name appears in PATH.
+> **Security notice (2026-10-21):** PHP released fixes for two critical remote-code-execution vulnerabilities. PHP is an optional catalog package, not SYN_LAUNCH's runtime. If you use PHP, see the [fixed versions and update instructions](wiki/PHP-Security-Update-2026-10-21.md) and verify the PHP version used by any web-serving service.
+
+**Important:** cataloged does not mean installed, compatible, or verified on every phone. Termux is not desktop Linux. Android permissions, kernel features, CPU architecture, package repositories, Python wheels, native libraries, external adapters, and root access all affect compatibility. PATH detection is discovery only. SYN_LAUNCH reports compatibility as unknown/not assessed until there is explicit metadata or evidence, and it does not claim a tool works merely because its executable name appears in PATH.
 
 ## Quick start
 
@@ -76,6 +78,7 @@ python main.py --functional-check jq
 - [Compatibility and verification model](wiki/Compatibility-and-Verification.md)
 - [Catalog and tool lifecycle](wiki/Catalog-and-Tool-Lifecycle.md)
 - [Security and responsible use](wiki/Security-and-Responsible-Use.md)
+- [Critical PHP security update (2026-10-21)](wiki/PHP-Security-Update-2026-10-21.md)
 - [Troubleshooting](wiki/Troubleshooting.md)
 - [Development and contributing](wiki/Development-and-Contributing.md)
 - [Workflow planning and bounded adapters](wiki/Workflow-Planning.md)
