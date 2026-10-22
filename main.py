@@ -1320,6 +1320,8 @@ def smoke_test_tool(tool):
             "ssh-keygen": ("--help", "-h", "--version"),
             "ssh-keyscan": ("-h", "--help", "--version"),
             "whois": ("--help", "--version", "-h"),
+            # `dig --version` may be parsed as a query name; `-v` is local-only.
+            "dig": ("-v",),
         }.get(executable, ("--version", "--help", "-h"))
         for flag in probe_flags:
             output, truncated, timed_out, returncode = bounded_probe(
