@@ -523,6 +523,10 @@ class CatalogTests(unittest.TestCase):
         from unittest.mock import patch
         candidates = {
             "curl": "curl-local-file-roundtrip",
+            "rg": "ripgrep-local-fixture-search",
+            "fd": "fd-local-fixture-find",
+            "file": "file-local-text-identification",
+            "tree": "tree-local-directory-inventory",
             "vim": "vim-local-ex-mode-edit",
             "npm": "npm-offline-package-metadata",
             "make": "make-local-target",
@@ -555,6 +559,41 @@ class CatalogTests(unittest.TestCase):
                         self.assertEqual(record["check_id"], expected_check)
                         self.assertFalse(record["network_actions_executed"])
                         self.assertFalse(record["package_changes"])
+
+    def test_local_search_and_inventory_adapters_are_bounded_and_fixture_only(self):
+        import tempfile
+        from unittest.mock import patch
+        cases = {
+            "rg": ("ripgrep-local-fixture-search", b"2:needle-one\n4:needle-two\n"),
+            "fd": ("fd-local-fixture-find", None),
+            "file": ("file-local-text-identification", b"ASCII text\n"),
+            "tree": ("tree-local-directory-inventory", None),
+        }
+        for executable, (expected_check, canned_output) in cases.items():
+            with self.subTest(executable=executable), tempfile.TemporaryDirectory() as tmp:
+                calls = []
+                def invoke(args, **kwargs):
+                    calls.append(args)
+                    if canned_output is not None:
+                        return canned_output
+                    root = Path(args[-1])
+                    target = root / "nested" / "needle.txt"
+                    return str(target).encode("utf-8") + b"\n"
+                tool = {
+                    "id": "functional-" + executable, "name": executable,
+                    "executable": executable, "category": "Test", "install_kind": "manual",
+                    "package": None, "installable": False, "description": "Test-only",
+                    "source": "https://example.org/test", "caveat": "Local-only test."
+                }
+                with patch.object(APP, "STATE_DIR", Path(tmp)), \
+                     patch.object(APP.shutil, "which", return_value="/mock/" + executable), \
+                     patch.object(APP, "run_bounded_local_command", side_effect=invoke):
+                    record = APP.functional_check_tool(tool)
+                self.assertEqual(record["status"], "passed", record)
+                self.assertEqual(record["check_id"], expected_check)
+                self.assertTrue(calls)
+                self.assertFalse(record["network_actions_executed"])
+                self.assertFalse(record["package_changes"])
 
     def test_vim_functional_check_is_noninteractive_and_edits_only_temporary_fixture(self):
         import tempfile

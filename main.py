@@ -1412,6 +1412,35 @@ def functional_check_tool(tool):
                     out = invoke([path, "-e", "-n", '{ok:true,items:2} | .ok == true and .items == 2'])
                     require(out.strip() == b"true", "jq predicate did not return true")
                     check_id = "jq-json-assertion"
+                elif executable == "rg":
+                    search_file = root / "search.txt"
+                    search_file.write_text("first\nneedle-one\nmiddle\nneedle-two\n", encoding="utf-8")
+                    out = invoke([path, "-n", "needle", str(search_file)])
+                    require(out.splitlines() == [b"2:needle-one", b"4:needle-two"],
+                            "ripgrep did not return the expected local fixture matches")
+                    check_id = "ripgrep-local-fixture-search"
+                elif executable == "fd":
+                    nested = root / "nested"
+                    nested.mkdir()
+                    target = nested / "needle.txt"
+                    target.write_text("local fixture\n", encoding="utf-8")
+                    out = invoke([path, "--type", "f", "needle", str(root)])
+                    require(len(out.splitlines()) == 1 and b"needle.txt" in out,
+                            "fd did not find the expected local fixture filename")
+                    check_id = "fd-local-fixture-find"
+                elif executable == "file":
+                    out = invoke([path, "-b", str(source)])
+                    require(b"ASCII text" in out, "file did not identify the temporary text fixture")
+                    check_id = "file-local-text-identification"
+                elif executable == "tree":
+                    nested = root / "nested"
+                    nested.mkdir()
+                    target = nested / "needle.txt"
+                    target.write_text("local fixture\n", encoding="utf-8")
+                    out = invoke([path, "-fi", str(root)])
+                    require(str(target).encode("utf-8") in out,
+                            "tree did not list the expected nested fixture file")
+                    check_id = "tree-local-directory-inventory"
                 elif executable == "rsync":
                     target = root / "copy.txt"
                     invoke([path, "-a", str(source), str(target)])
