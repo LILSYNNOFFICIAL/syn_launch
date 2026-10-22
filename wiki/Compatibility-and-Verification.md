@@ -31,7 +31,7 @@ These entries remain `installable: false` and manual-only. Do not add source-bac
 
 ## External HTTPS adapter validation
 
-The `web-api-review` adapter performs exactly one HTTPS `HEAD` request to the explicitly supplied URL; it does not follow redirects or read a response body. It requires an explicit operator authorization flag and rejects credentials, query strings, fragments, non-default ports, parent-directory path segments, and hostnames resolving to non-public IP addresses. This is an active network request, not a local-only diagnostic.
+The `web-api-review` adapter sends one initial HTTPS `HEAD` request and follows at most three redirects that remain on the exact same hostname. It records each hop's status, normalized host/path, and allowlisted response headers, without reading response bodies or retaining raw `Location` values. Redirects to a different hostname are recorded as out of scope and are not followed. The adapter rejects credentials, query strings, fragments, non-default ports, parent-directory path segments, and hostnames resolving to non-public IP addresses. This is an active network check, not a local-only diagnostic.
 
 After an authorized staging URL is supplied, run this from the repository root in Termux, replacing the placeholder with a URL you own or have explicit written permission to test:
 
@@ -39,8 +39,7 @@ After an authorized staging URL is supplied, run this from the repository root i
 python main.py --workflow-run web-api-review --target-scope "https://YOUR-AUTHORIZED-STAGING-HOST/" --authorized
 ```
 
-Do not run the placeholder literally. Save the report privately, inspect its status code and allowlisted response headers, and record the exact URL, time, and outcome in the release evidence. A response proves only that this bounded request received a response; it does not prove application security or full API functionality. A bounded check was run on 2026-10-22 against the owner-authorized scope `https://meepsheep.com/`. It made exactly one HTTPS `HEAD` request and received `307 Temporary Redirect`; the adapter did not follow the redirect or retain the `Location` header, so the redirect destination and final page remain unverified. The response included `strict-transport-security: max-age=31536000; includeSubDomains`, `x-content-type-options: nosniff`, `x-frame-options: SAMEORIGIN`, and `referrer-policy: same-origin`. This is endpoint-response evidence only, not a security assessment or full application validation.
-
+Do not run the placeholder literally. Save the report privately and review the status, redirect chain, and allowlisted response headers. A response proves only that the bounded request chain received a response; it does not prove application security or full API functionality. An initial check against the owner-authorized scope `https://meepsheep.com/` returned `307 Temporary Redirect`. The redirect destination was not captured by the earlier one-request adapter version; rerun the check with the current bounded-redirect implementation to establish whether the destination stays on the authorized hostname.
 ## Adding evidence
 
 1. Prefer the project's official install documentation or the exact package recipe.
