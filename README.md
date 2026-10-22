@@ -28,6 +28,7 @@ The app is designed to help you explore and manage tools—not to imply that eve
 - [How to read the catalog](#how-to-read-the-catalog)
 - [Using SYN_LAUNCH](#using-syn_launch)
 - [Tool guides by category](#tool-guides-by-category)
+- [Phone-number and Android pentesting Top 75](#phone-number-and-android-pentesting-top-75)
 - [Complete tool catalog](#complete-tool-catalog)
 - [Personal catalog and favorites](#personal-catalog-and-favorites)
 - [Security and responsible use](#security-and-responsible-use)
@@ -76,6 +77,7 @@ python main.py --list
 python main.py --search nuclei
 python main.py --category "Mobile App Security"
 python main.py --tool Nmap
+python main.py --toolset phone-android-top75
 python main.py --compatibility-report > compatibility-report.json
 python main.py --smoke-test python
 python main.py --functional-check jq
@@ -87,6 +89,7 @@ python main.py --php-security-check
 - **`--profile`** emits a machine-readable runtime profile. Runtime detection does not verify individual tools.
 - **`--list`, `--search`, and `--category`** help browse the catalog.
 - **`--tool`** displays metadata for one tool. Browsing does not execute the tool.
+- **`--toolset phone-android-top75`** emits a validated JSON profile of 75 curated phone-number OSINT, Android app security, device diagnostics, network, and forensic tools. It is read-only and does not install or execute tools.
 - **`--smoke-test`** performs a bounded help/version probe for one explicitly selected entry.
 - **`--functional-check`** runs one explicitly selected, allowlisted local-only check. Unsupported tools are not run.
 - **`--compatibility-report`** emits JSON that separates installation metadata, PATH discovery, compatibility declarations, smoke-test evidence, functional-check evidence, and device validation.
@@ -116,6 +119,10 @@ SYN_LAUNCH deliberately distinguishes catalog metadata from evidence that a tool
 The latest catalog review records **267 source-backed compatibility declarations**. Two catalog entries remain unassessed for native Termux execution; both are manual-only and are not presented as verified. These are: [Burp Suite](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements) is not listed among PortSwigger's supported desktop operating systems, and the public [Wappalyzer npm package](https://www.npmjs.com/package/wappalyzer) is deprecated while the [HTTP Archive fork](https://github.com/HTTPArchive/wappalyzer) represents an older open-source version. Both remain reference-only; neither is presented as verified. See the [release-readiness checklist](wiki/Release-Readiness.md) for the remaining external staging and verification gates. DNSGen now has a pinned upstream source revision, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
 
 Some entries require root, particular kernel capabilities, wireless hardware, companion applications, credentials, external services, or a separate Linux environment. Entries with those constraints are marked accordingly where known. Please read each tool's notes before attempting installation or use.
+
+## Phone-number and Android pentesting Top 75
+
+The curated [Phone Number OSINT + Android Penetration Testing Top 75](wiki/Phone-Number-and-Android-Pentest-Top75.md) profile groups 75 existing catalog entries and can be inspected with `python main.py --toolset phone-android-top75`. It includes phone-number public-source research, Android app security, device diagnostics, network/TLS analysis, recon, and forensics. This profile does not imply all 75 can be installed or run on a stock Android/Termux device. The command is read-only; install tools individually after reviewing platform, root, hardware, and credential requirements.
 
 ## Using SYN_LAUNCH
 
