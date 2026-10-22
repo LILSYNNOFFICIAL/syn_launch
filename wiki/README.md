@@ -9,6 +9,7 @@ SYN_LAUNCH is a mobile-first Termux catalog, installer, and diagnostics tool for
 ## Start here
 
 - [Using SYN_LAUNCH: Practical User Guide](Using-SYN-LAUNCH.md) — launch the app, find tools, interpret entries, install carefully, and use diagnostics.
+- [Phone Number OSINT + Android Pentesting: Top 75](Phone-Number-and-Android-Pentest-Top75.md) — curated, catalog-backed toolkit profile and compatibility limits.
 - [Installation and first run](Installation.md)
 - [Compatibility and verification model](Compatibility-and-Verification.md)
 - [Catalog and tool lifecycle](Catalog-and-Tool-Lifecycle.md)
