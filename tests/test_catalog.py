@@ -455,6 +455,27 @@ class CatalogTests(unittest.TestCase):
                 self.assertTrue(record["expected_usage_exit"])
                 self.assertEqual(mocked.call_args_list[0].args[0][-1], expected_flag)
 
+    def test_dig_smoke_test_uses_local_only_version_flag(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {
+            "id": "dig-smoke-test", "name": "dig", "executable": "dig",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/bind",
+            "caveat": "A version probe is not a feature test."
+        }
+        def probe(command, **kwargs):
+            if command[-1] == "-v":
+                return ("DiG 9.test\n", False, False, 0)
+            raise AssertionError("dig smoke test must not try flags that could trigger DNS queries")
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value="/usr/bin/dig"), patch.object(APP, "bounded_probe", side_effect=probe) as mocked:
+                record = APP.smoke_test_tool(tool)
+        self.assertEqual(record["status"], "passed")
+        self.assertEqual(record["probe"], "-v")
+        self.assertEqual(mocked.call_count, 1)
+        self.assertEqual(mocked.call_args_list[0].args[0][-1], "-v")
+
     def test_whois_smoke_test_accepts_usage_text_when_help_exits_nonzero(self):
         import tempfile
         from unittest.mock import patch
