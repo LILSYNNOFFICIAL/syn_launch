@@ -523,6 +523,7 @@ class CatalogTests(unittest.TestCase):
         from unittest.mock import patch
         candidates = {
             "curl": "curl-local-file-roundtrip",
+            "vim": "vim-local-ex-mode-edit",
             "npm": "npm-offline-package-metadata",
             "make": "make-local-target",
             "ssh": "ssh-config-expansion-no-connect",
@@ -554,6 +555,33 @@ class CatalogTests(unittest.TestCase):
                         self.assertEqual(record["check_id"], expected_check)
                         self.assertFalse(record["network_actions_executed"])
                         self.assertFalse(record["package_changes"])
+
+    def test_vim_functional_check_is_noninteractive_and_edits_only_temporary_fixture(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {
+            "id": "vim-functional-test", "name": "Vim", "executable": "vim",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/vim",
+            "caveat": "A local fixture assertion is not full compatibility certification."
+        }
+        calls = []
+        def invoke(args, **kwargs):
+            calls.append((args, kwargs))
+            fixture = Path(args[5])
+            fixture.write_bytes(b"SYN_LAUNCH functional check\nedited line\n")
+            return b""
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), \
+                 patch.object(APP.shutil, "which", return_value="/mock/vim"), \
+                 patch.object(APP, "run_bounded_local_command", side_effect=invoke):
+                record = APP.functional_check_tool(tool)
+        self.assertEqual(record["status"], "passed", record)
+        self.assertEqual(record["check_id"], "vim-local-ex-mode-edit")
+        self.assertEqual(calls[0][0][1:5], ["-Nu", "NONE", "-n", "-es"])
+        self.assertEqual(calls[0][0][-2:], ["-c", "wq"])
+        self.assertFalse(record["network_actions_executed"])
+        self.assertFalse(record["package_changes"])
 
     def test_npm_functional_check_isolates_cache_config_and_logs(self):
         from unittest.mock import patch

@@ -1490,6 +1490,12 @@ def functional_check_tool(tool):
                     out = invoke([path, "--fail", "--silent", "--show-error", "--max-time", "5", source.as_uri()])
                     require(out == raw, "curl local file transfer differs from source")
                     check_id = "curl-local-file-roundtrip"
+                elif executable == "vim":
+                    invoke([path, "-Nu", "NONE", "-n", "-es", str(source),
+                            "-c", "2s/second line/edited line/", "-c", "wq"])
+                    require(source.read_bytes() == b"SYN_LAUNCH functional check\nedited line\n",
+                            "Vim did not apply the expected edit to the temporary fixture")
+                    check_id = "vim-local-ex-mode-edit"
                 elif executable == "npm":
                     (root / "package.json").write_text('{"name":"syn-launch-local-probe","version":"1.0.0"}\n', encoding="utf-8")
                     # Keep npm's cache and logging inside this temporary directory and
