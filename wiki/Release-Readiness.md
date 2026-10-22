@@ -32,8 +32,8 @@ The first four tools also passed bounded local-fixture assertions; Vim passed it
 ## Release checklist
 
 - [x] Confirm `main` is the only listed branch.
-- [x] Confirm latest recorded GitHub Actions matrix is green for Python 3.10, 3.12, and 3.14.
-- [x] Confirm the current regression suite is passing (144 tests recorded in the Python 3.12 job).
+- [x] Confirm the feature/code-test baseline passed on Python 3.10, 3.12, and 3.14, with 144 tests recorded in the Python 3.12 job.
+- [ ] Before tagging a release, confirm the newest run for the final `main` commit is green in the [live Actions history](https://github.com/LILSYNNOFFICIAL/syn_launch/actions).
 - [x] Document catalog size, evidence level, device-check results, and known unsupported/unassessed entries.
 - [x] Document the difference between catalog presence, installation, smoke probes, local functional checks, and full device compatibility.
 - [ ] Repeat the local device diagnostic suite on the target phone after this documentation change. The connected device was offline during this review, so this check cannot be truthfully marked complete here.
