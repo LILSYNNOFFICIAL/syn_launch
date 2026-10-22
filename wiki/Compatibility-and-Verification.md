@@ -39,7 +39,7 @@ After an authorized staging URL is supplied, run this from the repository root i
 python main.py --workflow-run web-api-review --target-scope "https://YOUR-AUTHORIZED-STAGING-HOST/" --authorized
 ```
 
-Do not run the placeholder literally. Save the report privately, inspect its status code and allowlisted response headers, and record the exact URL, time, and outcome in the release evidence. A response proves only that this bounded request received a response; it does not prove application security or full API functionality. Until an authorized staging URL is available and the command has been run, external staging validation is **blocked / not run**, not passed.
+Do not run the placeholder literally. Save the report privately, inspect its status code and allowlisted response headers, and record the exact URL, time, and outcome in the release evidence. A response proves only that this bounded request received a response; it does not prove application security or full API functionality. A bounded check was run on 2026-10-22 against the owner-authorized scope `https://meepsheep.com/`. It made exactly one HTTPS `HEAD` request and received `307 Temporary Redirect`; the adapter did not follow the redirect or retain the `Location` header, so the redirect destination and final page remain unverified. The response included `strict-transport-security: max-age=31536000; includeSubDomains`, `x-content-type-options: nosniff`, `x-frame-options: SAMEORIGIN`, and `referrer-policy: same-origin`. This is endpoint-response evidence only, not a security assessment or full application validation.
 
 ## Adding evidence
 
