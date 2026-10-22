@@ -15,6 +15,21 @@ class PhoneAndroidToolsetTests(unittest.TestCase):
         self.assertEqual(proc.returncode,0,proc.stderr); payload=json.loads(proc.stdout)
         self.assertEqual(payload["tool_count"],75); self.assertEqual(payload["summary"]["catalog_entries_reused"],75)
         self.assertEqual(sum(len(g["tools"]) for g in payload["groups"]),75); self.assertIn("No tools were installed or executed",payload["note"])
+    def test_interactive_main_menu_exposes_and_browses_top75_toolset(self):
+        proc=subprocess.run(
+            [sys.executable,str(ROOT/"main.py")],
+            input="4\n1\n7\n0\n0\n9\n",
+            capture_output=True,text=True,timeout=20
+        )
+        self.assertEqual(proc.returncode,0,proc.stderr)
+        self.assertIn("Curated toolsets (Phone + Android Top 75)",proc.stdout)
+        self.assertIn("Phone Number OSINT + Android Penetration Testing: Top 75 (75 tools)",proc.stdout)
+        self.assertIn("Toolset groups",proc.stdout)
+        self.assertIn("Phone-number OSINT and identity pivots",proc.stdout)
+        self.assertIn("Show all tools in this toolset",proc.stdout)
+        self.assertIn("PhoneInfoga",proc.stdout)
+        self.assertIn("Android app security and runtime analysis",proc.stdout)
+
     def test_unknown_toolset_fails_cleanly(self):
         proc=subprocess.run([sys.executable,str(ROOT/"main.py"),"--toolset","missing-toolset"],capture_output=True,text=True,timeout=20)
         self.assertEqual(proc.returncode,2); self.assertIn("unknown toolset",proc.stderr)
