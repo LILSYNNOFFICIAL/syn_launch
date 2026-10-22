@@ -37,14 +37,14 @@ The catalog contains **269 tools across 19 categories**. Each category page desc
 - [Wireless & Android Environment](Using-wireless-and-android-environment.md) — 10 tools
 - [Cloud, Containers & Misc](Using-cloud-containers-and-misc.md) — 26 tools
 - [Advanced Pentest & Exploit Research](Using-advanced-pentest-and-exploit-research.md) — 26 tools
-- [Web & API Assessment](Using-web-and-api-assessment.md) — 1 tools
+- [Web & API Assessment](Using-web-and-api-assessment.md) — 1 tool
 - [Active Directory & Windows](Using-active-directory-and-windows.md) — 12 tools
 - [Mobile App Security](Using-mobile-app-security.md) — 10 tools
 - [Cloud & Container Security](Using-cloud-and-container-security.md) — 12 tools
 - [Network & TLS Assessment](Using-network-and-tls-assessment.md) — 8 tools
 - [Developer & Supply Chain Security](Using-developer-and-supply-chain-security.md) — 5 tools
 - [Forensics & Reverse Engineering](Using-forensics-and-reverse-engineering.md) — 7 tools
-- [Privacy & Metadata](Using-privacy-and-metadata.md) — 1 tools
+- [Privacy & Metadata](Using-privacy-and-metadata.md) — 1 tool
 - [Password & Authentication Auditing](Using-password-and-authentication-auditing.md) — 3 tools
 
 ## Evidence rule
