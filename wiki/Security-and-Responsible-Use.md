@@ -13,3 +13,7 @@ Termux, Python, Go, Cargo, and npm installers may execute third-party code or bu
 Reports may expose executable paths and runtime details. Logs may contain command output. Protect tokens, hashes, captured traffic, cloud policies, directory exports, and assessment reports. Redact sensitive details before sharing bug reports.
 
 Report security issues privately through GitHub's security reporting feature when available. See [SECURITY.md](../SECURITY.md).
+
+## Time-sensitive runtime advisory
+
+PHP is an optional catalog package, not the SYN_LAUNCH application runtime. On 21 October 2026, the PHP project published fixed releases for two critical unauthenticated remote-code-execution vulnerabilities. If PHP is installed, especially if it serves web requests, follow the [PHP security update guide](PHP-Security-Update-2026-10-21.md) and verify the version used by the actual service. The catalog's PHP entry records the upstream Termux package recipe revision, but this does not prove your device's installed version is patched.
