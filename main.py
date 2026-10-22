@@ -1159,6 +1159,68 @@ def installer(data):
             except OSError as exc:
                 say("Could not read lifecycle audit: " + str(exc))
 
+def load_toolset(name, data):
+    """Load and validate a curated toolset against the authoritative catalog."""
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+        raise ValueError("toolset name must be a lowercase slug")
+    path = APP_DIR / "toolsets" / (name + ".json")
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise ValueError(f"unknown toolset: {name}") from exc
+    if not isinstance(payload, dict) or payload.get("id") != name or payload.get("schema_version") != 1:
+        raise ValueError("invalid toolset identity or schema version")
+    groups = payload.get("groups")
+    if not isinstance(groups, list) or not groups:
+        raise ValueError("toolset groups must be a non-empty list")
+    catalog = {tool["id"]: tool for tool in data["tools"]}
+    ids = []
+    for group in groups:
+        if not isinstance(group, dict) or not isinstance(group.get("title"), str) or not group["title"].strip():
+            raise ValueError("toolset group requires a title")
+        tool_ids = group.get("tool_ids")
+        if not isinstance(tool_ids, list) or not tool_ids or any(not isinstance(item, str) for item in tool_ids):
+            raise ValueError("toolset group tool_ids must be a non-empty string list")
+        ids.extend(tool_ids)
+    if len(ids) != len(set(ids)):
+        raise ValueError("toolset contains duplicate tool IDs")
+    missing = sorted(set(ids) - set(catalog))
+    if missing:
+        raise ValueError("toolset references unknown catalog IDs: " + ", ".join(missing))
+    if type(payload.get("tool_count")) is not int or payload["tool_count"] != len(ids):
+        raise ValueError("toolset tool_count does not match group membership")
+    payload["groups"] = [dict(group, tools=[catalog[item] for item in group["tool_ids"]]) for group in groups]
+    payload["tools"] = [catalog[item] for item in ids]
+    return payload
+
+
+def print_toolset(name, data):
+    """Emit machine-readable toolset metadata and current PATH/installability signals."""
+    try:
+        toolset = load_toolset(name, data)
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        print("Toolset error: " + str(exc), file=sys.stderr)
+        return 2
+    groups = []
+    for group in toolset["groups"]:
+        groups.append({"title": group["title"], "tools": [{
+            "id": t["id"], "name": t["name"], "category": t["category"],
+            "install_kind": t["install_kind"], "installable": t["installable"],
+            "present_in_path": bool(installed(t)), "description": t["description"],
+            "source": t["source"], "caveat": t["caveat"]
+        } for t in group["tools"]]})
+    print(json.dumps({"schema_version": 1, "id": toolset["id"], "title": toolset["title"],
+        "tool_count": toolset["tool_count"], "reviewed_on": toolset["reviewed_on"],
+        "description": toolset["description"], "selection_policy": toolset["selection_policy"],
+        "safety_scope": toolset["safety_scope"], "groups": groups,
+        "summary": {"catalog_entries_reused": len(toolset["tools"]),
+            "present_in_path": sum(bool(installed(t)) for t in toolset["tools"]),
+            "installable_by_declared_method": sum(bool(t["installable"]) for t in toolset["tools"]),
+            "manual_or_root_only": sum(not bool(t["installable"]) for t in toolset["tools"])},
+        "note": "PATH presence is not a functional test. Installability metadata is not proof of Termux compatibility. No tools were installed or executed by this command."}, indent=2, ensure_ascii=False))
+    return 0
+
+
 def normalized_architecture(machine=None):
     """Normalize common Android/Linux machine names without certifying ABI support."""
     machine = (machine or platform.machine() or "unknown").lower()
@@ -1707,6 +1769,7 @@ def main():
     parser.add_argument("--search",metavar="QUERY",help="search catalog without interactive menu")
     parser.add_argument("--category",metavar="NAME",help="list tools in a category")
     parser.add_argument("--tool",metavar="NAME",help="show status and local help for a tool")
+    parser.add_argument("--toolset",metavar="ID",help="show a validated curated toolset as JSON (does not install or execute tools)")
     parser.add_argument("--workflow-list",action="store_true",help="list available dry-run assessment workflow plans")
     parser.add_argument("--workflow-plan",metavar="WORKFLOW_ID",help="emit a scope-bound dry-run plan; does not run tools")
     parser.add_argument("--workflow-run",metavar="WORKFLOW_ID",help="run an approved read-only local workflow adapter; unsupported workflows remain plan-only")
@@ -1716,6 +1779,8 @@ def main():
     try: data=load_catalog()
     except (OSError,json.JSONDecodeError,ValueError) as exc:
         print("Catalog validation failed:",exc,file=sys.stderr); return 2
+    if args.toolset:
+        return print_toolset(args.toolset, data)
     if args.workflow_list:
         print(json.dumps([{"id": key, "title": value["title"], "purpose": value["purpose"]} for key, value in sorted(WORKFLOWS.items())], indent=2))
         return 0
