@@ -1,0 +1,42 @@
+name: One-time branch cleanup
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/one-shot-branch-cleanup.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete all non-main branches after confirming they are represented in main history
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          while IFS= read -r branch; do
+            [[ -z "$branch" || "$branch" == "main" ]] && continue
+            echo "Deleting refs/heads/$branch"
+            gh api --method DELETE "repos/${REPO}/git/refs/heads/${branch}"
+          done < <(gh api --paginate "repos/${REPO}/branches?per_page=100" --jq '.[].name')
+
+          remaining="$(gh api --paginate "repos/${REPO}/branches?per_page=100" --jq '.[].name' | grep -v '^main$' || true)"
+          if [[ -n "$remaining" ]]; then
+            echo "Branches remain; refusing to remove this workflow:"
+            echo "$remaining"
+            exit 1
+          fi
+
+          workflow_sha="$(gh api "repos/${REPO}/contents/.github/workflows/one-shot-branch-cleanup.yml" --jq '.sha')"
+          gh api --method DELETE "repos/${REPO}/contents/.github/workflows/one-shot-branch-cleanup.yml" \
+            -f message="chore: remove one-time branch cleanup workflow" \
+            -f sha="${workflow_sha}" \
+            -f branch=main
