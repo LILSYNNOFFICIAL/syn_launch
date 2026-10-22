@@ -1254,6 +1254,7 @@ def smoke_test_tool(tool):
         # Keep probe arguments tool-specific where standard flags differ.
         probe_flags = {
             "ssh": ("-V", "--help", "-h"),
+            "ip": ("-V", "--help", "-h"),
             "ssh-keygen": ("--help", "-h", "--version"),
             "ssh-keyscan": ("-h", "--help", "--version"),
         }.get(executable, ("--version", "--help", "-h"))

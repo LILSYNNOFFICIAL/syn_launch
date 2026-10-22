@@ -412,6 +412,26 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(record["probe"], "-V")
         self.assertEqual(mocked.call_args_list[0].args[0][-1], "-V")
 
+    def test_iproute2_smoke_test_uses_supported_version_flag(self):
+        import tempfile
+        from unittest.mock import patch
+        tool = {
+            "id": "iproute2-smoke-test", "name": "iproute2", "executable": "ip",
+            "category": "Test", "install_kind": "manual", "package": None, "installable": False,
+            "description": "Test-only", "source": "https://example.org/iproute2",
+            "caveat": "A version probe is not a feature test."
+        }
+        def probe(command, **kwargs):
+            if command[-1] == "-V":
+                return ("ip utility, iproute2-test-version\n", False, False, 0)
+            return ("", False, False, 1)
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(APP, "STATE_DIR", Path(tmp)), patch.object(APP.shutil, "which", return_value="/usr/bin/ip"), patch.object(APP, "bounded_probe", side_effect=probe) as mocked:
+                record = APP.smoke_test_tool(tool)
+        self.assertEqual(record["status"], "passed")
+        self.assertEqual(record["probe"], "-V")
+        self.assertEqual(mocked.call_args_list[0].args[0][-1], "-V")
+
     def test_ssh_key_tools_accept_expected_usage_exit(self):
         import tempfile
         from unittest.mock import patch
