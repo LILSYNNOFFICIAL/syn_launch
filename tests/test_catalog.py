@@ -1,4 +1,5 @@
 import copy
+import io
 import importlib.util
 import json
 import os
@@ -7,6 +8,7 @@ import subprocess
 import tempfile
 import sys
 import unittest
+from contextlib import redirect_stdout
 from unittest import mock
 from pathlib import Path
 
@@ -161,6 +163,25 @@ class CatalogTests(unittest.TestCase):
         guide = (ROOT / "wiki" / "PHP-Security-Update-2026-10-21.md").read_text(encoding="utf-8")
         self.assertIn("pkg upgrade php", guide)
         self.assertIn("SYN_LAUNCH is implemented in Python", guide)
+
+    def test_php_security_check_cli_outputs_json_and_exit_status(self):
+        cases = [
+            ({"resolved_version": "8.5.11-1", "version_evidence": "package_manager_metadata", "version_query_exit_code": 0}, 1, "update_required"),
+            ({"resolved_version": "8.5.12-1", "version_evidence": "package_manager_metadata", "version_query_exit_code": 0}, 0, "fixed_release_or_newer"),
+            ({"resolved_version": None, "version_evidence": "not_found", "version_query_exit_code": 1}, 0, "not_installed"),
+        ]
+        for version_result, expected_code, expected_status in cases:
+            with self.subTest(version_result=version_result):
+                output = io.StringIO()
+                with mock.patch.object(APP, "collect_resolved_version", return_value=version_result), \
+                     mock.patch("sys.argv", ["main.py", "--php-security-check"]), \
+                     redirect_stdout(output):
+                    exit_code = APP.main()
+                self.assertEqual(exit_code, expected_code)
+                report = json.loads(output.getvalue())
+                self.assertEqual(report["status"], expected_status)
+                self.assertFalse(report["checks"]["network_requests_made"])
+                self.assertFalse(report["checks"]["package_changed"])
 
     def test_catalog_rejects_malformed_php_security_advisory_metadata(self):
         broken = copy.deepcopy(self.data)
