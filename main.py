@@ -1194,6 +1194,47 @@ def load_toolset(name, data):
     return payload
 
 
+def browse_curated_toolsets(data):
+    """Interactive browser for catalog-backed curated toolsets."""
+    directory = APP_DIR / "toolsets"
+    names = sorted(path.stem for path in directory.glob("*.json") if path.is_file())
+    if not names:
+        say("No curated toolsets are available.")
+        return
+    labels = []
+    for name in names:
+        try:
+            payload = load_toolset(name, data)
+            labels.append(f"{payload['title']} ({payload['tool_count']} tools)")
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            labels.append(f"{name} [invalid: {exc}]")
+    selected = menu("Curated toolsets", labels)
+    if not selected.isdigit() or not 1 <= int(selected) <= len(names):
+        return
+    name = names[int(selected) - 1]
+    try:
+        toolset = load_toolset(name, data)
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        say("Could not load curated toolset: " + str(exc))
+        return
+    say("\n" + toolset["title"])
+    say(toolset.get("description", ""))
+    say(f"Tools: {toolset['tool_count']} | Groups: {len(toolset['groups'])}")
+    say(toolset.get("safety_scope", "Use only tools and targets you are authorized to assess."))
+    while True:
+        group_names = [f"{group['title']} ({len(group['tools'])})" for group in toolset["groups"]]
+        choice = menu("Toolset groups", group_names + ["Show all tools in this toolset"])
+        if not choice.isdigit() or int(choice) == 0:
+            return
+        index = int(choice) - 1
+        if index < len(toolset["groups"]):
+            choose(data, toolset["groups"][index]["tools"])
+        elif index == len(toolset["groups"]):
+            choose(data, toolset["tools"])
+        else:
+            say("Invalid choice.")
+
+
 def print_toolset(name, data):
     """Emit machine-readable toolset metadata and current PATH/installability signals."""
     try:
@@ -1856,19 +1897,20 @@ def main():
         show_tool(matches[0]); return 0
     title()
     while True:
-        c=menu("Main menu",["Browse categories","Search catalog","All tools","Installer","Environment / health","Credits and safety","Custom tools / favorites","Exit"])
+        c=menu("Main menu",["Browse categories","Search catalog","All tools","Curated toolsets (Phone + Android Top 75)","Installer","Environment / health","Credits and safety","Custom tools / favorites","Exit"])
         if c=="1": category(data)
         elif c=="2": search(data)
         elif c=="3": choose(data)
-        elif c=="4": installer(data)
-        elif c=="5": health(data)
-        elif c=="6":
+        elif c=="4": browse_curated_toolsets(data)
+        elif c=="5": installer(data)
+        elif c=="6": health(data)
+        elif c=="7":
             say("SYN_LAUNCH is a catalog/launcher, not the author of listed utilities.")
             say("Each entry links to a maintainer or project page. Respect upstream licenses and API terms.")
             say("Some tools require root, compatible hardware, desktop Linux, API keys, or approved credentials.")
             say("No scans start automatically. Never run active tests outside explicit authorization.")
-        elif c=="7": manage_custom_tools(data)
-        elif c in ("0","8"): break
+        elif c=="8": manage_custom_tools(data)
+        elif c in ("0","9"): break
         else: say("Invalid choice.")
     return 0
 
