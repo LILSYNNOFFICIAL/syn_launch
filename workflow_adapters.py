@@ -431,10 +431,11 @@ def run_web_api_review(scope: str) -> dict:
                 except OSError:
                     pass
     report["request"]["redirects_followed"] = any(item["redirect_followed"] for item in report["redirect_chain"])
-    report["response"]["redirect_response_not_followed"] = bool(
-        report["redirect_chain"] and report["redirect_chain"][-1]["status_code"] in redirect_statuses
-        and report["request_status"] != "response_received"
-    ) if report["response"] else False
+    if report["response"] is not None:
+        report["response"]["redirect_response_not_followed"] = bool(
+            report["redirect_chain"] and report["redirect_chain"][-1]["status_code"] in redirect_statuses
+            and report["request_status"] != "response_received"
+        )
     return report
 
 def run_assessment_report(scope: str) -> dict:
