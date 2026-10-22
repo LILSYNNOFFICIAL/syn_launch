@@ -256,114 +256,186 @@ def _resolve_addresses_with_timeout(host: str, timeout_seconds: float = 3.0) -> 
 
 
 def run_web_api_review(scope: str) -> dict:
-    """Perform one bounded HTTPS HEAD request; never follows redirects or reads a body."""
-    from urllib.parse import unquote, urlsplit
+    """Perform bounded HTTPS HEAD requests and follow only same-host redirects."""
+    from urllib.parse import unquote, urljoin, urlsplit
 
+    max_redirects = 3
     if not isinstance(scope, str) or len(scope) > 2048 or any(ord(ch) < 32 or ch.isspace() for ch in scope):
         raise ValueError("web-api-review scope must be a single HTTPS URL without whitespace or control characters")
     if "*" in scope or "\\" in scope:
         raise ValueError("web-api-review does not accept wildcard or backslash URL scopes")
-    try:
-        parts = urlsplit(scope)
-        host = parts.hostname
-        port = parts.port
-    except ValueError as exc:
-        raise ValueError("web-api-review scope is not a valid URL") from exc
-    if parts.scheme.lower() != "https" or not host:
-        raise ValueError("web-api-review requires an explicit HTTPS URL")
-    if parts.username is not None or parts.password is not None:
-        raise ValueError("web-api-review URL must not contain embedded credentials")
-    # Reject literal delimiters even when their parsed values are empty ("?" or "#").
-    if "?" in scope or "#" in scope:
-        raise ValueError("web-api-review URL must not contain a query string or fragment")
-    if port not in (None, 443):
-        raise ValueError("web-api-review only permits the default HTTPS port 443")
-    # Decode repeatedly: a proxy/server may decode a path more than once.
-    decoded_path = parts.path
-    while True:
-        if any(segment == ".." for segment in decoded_path.split("/")):
-            raise ValueError("web-api-review path must not contain parent-directory segments")
-        next_path = unquote(decoded_path)
-        if next_path == decoded_path:
-            break
-        decoded_path = next_path
-    try:
-        host = host.encode("idna").decode("ascii")
-    except UnicodeError as exc:
-        raise ValueError("web-api-review hostname is invalid") from exc
-    path = parts.path or "/"
+
+    def parse_url(candidate: str, expected_host: str | None = None) -> tuple[str, str]:
+        try:
+            parts = urlsplit(candidate)
+            host_value = parts.hostname
+            port_value = parts.port
+        except ValueError as exc:
+            raise ValueError("web-api-review URL is not valid") from exc
+        if parts.scheme.lower() != "https" or not host_value:
+            raise ValueError("web-api-review requires HTTPS redirect targets")
+        if parts.username is not None or parts.password is not None:
+            raise ValueError("web-api-review does not permit credentials in URLs")
+        if "?" in candidate or "#" in candidate or parts.query or parts.fragment:
+            raise ValueError("web-api-review does not permit redirect query strings or fragments")
+        if port_value not in (None, 443):
+            raise ValueError("web-api-review only permits HTTPS port 443")
+        decoded_path = parts.path
+        while True:
+            if any(segment == ".." for segment in decoded_path.split("/")):
+                raise ValueError("web-api-review path must not contain parent-directory segments")
+            next_path = unquote(decoded_path)
+            if next_path == decoded_path:
+                break
+            decoded_path = next_path
+        try:
+            normalized_host = host_value.encode("idna").decode("ascii").lower()
+        except UnicodeError as exc:
+            raise ValueError("web-api-review hostname is invalid") from exc
+        if expected_host is not None and normalized_host != expected_host:
+            raise ValueError("web-api-review refuses to follow redirects outside the exact authorized hostname")
+        return normalized_host, parts.path or "/"
+
+    host, path = parse_url(scope)
+    original_host = host
     report = {
         "adapter_schema": ADAPTER_SCHEMA,
         "workflow_id": "web-api-review",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "target_host": host,
         "target_path": path,
-        "request": {"method": "HEAD", "socket_timeout_seconds": 5, "dns_timeout_seconds": 3, "dns_resolution_bounded": True, "redirects_followed": False, "response_body_read": False},
+        "request": {
+            "method": "HEAD",
+            "socket_timeout_seconds": 5,
+            "dns_timeout_seconds": 3,
+            "dns_resolution_bounded": True,
+            "max_same_host_redirects": max_redirects,
+            "response_body_read": False,
+        },
         "response": None,
+        "redirect_chain": [],
         "request_status": "request_failed",
         "execution": {
             "network_actions_executed": True,
             "subprocesses_executed": False,
             "catalog_tools_executed": False,
-            "request_count": 1,
+            "request_count": 0,
         },
         "limitations": [
-            "This makes exactly one HTTPS HEAD request to the supplied host and path. It is an active network request and requires explicit authorization.",
-            "DNS resolution has a three-second budget and socket operations have a five-second timeout. A stalled system resolver runs only in a daemon thread and cannot block CLI process exit indefinitely.",
-            "Redirects are not followed and response bodies are not read. A server may handle HEAD differently from GET.",
+            "This makes one initial HTTPS HEAD request and follows at most three HTTPS redirects on the exact same hostname.",
+            "Redirects to a different hostname are recorded as out of scope and are not followed; authorize and assess that hostname separately.",
+            "DNS resolution has a three-second budget and socket operations have a five-second timeout. A stalled resolver runs only in a daemon thread.",
+            "Response bodies are never read. A server may handle HEAD differently from GET.",
             "This is not a vulnerability scan, API schema review, authentication test, or security certification.",
-            "Only an allowlist of response headers is retained; the report does not independently prove application behavior.",
+            "Only allowlisted response headers are retained. Redirect destinations are recorded as normalized host/path only; query strings and fragments are rejected.",
         ],
     }
-    connection = None
-    try:
-        addresses = _resolve_addresses_with_timeout(host, timeout_seconds=3.0)
-        resolved = []
-        for address in addresses:
-            ip_text = address[4][0].split("%", 1)[0]
+    current_host, current_path = host, path
+    seen = set()
+    redirect_statuses = {301, 302, 303, 307, 308}
+    for hop in range(max_redirects + 1):
+        marker = (current_host, current_path)
+        if marker in seen:
+            report["request_status"] = "redirect_loop_detected"
+            break
+        seen.add(marker)
+        connection = None
+        try:
+            addresses = _resolve_addresses_with_timeout(current_host, timeout_seconds=3.0)
+            resolved = []
+            for address in addresses:
+                ip_text = address[4][0].split("%", 1)[0]
+                try:
+                    parsed_ip = ipaddress.ip_address(ip_text)
+                except ValueError:
+                    continue
+                if not parsed_ip.is_global:
+                    raise ValueError("web-api-review refuses hostnames that resolve to non-public IP addresses")
+                if ip_text not in resolved:
+                    resolved.append(ip_text)
+            if not resolved:
+                raise OSError("hostname did not resolve to a public IP address")
+            pinned_ip = next((item for item in resolved if ipaddress.ip_address(item).version == 4), resolved[0])
+            connection = _PinnedHTTPSConnection(
+                current_host, pinned_ip=pinned_ip, timeout=5, context=ssl.create_default_context()
+            )
+            connection.request("HEAD", current_path, headers={"User-Agent": "SYN_LAUNCH/1.0"})
+            report["execution"]["request_count"] += 1
+            response = connection.getresponse()
+            raw_headers = response.getheaders()
+            headers = {}
+            location = None
+            for name, value in raw_headers:
+                key = name.lower()
+                if key == "location" and location is None:
+                    location = str(value)[:2048]
+                if key in WEB_HEADER_ALLOWLIST and key not in headers:
+                    headers[key] = str(value)[:512]
+            entry = {
+                "host": current_host,
+                "path": current_path,
+                "status_code": int(response.status),
+                "reason": str(response.reason or "")[:128],
+                "headers": headers,
+                "redirect_target": None,
+                "redirect_followed": False,
+            }
+            report["redirect_chain"].append(entry)
+            report["response"] = {
+                "status_code": int(response.status),
+                "reason": str(response.reason or "")[:128],
+                "headers": headers,
+                "redirect_response_not_followed": False,
+            }
+            if int(response.status) not in redirect_statuses or not location:
+                report["request_status"] = "response_received"
+                break
             try:
-                parsed_ip = ipaddress.ip_address(ip_text)
+                candidate = urljoin("https://" + current_host + current_path, location)
+                target_host, target_path = parse_url(candidate, expected_host=original_host)
             except ValueError:
-                continue
-            if not parsed_ip.is_global:
-                raise ValueError("web-api-review refuses hostnames that resolve to non-public IP addresses")
-            if ip_text not in resolved:
-                resolved.append(ip_text)
-        if not resolved:
-            raise OSError("hostname did not resolve to a public IP address")
-        # Prefer IPv4 for broader mobile-network compatibility; TLS still validates the hostname.
-        pinned_ip = next((item for item in resolved if ipaddress.ip_address(item).version == 4), resolved[0])
-        connection = _PinnedHTTPSConnection(
-            host, pinned_ip=pinned_ip, timeout=5, context=ssl.create_default_context()
-        )
-        connection.request("HEAD", path, headers={"User-Agent": "SYN_LAUNCH/1.0"})
-        response = connection.getresponse()
-        headers = {}
-        for name, value in response.getheaders():
-            key = name.lower()
-            if key in WEB_HEADER_ALLOWLIST and key not in headers:
-                headers[key] = value[:512]
-        report["response"] = {
-            "status_code": int(response.status),
-            "reason": str(response.reason or "")[:128],
-            "headers": headers,
-            "redirect_response_not_followed": 300 <= int(response.status) < 400,
-        }
-        report["request_status"] = "response_received"
-    except ValueError:
-        # This path is reserved for the post-parse address safety gate; do not leak resolver data.
-        report["request_status"] = "request_rejected"
-        report["error_type"] = "TargetAddressRejected"
-    except (OSError, ssl.SSLError, http.client.HTTPException, TimeoutError) as exc:
-        report["error_type"] = type(exc).__name__
-    finally:
-        if connection is not None:
-            try:
+                # Record only a safe, non-sensitive classification; never store the raw Location value.
+                try:
+                    target_parts = urlsplit(urljoin("https://" + current_host + current_path, location))
+                    raw_target_host = target_parts.hostname
+                    safe_host = raw_target_host.encode("idna").decode("ascii").lower() if raw_target_host else None
+                    safe_path = target_parts.path[:512] if target_parts.path.startswith("/") else None
+                except (ValueError, UnicodeError):
+                    safe_host, safe_path = None, None
+                entry["redirect_target"] = {"host": safe_host, "path": safe_path}
+                report["response"]["redirect_response_not_followed"] = True
+                report["request_status"] = "redirect_blocked_out_of_scope"
+                break
+            entry["redirect_target"] = {"host": target_host, "path": target_path}
+            report["response"]["redirect_response_not_followed"] = True
+            if hop >= max_redirects:
+                report["request_status"] = "redirect_limit_reached"
+                break
+            entry["redirect_followed"] = True
+            current_host, current_path = target_host, target_path
+            if connection is not None:
                 connection.close()
-            except OSError:
-                pass
+                connection = None
+        except ValueError:
+            report["request_status"] = "request_rejected"
+            report["error_type"] = "TargetAddressRejected"
+            break
+        except (OSError, ssl.SSLError, http.client.HTTPException, TimeoutError) as exc:
+            report["error_type"] = type(exc).__name__
+            report["request_status"] = "request_failed"
+            break
+        finally:
+            if connection is not None:
+                try:
+                    connection.close()
+                except OSError:
+                    pass
+    report["request"]["redirects_followed"] = any(item["redirect_followed"] for item in report["redirect_chain"])
+    report["response"]["redirect_response_not_followed"] = bool(
+        report["redirect_chain"] and report["redirect_chain"][-1]["status_code"] in redirect_statuses
+        and report["request_status"] != "response_received"
+    ) if report["response"] else False
     return report
-
 
 def run_assessment_report(scope: str) -> dict:
     """Validate and summarize a local JSON evidence bundle without contacting targets."""
