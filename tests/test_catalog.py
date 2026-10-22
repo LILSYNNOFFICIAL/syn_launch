@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -184,7 +185,7 @@ class CatalogTests(unittest.TestCase):
                 self.assertFalse(report["checks"]["package_changed"])
 
     def test_php_security_check_cli_uses_package_metadata_and_reports_exit_status(self):
-        with unittest.mock.patch.object(APP, "collect_resolved_version", return_value={
+        with mock.patch.object(APP, "collect_resolved_version", return_value={
             "resolved_version": "8.5.11-1",
             "version_evidence": "package_manager_metadata",
             "version_query_exit_code": 0,
