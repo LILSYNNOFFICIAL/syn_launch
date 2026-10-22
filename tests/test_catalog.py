@@ -161,6 +161,40 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("pkg upgrade php", guide)
         self.assertIn("SYN_LAUNCH is implemented in Python", guide)
 
+    def test_php_security_version_assessment_handles_fixed_and_vulnerable_versions(self):
+        advisory = next(tool for tool in self.tools if tool["id"] == "php")["security_advisory"]
+        assess = APP.assess_php_security_version
+        cases = [
+            ({"resolved_version": "8.5.12-1", "version_evidence": "package_manager_metadata"}, "fixed_release_or_newer"),
+            ({"resolved_version": "8.5.13", "version_evidence": "package_manager_metadata"}, "fixed_release_or_newer"),
+            ({"resolved_version": "8.4.26-2", "version_evidence": "package_manager_metadata"}, "update_required"),
+            ({"resolved_version": "8.3.35", "version_evidence": "package_manager_metadata"}, "update_required"),
+            ({"resolved_version": "8.2.35-0+termux", "version_evidence": "package_manager_metadata"}, "fixed_release_or_newer"),
+            ({"resolved_version": "8.1.33", "version_evidence": "package_manager_metadata"}, "vendor_backport_or_upgrade_required"),
+            ({"resolved_version": None, "version_evidence": "not_found"}, "not_installed"),
+            ({"resolved_version": None, "version_evidence": "query_failed"}, "version_unavailable"),
+            ({"resolved_version": "8.6.0RC3", "version_evidence": "package_manager_metadata"}, "version_unparseable"),
+        ]
+        for version_result, expected in cases:
+            with self.subTest(version=version_result):
+                report = assess(version_result, advisory)
+                self.assertEqual(report["status"], expected)
+                self.assertFalse(report["checks"]["network_requests_made"])
+                self.assertFalse(report["checks"]["php_executable_run"])
+                self.assertFalse(report["checks"]["package_changed"])
+
+    def test_php_security_check_cli_uses_package_metadata_and_reports_exit_status(self):
+        with unittest.mock.patch.object(APP, "collect_resolved_version", return_value={
+            "resolved_version": "8.5.11-1",
+            "version_evidence": "package_manager_metadata",
+            "version_query_exit_code": 0,
+        }):
+            data = copy.deepcopy(self.data)
+            report = APP.php_security_report(data)
+        self.assertEqual(report["status"], "update_required")
+        self.assertFalse(report["checks"]["network_requests_made"])
+        self.assertEqual(report["source"], "local Termux package-manager metadata")
+
     def test_catalog_rejects_invalid_compatibility_evidence(self):
         broken = copy.deepcopy(self.data)
         tool = next(t for t in broken["tools"] if t.get("compatibility"))
