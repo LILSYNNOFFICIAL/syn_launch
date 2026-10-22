@@ -1319,6 +1319,7 @@ def smoke_test_tool(tool):
             "ip": ("-V", "--help", "-h"),
             "ssh-keygen": ("--help", "-h", "--version"),
             "ssh-keyscan": ("-h", "--help", "--version"),
+            "whois": ("--help", "--version", "-h"),
         }.get(executable, ("--version", "--help", "-h"))
         for flag in probe_flags:
             output, truncated, timed_out, returncode = bounded_probe(
@@ -1330,7 +1331,7 @@ def smoke_test_tool(tool):
                 "timed_out": timed_out
             }
             expected_usage_exit = (
-                executable in {"ssh-keygen", "ssh-keyscan"}
+                executable in {"ssh-keygen", "ssh-keyscan", "whois"}
                 and returncode == 1
                 and bool(re.search(r"\busage:", output, re.IGNORECASE))
             )
