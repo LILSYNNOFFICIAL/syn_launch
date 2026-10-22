@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "phone-android-top75",
+  "title": "Phone Number OSINT + Android Penetration Testing: Top 75",
+  "tool_count": 75,
+  "generated_for": "SYN_LAUNCH",
+  "reviewed_on": "2026-10-22",
+  "description": "A curated set of 75 catalog-backed tools for phone-number public-source research, Android app security review, device diagnostics, network/TLS analysis, and supporting forensics.",
+  "selection_policy": "Curated for practical breadth and Termux relevance, not a universal ranking. Existing catalog entries are reused; this profile does not imply installation or device compatibility.",
+  "safety_scope": "Use phone-number research only for your own number or with the number holder's permission. Test only apps, devices, networks, and services you own or are explicitly authorized to assess. Passive lookup tools do not reveal a phone's live location. No SMS, calls, account login attempts, SIM-swap actions, or destructive scans are initiated by this profile.",
+  "groups": [
+    {
+      "title": "Phone-number OSINT and identity pivots",
+      "tool_ids": [
+        "phoneinfoga",
+        "holehe",
+        "maigret",
+        "sherlock",
+        "recon-ng",
+        "osrframework",
+        "spiderfoot",
+        "h8mail",
+        "theharvester",
+        "email-validator",
+        "whois",
+        "dnstwist"
+      ]
+    },
+    {
+      "title": "Android app security and runtime analysis",
+      "tool_ids": [
+        "frida-tools",
+        "objection",
+        "apkleaks",
+        "androguard",
+        "quark-engine",
+        "jadx",
+        "apktool",
+        "mobsf",
+        "apkid",
+        "apk-mitm",
+        "termux-api",
+        "termux-info"
+      ]
+    },
+    {
+      "title": "Network, TLS and traffic analysis",
+      "tool_ids": [
+        "nmap",
+        "netcat",
+        "ncat",
+        "tcpdump",
+        "mitmproxy",
+        "openssl",
+        "tshark",
+        "sslscan",
+        "testssl-sh",
+        "httpie",
+        "xh",
+        "curl",
+        "socat",
+        "proxychains-ng",
+        "ssh-audit"
+      ]
+    },
+    {
+      "title": "Android device and wireless diagnostics",
+      "tool_ids": [
+        "termux-wi-fi-info",
+        "termux-wi-fi-scan",
+        "termux-open",
+        "termux-clipboard",
+        "termux-location",
+        "aircrack-ng",
+        "kismet",
+        "bluez-tools",
+        "iw",
+        "termux-wake-lock"
+      ]
+    },
+    {
+      "title": "APK, filesystem and binary forensics",
+      "tool_ids": [
+        "exiftool",
+        "binwalk",
+        "radare2",
+        "rizin",
+        "yara",
+        "tesseract-ocr",
+        "foremost",
+        "volatility-3",
+        "strings",
+        "xxd"
+      ]
+    },
+    {
+      "title": "Recon and exposure assessment",
+      "tool_ids": [
+        "subfinder",
+        "assetfinder",
+        "dnsx",
+        "httpx",
+        "naabu",
+        "gau",
+        "waybackurls",
+        "katana",
+        "unfurl",
+        "anew",
+        "puredns",
+        "nuclei",
+        "dns-utils",
+        "traceroute",
+        "mtr",
+        "iperf3"
+      ]
+    }
+  ]
+}
