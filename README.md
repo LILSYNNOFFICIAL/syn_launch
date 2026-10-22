@@ -26,6 +26,8 @@ The app is designed to help you explore and manage tools—not to imply that eve
 - [Run diagnostics](#run-diagnostics)
 - [Command-line options](#command-line-options)
 - [How to read the catalog](#how-to-read-the-catalog)
+- [Using SYN_LAUNCH](#using-syn_launch)
+- [Tool guides by category](#tool-guides-by-category)
 - [Complete tool catalog](#complete-tool-catalog)
 - [Personal catalog and favorites](#personal-catalog-and-favorites)
 - [Security and responsible use](#security-and-responsible-use)
@@ -114,6 +116,34 @@ SYN_LAUNCH deliberately distinguishes catalog metadata from evidence that a tool
 The latest catalog review records **267 source-backed compatibility declarations**. Two catalog entries remain unassessed: Burp Suite and Wappalyzer. Their status is intentionally not presented as verified. DNSGen now has a pinned upstream source revision, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
 
 Some entries require root, particular kernel capabilities, wireless hardware, companion applications, credentials, external services, or a separate Linux environment. Entries with those constraints are marked accordingly where known. Please read each tool's notes before attempting installation or use.
+
+## Using SYN_LAUNCH
+
+For step-by-step instructions on launching SYN_LAUNCH, finding entries, interpreting compatibility evidence, installing tools, and adapting examples, see the [Practical User Guide](wiki/Using-SYN-LAUNCH.md).
+
+## Tool guides by category
+
+Each guide describes what every cataloged tool is used for, provides a starting command where one is available, and links to the upstream project and relevant packaging evidence. Examples are not guarantees of Android compatibility; review each tool's notes and authorization requirements.
+
+- [Termux Core](wiki/Using-termux-core.md) — 25 tools
+- [Network & DNS](wiki/Using-network-and-dns.md) — 23 tools
+- [OSINT & Recon](wiki/Using-osint-and-recon.md) — 25 tools
+- [Web App Testing](wiki/Using-web-app-testing.md) — 22 tools
+- [Audit, SAST & Supply Chain](wiki/Using-audit-sast-and-supply-chain.md) — 20 tools
+- [Forensics & File Analysis](wiki/Using-forensics-and-file-analysis.md) — 21 tools
+- [Cryptography & Password Hygiene](wiki/Using-cryptography-and-password-hygiene.md) — 12 tools
+- [Wireless & Android Environment](wiki/Using-wireless-and-android-environment.md) — 10 tools
+- [Cloud, Containers & Misc](wiki/Using-cloud-containers-and-misc.md) — 26 tools
+- [Advanced Pentest & Exploit Research](wiki/Using-advanced-pentest-and-exploit-research.md) — 26 tools
+- [Web & API Assessment](wiki/Using-web-and-api-assessment.md) — 1 tools
+- [Active Directory & Windows](wiki/Using-active-directory-and-windows.md) — 12 tools
+- [Mobile App Security](wiki/Using-mobile-app-security.md) — 10 tools
+- [Cloud & Container Security](wiki/Using-cloud-and-container-security.md) — 12 tools
+- [Network & TLS Assessment](wiki/Using-network-and-tls-assessment.md) — 8 tools
+- [Developer & Supply Chain Security](wiki/Using-developer-and-supply-chain-security.md) — 5 tools
+- [Forensics & Reverse Engineering](wiki/Using-forensics-and-reverse-engineering.md) — 7 tools
+- [Privacy & Metadata](wiki/Using-privacy-and-metadata.md) — 1 tools
+- [Password & Authentication Auditing](wiki/Using-password-and-authentication-auditing.md) — 3 tools
 
 ## Complete tool catalog
 
