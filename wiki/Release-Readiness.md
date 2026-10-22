@@ -2,37 +2,45 @@
 
 **Review date:** 2026-10-22  
 **Repository:** [LILSYNNOFFICIAL/syn_launch](https://github.com/LILSYNNOFFICIAL/syn_launch)  
-**Release posture:** Conditional — do not claim full external staging validation.
+**Status:** Repository release candidate. Full catalog compatibility is not certified.
 
-## Verified repository state
+## Current repository gate
 
 - The default branch is `main`; the latest branch inventory returned only `main`.
-- The Termux checkout was synchronized with `origin/main` before this documentation update; the final candidate commit is recorded by GitHub after publication.
-- The catalog contains 269 entries across 19 categories.
-- The README and compatibility guide document that 267 entries have source-backed declarations; Burp Suite and Wappalyzer remain unassessed for native Termux execution.
-- Existing diagnostics deliberately do not execute every catalog tool. On 2026-10-22, the device had 41 catalog executable matches on PATH, 37 bounded smoke probes passed, and 29 reviewed local-only functional checks passed through the built-in evidence reporter. Four potentially side-effecting or network-oriented executables were skipped for generic smoke probing. Six tool packages were installed one at a time after dry-runs confirmed zero upgrades: ripgrep 15.2.0, fd 10.5.0, file 5.48-3, tree 2.3.2, iproute2 7.3.0, and Vim 9.2.1200 (with libsodium 1.0.22-1 as a dependency). The first four passed smoke probes and separate local-fixture assertions recorded in the private manual evidence file, and now also have repeatable built-in local-only functional adapters. Vim passed its smoke probe and the built-in local-only file-edit assertion. iproute2 passed only its `ip -V` smoke probe; Android denied its interface-inspection netlink call, so that operation remains unverified. These are limited checks, not full device certification; catalog-wide device validation remains `not_run`.
+- Latest verified commit: [`a706ef74d609bde2d887beb8b6291bc41b55dedb`](https://github.com/LILSYNNOFFICIAL/syn_launch/commit/a706ef74d609bde2d887beb8b6291bc41b55dedb).
+- The latest verified GitHub Actions run passed all Python matrix jobs on 3.10, 3.12, and 3.14: [run 39823202999](https://github.com/LILSYNNOFFICIAL/syn_launch/actions/runs/39823202999). The Python 3.12 job log records 144 passing tests.
+- The catalog contains 269 entries across 19 categories. 267 entries have source-backed compatibility declarations. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution.
+- The curated Phone Number OSINT + Android Pentest Top 75 is catalog-backed and covered by regression tests. It is a selection/profile, not a claim that all 75 tools install or work on stock Android.
 
-## Final-gap outcomes
+## Device evidence and limitations
 
-| Item | Status | Evidence / next action |
+The last recorded device audit on 2026-10-22 was on one Android 16 / Termux ARM64 device. It recorded 41 catalog executable matches on PATH, 37 bounded smoke probes passed, and 29 reviewed local-only functional checks passed through the built-in evidence reporter. Four potentially side-effecting or network-oriented executables were excluded from generic smoke probing. Six packages were installed after package-manager dry-runs showed zero upgrades: ripgrep 15.2.0, fd 10.5.0, file 5.48-3, tree 2.3.2, iproute2 7.3.0, and Vim 9.2.1200 (with libsodium 1.0.22-1 as a dependency).
+
+The first four tools also passed bounded local-fixture assertions; Vim passed its local file-edit assertion. iproute2 passed `ip -V`, but Android denied interface inspection through netlink. These are limited checks, not complete tool-feature tests. Catalog-wide device validation remains `not_run`, and the device audit has not been repeated as part of this GitHub-only release review.
+
+## Explicitly retained limitations
+
+| Item | Status | Decision |
 |---|---|---|
-| Burp Suite native Termux assessment | **Not assessed; limitation documented** | PortSwigger's published desktop OS list does not include Android/Termux. Keep manual-only and `installable: false`. [Official requirements](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements). |
-| Wappalyzer native Termux assessment | **Not assessed; limitation documented** | Public npm package is deprecated; HTTP Archive is a fork of the last open-source version. Do not imply current official CLI or Termux support. [npm package](https://www.npmjs.com/package/wappalyzer), [HTTP Archive fork](https://github.com/HTTPArchive/wappalyzer). |
-| External HTTPS staging adapter | **Bounded live check completed** | The owner-authorized check returned `307` to `/en-gb`, then `200 OK` on the same hostname using two HTTPS HEAD requests. Response bodies were not read. This is not a vulnerability scan. See [Compatibility and verification](Compatibility-and-Verification.md). |
-| Local regression suite after redirect-adapter changes | **Passed on current code; rerun after final docs commit** | The 135-test suite passed, catalog JSON and diff checks passed, and `device_check.sh` completed all 12 checks. Re-run the suite on the final published commit as the release gate. |
-| CI for the current code revision | **Previously passed; final documentation commit pending** | Confirm Actions for the final documentation commit before release; do not infer a result for a commit that has not run yet. |
-| Release publication | **Conditional** | A release may accurately describe the above limitations, but must not claim external staging validation or universal tool compatibility. |
+| Burp Suite native Termux support | Unassessed; no supported Android/Termux claim | Keep manual/reference-only and non-installable by default. See [official system requirements](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements). |
+| Wappalyzer native Termux support | Unassessed; public npm package is deprecated | Keep reference-only. Do not imply current official CLI or Termux support. See [npm package](https://www.npmjs.com/package/wappalyzer) and [HTTP Archive fork](https://github.com/HTTPArchive/wappalyzer). |
+| Metasploit Framework | Cataloged, device installation not verified in this release audit | A catalog entry is not proof of installation or operation on Android. |
+| Armitage GUI | No catalog entry found in the reviewed catalog | Treat as not included unless separately added and assessed. |
+| External HTTPS staging adapter | Bounded check previously completed | An owner-authorized HTTPS HEAD check to `https://meepsheep.com/` followed a same-host 307 redirect and received 200 OK. No response body was read. This was not a vulnerability scan. |
+| Full catalog runtime certification | Not performed | Do not claim all 269 entries are installable, compatible, or functional. |
 
-## Pre-release checklist
+## Release checklist
 
-- [ ] Confirm the final `main` commit and clean working tree.
-- [x] Run the 135-test unit/regression suite, catalog JSON validation, and diff check on the current code revision.
-- [x] Run `bash device_check.sh` in Termux; all 12 checks passed. Private evidence bundle: `~/.syn_launch/device-check-20261022-041737/`.
-- [x] GitHub Actions passed for commit `366e584d0c1d8d5c4bdddb8c121346812211375f`: [Validate SYN_LAUNCH](https://github.com/LILSYNNOFFICIAL/syn_launch/actions/runs/39770273910) and [Sync repository docs to GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/actions/runs/39770273898). Any subsequent commit requires its own fresh CI check.
-- [x] Run the bounded HTTPS HEAD check against the authorized `https://meepsheep.com/` scope; the same-host redirect chain returned `307` then `200 OK` in two requests.
+- [x] Confirm `main` is the only listed branch.
+- [x] Confirm latest recorded GitHub Actions matrix is green for Python 3.10, 3.12, and 3.14.
+- [x] Confirm the current regression suite is passing (144 tests recorded in the Python 3.12 job).
+- [x] Document catalog size, evidence level, device-check results, and known unsupported/unassessed entries.
+- [x] Document the difference between catalog presence, installation, smoke probes, local functional checks, and full device compatibility.
+- [ ] Repeat the local device diagnostic suite on the target phone after this documentation change. The connected device was offline during this review, so this check cannot be truthfully marked complete here.
+- [ ] Publish a versioned GitHub release if/when the owner wants a formal release artifact. No release tag or release asset is claimed by this checklist.
 
-## Release language
+## Accurate release wording
 
-Recommended wording: “SYN_LAUNCH is a Termux-first Android tool catalog with source-backed installation evidence for selected entries and bounded local diagnostics. On one Android 16 / Termux ARM64 device, 37 bounded smoke probes and 29 built-in local functional assertions passed, plus separate local-fixture assertions for ripgrep, fd, file, and tree; Vim passed the built-in local file-edit check, while iproute2 passed only its version probe because Android denied netlink interface inspection; this does not establish full tool compatibility or certify all 269 catalog entries. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution. A bounded HTTPS HEAD check against the owner-authorized `https://meepsheep.com/` scope followed a same-host redirect and received `200 OK`; this was not a vulnerability scan.”
+“SYN_LAUNCH is a Termux-first Android security and developer-tool catalog with source-backed installation evidence for selected entries, bounded diagnostics, and a curated Phone Number OSINT + Android Pentest Top 75 profile. Its current GitHub Actions matrix passes on Python 3.10, 3.12, and 3.14, with 144 tests recorded in the Python 3.12 job. On one Android 16 / Termux ARM64 device, a prior bounded audit recorded 37 smoke probes and 29 local-only functional checks passing; iproute2 interface inspection remained blocked by Android permissions. These results do not certify the full 269-entry catalog. Burp Suite and Wappalyzer remain reference-only and unassessed for native Termux execution; Metasploit is cataloged but its device installation is unverified, and Armitage is not included in the reviewed catalog.”
 
-Do not describe the project as fully device-verified or every catalog entry as working.
+Do not describe SYN_LAUNCH as fully device-verified or claim that every catalog entry works.
