@@ -113,7 +113,7 @@ Install paths describe what SYN_LAUNCH may attempt; they are not guarantees that
 
 SYN_LAUNCH deliberately distinguishes catalog metadata from evidence that a tool actually runs. Source-backed declarations describe the specific upstream recipe, package manifest, or source snapshot reviewed; they do not prove Android compatibility, current package availability, successful installation, ABI support, or runtime functionality.
 
-The latest catalog review records **267 source-backed compatibility declarations**. Two catalog entries remain unassessed: Burp Suite and Wappalyzer. Their status is intentionally not presented as verified. DNSGen now has a pinned upstream source revision, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
+The latest catalog review records **267 source-backed compatibility declarations**. Two manual-only entries remain unassessed for native Termux execution: [Burp Suite](https://portswigger.net/burp/documentation/desktop/getting-started/system-requirements) is not listed among PortSwigger's supported desktop operating systems, and the public [Wappalyzer npm package](https://www.npmjs.com/package/wappalyzer) is deprecated while the [HTTP Archive fork](https://github.com/HTTPArchive/wappalyzer) represents an older open-source version. Both remain reference-only; neither is presented as verified. See the [release-readiness checklist](wiki/Release-Readiness.md) for the remaining external staging and verification gates. DNSGen now has a pinned upstream source revision, but equivalence with the published PyPI artifact and Android runtime behavior remain unverified.
 
 Some entries require root, particular kernel capabilities, wireless hardware, companion applications, credentials, external services, or a separate Linux environment. Entries with those constraints are marked accordingly where known. Please read each tool's notes before attempting installation or use.
 
@@ -541,6 +541,7 @@ Network and assessment tools can have real effects when you choose to run them. 
 - [Published GitHub Wiki](https://github.com/LILSYNNOFFICIAL/syn_launch/wiki)
 - [Installation and first run](wiki/Installation.md)
 - [Compatibility and verification model](wiki/Compatibility-and-Verification.md)
+- [Release readiness and final-gap checklist](wiki/Release-Readiness.md)
 - [Catalog and tool lifecycle](wiki/Catalog-and-Tool-Lifecycle.md)
 - [Security and responsible use](wiki/Security-and-Responsible-Use.md)
 - [Troubleshooting](wiki/Troubleshooting.md)
