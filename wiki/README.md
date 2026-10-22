@@ -12,6 +12,7 @@ SYN_LAUNCH is a mobile-first Termux catalog, installer, and device/runtime diagn
 - [Compatibility and verification model](Compatibility-and-Verification.md)
 - [Catalog and tool lifecycle](Catalog-and-Tool-Lifecycle.md)
 - [Security and responsible use](Security-and-Responsible-Use.md)
+- [Critical PHP security update (2026-10-21)](PHP-Security-Update-2026-10-21.md)
 - [Troubleshooting](Troubleshooting.md)
 - [Development and contributing](Development-and-Contributing.md)
 - [Platform roadmap](../PLATFORM_ROADMAP.md)
