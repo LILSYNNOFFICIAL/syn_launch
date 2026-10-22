@@ -676,10 +676,10 @@
       "install_kind": "pkg",
       "package": "php",
       "installable": true,
-      "description": "PHP runtime for application testing and local development.",
+      "description": "PHP runtime for application testing and local development. Critical security update (2026-10-21): upgrade promptly; see the PHP security advisory in the project wiki.",
       "example": "php --help",
       "source": "https://github.com/termux/termux-packages",
-      "caveat": "Package availability differs by Termux repository, architecture, and release.",
+      "caveat": "CRITICAL SECURITY UPDATE 2026-10-21: CVE-2026-109618 and CVE-2026-109619 allow unauthenticated remote code execution in affected PHP web-serving installations. Fixed upstream releases: 8.5.12, 8.4.27, 8.3.36, 8.2.35. Termux's upstream recipe now targets 8.5.12, but installed repository metadata may lag; refresh packages, update PHP, then verify with php -v. See wiki/PHP-Security-Update-2026-10-21.md.",
       "compatibility": {
         "status": "source_documented_not_device_verified",
         "platform": "Termux on Android",
@@ -695,9 +695,26 @@
           "Package availability and dependencies vary with configured repositories, device architecture, Android version, and package revision.",
           "Root, Android permissions, companion apps, native libraries, hardware, credentials, or external services may be required for particular operations; this declaration does not validate those operations."
         ],
-        "reviewed_on": "2026-10-17",
-        "source_revision": "e85983636adcf748134c3feb1df27f44e78322e1",
-        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/e85983636adcf748134c3feb1df27f44e78322e1/packages/php"
+        "reviewed_on": "2026-10-21",
+        "source_revision": "c2bb85d3f26d52ba4a4a159d14214a8ace706235",
+        "source_snapshot_url": "https://github.com/termux/termux-packages/tree/c2bb85d3f26d52ba4a4a159d14214a8ace706235/packages/php"
+      },
+      "security_advisory": {
+        "published_on": "2026-10-21",
+        "severity": "critical",
+        "cves": [
+          "CVE-2026-109618",
+          "CVE-2026-109619"
+        ],
+        "fixed_versions": {
+          "8.5": "8.5.12",
+          "8.4": "8.4.27",
+          "8.3": "8.3.36",
+          "8.2": "8.2.35"
+        },
+        "upstream_advisory": "https://www.php.net/archive/2026.php#2026-10-21-5",
+        "termux_recipe_revision": "c2bb85d3f26d52ba4a4a159d14214a8ace706235",
+        "note": "The Termux recipe revision establishes the upstream packaging version only; the installed package version and runtime exposure must be checked on each device."
       }
     },
     {
